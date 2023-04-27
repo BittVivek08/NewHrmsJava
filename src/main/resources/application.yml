@@ -1,0 +1,13 @@
+server:
+  port: 9090
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: DbUser@123
+    url: jdbc:mysql://68.178.164.213:3306/hrms_dummy
+    username: hrmsapp_user
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
