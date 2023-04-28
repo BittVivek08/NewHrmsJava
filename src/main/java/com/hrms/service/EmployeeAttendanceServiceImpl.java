@@ -35,7 +35,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 			return false;
 		}
 		else {
-			LocalDate checkInTime = employeeAttendance.get(0).getDate();
+			LocalDate checkInTime = employeeAttendance.get(employeeAttendance.size()-1).getDate();
 			if (checkInTime != null && checkInTime.isEqual(LocalDate.now())) {
 				eab.setStatus(true);
 				return true;

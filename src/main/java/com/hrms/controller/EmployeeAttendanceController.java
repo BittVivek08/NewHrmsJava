@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.hrms.beans.EmployeeAttendanceRequest;
 import com.hrms.entity.EmployeeAttendance;
-import com.hrms.repository.AttendanceRepository;
 import com.hrms.service.EmployeeAttendanceService;
 import com.hrms.util.IPAddress;
 
@@ -26,9 +25,9 @@ public class EmployeeAttendanceController {
 	   @Autowired
 	   private EmployeeAttendanceService attendanceService;
 	   
-	   @Autowired
-	   private AttendanceRepository attendanceRepo;
-	   
+//	   @Autowired
+//	   private AttendanceRepository attendanceRepo;
+//	   
 	   @PostMapping("/check-in/{empId}" )
 	    public ResponseEntity<String> checkIn(@PathVariable int empId, @RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
 		   
