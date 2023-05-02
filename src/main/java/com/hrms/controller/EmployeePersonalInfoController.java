@@ -48,9 +48,9 @@ public class EmployeePersonalInfoController {
 		
 		// for delete the particular details by using id
 		@DeleteMapping("delete/{positionId}")
-		public JobHistoryResponse  deleteByPositionId(@PathVariable("positionId") int positionId)
+		public JobHistoryResponse deleteByPositionId(@PathVariable("positionId") int positionId)
 		{
-			return employeePersonalInfoService.deleteByPositionId(positionId);	
+			return employeePersonalInfoService.deletePositionId(positionId);	
 		}
 		
 		// for update the particular details by using id

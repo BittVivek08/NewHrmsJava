@@ -49,13 +49,19 @@ public class EmployeePersonalInfoServiceImpl implements EmployeePersonalInfoServ
 	}
 
 	@Override
-	public JobHistoryResponse deleteByPositionId(int positionId) {
-
-		employeePersonalInfoRepository.deleteById(positionId);
-		;
-		historyResponse.setMessage("Employee Job history delete successfully");
-		historyResponse.setStatus(true);
+	public JobHistoryResponse deletePositionId(int positionId) {
+		
+		EmployeeJobHistory employee = this.employeePersonalInfoRepository.findByPositionId(positionId);
+		if(employee!=null) {
+			this.employeePersonalInfoRepository.delete(employee);
+			historyResponse.setMessage("Employee Job history delete successfully");
+			historyResponse.setStatus(true);
+		} else {
+			historyResponse.setMessage("Failed to Delete details ");
+			historyResponse.setStatus(false);
+		}
 		return historyResponse;
+		
 	}
 
 	@Override

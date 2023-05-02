@@ -17,7 +17,7 @@ public interface EmployeePersonalInfoService {
   public List<EmployeeJobHistory> getAllJobHistory();
 	
   // delete the job history details by use positionId
-  public JobHistoryResponse deleteByPositionId(int positionId);
+  public JobHistoryResponse deletePositionId(int positionId);
   
   // update the job history details by use positionId
   public EmployeeJobHistory updateJobHistory(int positionId,EmployeeJobHistory employeeJobHistory);
