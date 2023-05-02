@@ -38,19 +38,35 @@ public class BusinessunitController {
 
 	}
 
-	@PutMapping("/Updatebusinessdetails/{id}")
-	public ResponseEntity<Businessunit> updatebusinessdetails(@PathVariable("id") int id,
+//	@PutMapping("/Updatebusinessdetails/{id}")
+//	public ResponseEntity<Businessunit> updatebusinessdetails(@PathVariable("id") int id,
+//			@RequestBody Businessunit entity) {
+//
+//		Businessunit updatedetails = BusinessunitService.updatebusinessdetails(id, entity);
+//
+//		return new ResponseEntity<>(updatedetails, HttpStatus.OK);
+//
+//	}
+//
+//	@DeleteMapping("/delete/{id}")
+//	public Businessbean deleteById(@PathVariable("id") int id) {
+//		return BusinessunitService.deleteById(id);
+//	}
+
+	@PutMapping("/Updatebusinessdetails/{bid}")
+	public ResponseEntity<Businessunit> updatebusinessdetails(@PathVariable("bid") int bid,
 			@RequestBody Businessunit entity) {
 
-		Businessunit updatedetails = BusinessunitService.updatebusinessdetails(id, entity);
+		Businessunit updatedetails = BusinessunitService.updatebusinessdetails(bid, entity);
 
-		return new ResponseEntity<>(updatedetails, HttpStatus.OK);
+		return  ResponseEntity.ok(updatedetails);
 
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public Businessbean deleteById(@PathVariable("id") int id) {
-		return BusinessunitService.deleteById(id);
-	}
 
-}
+	@DeleteMapping("/delete/{bid}")
+	public Businessbean deleteById(@PathVariable("bid") int bid) {
+		return BusinessunitService.deleteByBid(bid);
+	}}
+//
+//}

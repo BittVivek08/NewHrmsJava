@@ -39,41 +39,100 @@ public class BusinessunitServicelmpl implements BusinessunitService {
 		return businessunitrepository.findAll();
 	}
 
-	@Override
-	public Businessunit updatebusinessdetails(int id, Businessunit entity) {
-		Optional<Businessunit> businessOptional = businessunitrepository.findById(id);
-		try {
-			if (businessOptional.isPresent()) {
+@Override
+public Businessunit updatebusinessdetails(int bid, Businessunit entity) {
 
-				Businessunit details = businessOptional.get();
+	Businessunit bean = businessunitrepository.getByBid(bid);
+	
+		if (bean != null) {
+			bean.setName(entity.getName());
+			bean.setStartdate(entity.getStartdate());
+			bean.setState(entity.getState());
+			bean.setDescription(entity.getDescription());
+			bean.setCountry(entity.getCountry());
+			bean.setCode(entity.getCode());
+			bean.setAddress1(entity.getAddress1());
+			bean.setAddress2(entity.getAddress2());
+			bean.setAddress3(entity.getAddress3());
 
-				details.setId(entity.getId());
-				details.setBid(entity.getBid());
-				details.setName(entity.getName());
-				details.setStartdate(entity.getStartdate());
-				details.setState(entity.getState());
-				details.setDescription(entity.getDescription());
-				details.setCountry(entity.getCountry());
-				details.setCode(entity.getCode());
-				details.setAddress1(entity.getAddress1());
-				details.setAddress2(entity.getAddress2());
-				details.setAddress3(entity.getAddress3());
-				return businessunitrepository.save(details);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-
+		return businessunitrepository.save(bean);
 		}
 		return null;
-	}
+	
+}
 
-	@Override
-	public Businessbean deleteById(int id) {
+public Businessbean deleteByBid(int bid) {
+	
+	
 		
-		businessunitrepository.deleteById(id);
-		businessbean.setMessage("businessdetails delete successfully");
-		businessbean.setStatus(true);
+	Businessunit bean = this.businessunitrepository.getByBid( bid);
+		if(bean!=null) {
+			this.businessunitrepository.delete(bean);
+			businessbean.setMessage("buinessdetails deleted successfully");
+			businessbean.setStatus(true);
+		} else {
+			businessbean.setMessage("Failed to Delete details ");
+			businessbean.setStatus(false);
+		}
 		return businessbean;
-	}
+		
+	
 
 }
+
+//
+//@Override
+//public Businessunit updatebusinessdetails(int id, Businessunit entity) {
+//	Optional<Businessunit> businessOptional = businessunitrepository.findById(id);
+//	try {
+//		if (businessOptional.isPresent()) {
+//
+//			Businessunit details = businessOptional.get();
+//
+//			details.setId(entity.getId());
+//			details.setBid(entity.getBid());
+//			details.setName(entity.getName());
+//			details.setStartdate(entity.getStartdate());
+//			details.setState(entity.getState());
+//			details.setDescription(entity.getDescription());
+//			details.setCountry(entity.getCountry());
+//			details.setCode(entity.getCode());
+//			details.setAddress1(entity.getAddress1());
+//			details.setAddress2(entity.getAddress2());
+//			details.setAddress3(entity.getAddress3());
+//			return businessunitrepository.save(details);
+//		}
+//	} catch (Exception e) {
+//		e.printStackTrace();
+//
+//	}
+//	return null;
+//}
+//
+//@Override
+//public Businessbean deleteById(int id) {
+//	
+//	businessunitrepository.deleteById(id);
+//	businessbean.setMessage("businessdetails delete successfully");
+//	businessbean.setStatus(true);
+//	return businessbean;
+//}
+//}
+
+
+//public Businessunit deletebid(int bid) {
+//
+//Businessunit bean = this.businessunitrepository.findBybid(bid);
+//if(bean!=null) {
+//	this.businessunitrepository.deleteBybId(bean);
+//	businessbean.setMessage("bussniessdetails  delete successfully");
+//	businessbean.setStatus(true);
+//} else {
+//	businessbean.setMessage("Failed to Delete details ");
+//	businessbean.setStatus(false);
+//}
+//return bean;
+//}
+
+}
+

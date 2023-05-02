@@ -12,6 +12,10 @@ public interface BusinessunitService {
 
 	public Businessunit updatebusinessdetails(int bid, Businessunit entity);
 
-	Businessbean deleteById(int id);
+	//Businessbean deleteById(int id);
+
+	//Businessunit deletebid(int bid);
+
+	//Businessbean deletebid(int bid);
 
 }
