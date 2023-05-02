@@ -30,6 +30,13 @@ public class BusinessunitController {
 
 		return BusinessunitService.saveBusinessDetails(businessunit);
 	}
+	
+@GetMapping("/getbusinessdetails/{bid}")
+public  Businessunit getByBId(@PathVariable("bid") int bid) {
+	return BusinessunitService.getByBid(bid);
+}
+
+
 
 	@GetMapping("/getbusinessdetails")
 	public ResponseEntity<List<Businessunit>> getbusinessDetails() {
@@ -37,21 +44,6 @@ public class BusinessunitController {
 		return new ResponseEntity<>(details, HttpStatus.OK);
 
 	}
-
-//	@PutMapping("/Updatebusinessdetails/{id}")
-//	public ResponseEntity<Businessunit> updatebusinessdetails(@PathVariable("id") int id,
-//			@RequestBody Businessunit entity) {
-//
-//		Businessunit updatedetails = BusinessunitService.updatebusinessdetails(id, entity);
-//
-//		return new ResponseEntity<>(updatedetails, HttpStatus.OK);
-//
-//	}
-//
-//	@DeleteMapping("/delete/{id}")
-//	public Businessbean deleteById(@PathVariable("id") int id) {
-//		return BusinessunitService.deleteById(id);
-//	}
 
 	@PutMapping("/Updatebusinessdetails/{bid}")
 	public ResponseEntity<Businessunit> updatebusinessdetails(@PathVariable("bid") int bid,
@@ -67,6 +59,20 @@ public class BusinessunitController {
 	@DeleteMapping("/delete/{bid}")
 	public Businessbean deleteById(@PathVariable("bid") int bid) {
 		return BusinessunitService.deleteByBid(bid);
-	}}
+	}
+}
+
+//@PutMapping("/Updatebusinessdetails/{id}")
+//public ResponseEntity<Businessunit> updatebusinessdetails(@PathVariable("id") int id,
+//		@RequestBody Businessunit entity) {
 //
+//	Businessunit updatedetails = BusinessunitService.updatebusinessdetails(id, entity);
+//
+//	return new ResponseEntity<>(updatedetails, HttpStatus.OK);
+//
+//}
+//
+//@DeleteMapping("/delete/{id}")
+//public Businessbean deleteById(@PathVariable("id") int id) {
+//	return BusinessunitService.deleteById(id);
 //}

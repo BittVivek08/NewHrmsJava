@@ -11,14 +11,6 @@ public interface BusinessunitRepository  extends JpaRepository<Businessunit, Int
 	
 	public Businessunit getByBid(int bid);
 
-	//public Businessunit findByBid(int bid);
-
-	//public void deleteById(Businessbean bean);
-
-	//public void deleteBybId(Businessunit bean);
-
-	//public Businessunit getBybid(int bid);
-
-	//public void deleteBybId(Businessunit bean);
+	
 
 }

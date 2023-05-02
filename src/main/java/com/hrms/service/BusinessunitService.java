@@ -11,11 +11,11 @@ public interface BusinessunitService {
 	public List<Businessunit> getAllbusinessdetails();
 
 	public Businessunit updatebusinessdetails(int bid, Businessunit entity);
-
-	//Businessbean deleteById(int id);
-
-	//Businessunit deletebid(int bid);
-
-	//Businessbean deletebid(int bid);
+	
+	public Businessbean deleteByBid(int bid);
+	
+	public Businessunit getByBid(int bid);
+	
+	
 
 }

@@ -32,6 +32,13 @@ public class BusinessunitServicelmpl implements BusinessunitService {
 		}
 		return businessbean;
 	}
+	@Override
+	public Businessunit getByBid(int bid) {
+		
+		Businessunit bean=this.businessunitrepository.getByBid(bid);
+		
+		return bean;
+	}
 
 	@Override
 	public List<Businessunit> getAllbusinessdetails() {
@@ -61,10 +68,9 @@ public Businessunit updatebusinessdetails(int bid, Businessunit entity) {
 	
 }
 
+@Override
 public Businessbean deleteByBid(int bid) {
 	
-	
-		
 	Businessunit bean = this.businessunitrepository.getByBid( bid);
 		if(bean!=null) {
 			this.businessunitrepository.delete(bean);
