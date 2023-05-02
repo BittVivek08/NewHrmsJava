@@ -25,7 +25,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 	private EmployeeAttendanceRequest employeeRequest;
 
 	@Override
-	public boolean checkIfCheckedInToday(int empId) {
+	public boolean checkIfCheckedInToday(String empId) {
 
 		List<EmployeeAttendance> employeeAttendance = attendanceRepo.findByEmpId(empId);
 
@@ -45,7 +45,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 	}
 
 	@Override
-	public void saveCheckInTime(int empId, String ipAddress, String workFrom) {
+	public void saveCheckInTime(String empId, String ipAddress, String workFrom) {
 
 		EmployeeAttendance employeeAttendance = new EmployeeAttendance();
 		//		EmployeeAttendance employeeAttendance = attendanceRepo.findById(empId).orElse(null);
@@ -69,7 +69,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 	}
 
 	@Override
-	public void saveCheckOutTime(int empId) {
+	public void saveCheckOutTime(String empId) {
 
 		List<EmployeeAttendance> employeeAttendanceList = attendanceRepo.findByEmpId(empId);
 
@@ -81,7 +81,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 	}
 
 	@Override
-	public List<EmployeeAttendance> getEmployeeWeeklyAttendance(int empId, String startDate, String endDate) {
+	public List<EmployeeAttendance> getEmployeeWeeklyAttendance(String empId, String startDate, String endDate) {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 

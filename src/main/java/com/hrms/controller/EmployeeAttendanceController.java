@@ -29,7 +29,7 @@ public class EmployeeAttendanceController {
 //	   private AttendanceRepository attendanceRepo;
 //	   
 	   @PostMapping("/check-in/{empId}" )
-	    public ResponseEntity<String> checkIn(@PathVariable int empId, @RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
+	    public ResponseEntity<String> checkIn(@PathVariable String empId, @RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
 		   
 		   
 	        boolean isCheckedIn = attendanceService.checkIfCheckedInToday(empId);
@@ -43,14 +43,14 @@ public class EmployeeAttendanceController {
 	    }
 	   
 	   @PostMapping("/check-out/{empId}")
-	    public ResponseEntity<String> checkOut(@PathVariable int empId) {
+	    public ResponseEntity<String> checkOut(@PathVariable String empId) {
 		   
 	        attendanceService.saveCheckOutTime(empId);
 	        return ResponseEntity.ok("Employee checked out successfully");
 	    }
 	   
 	   @GetMapping("/employee/weekly/{empId}")
-	    public ResponseEntity<List<EmployeeAttendance>> getEmployeeWeeklyAttendance(@PathVariable int empId,
+	    public ResponseEntity<List<EmployeeAttendance>> getEmployeeWeeklyAttendance(@PathVariable String empId,
 	    		@QueryParam("startDate") String startDate,
 	    		@QueryParam("endDate") String endDate) throws ParseException {
 		   

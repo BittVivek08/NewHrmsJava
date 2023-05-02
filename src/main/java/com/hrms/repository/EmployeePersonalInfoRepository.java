@@ -13,7 +13,7 @@ public interface EmployeePersonalInfoRepository extends JpaRepository<EmployeeJo
 
 //	public EmployeeJobHistory findBypositionId(int positionId);
 
-	//public int updateEmployeeJobHistory(EmployeeJobHistory employeeJobHistory);
+//	public int updateEmployeeJobHistory(EmployeeJobHistory employeeJobHistory);
 	
 
 }
