@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.AnnouncementBean;
 import com.hrms.entity.CompanyAnnouncement;
-import com.hrms.service.CompanyAnnouncementServiceImpl;
+import com.hrms.serviceImpl.CompanyAnnouncementServiceImpl;
 
 
 

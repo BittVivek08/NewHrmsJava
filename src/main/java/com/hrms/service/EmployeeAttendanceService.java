@@ -1,12 +1,9 @@
 package com.hrms.service;
 
 import java.util.List;
-import org.springframework.stereotype.Service;
 
-import com.hrms.beans.EmployeeAttendanceRequest;
 import com.hrms.beans.EmployeeAttendancebean;
 import com.hrms.entity.EmployeeAttendance;
-
 
 public interface EmployeeAttendanceService {
 		

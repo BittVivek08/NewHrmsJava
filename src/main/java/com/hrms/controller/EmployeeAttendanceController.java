@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.hrms.beans.EmployeeAttendanceRequest;
+import com.hrms.beans.EmployeeAttendancebean;
 import com.hrms.entity.EmployeeAttendance;
 import com.hrms.service.EmployeeAttendanceService;
 import com.hrms.util.IPAddress;
@@ -29,24 +30,33 @@ public class EmployeeAttendanceController {
 //	   private AttendanceRepository attendanceRepo;
 //	   
 	   @PostMapping("/check-in/{empId}" )
-	    public ResponseEntity<String> checkIn(@PathVariable String empId, @RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
+	    public ResponseEntity<EmployeeAttendancebean> checkIn(@PathVariable String empId, @RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
 		   
-		   
+		   EmployeeAttendancebean attendancebean = new EmployeeAttendancebean();
 	        boolean isCheckedIn = attendanceService.checkIfCheckedInToday(empId);
+	        
 	        if (isCheckedIn) {
-            return ResponseEntity.badRequest().body("Employee has already checked in today");
+	        	attendancebean.setMsg("Employee has already checked in today");
+	        	attendancebean.setStatus(false);
+            return ResponseEntity.ok().body(attendancebean);
+            
 //	        	return new ResponseEntity<EmployeeAttendance>(HttpStatus.BAD_REQUEST);
 	        }
 	        attendanceService.saveCheckInTime(empId,IPAddress.getCurrentIp(),employeeAttendanceRequest.getWorkFrom());
-	        return ResponseEntity.ok("Employee checked in successfully");
+	        attendancebean.setMsg("Employee checked in successfully");
+	        attendancebean.setStatus(true);
+	        return ResponseEntity.ok(attendancebean);
 				
 	    }
 	   
 	   @PostMapping("/check-out/{empId}")
-	    public ResponseEntity<String> checkOut(@PathVariable String empId) {
+	    public ResponseEntity<EmployeeAttendancebean> checkOut(@PathVariable String empId) {
 		   
-	        attendanceService.saveCheckOutTime(empId);
-	        return ResponseEntity.ok("Employee checked out successfully");
+		   EmployeeAttendancebean attendancebean = new EmployeeAttendancebean();
+		   attendanceService.saveCheckOutTime(empId);
+		   attendancebean.setMsg("Employee checked out successfully");
+		   attendancebean.setStatus(true);
+	        return ResponseEntity.ok(attendancebean);
 	    }
 	   
 	   @GetMapping("/employee/weekly/{empId}")
