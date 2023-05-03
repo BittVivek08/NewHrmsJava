@@ -66,7 +66,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 		List<EmployeeAttendance> employeeAttendanceList = attendanceRepo.findByEmpId(empId);
 
-		EmployeeAttendance employeeAttendance = employeeAttendanceList.get(0);
+		EmployeeAttendance employeeAttendance = employeeAttendanceList.get(employeeAttendanceList.size()-1);
 		employeeAttendance.setCheckOutTime(LocalTime.now());
 		employeeAttendance.setDate(LocalDate.now());
 		employeeAttendance.setWorkFrom(employeeAttendance.getWorkFrom());
