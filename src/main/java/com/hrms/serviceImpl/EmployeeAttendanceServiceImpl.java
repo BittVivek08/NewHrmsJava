@@ -1,4 +1,4 @@
-package com.hrms.service;
+package com.hrms.serviceImpl;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -7,10 +7,10 @@ import java.time.ZoneId;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.hrms.beans.EmployeeAttendanceRequest;
 import com.hrms.beans.EmployeeAttendancebean;
 import com.hrms.entity.EmployeeAttendance;
 import com.hrms.repository.AttendanceRepository;
+import com.hrms.service.EmployeeAttendanceService;
 
 @Service
 public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService {
@@ -21,11 +21,8 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 	@Autowired
 	private EmployeeAttendancebean eab;
 
-	@Autowired
-	private EmployeeAttendanceRequest employeeRequest;
-
 	@Override
-	public boolean checkIfCheckedInToday(int empId) {
+	public boolean checkIfCheckedInToday(String empId) {
 
 		List<EmployeeAttendance> employeeAttendance = attendanceRepo.findByEmpId(empId);
 
@@ -35,7 +32,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 			return false;
 		}
 		else {
-			LocalDate checkInTime = employeeAttendance.get(0).getDate();
+			LocalDate checkInTime = employeeAttendance.get(employeeAttendance.size()-1).getDate();
 			if (checkInTime != null && checkInTime.isEqual(LocalDate.now())) {
 				eab.setStatus(true);
 				return true;
@@ -45,8 +42,9 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 	}
 
 	@Override
-	public void saveCheckInTime(int empId, String ipAddress, String workFrom) {
-
+	public void saveCheckInTime(String empId, String ipAddress, String workFrom) {
+		
+		EmployeeAttendancebean attendancebean= new EmployeeAttendancebean();
 		EmployeeAttendance employeeAttendance = new EmployeeAttendance();
 		//		EmployeeAttendance employeeAttendance = attendanceRepo.findById(empId).orElse(null);
 		employeeAttendance.setCheckInTime(LocalTime.now());
@@ -61,27 +59,23 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 			employeeAttendance.setStatus("present");
 			attendanceRepo.save(employeeAttendance);
 		}
-		else {
-
-			employeeAttendance.setStatus("absent");
-			attendanceRepo.save(employeeAttendance);
-		}
 	}
 
 	@Override
-	public void saveCheckOutTime(int empId) {
+	public void saveCheckOutTime(String empId) {
 
 		List<EmployeeAttendance> employeeAttendanceList = attendanceRepo.findByEmpId(empId);
 
-		EmployeeAttendance employeeAttendance = employeeAttendanceList.get(0);
+		EmployeeAttendance employeeAttendance = employeeAttendanceList.get(employeeAttendanceList.size()-1);
 		employeeAttendance.setCheckOutTime(LocalTime.now());
 		employeeAttendance.setDate(LocalDate.now());
 		employeeAttendance.setWorkFrom(employeeAttendance.getWorkFrom());
-		EmployeeAttendance employeeAtt = attendanceRepo.save(employeeAttendance);
+		attendanceRepo.save(employeeAttendance);
+	
 	}
 
 	@Override
-	public List<EmployeeAttendance> getEmployeeWeeklyAttendance(int empId, String startDate, String endDate) {
+	public List<EmployeeAttendance> getEmployeeWeeklyAttendance(String empId, String startDate, String endDate) {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
