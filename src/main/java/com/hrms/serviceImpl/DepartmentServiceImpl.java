@@ -1,4 +1,4 @@
-package com.hrms.service;
+package com.hrms.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +11,7 @@ import com.hrms.beans.Departmentbean;
 
 import com.hrms.entity.Department;
 import com.hrms.repository.DepartmentRepo;
+import com.hrms.service.DepartmentService;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {

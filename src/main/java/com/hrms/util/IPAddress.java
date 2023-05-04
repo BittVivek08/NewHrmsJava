@@ -3,15 +3,13 @@ package com.hrms.util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.net.UnknownHostException;
 
 public class IPAddress {
 
-	public static void main(String[] args) throws UnknownHostException {
-		IPAddress.getCurrentIp();
-
-	}
-
+//	public static void main(String[] args) throws UnknownHostException {
+//		IPAddress.getCurrentIp();
+//
+//	}
 	public static String getCurrentIp() {
 		
 		try {

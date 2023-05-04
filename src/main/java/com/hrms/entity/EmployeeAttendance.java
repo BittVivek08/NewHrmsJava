@@ -2,11 +2,15 @@ package com.hrms.entity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 
@@ -20,7 +24,7 @@ public class EmployeeAttendance {
 	private int id;
 
 	@Column(name = "emp_id")
-	private int empId;
+	private String empId;
 	
 	@Column(name = "ip_Address")
 	private String ipAddress;
@@ -37,6 +41,10 @@ public class EmployeeAttendance {
 	private LocalDate date;
 	
 	private String status;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "date2" , referencedColumnName = "date2")
+	private HolidayCalendarEntity calendarEntity;
 	
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	private EmployeeDetails employee;

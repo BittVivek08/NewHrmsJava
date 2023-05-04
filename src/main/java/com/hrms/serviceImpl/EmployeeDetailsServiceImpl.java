@@ -1,4 +1,4 @@
-package com.hrms.service;
+package com.hrms.serviceImpl;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -16,6 +16,7 @@ import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.repository.EmployeeRepository;
+import com.hrms.service.EmployeeDetailsService;
 
 @Service
 public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{

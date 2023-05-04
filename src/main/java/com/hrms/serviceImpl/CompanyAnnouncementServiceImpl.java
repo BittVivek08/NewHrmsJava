@@ -1,4 +1,4 @@
-package com.hrms.service;
+package com.hrms.serviceImpl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.hrms.beans.AnnouncementBean;
 import com.hrms.entity.CompanyAnnouncement;
 import com.hrms.repository.AnnouncementRepo;
+import com.hrms.service.CompanyAnnouncementService;
 
 @Service
 public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementService {
@@ -45,11 +46,6 @@ public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementServ
 	}
 	
 }
-
-
-
-
-
 
 
 
