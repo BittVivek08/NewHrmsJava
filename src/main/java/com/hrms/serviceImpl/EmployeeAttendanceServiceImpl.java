@@ -7,7 +7,6 @@ import java.time.ZoneId;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.hrms.beans.EmployeeAttendanceRequest;
 import com.hrms.beans.EmployeeAttendancebean;
 import com.hrms.entity.EmployeeAttendance;
 import com.hrms.repository.AttendanceRepository;
@@ -21,9 +20,6 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Autowired
 	private EmployeeAttendancebean eab;
-
-	@Autowired
-	private EmployeeAttendanceRequest employeeRequest;
 
 	@Override
 	public boolean checkIfCheckedInToday(String empId) {
@@ -47,7 +43,12 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Override
 	public void saveCheckInTime(String empId, String ipAddress, String workFrom) {
+<<<<<<< HEAD
 
+=======
+		
+		EmployeeAttendancebean attendancebean= new EmployeeAttendancebean();
+>>>>>>> 263fa520f10cf84dbe623210aab30fd233f2e7fc
 		EmployeeAttendance employeeAttendance = new EmployeeAttendance();
 		//		EmployeeAttendance employeeAttendance = attendanceRepo.findById(empId).orElse(null);
 		employeeAttendance.setCheckInTime(LocalTime.now());
@@ -62,11 +63,6 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 			employeeAttendance.setStatus("present");
 			attendanceRepo.save(employeeAttendance);
 		}
-		else {
-
-			employeeAttendance.setStatus("absent");
-			attendanceRepo.save(employeeAttendance);
-		}
 	}
 
 	@Override
@@ -78,7 +74,8 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 		employeeAttendance.setCheckOutTime(LocalTime.now());
 		employeeAttendance.setDate(LocalDate.now());
 		employeeAttendance.setWorkFrom(employeeAttendance.getWorkFrom());
-		EmployeeAttendance employeeAtt = attendanceRepo.save(employeeAttendance);
+		attendanceRepo.save(employeeAttendance);
+	
 	}
 
 	@Override
