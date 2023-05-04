@@ -8,18 +8,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.hrms.entity.EmployeeDetails;
 
-public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Integer>{
+public interface EmployeeRepository extends JpaRepository<EmployeeDetails, String>{
 
-	
-	
-	//@Query("SELECT empId,firstName,dateOfBirth,lastName FROM EmployeeDetails where ")
-	//List<Object[]> findEmployeeDetails();
-	
-
-	
 	Optional<EmployeeDetails> findByEmailAndPassword(String email, String password);
 	
 	EmployeeDetails findByEmail(String email);
+
+	Optional<EmployeeDetails> findById(Integer id);
+
+	public EmployeeDetails findByEmpId(String empid);
 	
-	EmployeeDetails findByFirstName(String firstName);
+
 }

@@ -1,4 +1,4 @@
-package com.hrms.service;
+package com.hrms.serviceImpl;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -10,12 +10,16 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.hrms.beans.EmpBirthResponse;
 import com.hrms.beans.EmployeeDto;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.EmployeeSalaryDetails;
 import com.hrms.repository.EmployeeRepository;
+import com.hrms.repository.EmployeeSalaryRepository;
+import com.hrms.service.EmployeeDetailsService;
 
 @Service
 public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
@@ -24,18 +28,30 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 	private EmployeeRepository empRepo;
 
 	@Autowired
+	private EmployeeSalaryRepository empSalRepo;
+
+	@Autowired
 	private EntityBeanResponse ebr;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public EntityBeanResponse saveEmpDetails(EmployeeDetails employeeDetails)  {
+
 		String encode = this.passwordEncoder.encode(employeeDetails.getPassword());
 		employeeDetails.setPassword(encode);
+
+		// parent + child record data 
+	//	EmployeeDetails empDetails = new EmployeeDetails();
 		
-		
-		  EmployeeDetails saved = empRepo.save(employeeDetails);
+		//		empDetails.getEmpSalDetails().setDetails(empDetails);
+		//only save parent entity class
+		EmployeeDetails saved = empRepo.save(employeeDetails);
+
+		//		EmployeeSalaryDetails sal = new EmployeeSalaryDetails(employeeDetails.getChild());
+		//		empDetails.setEmpSalDetails(sal);
+
 		if (saved != null) {
 			ebr.setMsg("Employee Details Saved Successfully");
 			ebr.setStatus(true);
@@ -44,6 +60,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 			ebr.setStatus(false);
 		}
 		return ebr;
+
 	}
 
 	@Override
@@ -64,6 +81,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 
 	@Override
 	public EntityBeanResponse updateEmpDetails(EmployeeDetails employeeDetails) {
+
 		EmployeeDetails update = empRepo.save(employeeDetails);
 		if (update != null) {
 			ebr.setMsg("Employee Details Updated Successfully");
@@ -76,7 +94,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 	}
 	@Override
 	public List<EmpBirthResponse> findBirthdayDetails() {
-		
+
 		List<EmployeeDetails> empList =  empRepo.findAll();
 		List<EmployeeDetails> empListBirhdays = new ArrayList<>();
 		List<EmpBirthResponse> lis = new ArrayList<>();
@@ -89,7 +107,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 
 				if (dob.getDate() == today.getDayOfMonth()
 						&& dob.getMonth()+1 == today.getMonthValue()) {
-					
+
 					EmpBirthResponse res = new EmpBirthResponse();
 					res.setFirstname(emp.getFirstName());
 					res.setLastname(emp.getLastName());
@@ -112,7 +130,6 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 	public EntityBeanResponse loginEmployee(LoginDto loginDto) {
 
 		EmployeeDetails employee1 = empRepo.findByEmail(loginDto.getEmail());
-
 		if (employee1 != null) {
 			String password = loginDto.getPassword();
 			String encodedPassword = employee1.getPassword();
@@ -153,6 +170,47 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 		}
 		return ebr;
 	}
+
+	@Override
+	public EntityBeanResponse saveSalaryDetails(EmployeeSalaryDetails empSalaryDetails) {
+		EmployeeDetails empDetail = empRepo.findByEmpId(empSalaryDetails.getEmployeeDetails().getEmpId());
+		empSalaryDetails.setEmployeeDetails(empDetail);
+		EmployeeSalaryDetails saved= empSalRepo.save(empSalaryDetails);
+	
+		if(saved != null) {
+			ebr.setMsg("Salary Details Added successfully !");
+			ebr.setStatus(true);
+			ebr.setEmployeeDto(null);
+		}else {
+			ebr.setMsg("Adding Salary Details Failed");
+			ebr.setStatus(false);
+			ebr.setEmployeeDto(null);
+		}
+		return ebr;
+	}
+	@Override
+	public EntityBeanResponse updateSalaryDetails(EmployeeSalaryDetails empSalaryDetails) {
+		EmployeeDetails empDetails = empRepo.findByEmpId(empSalaryDetails.getEmployeeDetails().getEmpId());
+		empSalaryDetails.setEmployeeDetails(empDetails);
+		EmployeeSalaryDetails updated = empSalRepo.save(empSalaryDetails);
+		
+		if(updated != null) {
+			ebr.setMsg("Salary Details Updated Successfully");
+			ebr.setStatus(true);
+		}else {
+			ebr.setMsg("Salary Updation Failed");
+			ebr.setStatus(false);
+		}
+		return ebr;
+	}
+
+	@Override
+	public List<EmployeeSalaryDetails> getSalaryByEmpName(String empName) {
+		
+		return empSalRepo.findByEmpName(empName);
+	}
+
+	
 }
 
 

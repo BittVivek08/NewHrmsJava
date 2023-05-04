@@ -12,15 +12,15 @@ public interface EmployeeAttendanceService {
 		
 //	public EmployeeAttendancebean saveAttendanceDetails(EmployeeAttendance employeeattend);
 	
-	public boolean checkIfCheckedInToday(int empId);
+	public boolean checkIfCheckedInToday(String empId);
 	
-	public void saveCheckInTime(int empId ,String ipAddress,String workFrom);
+	public void saveCheckInTime(String empId ,String ipAddress,String workFrom);
 	
-	public void saveCheckOutTime(int empId);
+	public void saveCheckOutTime(String empId);
 	
 //	public EmployeeAttendance findByEmpId(int empId);
 	
-	public List<EmployeeAttendance> getEmployeeWeeklyAttendance(int empId, String startDate, String endDate);
+	public List<EmployeeAttendance> getEmployeeWeeklyAttendance(String empId, String startDate, String endDate);
 		
 	
 }

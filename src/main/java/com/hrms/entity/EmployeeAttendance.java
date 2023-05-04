@@ -20,7 +20,7 @@ public class EmployeeAttendance {
 	private int id;
 
 	@Column(name = "emp_id")
-	private int empId;
+	private String empId;
 	
 	@Column(name = "ip_Address")
 	private String ipAddress;
