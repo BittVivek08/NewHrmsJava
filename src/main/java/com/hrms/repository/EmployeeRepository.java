@@ -22,4 +22,10 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Integ
 	EmployeeDetails findByEmail(String email);
 	
 	EmployeeDetails findByFirstName(String firstName);
+	
+	EmployeeDetails findByEmpId(String empId);
+	
+	
+	
+	
 }

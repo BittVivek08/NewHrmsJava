@@ -1,6 +1,8 @@
 package com.hrms.entity;
 
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,12 +19,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name= "main_employees")
-public class EmployeeDetails {
+public class EmployeeDetails implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
+	@Column(name="emp_id")
 	private String empId;
 	
 	private String firstName;
