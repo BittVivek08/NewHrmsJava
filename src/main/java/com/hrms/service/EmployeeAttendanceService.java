@@ -22,6 +22,8 @@ public interface EmployeeAttendanceService {
 	public List<EmployeeAttendance> getEmployeeWeeklyAttendance(String empId, String startDate, String endDate);
 
 	public boolean findHolidayDetails();
+	
+	public boolean findWeekends();
 		
 	
 }

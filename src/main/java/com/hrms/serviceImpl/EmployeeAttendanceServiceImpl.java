@@ -1,6 +1,7 @@
 package com.hrms.serviceImpl;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -52,6 +53,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 		EmployeeAttendancebean attendancebean= new EmployeeAttendancebean();
 
 		if(findHolidayDetails()) {
+			if(findWeekends()) {
 			if(!checkIfCheckedInToday(empId)) {
 				EmployeeAttendance employeeAttendance = new EmployeeAttendance();
 				employeeAttendance.setCheckInTime(LocalTime.now());
@@ -73,8 +75,12 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 				attendancebean.setMsg("Employee has already checked in today");
 				attendancebean.setStatus(false);
 			}
+			}else {
+				attendancebean.setMsg("Attendance not allowed on weekends....!");
+				attendancebean.setStatus(true);
+			}
 		} else {
-			attendancebean.setMsg("Today id Holiday..!,Employee cannot Check-In");
+			attendancebean.setMsg("Today is Holiday..!,Employee cannot Check-In");
 			attendancebean.setStatus(true);
 		}
 		return attendancebean;
@@ -134,7 +140,22 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 		return true;
 	}
 
+	@Override
+	public boolean findWeekends() {
+		LocalDate today = LocalDate.now();
+        DayOfWeek dayOfWeek = today.getDayOfWeek();
+        if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
+        	
+        	return false;
+        	
+        } else {
+            // code to mark attendance
+        	return true;
+        }
+		
+	}
 
+	
 
 	//	@Override
 	//	public HolidayCalendarEntity getHolidays (LocalDate date)
