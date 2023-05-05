@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +20,9 @@ import com.hrms.beans.EmpBirthResponse;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
 import com.hrms.entity.EmployeeDetails;
-<<<<<<< HEAD
+
 import com.hrms.entity.EmployeeSalaryDetails;
 import com.hrms.repository.EmployeeRepository;
-=======
->>>>>>> 263fa520f10cf84dbe623210aab30fd233f2e7fc
 import com.hrms.service.EmployeeDetailsService;
 import com.hrms.service.FileStorageService;
 
@@ -34,7 +33,6 @@ public class EmployeeDetailsController {
 
 	@Autowired
 	private EmployeeDetailsService empService;
-<<<<<<< HEAD
 
 	@Autowired
 	FileStorageService fileStorageService;
@@ -45,7 +43,6 @@ public class EmployeeDetailsController {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-=======
 		
 	/*
 	 * @PostMapping("/saveEmployee") public EntityBeanResponse
@@ -56,7 +53,6 @@ public class EmployeeDetailsController {
 	 * }
 	 */
 	
->>>>>>> 263fa520f10cf84dbe623210aab30fd233f2e7fc
 	@PostMapping("/saveEmployee")
 	public EntityBeanResponse saveEmpDetails(@RequestBody EmployeeDetails empDetails) {
 

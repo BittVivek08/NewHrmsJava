@@ -43,12 +43,9 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Override
 	public void saveCheckInTime(String empId, String ipAddress, String workFrom) {
-<<<<<<< HEAD
 
-=======
 		
 		EmployeeAttendancebean attendancebean= new EmployeeAttendancebean();
->>>>>>> 263fa520f10cf84dbe623210aab30fd233f2e7fc
 		EmployeeAttendance employeeAttendance = new EmployeeAttendance();
 		//		EmployeeAttendance employeeAttendance = attendanceRepo.findById(empId).orElse(null);
 		employeeAttendance.setCheckInTime(LocalTime.now());

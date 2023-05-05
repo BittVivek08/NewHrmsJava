@@ -27,12 +27,10 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-<<<<<<< HEAD
     
 springdoc:
     packagesToScan: com.hrms.controller
     
-=======
 
 #server:
 #  port: 9090
@@ -47,4 +45,3 @@ springdoc:
 #    hibernate:
 #      ddl-auto: update
 #    show-sql: true
->>>>>>> 263fa520f10cf84dbe623210aab30fd233f2e7fc
