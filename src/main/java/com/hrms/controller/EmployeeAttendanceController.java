@@ -23,42 +23,39 @@ import com.hrms.util.IPAddress;
 @RequestMapping("/attendance")
 @CrossOrigin
 public class EmployeeAttendanceController {
-
-	@Autowired
-	private EmployeeAttendanceService attendanceService;
-
-	//	   @Autowired
-	//	   private AttendanceRepository attendanceRepo;
-	//	   
-	@PostMapping("/check-in/{empId}" )
-	public ResponseEntity<EmployeeAttendancebean> checkIn(LocalDate date,@PathVariable String empId, @RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
-
-		EmployeeAttendancebean attendancebean = attendanceService.saveCheckInTime(empId,IPAddress.getCurrentIp(),employeeAttendanceRequest.getWorkFrom());
-		return ResponseEntity.ok(attendancebean);
+	
+	   @Autowired
+	   private EmployeeAttendanceService attendanceService;
+	   
+//	   @Autowired
+//	   private AttendanceRepository attendanceRepo;
+//	   
+	   @PostMapping("/check-in/{empId}" )
+	    public ResponseEntity<EmployeeAttendancebean> checkIn(@PathVariable String empId, @RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
+		 
+	        attendanceService.saveCheckInTime(empId,IPAddress.getCurrentIp(),employeeAttendanceRequest.getWorkFrom());
+	        return ResponseEntity.ok(attendancebean);
+	    }
+	   
+	   @PostMapping("/check-out/{empId}")
+	    public ResponseEntity<EmployeeAttendancebean> checkOut(@PathVariable String empId) {
+		   
+		   EmployeeAttendancebean attendancebean = new EmployeeAttendancebean();
+		   attendanceService.saveCheckOutTime(empId);
+		   attendancebean.setMsg("Employee checked out successfully");
+		   attendancebean.setStatus(true);
+	        return ResponseEntity.ok(attendancebean);
+	    }
+	   
+	   @GetMapping("/employee/weekly/{empId}")
+	    public ResponseEntity<List<EmployeeAttendance>> getEmployeeWeeklyAttendance(@PathVariable String empId,
+	    		@QueryParam("startDate") String startDate,
+	    		@QueryParam("endDate") String endDate) throws ParseException {
+		   
+//		   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	        List<EmployeeAttendance> attendanceList = attendanceService.getEmployeeWeeklyAttendance(empId, startDate, endDate)
 
 	}
-
-	@PostMapping("/check-out/{empId}")
-	public ResponseEntity<EmployeeAttendancebean> checkOut(@PathVariable String empId) {
-
-		EmployeeAttendancebean attendancebean = new EmployeeAttendancebean();
-		attendanceService.saveCheckOutTime(empId);
-		attendancebean.setMsg("Employee checked out successfully");
-		attendancebean.setStatus(true);
-		return ResponseEntity.ok(attendancebean);
-	}
-
-	@GetMapping("/employee/weekly/{empId}")
-	public ResponseEntity<List<EmployeeAttendance>> getEmployeeWeeklyAttendance(@PathVariable String empId,
-			@QueryParam("startDate") String startDate,
-			@QueryParam("endDate") String endDate) throws ParseException {
-
-		//		   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		List<EmployeeAttendance> attendanceList = attendanceService.getEmployeeWeeklyAttendance(empId, startDate, endDate);
-
-		return ResponseEntity.ok(attendanceList);
-	}
-
 
 	//	   @PostMapping("/saveEmployee")
 	//		public  EmployeeAttendancebean recordAttendance(@RequestBody EmployeeAttendance employeeattend){

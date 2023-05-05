@@ -23,7 +23,7 @@ public class EmployeeDto {
 	
 	private String qualification;
 	
-	private Long mobileNumber;
+	private long mobileNumber;
 	
 	private String email;
 		

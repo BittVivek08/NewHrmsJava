@@ -17,6 +17,8 @@ public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementServ
 	@Autowired
 	private AnnouncementBean announcementbean;
 	
+	@Autowired
+	CompanyAnnouncement companyanoun;
 
 
 	@Override
@@ -45,8 +47,10 @@ public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementServ
 	
 	}
 	
-}
+		return announcementrepo.getCurrentAnnouncementDetails();
 
+	}
+}
 
 
 //	@Override

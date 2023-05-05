@@ -12,9 +12,8 @@ import com.hrms.entity.EmployeeAttendance;
 public interface AttendanceRepository extends JpaRepository<EmployeeAttendance, Integer> {
 	
 	   List<EmployeeAttendance> findByEmpIdAndDateBetween(String empId, LocalDate startDate, LocalDate endDate);
-	   
+
 	   List<EmployeeAttendance> findByEmpId(String empId);
-	   
 	   
 	  // List<EmployeeAttendance> findByDateBetween(LocalDate startDate, LocalDate endDate);
 	   
