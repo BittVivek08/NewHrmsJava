@@ -6,11 +6,10 @@ import lombok.Data;
 
 @Data
 @Component
-public class AnnouncementBean {
+public class Departmentbean {
 	
-	private String message;
+  private String message;
 	
 	private boolean status;
-	
-	
+
 }

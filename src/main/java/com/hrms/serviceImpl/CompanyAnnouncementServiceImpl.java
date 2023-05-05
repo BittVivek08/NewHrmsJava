@@ -16,6 +16,7 @@ public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementServ
 
 	@Autowired
 	private AnnouncementBean announcementbean;
+	
 	@Autowired
 	CompanyAnnouncement companyanoun;
 
@@ -36,16 +37,20 @@ public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementServ
 	}
 	@Override
 	public List<CompanyAnnouncement> Announcements() {
+		
+		List<CompanyAnnouncement> an =announcementrepo.getCurrentAnnouncementDetails();
+		if(an.isEmpty()) {
+        	return null;
+        }
+        
+		return an;
+	
+	}
+	
 		return announcementrepo.getCurrentAnnouncementDetails();
 
 	}
 }
-
-
-
-
-
-
 
 
 //	@Override
