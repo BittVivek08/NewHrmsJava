@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hrms.beans.Businessbean;
 import com.hrms.entity.Businessunit;
 import com.hrms.serviceImpl.BusinessunitServicelmpl;
-import com.hrms.service.BusinessunitServicelmpl;
 
 @RestController
 @RequestMapping("/business")
@@ -31,13 +30,11 @@ public class BusinessunitController {
 
 		return BusinessunitService.saveBusinessDetails(businessunit);
 	}
-	
-@GetMapping("/getbusinessdetails/{bid}")
-public  Businessunit getByBId(@PathVariable("bid") int bid) {
-	return BusinessunitService.getByBid(bid);
-}
 
-
+	@GetMapping("/getbusinessdetails/{bid}")
+	public Businessunit getByBId(@PathVariable("bid") int bid) {
+		return BusinessunitService.getByBid(bid);
+	}
 
 	@GetMapping("/getbusinessdetails")
 	public ResponseEntity<List<Businessunit>> getbusinessDetails() {
@@ -52,10 +49,9 @@ public  Businessunit getByBId(@PathVariable("bid") int bid) {
 
 		Businessunit updatedetails = BusinessunitService.updatebusinessdetails(bid, entity);
 
-		return  ResponseEntity.ok(updatedetails);
+		return ResponseEntity.ok(updatedetails);
 
 	}
-
 
 	@DeleteMapping("/delete/{bid}")
 	public Businessbean deleteById(@PathVariable("bid") int bid) {

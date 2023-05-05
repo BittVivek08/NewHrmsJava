@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.hrms.beans.EmployeeAttendancebean;
 import com.hrms.entity.EmployeeAttendance;
-import com.hrms.entity.HolidayCalendarEntity;
+import com.hrms.entity.HolidayCalenderEntity;
 import com.hrms.repository.AttendanceRepository;
-import com.hrms.repository.HolidayRepository;
+import com.hrms.repository.HolidayCalenderRepository;
 import com.hrms.service.EmployeeAttendanceService;
 
 @Service
@@ -24,7 +24,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 	private AttendanceRepository attendanceRepo;
 
 	@Autowired
-	private HolidayRepository holidayRepo;
+	private HolidayCalenderRepository holidayRepo;
 
 	@Autowired
 	private EmployeeAttendancebean eab;
@@ -48,24 +48,9 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 	}
 
 	@Override
-<<<<<<< HEAD
-	public void saveCheckInTime(String empId, String ipAddress, String workFrom) {
-
-		
-		EmployeeAttendancebean attendancebean= new EmployeeAttendancebean();
-		EmployeeAttendance employeeAttendance = new EmployeeAttendance();
-		//		EmployeeAttendance employeeAttendance = attendanceRepo.findById(empId).orElse(null);
-		employeeAttendance.setCheckInTime(LocalTime.now());
-		employeeAttendance.setDate(LocalDate.now());
-		employeeAttendance.setEmpId(empId);
-		employeeAttendance.setIpAddress(ipAddress);
-		employeeAttendance.setWorkFrom(workFrom);
-		attendanceRepo.save(employeeAttendance);
-=======
 	public EmployeeAttendancebean saveCheckInTime(String empId, String ipAddress, String workFrom) {
 
 		EmployeeAttendancebean attendancebean= new EmployeeAttendancebean();
->>>>>>> 7900334bed9587264593b285fceed763962e3224
 
 		if(findHolidayDetails()) {
 			if(findWeekends()) {
@@ -134,12 +119,12 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 	@Override
 	public boolean findHolidayDetails() {
 
-		List<HolidayCalendarEntity> holidayList =  holidayRepo.findAll();
+		List<HolidayCalenderEntity> holidayList =  holidayRepo.findAll();
 		LocalDate today = LocalDate.now();
 		try {
-			for (HolidayCalendarEntity holiday : holidayList) {
+			for (HolidayCalenderEntity holiday : holidayList) {
 
-				LocalDate holidaydate = holiday.getDate2();
+				LocalDate holidaydate = holiday.getDate();
 
 				if (holidaydate.getDayOfMonth() == today.getDayOfMonth()
 						&& holidaydate.getMonthValue() == today.getMonthValue()) {

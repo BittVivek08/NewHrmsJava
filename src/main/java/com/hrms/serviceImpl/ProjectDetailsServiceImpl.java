@@ -99,10 +99,11 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 	@Override
 	public List<ProjectResponseBean> getAllProjects(int id) {
 		ClientDetailsEntity clientInfo = clientRepo.findByClientid(id);
-		ProjectResponseBean res = new ProjectResponseBean();
+		ProjectResponseBean res;
 		List<ProjectResponseBean> list = new ArrayList<ProjectResponseBean>();
 		List<ProjectDetailsEntity> projectList = this.projectRepo.findByClient(clientInfo.getClientid() );
 		for (ProjectDetailsEntity proj : projectList) {
+			res = new ProjectResponseBean();
 			res.setProjectId(proj.getProjectId());
 			res.setClientid(proj.getClient().getClientid());
 			res.setDescription(proj.getDescription());

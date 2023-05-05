@@ -42,13 +42,7 @@ public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementServ
 		if(an.isEmpty()) {
         	return null;
         }
-        
 		return an;
-	
-	}
-	
-		return announcementrepo.getCurrentAnnouncementDetails();
-
 	}
 }
 

@@ -43,8 +43,8 @@ public class EmployeeAttendance {
 	private String status;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "date2" , referencedColumnName = "date2")
-	private HolidayCalendarEntity calendarEntity;
+	@JoinColumn(name = "date2" , referencedColumnName = "date")
+	private HolidayCalenderEntity calendarEntity;
 	
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	private EmployeeDetails employee;

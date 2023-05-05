@@ -19,10 +19,7 @@ import com.hrms.entity.EmployeeDetails;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.entity.EmployeeSalaryDetails;
 import com.hrms.repository.EmployeeRepository;
-<<<<<<< HEAD
 
-=======
->>>>>>> 7900334bed9587264593b285fceed763962e3224
 import com.hrms.repository.EmployeeSalaryRepository;
 import com.hrms.service.EmployeeDetailsService;
 
@@ -34,11 +31,11 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 
 	@Autowired
 	private EntityBeanResponse ebr;
+	
   @Autowired
 	private EmployeeSalaryRepository empSalRepo;
 
-	@Autowired
-	private EntityBeanResponse ebr;
+	
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -48,18 +45,13 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 		String encode = this.passwordEncoder.encode(employeeDetails.getPassword());
 		employeeDetails.setPassword(encode);
 		
-		
 		  EmployeeDetails saved = empRepo.save(employeeDetails);
-
-		String encode = this.passwordEncoder.encode(employeeDetails.getPassword());
-		employeeDetails.setPassword(encode);
 
 		// parent + child record data 
 	//	EmployeeDetails empDetails = new EmployeeDetails();
 		
 		//		empDetails.getEmpSalDetails().setDetails(empDetails);
 		//only save parent entity class
-		EmployeeDetails saved = empRepo.save(employeeDetails);
 
 		//		EmployeeSalaryDetails sal = new EmployeeSalaryDetails(employeeDetails.getChild());
 		//		empDetails.setEmpSalDetails(sal);
