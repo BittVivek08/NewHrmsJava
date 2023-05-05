@@ -35,10 +35,10 @@ public class CompanyAnnouncementController {
 	public List<CompanyAnnouncement> getAnnouncementsBetweendates()
 	{
 		List<CompanyAnnouncement> an =  companyannouncementservice.Announcements();
-		System.out.println(an.get(0).getDescription());
+		//System.out.println(an.get(0).getDescription());
 		return an;
-	}
  }
+}
 
 		
 //	public List<CompanyAnnouncement> getAnnouncementsBetweenddates(){

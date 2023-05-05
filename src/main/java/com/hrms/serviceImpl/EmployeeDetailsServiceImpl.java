@@ -16,12 +16,10 @@ import com.hrms.beans.EmployeeDto;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.repository.EmployeeRepository;
 import com.hrms.entity.EmployeeSalaryDetails;
 import com.hrms.repository.EmployeeRepository;
-<<<<<<< HEAD
 import com.hrms.repository.EmployeeSalaryRepository;
-=======
->>>>>>> 263fa520f10cf84dbe623210aab30fd233f2e7fc
 import com.hrms.service.EmployeeDetailsService;
 
 @Service
@@ -31,6 +29,8 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 	private EmployeeRepository empRepo;
 
 	@Autowired
+	private EntityBeanResponse ebr;
+  @Autowired
 	private EmployeeSalaryRepository empSalRepo;
 
 	@Autowired
@@ -41,6 +41,11 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 
 	@Override
 	public EntityBeanResponse saveEmpDetails(EmployeeDetails employeeDetails)  {
+		String encode = this.passwordEncoder.encode(employeeDetails.getPassword());
+		employeeDetails.setPassword(encode);
+		
+		
+		  EmployeeDetails saved = empRepo.save(employeeDetails);
 
 		String encode = this.passwordEncoder.encode(employeeDetails.getPassword());
 		employeeDetails.setPassword(encode);
@@ -133,6 +138,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 	public EntityBeanResponse loginEmployee(LoginDto loginDto) {
 
 		EmployeeDetails employee1 = empRepo.findByEmail(loginDto.getEmail());
+
 		if (employee1 != null) {
 			String password = loginDto.getPassword();
 			String encodedPassword = employee1.getPassword();
@@ -174,6 +180,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 		return ebr;
 	}
 
+
 	@Override
 	public EntityBeanResponse saveSalaryDetails(EmployeeSalaryDetails empSalaryDetails) {
 		EmployeeDetails empDetail = empRepo.findByEmpId(empSalaryDetails.getEmployeeDetails().getEmpId());
@@ -214,6 +221,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 	}
 
 	
+
 }
 
 
