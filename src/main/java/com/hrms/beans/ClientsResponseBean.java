@@ -6,11 +6,17 @@ import lombok.Data;
 
 @Data
 @Component
-public class AnnouncementBean {
+public class ClientsResponseBean {
 	
 	private String message;
 	
+	
 	private boolean status;
 	
+	private Object clientslist;
 	
+	
+	
+	
+
 }

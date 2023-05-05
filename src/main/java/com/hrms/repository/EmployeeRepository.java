@@ -19,4 +19,8 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
 	public EmployeeDetails findByEmpId(String empid);
 	
 
+	EmployeeDetails findByFirstName(String firstName);
+	
+	EmployeeDetails findByEmpId(String empId);
+	
 }
