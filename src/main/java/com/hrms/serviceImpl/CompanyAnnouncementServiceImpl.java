@@ -45,9 +45,8 @@ public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementServ
         
 		return an;
 	
-	}
 	
-		return announcementrepo.getCurrentAnnouncementDetails();
+	
 
 	}
 }

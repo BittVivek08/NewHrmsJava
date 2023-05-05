@@ -42,11 +42,7 @@ public class EmployeeDetailsController {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-<<<<<<< HEAD
 
-		
-=======
->>>>>>> 7900334bed9587264593b285fceed763962e3224
 	/*
 	 * @PostMapping("/saveEmployee") public EntityBeanResponse
 	 * saveEmpDetails(@RequestBody EmployeeDetails empDetails) {
@@ -55,11 +51,7 @@ public class EmployeeDetailsController {
 	 * 
 	 * }
 	 */
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> 7900334bed9587264593b285fceed763962e3224
 	@PostMapping("/saveEmployee")
 	public EntityBeanResponse saveEmpDetails(@RequestBody EmployeeDetails empDetails) {
 

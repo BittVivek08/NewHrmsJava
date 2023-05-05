@@ -48,24 +48,9 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 	}
 
 	@Override
-<<<<<<< HEAD
-	public void saveCheckInTime(String empId, String ipAddress, String workFrom) {
-
-		
-		EmployeeAttendancebean attendancebean= new EmployeeAttendancebean();
-		EmployeeAttendance employeeAttendance = new EmployeeAttendance();
-		//		EmployeeAttendance employeeAttendance = attendanceRepo.findById(empId).orElse(null);
-		employeeAttendance.setCheckInTime(LocalTime.now());
-		employeeAttendance.setDate(LocalDate.now());
-		employeeAttendance.setEmpId(empId);
-		employeeAttendance.setIpAddress(ipAddress);
-		employeeAttendance.setWorkFrom(workFrom);
-		attendanceRepo.save(employeeAttendance);
-=======
 	public EmployeeAttendancebean saveCheckInTime(String empId, String ipAddress, String workFrom) {
 
 		EmployeeAttendancebean attendancebean= new EmployeeAttendancebean();
->>>>>>> 7900334bed9587264593b285fceed763962e3224
 
 		if(findHolidayDetails()) {
 			if(findWeekends()) {

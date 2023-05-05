@@ -32,45 +32,18 @@ public class EmployeeAttendanceController {
 //	   
 	   @PostMapping("/check-in/{empId}" )
 	    public ResponseEntity<EmployeeAttendancebean> checkIn(@PathVariable String empId, @RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
-<<<<<<< HEAD
 		   
-
-
-		   EmployeeAttendancebean attendancebean = new EmployeeAttendancebean();
-	        boolean isCheckedIn = attendanceService.checkIfCheckedInToday(empId);
-	        
-	        if (isCheckedIn) {
-	        	attendancebean.setMsg("Employee has already checked in today");
-	        	attendancebean.setStatus(false);
-	        	return ResponseEntity.ok().body(attendancebean);
-            
-//	        	return new ResponseEntity<EmployeeAttendance>(HttpStatus.BAD_REQUEST);
-	        }
-	        attendanceService.saveCheckInTime(empId,IPAddress.getCurrentIp(),employeeAttendanceRequest.getWorkFrom());
-	        attendancebean.setMsg("Employee checked in successfully");
-        	attendancebean.setStatus(true);
+		   EmployeeAttendancebean attendancebean=  attendanceService.saveCheckInTime(empId,IPAddress.getCurrentIp(),employeeAttendanceRequest.getWorkFrom());
 	        return ResponseEntity.ok(attendancebean);
-				
-=======
-		 
-	        attendanceService.saveCheckInTime(empId,IPAddress.getCurrentIp(),employeeAttendanceRequest.getWorkFrom());
-	        return ResponseEntity.ok(attendancebean);
->>>>>>> 7900334bed9587264593b285fceed763962e3224
 	    }
 	   
 	   @PostMapping("/check-out/{empId}")
 	    public ResponseEntity<EmployeeAttendancebean> checkOut(@PathVariable String empId) {
 		   
 		   EmployeeAttendancebean attendancebean = new EmployeeAttendancebean();
-<<<<<<< HEAD
 	        attendanceService.saveCheckOutTime(empId);
 	        attendancebean.setMsg("Employee checked out successfully");
         	attendancebean.setStatus(true);
-=======
->>>>>>> 7900334bed9587264593b285fceed763962e3224
-		   attendanceService.saveCheckOutTime(empId);
-		   attendancebean.setMsg("Employee checked out successfully");
-		   attendancebean.setStatus(true);
 	        return ResponseEntity.ok(attendancebean);
 	    }
 	   
@@ -80,8 +53,8 @@ public class EmployeeAttendanceController {
 	    		@QueryParam("endDate") String endDate) throws ParseException {
 		   
 //		   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	        List<EmployeeAttendance> attendanceList = attendanceService.getEmployeeWeeklyAttendance(empId, startDate, endDate)
-
+	        List<EmployeeAttendance> attendanceList = attendanceService.getEmployeeWeeklyAttendance(empId, startDate, endDate);
+	        return ResponseEntity.ok(attendanceList);
 	}
 
 	//	   @PostMapping("/saveEmployee")
