@@ -18,10 +18,8 @@ import com.hrms.beans.LoginDto;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.entity.EmployeeSalaryDetails;
-<<<<<<< HEAD
+
 import com.hrms.repository.EmployeeRepository;
-=======
->>>>>>> 5d39815c388e03a52c15e9a07a6b8e996f725e4c
 import com.hrms.repository.EmployeeSalaryRepository;
 import com.hrms.service.EmployeeDetailsService;
 

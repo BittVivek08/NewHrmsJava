@@ -147,13 +147,13 @@ public class EmployeeDetailsController {
 	
 	    @PostMapping("/saveSalaryDetails")
         public EntityBeanResponse saveEmpSalaryDetails(@RequestBody EmployeeSalaryDetails empSalDetails) {
-        	EmployeeDetails byEmpId = empRepo.findByEmpId(empSalDetails.getEmp_Idd());
+        	EmployeeDetails byEmpId = empRepo.findByEmpId(empSalDetails.getEmployeeDetails().getEmpId());
         	empSalDetails.setEmployeeDetails(byEmpId);
         	return empService.saveSalaryDetails(empSalDetails);
         }
 	    @PutMapping("/updateSalaryDetails")
 	    public EntityBeanResponse updateEmpSalaryDetails(@RequestBody EmployeeSalaryDetails empSalDetails) {
-	    	EmployeeDetails byEmp = empRepo.findByEmpId(empSalDetails.getEmp_Idd());
+	    	EmployeeDetails byEmp = empRepo.findByEmpId(empSalDetails.getEmployeeDetails().getEmpId());
 	    	empSalDetails.setEmployeeDetails(byEmp);
 	    	return empService.updateSalaryDetails(empSalDetails);
 	    }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.PathVariable;
@@ -21,17 +22,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hrms.ServiceImpl.TimeSheetDetailsImpl;
 import com.hrms.beans.EntityBeanResponse;
 //import com.hrms.beans.SaveTimesheetRequestBean;
 import com.hrms.entity.SaveTimeSheet;
-import com.hrms.entity.TimeSheetApprovalStatus;
+import com.hrms.serviceImpl.TimeSheetDetailsImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
 @RestController
+@CrossOrigin
 public class HrmsEmpTimeSheetController {
      @Autowired
 	private TimeSheetDetailsImpl impl;
@@ -144,15 +145,14 @@ public class HrmsEmpTimeSheetController {
 //		   
 //	   }
 	    
-	    @PostMapping("/timeSheetApproval")
-	    public ResponseEntity<TimeSheetApprovalStatus> timeSheetApproval(@QueryParam("empId") int empid){
-	    	TimeSheetApprovalStatus timesheet=impl.timeSheetApproval(empid);
-	    	if(timesheet!=null) {
-	    	return new ResponseEntity<TimeSheetApprovalStatus>(timesheet,HttpStatus.ACCEPTED)  ; 
-	    	}else {
-	    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    	}
-	    }
+		/*
+		 * @PostMapping("/timeSheetApproval") public
+		 * ResponseEntity<TimeSheetApprovalStatus>
+		 * timeSheetApproval(@QueryParam("empId") int empid){ TimeSheetApprovalStatus
+		 * timesheet=impl.timeSheetApproval(empid); if(timesheet!=null) { return new
+		 * ResponseEntity<TimeSheetApprovalStatus>(timesheet,HttpStatus.ACCEPTED) ;
+		 * }else { return new ResponseEntity<>(HttpStatus.NOT_FOUND); } }
+		 */
 	    
      }
 

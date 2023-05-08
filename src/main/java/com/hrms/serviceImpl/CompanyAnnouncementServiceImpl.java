@@ -1,4 +1,5 @@
 package com.hrms.serviceImpl;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +41,12 @@ public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementServ
 		
 		List<CompanyAnnouncement> an =announcementrepo.getCurrentAnnouncementDetails();
 		if(an.isEmpty()) {
-        	return null;
+        	return new ArrayList<CompanyAnnouncement>();
         }
 		return an;
-<<<<<<< HEAD
 
-=======
->>>>>>> 5d39815c388e03a52c15e9a07a6b8e996f725e4c
 	}
 }
-
 
 //	@Override
 //	public List<CompanyAnnouncement> getAllAnnouncements() {

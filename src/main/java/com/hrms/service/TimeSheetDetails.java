@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.entity.SaveTimeSheet;
-import com.hrms.entity.TimeSheetApprovalStatus;
 
 
 public interface TimeSheetDetails {
