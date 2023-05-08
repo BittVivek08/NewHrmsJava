@@ -58,6 +58,11 @@ public class EmployeeDetails implements Serializable{
 
 	private String image;
 	
+	/*
+	 * private String createdOn;
+	 * 
+	 * private String lastUpdatedOn;
+	 */
 	
 }
 

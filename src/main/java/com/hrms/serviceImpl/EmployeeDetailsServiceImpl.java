@@ -19,10 +19,6 @@ import com.hrms.entity.EmployeeDetails;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.entity.EmployeeSalaryDetails;
 import com.hrms.repository.EmployeeRepository;
-<<<<<<< HEAD
-
-=======
->>>>>>> a6b861b6998b3a3b531f9d284846696f9f9349b6
 import com.hrms.repository.EmployeeSalaryRepository;
 import com.hrms.service.EmployeeDetailsService;
 
@@ -37,8 +33,6 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 	
   @Autowired
 	private EmployeeSalaryRepository empSalRepo;
-
-	
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -218,8 +212,6 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 		
 		return empSalRepo.findByEmpName(empName);
 	}
-
-	
 
 }
 

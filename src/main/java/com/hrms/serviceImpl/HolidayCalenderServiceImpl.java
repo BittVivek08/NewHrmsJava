@@ -1,16 +1,14 @@
 package com.hrms.serviceImpl;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.EntityBeanResponseCommon;
 import com.hrms.entity.HolidayCalenderEntity;
 import com.hrms.repository.HolidayCalenderRepository;
@@ -41,39 +39,43 @@ public class HolidayCalenderServiceImpl implements HolidayCalenderService {
 			bean.setMsg("Holday successfull not saved");
 			bean.setStatus(false);
 			logging.warn("Exception occured in service");
-			
 		}
-
 		return bean;
 	}
 
 	@Override
 	public List<HolidayCalenderEntity> getAllHolidays() {
 		logging.info("Entered get all holidays method in servcie ");
-		
+
 		Iterable<HolidayCalenderEntity> findAllHolidays = holiRepo.findAll();
-		
+
 		logging.info("successfully fetched Holidays in service");
-		
+
 		return (List<HolidayCalenderEntity>) findAllHolidays;
 	}
 
 	@Override
 	public HolidayCalenderEntity updateHoliday(int id, HolidayCalenderEntity updateHoliday) {
-		
+
 		this.logging.info("Entered update holiday by id method in service ");
-		
+
+		this.logging.info("updateHoliday.getDate()"+updateHoliday.getDate());
+		this.logging.info("updateHoliday.getHolidayDescription()"+updateHoliday.getHolidayDescription());
+		this.logging.info("updateHoliday.getHolidayName()"+updateHoliday.getHolidayName());
+
 		Optional<HolidayCalenderEntity> holiday = holiRepo.findById(id);
-		
-		holiday.orElseThrow().setDate(updateHoliday.getDate());
-		holiday.orElseThrow().setHolidayName(updateHoliday.getHolidayName());
-		holiday.orElseThrow().setHolidayDescription(updateHoliday.getHolidayDescription());
-		
+
+		if(holiday.isPresent()) {
+			List<HolidayCalenderEntity> list = holiday.stream().collect(Collectors.toList());
+			list.get(0).setDate(updateHoliday.getDate());
+			list.get(0).setHolidayName(updateHoliday.getHolidayName());
+			list.get(0).setHolidayDescription(updateHoliday.getHolidayDescription());
+		}
+
+
 		//HolidayCalenderEntity updatedHloiday = holiRepo.save(holiday);
 		return this.holiRepo.save(holiday.orElseThrow());
 	}
-
-	
 	/*
 	 * //GetbyDate
 	 * 
@@ -88,39 +90,39 @@ public class HolidayCalenderServiceImpl implements HolidayCalenderService {
 	 * findByDate; }
 	 */
 
-	
-	
+
+
 	//GetById
 	@Override
 	public HolidayCalenderEntity getHolidayById(int id) {
-		
+
 		this.logging.info("Entered Get holiday By Id in service");
-		
+
 		Optional<HolidayCalenderEntity> findById = this.holiRepo.findById(id);
-		
+
 		this.logging.info("Successfully get Holiday by id in service");
-		
+
 		return findById.orElseThrow();
 	}
-	
-	
-   //deleteHolidayById
+
+
+	//deleteHolidayById
 	@Override
 	public EntityBeanResponseCommon deleteHoliday(int id) {
-		
+
 		this.logging.info("Entered Delete Holiday By id in service");
-		
+
 		this.holiRepo.deleteById(id);
 		bean.setMsg("Successfully Deleted id :"+id);
 		bean.setStatus(true);
-		
+
 		this.logging.info("Successfully Deleted holiday By id");
-		
+
 		return bean;
 	}
 
 
-   
+
 	@Override
 	public List<LocalDate> getalllocaldates() {
 		List<LocalDate> finDates = this.holiRepo.finDates();
@@ -132,11 +134,11 @@ public class HolidayCalenderServiceImpl implements HolidayCalenderService {
 		HolidayCalenderEntity finHolidayCalenderEntity = this.holiRepo.findByDate(holidayDate);
 		return finHolidayCalenderEntity;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	/*
 	 * @Override public List<Date> getAllDates() {
 	 * 
@@ -144,9 +146,9 @@ public class HolidayCalenderServiceImpl implements HolidayCalenderService {
 	 * 
 	 * return findAllDate; }
 	 */
-	
-	
-	
+
+
+
 
 	/*
 	 * @Override public HolidayCalenderEntity UpdateHoliday(HolidayCalenderEntity
@@ -162,23 +164,23 @@ public class HolidayCalenderServiceImpl implements HolidayCalenderService {
 	 * 
 	 * //return updateHolidaDate; }
 	 */
-	
-	
-	
+
+
+
 	//getHloidayByname
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
