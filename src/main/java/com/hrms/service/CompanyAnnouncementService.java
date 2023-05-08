@@ -10,6 +10,8 @@ public interface CompanyAnnouncementService {
 	public AnnouncementBean saveAnnouncementDetails(CompanyAnnouncement companyannouncement);
 	
     List<CompanyAnnouncement> Announcements();
+
+    CompanyAnnouncement updateAnnouncementDetails(int announid, CompanyAnnouncement announcements);
 	
 	
 }

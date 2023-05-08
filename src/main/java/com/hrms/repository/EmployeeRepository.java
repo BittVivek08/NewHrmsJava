@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+
 import com.hrms.entity.EmployeeDetails;
 
 public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Integer>{
@@ -22,4 +23,10 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Integ
 	EmployeeDetails findByEmail(String email);
 	
 	EmployeeDetails findByFirstName(String firstName);
+
+	EmployeeDetails findByEmpId(String empId);
+
+
+	
+	
 }

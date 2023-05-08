@@ -6,36 +6,43 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.hrms.beans.Contactbean;
 import com.hrms.beans.EmpBirthResponse;
 import com.hrms.beans.EmployeeDto;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
+import com.hrms.entity.ContactDetails;
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.repository.ContactRepo;
 import com.hrms.repository.EmployeeRepository;
 
 @Service
-public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
+public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Autowired
 	private EmployeeRepository empRepo;
 
 	@Autowired
 	private EntityBeanResponse ebr;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
+	private ContactRepo contactrepo;
+
+	@Autowired
+	private Contactbean contactbean;
+
 	@Override
-	public EntityBeanResponse saveEmpDetails(EmployeeDetails employeeDetails)  {
+	public EntityBeanResponse saveEmpDetails(EmployeeDetails employeeDetails) {
 		String encode = this.passwordEncoder.encode(employeeDetails.getPassword());
 		employeeDetails.setPassword(encode);
-		
-		
-		  EmployeeDetails saved = empRepo.save(employeeDetails);
+
+		EmployeeDetails saved = empRepo.save(employeeDetails);
 		if (saved != null) {
 			ebr.setMsg("Employee Details Saved Successfully");
 			ebr.setStatus(true);
@@ -56,10 +63,10 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 	public EmployeeDetails getEmpById(Integer id) {
 		Optional<EmployeeDetails> findById = empRepo.findById(id);
 
-		if(findById.isPresent()) {
+		if (findById.isPresent()) {
 			return findById.get();
 		}
-		return null ;
+		return null;
 	}
 
 	@Override
@@ -74,10 +81,11 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 		}
 		return ebr;
 	}
+
 	@Override
 	public List<EmpBirthResponse> findBirthdayDetails() {
-		
-		List<EmployeeDetails> empList =  empRepo.findAll();
+
+		List<EmployeeDetails> empList = empRepo.findAll();
 		List<EmployeeDetails> empListBirhdays = new ArrayList<>();
 		List<EmpBirthResponse> lis = new ArrayList<>();
 		LocalDate today = LocalDate.now();
@@ -87,9 +95,8 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 
 				Date dob = sdf.parse(emp.getDateOfBirth());
 
-				if (dob.getDate() == today.getDayOfMonth()
-						&& dob.getMonth()+1 == today.getMonthValue()) {
-					
+				if (dob.getDate() == today.getDayOfMonth() && dob.getMonth() + 1 == today.getMonthValue()) {
+
 					EmpBirthResponse res = new EmpBirthResponse();
 					res.setFirstname(emp.getFirstName());
 					res.setLastname(emp.getLastName());
@@ -99,8 +106,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 					empListBirhdays.add(emp);
 				}
 			}
-		}catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -153,6 +159,42 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 		}
 		return ebr;
 	}
+	
+
+	@Override
+	public Contactbean saveContactDetails( ContactDetails contactdata) {
+		
+		EmployeeDetails employeeDetails = empRepo.findByEmpId(contactdata.getEmployeedetails().getEmpId());
+		contactdata.setEmployeedetails(employeeDetails);
+		ContactDetails contb = contactrepo.save(contactdata);
+		
+		if (contb != null) {
+			contactbean.setMessage("contact details saved successfully");
+			contactbean.setStatus(true);
+		} else {
+			contactbean.setMessage("iserting contact detals fail");
+			contactbean.setStatus(false);
+		}
+		return contactbean;
+	}
+
+	@Override
+public List<ContactDetails> getAllContactDetails() {
+
+	return contactrepo.findAll();
 }
+	
+
+	@Override
+	public ContactDetails updateContactDetails(ContactDetails contact) {
+		EmployeeDetails emp= empRepo.findByEmpId(contact.getEmployeedetails().getEmpId());
+		contact.setEmployeedetails(emp);
+
+		return contactrepo.save(contact);
+		
+		
+	}
+}
+
 
 

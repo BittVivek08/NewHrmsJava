@@ -43,7 +43,7 @@ public class DepartmentController {
 	
 	
 	
-	 @PutMapping("/getDetails/{id}")    
+	 @PutMapping("/updateDetails/{id}")    
 	 public ResponseEntity<Department> updateDepartment(@PathVariable(value = "id") int id, @RequestBody Department departmentDetails) {
 	       
 		 

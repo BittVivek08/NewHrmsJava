@@ -4,9 +4,12 @@ package com.hrms.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +40,18 @@ public class CompanyAnnouncementController {
 		List<CompanyAnnouncement> an =  companyannouncementservice.Announcements();
 		//System.out.println(an.get(0).getDescription());
 		return an;
- }
+ }	
+
+	 @PutMapping("/updateDetails/{announid}")    
+	 public ResponseEntity<CompanyAnnouncement> updateannouncements(@PathVariable(value = "announid") int announid, @RequestBody CompanyAnnouncement announcements) {
+	       
+		 
+		 CompanyAnnouncement updated =companyannouncementservice.updateAnnouncementDetails(announid, announcements);
+	        
+	        return ResponseEntity.ok(updated);
+	    }
+		
+	
 }
 
 		

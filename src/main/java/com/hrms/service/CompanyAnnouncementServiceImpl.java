@@ -1,5 +1,6 @@
 package com.hrms.service;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,33 @@ public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementServ
 	
 	}
 	
+	@Override
+	public CompanyAnnouncement updateAnnouncementDetails(int announid, CompanyAnnouncement announcements) {
+		
+		Optional<CompanyAnnouncement> announcementdetails = announcementrepo.findById(announid);
+		try {
+	    if (announcementdetails.isPresent()) {
+	   
+	    	CompanyAnnouncement announ = announcementdetails.get();
+	        
+	    	//announ.setAnnounid(announcements.getAnnounid());
+	    	announ.setDescription(announcements.getDescription());
+	    	announ.setEnddate(announcements.getEnddate());
+	    	announ.setStartdate(announcements.getStartdate());
+	    	announ.setSubject(announcements.getSubject());
+	        
+
+	        return announcementrepo.save(announ);
+	    }
+		}
+	    catch(Exception e) {
+	    	e.printStackTrace();
+	  
+	    }
+		return null;
+	
+	
+	}
 }
 
 
