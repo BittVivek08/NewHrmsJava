@@ -43,7 +43,10 @@ public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementServ
         	return null;
         }
 		return an;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5d39815c388e03a52c15e9a07a6b8e996f725e4c
 	}
 }
 

@@ -51,7 +51,8 @@ public class EmployeePersonalInfoServiceImpl implements EmployeePersonalInfoServ
 	@Override
 	public JobHistoryResponse deletePositionId(int positionId) {
 		
-		EmployeeJobHistory employee = this.employeePersonalInfoRepository.findByPositionId(positionId);
+//		EmployeeJobHistory employee = this.employeePersonalInfoRepository.findByPositionId(positionId);
+		EmployeeJobHistory employee = employeePersonalInfoRepository.getByPositionId(positionId);
 		if(employee!=null) {
 			this.employeePersonalInfoRepository.delete(employee);
 			historyResponse.setMessage("Employee Job history delete successfully");
@@ -61,7 +62,6 @@ public class EmployeePersonalInfoServiceImpl implements EmployeePersonalInfoServ
 			historyResponse.setStatus(false);
 		}
 		return historyResponse;
-		
 	}
 
 	@Override
