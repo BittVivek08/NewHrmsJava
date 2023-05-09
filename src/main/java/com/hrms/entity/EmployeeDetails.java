@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -58,6 +59,14 @@ public class EmployeeDetails implements Serializable{
 
 	private String image;
 	
+//	@OneToMany(mappedBy = "details")
+//	private RequestForLeave leaveReq;
+	
+	/*
+	 * private String createdOn;
+	 * 
+	 * private String lastUpdatedOn;
+	 */
 	
 }
 

@@ -68,7 +68,10 @@ public class HolidayCalenderController {
 	public ResponseEntity<HolidayCalenderEntity> updateHoliday(@PathVariable("id") int id,@RequestBody HolidayCalenderEntity entity) {
 		
 		log.info("Entered Update Holiday method in controller");
-		
+		log.info("updateHoliday.getDate()"+entity.getDate());
+		log.info("updateHoliday.getHolidayDescription()"+entity.getHolidayDescription());
+		log.info("updateHoliday.getHolidayName()"+entity.getHolidayName());
+
 		HolidayCalenderEntity updateHoliday = this.service.updateHoliday(id, entity);
 		
 		log.info("Successfully Upadted Holiday in controller");

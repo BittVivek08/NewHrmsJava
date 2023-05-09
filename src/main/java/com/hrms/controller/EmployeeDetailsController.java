@@ -26,6 +26,8 @@ import com.hrms.repository.EmployeeRepository;
 import com.hrms.service.EmployeeDetailsService;
 import com.hrms.service.FileStorageService;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @RestController
 @CrossOrigin
 @RequestMapping("/Employee")
@@ -147,19 +149,20 @@ public class EmployeeDetailsController {
 	
 	    @PostMapping("/saveSalaryDetails")
         public EntityBeanResponse saveEmpSalaryDetails(@RequestBody EmployeeSalaryDetails empSalDetails) {
-        	EmployeeDetails byEmpId = empRepo.findByEmpId(empSalDetails.getEmp_Idd());
+        	EmployeeDetails byEmpId = empRepo.findByEmpId(empSalDetails.getEmployeeDetails().getEmpId());
         	empSalDetails.setEmployeeDetails(byEmpId);
         	return empService.saveSalaryDetails(empSalDetails);
         }
 	    @PutMapping("/updateSalaryDetails")
 	    public EntityBeanResponse updateEmpSalaryDetails(@RequestBody EmployeeSalaryDetails empSalDetails) {
-	    	EmployeeDetails byEmp = empRepo.findByEmpId(empSalDetails.getEmp_Idd());
+	    	EmployeeDetails byEmp = empRepo.findByEmpId(empSalDetails.getEmployeeDetails().getEmpId());
 	    	empSalDetails.setEmployeeDetails(byEmp);
 	    	return empService.updateSalaryDetails(empSalDetails);
 	    }
 	    
 	    @GetMapping("/getSalaryByEmpName/{empName}")
 		public List<EmployeeSalaryDetails> getSalaryByEmpName(@PathVariable String empName){
+	    	log.info("In getSalaryByEmpName Controller");
 			return empService.getSalaryByEmpName(empName);
 		}
 	
