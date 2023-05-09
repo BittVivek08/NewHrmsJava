@@ -17,6 +17,9 @@ import com.hrms.beans.Businessbean;
 import com.hrms.entity.Businessunit;
 import com.hrms.serviceImpl.BusinessunitServicelmpl;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/business")
 @CrossOrigin
@@ -27,7 +30,7 @@ public class BusinessunitController {
 
 	@PostMapping("/savebusinessdetails")
 	public Businessbean saveBusinessDetails(@RequestBody Businessunit businessunit) {
-
+		log.info("BusinessunitController , savebusinessdetails");
 		return BusinessunitService.saveBusinessDetails(businessunit);
 	}
 
