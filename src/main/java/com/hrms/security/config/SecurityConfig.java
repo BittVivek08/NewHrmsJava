@@ -1,4 +1,4 @@
-package com.hrms.config;
+package com.hrms.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

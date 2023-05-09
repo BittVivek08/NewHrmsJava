@@ -9,7 +9,7 @@ import com.hrms.entity.CompanyAnnouncement;
 
 public interface AnnouncementRepo extends JpaRepository<CompanyAnnouncement, Integer> {
 
-	//List<CompanyAnnouncement> findByDateBetween(LocalDate date1, LocalDate date2);
+
 
 	@Query("FROM CompanyAnnouncement where startdate <= CURDATE() AND enddate >= CURDATE()")
 	List<CompanyAnnouncement> getCurrentAnnouncementDetails();

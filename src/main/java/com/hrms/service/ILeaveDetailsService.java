@@ -1,7 +1,7 @@
 package com.hrms.service;
 
-import com.hrms.binding.LeaveDetailsBinding;
-import com.hrms.helper.EntityResponse;
+import com.hrms.request.bean.LeaveDetailsBinding;
+import com.hrms.response.bean.EntityResponse;
 
 public interface ILeaveDetailsService {
 

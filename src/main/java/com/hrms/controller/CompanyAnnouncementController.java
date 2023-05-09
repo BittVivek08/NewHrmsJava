@@ -4,9 +4,14 @@ package com.hrms.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,62 +43,23 @@ public class CompanyAnnouncementController {
 		//System.out.println(an.get(0).getDescription());
 		return an;
  }
+	
+	@PutMapping("/updateAnnouncementDetails/{id}")    
+	 public ResponseEntity<AnnouncementBean> updateAnnouncement(@PathVariable(value = "id") int id, @RequestBody CompanyAnnouncement announcement) {
+		 AnnouncementBean updatedannouncent =companyannouncementservice.updateAnnouncement(id, announcement);
+	        
+	        return ResponseEntity.ok(updatedannouncent);
+	    }
+	
+	
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<AnnouncementBean> deleteById(@PathVariable("id") int id) {
+		AnnouncementBean deleteannouncement=companyannouncementservice.deleteannoun(id);
+		
+		return new ResponseEntity<>(deleteannouncement,HttpStatus.OK);
+	}
 }
 
-		
-//	public List<CompanyAnnouncement> getAnnouncementsBetweenddates(){
-//		
-//		List<CompanyAnnouncement> an =  companyannouncementservice.Announcements();
-//		
-//		return an;
-//}
 
 
-
-//	@GetMapping("/getAnnouncements")
-//	public List<CompanyAnnouncement> getAnnouncementsBetweenddates( @QueryParam("startDate")  String startDate,
-//			@QueryParam("endDate")  Staring endDate)
-//	{
-//		List<CompanyAnnouncement> an =  companyannouncementservice.Announcements( startDate, endDate);
-//		System.out.println(an.get(0).getDescription());
-//		return an;
-//	}
-//}
-
-
-
-
-
-
-
-
-//@GetMapping("/getAnnouncements")
-//public List<CompanyAnnouncement> getAnnouncementsBetweenDates(
-//        @RequestParam("startDate")  Date startDate,
-//        @RequestParam("endDate") Date endDate) {
-//    return companyannouncementservice.getAnnouncementsBetweenDates(startDate, endDate);
-
-
-//	@GetMapping("/getAnnouncementDetails")
-//	public ResponseEntity<List<CompanyAnnouncement>> getAnnouncementDetails(){
-//		List<CompanyAnnouncement> details = companyannouncementservice.getAllAnnouncements();
-//		return new ResponseEntity<> (details, HttpStatus.OK);
-//	}
-//	@GetMapping("/display/{id}")
-//	public ResponseEntity<CompanyAnnouncement> getAnnouncementById(@PathVariable("id") int id){
-//		CompanyAnnouncement byId = companyannouncementservice.getempById(id);
-//		return new ResponseEntity<> (byId, HttpStatus.OK);
-//}
-
-
-//@DeleteMapping("/deleteById/{id}")
-//public ResponseEntity<AnnouncementBean> deleteByid(@PathVariable("id") int id){
-	
-	
-//	AnnouncementBean deleteannouncement = companyannouncementservice.deleteannoun(id);
-
-	
-//	return new ResponseEntity<>(deleteannouncement,HttpStatus.OK);
-//}
-//}
 

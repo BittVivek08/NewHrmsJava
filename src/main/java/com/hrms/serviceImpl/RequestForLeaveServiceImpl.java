@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hrms.binding.RequestForLeaveBinding;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.RequestForLeave;
-import com.hrms.helper.EntityResponse;
 import com.hrms.service.IRequestForLeaveService;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.ILeaveDetailsRepository;
 import com.hrms.repository.IRequestForLeaveRepository;
+import com.hrms.request.bean.RequestForLeaveBinding;
+import com.hrms.response.bean.EntityResponse;
 
 import java.util.function.Predicate;
 import java.util.stream.Stream;

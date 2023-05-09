@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hrms.binding.LeaveDetailsBinding;
-import com.hrms.helper.EntityResponse;
+import com.hrms.request.bean.LeaveDetailsBinding;
+import com.hrms.response.bean.EntityResponse;
 import com.hrms.service.ILeaveDetailsService;
 
 @RestController

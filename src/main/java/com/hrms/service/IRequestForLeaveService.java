@@ -1,7 +1,7 @@
 package com.hrms.service;
 
-import com.hrms.binding.RequestForLeaveBinding;
-import com.hrms.helper.EntityResponse;
+import com.hrms.request.bean.RequestForLeaveBinding;
+import com.hrms.response.bean.EntityResponse;
 
 public interface IRequestForLeaveService {
 

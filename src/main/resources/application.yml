@@ -13,27 +13,33 @@
     hibernate:
       ddl-auto: update
     show-sql: true
-   
- springdoc:
-    packagesToScan: com.hrms.controller
-
+   mail:
+    host: 213.164.178.68.host.secureserver.net
+    port: 25
+    username: _mainaccount@hrmsapp.com
+    password: Shekar!123
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    default-encoding: UTF-8
 
 #server:
-#  port: 9090
+#  port: 9999
 #spring:
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
-#    password: DbUser@123
-#    url: jdbc:mysql://68.178.164.213:3306/hrms_dummy
-#    username: hrmsapp_user
 #    password: root
+#    
 #    url: jdbc:mysql://localhost:3306/hrms_dummy
 #    username: root
 #  jpa:
 #    database-platform: org.hibernate.dialect.MySQL8Dialect
 #    hibernate:
 #      ddl-auto: update
-#    show-sql: true    
-#springdoc:
-#    packagesToScan: com.hrms.controller
-#    
+#    show-sql: true
+#    open-in-view: false
