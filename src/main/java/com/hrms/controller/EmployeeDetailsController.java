@@ -20,9 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hrms.beans.ContactBean;
 import com.hrms.beans.EmpBirthResponse;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
+import com.hrms.entity.ContactDetails;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeInformation;
 import com.hrms.entity.EmployeeSalaryDetails;
@@ -31,6 +33,7 @@ import com.hrms.service.EmployeeDetailsService;
 import com.hrms.service.FileStorageService;
 
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @RestController
 @CrossOrigin
@@ -179,5 +182,25 @@ public class EmployeeDetailsController {
 		return new ResponseEntity<>(empInfoById,HttpStatus.OK);
 	}
 
+	@PostMapping("/saveContactDetails") 
+	public ContactBean saveContactDetails(@RequestBody ContactDetails details) {
+
+		return empService.saveContactdata(details);
+	} 
+
+	@GetMapping("/getAllContactDetails")
+	public ResponseEntity<List<ContactDetails>> getAllontactDetails() {
+		List<ContactDetails> datails = empService.getContactdata();
+		if (datails.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(datails);
+	}
+
+	@PutMapping("/updateContactDetails")
+	public ResponseEntity<ContactDetails> updateContactDetails(@RequestBody ContactDetails entity) {
+		ContactDetails updatedetails = empService.updateContact(entity);
+		return ResponseEntity.ok(updatedetails);
+	}
 
 }
