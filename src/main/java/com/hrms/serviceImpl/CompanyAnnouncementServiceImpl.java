@@ -10,6 +10,8 @@ import com.hrms.entity.CompanyAnnouncement;
 import com.hrms.repository.AnnouncementRepo;
 import com.hrms.service.CompanyAnnouncementService;
 
+import net.bytebuddy.dynamic.DynamicType.Builder.FieldDefinition.Optional;
+
 @Service
 public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementService {
 	@Autowired
@@ -46,48 +48,61 @@ public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementServ
 		return an;
 
 	}
+
+	public AnnouncementBean updateAnnouncement(int id, CompanyAnnouncement announcement) {
+		
+		
+		java.util.Optional<CompanyAnnouncement> CompanyOptional = announcementrepo.findById(id);
+		try {
+	    if (CompanyOptional.isPresent()) {
+	   
+	    	CompanyAnnouncement details = CompanyOptional.get();
+	        
+	    	details.setDescription(announcement.getDescription());
+	    	details.setEnddate(announcement.getEnddate());
+	    	details.setStartdate(announcement.getStartdate());
+	    	details.setSubject(announcement.getSubject());
+	        announcementrepo.save(details);
+	        announcementbean.setMessage("announcement details updated succefully");
+	        announcementbean.setStatus(true);
+	        
+	        return announcementbean;
+	
+	        
+	    }
+	    else {
+	    	announcementbean.setMessage("inavalied id");
+	    	announcementbean.setStatus(false);
+	    	return announcementbean;
+	    }
+	    
+		}
+	    catch(Exception e) {
+	    	e.printStackTrace();
+	  
+		
+	}
+		return announcementbean;
+	
+	}
+	
+	public AnnouncementBean deleteannoun(int id) {
+		
+		CompanyAnnouncement bean = this.announcementrepo.getById(id);
+		if(bean!=null) {
+			this.announcementrepo.delete(bean);
+			announcementbean.setMessage("announcement details deleted successfully");
+			announcementbean.setStatus(true);
+		} else {
+			announcementbean.setMessage("Failed to  Delete  announcement details ");
+			announcementbean.setStatus(false);
+		}
+		return announcementbean;
+		
+		
+	}
 }
 
-//	@Override
-//	public List<CompanyAnnouncement> getAllAnnouncements() {
-//		
-//		return announcementrepo.findAll();
-//	}
-//
-//
-//	@Override
-//	public CompanyAnnouncement getempById(Integer empid) {
-//Optional<CompanyAnnouncement> findById =announcementrepo.findById(empid);
-//		
-//		if(findById.isPresent()) {
-//			return findById.get();
-//			
-//		}
-//		else {
-//			System.out.println("invalid empid");
-//		}
-//			return null;
-//		
-//	}
-//
-//	@Override
-//	public AnnouncementBean deleteannoun(int empid) {
-//		
-//		
-//		
-//		announcementrepo.deleteById(empid);
-//
-//		announcementbean.setMessage("");
-//		announcementbean.setStatus(true);
-//		
-//	
-//		
-//		return announcementbean;
-//	}
-//	
-//}
-//		
-//	
 
 
 

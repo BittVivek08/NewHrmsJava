@@ -11,16 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.hrms.beans.ContactBean;
 import com.hrms.beans.EmpBirthResponse;
 import com.hrms.beans.EmployeeDto;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
+import com.hrms.entity.ContactDetails;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeInformation;
+import com.hrms.repository.ContactRepo;
 import com.hrms.repository.EmployeeInformationRepository;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.entity.EmployeeSalaryDetails;
-import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.EmployeeSalaryRepository;
 import com.hrms.service.EmployeeDetailsService;
 
@@ -41,6 +43,12 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private ContactRepo contactrepo;
+	
+	@Autowired
+	private ContactBean contactbean;
 
 	@Override
 	public EntityBeanResponse saveEmpDetails(EmployeeDetails employeeDetails) {
@@ -275,6 +283,53 @@ EmployeeDetails employeeDetails=empRepo.findByEmpId(empInformation.getEmployeeDe
          }
 		return null;
 	}
+	
+	
+	@Override
+	public ContactBean saveContactdata(ContactDetails details) {
+		
+       EmployeeDetails employeedetails=empRepo.findByEmpId(details.getEmployeedetails().getEmpId());
+		
+       details.setEmployeedetails(employeedetails);
+		
+
+       ContactDetails contactdetails =contactrepo.save(details);
+		
+         if (contactdetails != null) {
+        	 contactbean.setMessage("contact details save successfully");
+        	 contactbean.setStatus(true);
+		} else {
+			contactbean.setMessage("contact details not saved");
+			contactbean.setStatus(false);
+		}
+
+
+		return contactbean ;
+
+
+	}
+
+
+	@Override
+	public List<ContactDetails> getContactdata() {
+		
+		return contactrepo.findAll();
+	}
+
+	@Override
+	public ContactDetails updateContact(ContactDetails entity) {
+		
+		EmployeeDetails emp = empRepo.findByEmpId(entity.getEmployeedetails().getEmpId());
+		entity.setEmployeedetails(emp);
+
+		return contactrepo.save(entity);
+		
+	}
 
 }
+	
+	
+	
+
+
 

@@ -2,9 +2,11 @@ package com.hrms.service;
 
 import java.util.List;
 
+import com.hrms.beans.ContactBean;
 import com.hrms.beans.EmpBirthResponse;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
+import com.hrms.entity.ContactDetails;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeInformation;
 import com.hrms.entity.EmployeeSalaryDetails;
@@ -35,4 +37,11 @@ public interface EmployeeDetailsService {
 	public EntityBeanResponse updateEmployeeInformation(EmployeeInformation entity);
 	
 	public EmployeeInformation getEmpInfoById(Integer id);
+	
+	
+	public ContactBean saveContactdata(ContactDetails details);
+
+	public List<ContactDetails> getContactdata();
+
+	public ContactDetails updateContact(ContactDetails entity);
 }

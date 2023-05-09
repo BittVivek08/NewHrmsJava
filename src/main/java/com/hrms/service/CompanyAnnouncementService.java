@@ -10,6 +10,10 @@ public interface CompanyAnnouncementService {
 	public AnnouncementBean saveAnnouncementDetails(CompanyAnnouncement companyannouncement);
 	
     List<CompanyAnnouncement> Announcements();
+    
+    public AnnouncementBean deleteannoun(int id);
+    
+    public AnnouncementBean updateAnnouncement(int id, CompanyAnnouncement announcement);
 	
 	
 }
