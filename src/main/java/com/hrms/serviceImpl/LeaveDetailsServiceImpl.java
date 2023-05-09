@@ -3,12 +3,12 @@ package com.hrms.serviceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hrms.binding.LeaveDetailsBinding;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.LeaveDetails;
-import com.hrms.helper.EntityResponse;
 import com.hrms.service.ILeaveDetailsService;
 import com.hrms.repository.EmployeeRepository;
+import com.hrms.request.bean.LeaveDetailsBinding;
+import com.hrms.response.bean.EntityResponse;
 import com.hrms.repository.*;
 
 @Service("leave")

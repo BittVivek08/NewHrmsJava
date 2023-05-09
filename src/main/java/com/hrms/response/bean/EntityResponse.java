@@ -1,4 +1,4 @@
-package com.hrms.helper;
+package com.hrms.response.bean;
 
 import org.springframework.stereotype.Component;
 
