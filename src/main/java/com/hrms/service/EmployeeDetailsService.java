@@ -9,7 +9,6 @@ import com.hrms.beans.LoginDto;
 import com.hrms.entity.ContactDetails;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeInformation;
-import com.hrms.entity.EmployeeSalaryDetails;
 
 public interface EmployeeDetailsService {
 
@@ -25,11 +24,7 @@ public interface EmployeeDetailsService {
 
 	public EntityBeanResponse loginEmployee(LoginDto loginDto);
 
-	public EntityBeanResponse saveSalaryDetails(EmployeeSalaryDetails empSalaryDetails);
 
-	public EntityBeanResponse updateSalaryDetails(EmployeeSalaryDetails empSalaryDetails);
-
-	public EmployeeSalaryDetails getEmpSalaryDetailsById(Integer id);
 	// saving employee information
 	
 	public EntityBeanResponse saveEmployeeInformation(EmployeeInformation empinformation);
