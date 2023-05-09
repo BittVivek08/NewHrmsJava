@@ -1,9 +1,11 @@
 package com.hrms.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.hrms.beans.EmployeeAttendancebean;
 import com.hrms.entity.EmployeeAttendance;
+import com.hrms.entity.HolidayCalenderEntity;
 
 public interface EmployeeAttendanceService {
 		
@@ -24,6 +26,10 @@ public interface EmployeeAttendanceService {
 	public boolean findHolidayDetails();
 	
 	public boolean findWeekends();
-		
+	
+	public List<HolidayCalenderEntity> findHolidaysByDateRange(String startDate, String endDate);
+	
+	public List<String> getWeekendsBetweenDates(String startDate, String endDate);
+
 	
 }

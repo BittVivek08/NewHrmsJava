@@ -1,7 +1,7 @@
 package com.hrms.controller;
 
 import java.text.ParseException;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.QueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hrms.beans.EmployeeAttendanceRequest;
 import com.hrms.beans.EmployeeAttendancebean;
 import com.hrms.entity.EmployeeAttendance;
+import com.hrms.entity.HolidayCalenderEntity;
 import com.hrms.service.EmployeeAttendanceService;
 import com.hrms.util.IPAddress;
 
@@ -48,14 +49,31 @@ public class EmployeeAttendanceController {
 	    }
 	   
 	   @GetMapping("/employee/weekly/{empId}")
-	    public ResponseEntity<List<EmployeeAttendance>> getEmployeeWeeklyAttendance(@PathVariable String empId,
+	    public ResponseEntity<List<Object>> getEmployeeWeeklyAttendance(@PathVariable String empId,
 	    		@QueryParam("startDate") String startDate,
 	    		@QueryParam("endDate") String endDate) throws ParseException {
 		   
 //		   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	        List<EmployeeAttendance> attendanceList = attendanceService.getEmployeeWeeklyAttendance(empId, startDate, endDate);
-	        return ResponseEntity.ok(attendanceList);
+	        
+	        List<HolidayCalenderEntity> holidaylist =attendanceService.findHolidaysByDateRange(startDate, endDate);
+	        
+	        List<String> weekendList = attendanceService.getWeekendsBetweenDates(startDate, endDate);
+	        // Combine all results into a single list
+	        List<Object> result = new ArrayList<>();
+	        result.addAll(attendanceList);
+	        result.addAll(holidaylist);
+//	        result.addAll(leaveList);
+	        result.addAll(weekendList);
+	        
+	        return ResponseEntity.ok(result);
+	        
 	}
+	   
+	   
+	   
+	   
+	   
 
 	//	   @PostMapping("/saveEmployee")
 	//		public  EmployeeAttendancebean recordAttendance(@RequestBody EmployeeAttendance employeeattend){

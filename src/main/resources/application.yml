@@ -23,6 +23,9 @@
 #spring:
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
+#    password: DbUser@123
+#    url: jdbc:mysql://68.178.164.213:3306/hrms_dummy
+#    username: hrmsapp_user
 #    password: root
 #    url: jdbc:mysql://localhost:3306/hrms_dummy
 #    username: root
@@ -30,4 +33,22 @@
 #    database-platform: org.hibernate.dialect.MySQL8Dialect
 #    hibernate:
 #      ddl-auto: update
-#    show-sql: true
+#    show-sql: true    
+#springdoc:
+#    packagesToScan: com.hrms.controller
+#    
+
+ server:
+   port: 9090
+ spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 1438
+    url: jdbc:mysql://localhost:3306/skdb
+    username: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+

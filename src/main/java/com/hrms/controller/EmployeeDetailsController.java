@@ -26,6 +26,8 @@ import com.hrms.repository.EmployeeRepository;
 import com.hrms.service.EmployeeDetailsService;
 import com.hrms.service.FileStorageService;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @RestController
 @CrossOrigin
 @RequestMapping("/Employee")
@@ -158,6 +160,7 @@ public class EmployeeDetailsController {
 	    	return empService.updateSalaryDetails(empSalDetails);
 	    }
 	    
+<<<<<<< HEAD
 		/*
 		 * @GetMapping("/getSalaryByEmpId/{empId}") public List<EmployeeSalaryDetails>
 		 * getSalaryByEmpId(@PathVariable String empId){ return
@@ -188,4 +191,12 @@ public class EmployeeDetailsController {
 	    	EmployeeInformation empInfoById = empService.getEmpInfoById(id);
 	    	return new ResponseEntity<>(empInfoById,HttpStatus.OK);
 	    }
+=======
+	    @GetMapping("/getSalaryByEmpName/{empName}")
+		public List<EmployeeSalaryDetails> getSalaryByEmpName(@PathVariable String empName){
+	    	log.info("In getSalaryByEmpName Controller");
+			return empService.getSalaryByEmpName(empName);
+		}
+	
+>>>>>>> 5da90477c4f881ddde34cd2088c66e9168ae9113
 }

@@ -1,6 +1,7 @@
 package com.hrms.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import javax.persistence.CascadeType;
@@ -45,6 +46,10 @@ public class EmployeeAttendance {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "date2" , referencedColumnName = "date")
 	private HolidayCalenderEntity calendarEntity;
+	
+	private LocalDateTime createdOn;
+	
+	private LocalDateTime lastUpdatedOn;
 	
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	private EmployeeDetails employee;

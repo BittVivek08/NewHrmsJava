@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.hrms.beans.EntityBeanResponse;
 //import com.hrms.beans.SaveTimesheetRequestBean;
 import com.hrms.entity.SaveTimeSheet;
@@ -34,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @CrossOrigin
 public class HrmsEmpTimeSheetController {
-     @Autowired
+  @Autowired
 	private TimeSheetDetailsImpl impl;
 
      
@@ -145,6 +146,17 @@ public class HrmsEmpTimeSheetController {
 //		   
 //	   }
 	    
+
+//	    @PostMapping("/timeSheetApproval")
+//	    public ResponseEntity<TimeSheetApprovalStatus> timeSheetApproval(@QueryParam("empId") int empid){
+//	    	TimeSheetApprovalStatus timesheet=impl.timeSheetApproval(empid);
+//	    	if(timesheet!=null) {
+//	    	return new ResponseEntity<TimeSheetApprovalStatus>(timesheet,HttpStatus.ACCEPTED)  ; 
+//	    	}else {
+//	    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//	    	}
+//	    }
+
 		/*
 		 * @PostMapping("/timeSheetApproval") public
 		 * ResponseEntity<TimeSheetApprovalStatus>
@@ -153,6 +165,7 @@ public class HrmsEmpTimeSheetController {
 		 * ResponseEntity<TimeSheetApprovalStatus>(timesheet,HttpStatus.ACCEPTED) ;
 		 * }else { return new ResponseEntity<>(HttpStatus.NOT_FOUND); } }
 		 */
+
 	    
      }
 
