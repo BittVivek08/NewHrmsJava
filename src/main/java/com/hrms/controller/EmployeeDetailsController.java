@@ -27,7 +27,6 @@ import com.hrms.beans.LoginDto;
 import com.hrms.entity.ContactDetails;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeInformation;
-import com.hrms.entity.EmployeeSalaryDetails;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.service.EmployeeDetailsService;
 import com.hrms.service.FileStorageService;
@@ -137,18 +136,9 @@ public class EmployeeDetailsController {
 		 */
 	}
 
-	@PostMapping("/saveSalaryDetails")
-	public EntityBeanResponse saveEmpSalaryDetails(@RequestBody EmployeeSalaryDetails empSalDetails) {
-		EmployeeDetails byEmpId = empRepo.findByEmpId(empSalDetails.getEmployeeDetails().getEmpId());
-		empSalDetails.setEmployeeDetails(byEmpId);
-		return empService.saveSalaryDetails(empSalDetails);
-	}
-	@PutMapping("/updateSalaryDetails")
-	public EntityBeanResponse updateEmpSalaryDetails(@RequestBody EmployeeSalaryDetails empSalDetails) {
-		EmployeeDetails byEmp = empRepo.findByEmpId(empSalDetails.getEmployeeDetails().getEmpId());
-		empSalDetails.setEmployeeDetails(byEmp);
-		return empService.updateSalaryDetails(empSalDetails);
-	}
+	
+	   
+	    
 
 
 	/*
@@ -156,11 +146,6 @@ public class EmployeeDetailsController {
 	 * getSalaryByEmpId(@PathVariable String empId){ return
 	 * empService.getSalaryByEmpId(empId); }
 	 */
-	@GetMapping("/getEmployeeSalaryDetail/{id}")
-	public ResponseEntity<EmployeeSalaryDetails> findSalaryById(@PathVariable Integer id){
-		EmployeeSalaryDetails empSalaryDetailsById = empService.getEmpSalaryDetailsById(id);
-		return new ResponseEntity<>(empSalaryDetailsById,HttpStatus.OK);
-	}
 
 	@PostMapping("/saveEmpInfo") 
 	public EntityBeanResponse saveEmployeeInformation(@RequestBody EmployeeInformation empInformation) {
