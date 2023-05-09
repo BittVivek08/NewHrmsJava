@@ -15,7 +15,7 @@
 	<name>0001_Dummy_Hrms</name>
 	<description>project on hrms</description>
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 

@@ -1,4 +1,4 @@
-package com.hrms.ServiceImpl;
+package com.hrms.serviceImpl;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -18,15 +18,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.hrms.beans.CommonResponseBean;
+
 import com.hrms.beans.EntityBeanResponse;
-import com.hrms.beans.SaveTimesheetRequestBean;
-import com.hrms.beans.SavingTimeSheetReqBean;
-import com.hrms.beans.TimeSheetMonthyResponse;
+
 import com.hrms.entity.EmployeeDetails;
 //import com.hrms.entity.EmployeeWorkStatusEntity;
 import com.hrms.entity.SaveTimeSheet;
-import com.hrms.entity.TimeSheetApprovalStatus;
+
 //import com.hrms.entity.ProjectTaskEntity;
 //import com.hrms.entity.SavingTimeSheet;
 //import com.hrms.entity.Task;
@@ -38,11 +36,11 @@ import com.hrms.service.TimeSheetDetails;
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
-@ComponentScan({"com.hrms.entity.EmployeeDetails","com.hrms.repository","com.hrms.entity.TimeSheetApprovalStatus"})
+@ComponentScan({"com.hrms.repository","com.hrms.entity.TimeSheetApprovalStatus"})
 public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	
-	   @Autowired(required = true)
-	   private EmployeeDetails employeeDetails;
+//	   @Autowired(required = true)
+//	   private EmployeeDetails employeeDetails;
 	     @Autowired
 	     private  EntityBeanResponse  entityBeanResponse;
 //	   @Autowired
@@ -73,8 +71,8 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		private EmployeeRepository employeeRepository;
 		@Autowired
 	  private SaveTimeSheetRepo hrmsEntityRepo;
-		@Autowired
-	   private TimeSheetApprovalStatus timeSheetApprovalStatus;
+//		@Autowired
+//	   private TimeSheetApprovalStatus timeSheetApprovalStatus;
 
 //	@Override
 //	public void getMonthlyDataInTimeSheet(int userid, String monthStartDate, String monthEndDate) {
@@ -152,18 +150,18 @@ public List<Object[]> getTimeSheetDetailsByMonth(int month,int empid,int year) {
 
 
 
-public TimeSheetApprovalStatus timeSheetApproval(int empid) {
-	log.info("entered into timeSheetApproval Method of TimeSheetDetails BusinessClass..");
-		String status1=hrmsEntityRepo.getStatus(empid);
-		if(status1=="Approve") {
-timeSheetApprovalStatus.setTimeSheetId(hrmsEntityRepo.getTimeSheetId(empid));
-timeSheetApprovalStatus.setApproverName("Nilesh");
-		}else {
-			System.out.println("wrong id");
-		}
-return timeSheetApprovalStatus;
-	
-}
+//public TimeSheetApprovalStatus timeSheetApproval(int empid) {
+//	log.info("entered into timeSheetApproval Method of TimeSheetDetails BusinessClass..");
+//		String status1=hrmsEntityRepo.getStatus(empid);
+//		if(status1=="Approve") {
+//timeSheetApprovalStatus.setTimeSheetId(hrmsEntityRepo.getTimeSheetId(empid));
+//timeSheetApprovalStatus.setApproverName("Nilesh");
+//		}else {
+//			System.out.println("wrong id");
+//		}
+//return timeSheetApprovalStatus;
+//	
+//}
 //public List<SaveTimeSheet> getEmpByReportingId(int repId) {
 //	
 //	return this.hrmsEntityRepo.getDetailByRepId(repId);
