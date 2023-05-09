@@ -1,18 +1,22 @@
 package com.hrms.controller;
 
+import java.io.IOException;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,45 +46,28 @@ public class EmployeeDetailsController {
 	@Autowired
 	private EmployeeRepository empRepo;
 
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-	/*
-	 * @PostMapping("/saveEmployee") public EntityBeanResponse
-	 * saveEmpDetails(@RequestBody EmployeeDetails empDetails) {
-	 * 
-	 * return empService.saveEmpDetails(empDetails);
-	 * 
-	 * }
-	 */
-
 	@PostMapping("/saveEmployee")
 	public EntityBeanResponse saveEmpDetails(@RequestBody EmployeeDetails empDetails) {
-
 		return empService.saveEmpDetails(empDetails);
-
 	}
 
-	// @PostMapping("/saveEmployee")
-	// public EntityBeanResponse saveEmpDetails(@RequestBody EmployeeDetails
-	// empDetails,@RequestParam("file")
-	// MultipartFile file, @RequestParam("fileName") String fileName) throws
-	// IOException{
-	//
-	// empDetails.setImage(file.getBytes().toString());
-	// return empService.saveEmpDetails(empDetails);
-	//
-	// }
+	@PostMapping("/uploadImage") public EntityBeanResponse saveEmpDetails(@RequestParam String jsonData,@RequestParam("file") MultipartFile file) throws IOException {
+		try{
+			log.info("Class : "+this.getClass().getName());
 
-//Madhu bhaia
-	/*
-	 * @PostMapping("/saveEmployee") public EntityBeanResponse
-	 * saveEmpDetails(@ModelAttribute EmployeeDetails
-	 * empDetails,@RequestParam("file") MultipartFile file) throws IOException{
-	 * String fileName = fileStorageService.storeFile(file);
-	 * empDetails.setImage(fileName); return empService.saveEmpDetails(empDetails);
-	 * }
-	 */
+			log.info("Method :" + Thread.currentThread().getStackTrace()[1].getMethodName());
+			String fileName = fileStorageService.storeFile(file);
+			EmployeeDetails empDetails = new ObjectMapper().readValue(jsonData, EmployeeDetails.class);
+			new ObjectMapper().writeValueAsString(jsonData);
+			empDetails.setImage(fileName); 
+			EntityBeanResponse response = empService.saveEmpDetails(empDetails);
+			return response;
+		}
+		catch(Exception e) {
+			return null;
+		}
+	}
+
 	@GetMapping("/getEmployeeDetails")
 	public ResponseEntity<List<EmployeeDetails>> getAllEmployeeDetails() {
 		List<EmployeeDetails> allEmpDetails = empService.getAllEmpDetails();
@@ -146,51 +133,51 @@ public class EmployeeDetailsController {
 		 * pcr; }
 		 */
 	}
-	
-	    @PostMapping("/saveSalaryDetails")
-        public EntityBeanResponse saveEmpSalaryDetails(@RequestBody EmployeeSalaryDetails empSalDetails) {
-        	EmployeeDetails byEmpId = empRepo.findByEmpId(empSalDetails.getEmployeeDetails().getEmpId());
-        	empSalDetails.setEmployeeDetails(byEmpId);
-        	return empService.saveSalaryDetails(empSalDetails);
-        }
-	    @PutMapping("/updateSalaryDetails")
-	    public EntityBeanResponse updateEmpSalaryDetails(@RequestBody EmployeeSalaryDetails empSalDetails) {
-	    	EmployeeDetails byEmp = empRepo.findByEmpId(empSalDetails.getEmployeeDetails().getEmpId());
-	    	empSalDetails.setEmployeeDetails(byEmp);
-	    	return empService.updateSalaryDetails(empSalDetails);
-	    }
-	    
 
-		/*
-		 * @GetMapping("/getSalaryByEmpId/{empId}") public List<EmployeeSalaryDetails>
-		 * getSalaryByEmpId(@PathVariable String empId){ return
-		 * empService.getSalaryByEmpId(empId); }
-		 */
-	    @GetMapping("/getEmployeeSalaryDetail/{id}")
-	    public ResponseEntity<EmployeeSalaryDetails> findSalaryById(@PathVariable Integer id){
-	    	EmployeeSalaryDetails empSalaryDetailsById = empService.getEmpSalaryDetailsById(id);
-	    	return new ResponseEntity<>(empSalaryDetailsById,HttpStatus.OK);
-	    }
-	    
-	    @PostMapping("/saveEmpInfo") 
-        public EntityBeanResponse saveEmployeeInformation(@RequestBody EmployeeInformation empInformation) {
-      
-  		return empService.saveEmployeeInformation(empInformation);
-  	}   
-	    
-	    @PutMapping("/UpdateEmpInfo")
-	    public EntityBeanResponse updateEmpInfo(@RequestBody EmployeeInformation empInfo) {
-	    	EmployeeDetails byEmp = empRepo.findByEmpId(empInfo.getEmployeeDetails().getEmpId());
-	    	empInfo.setEmployeeDetails(byEmp);
-	    	return empService.updateEmployeeInformation(empInfo);
-	    }
-	 
+	@PostMapping("/saveSalaryDetails")
+	public EntityBeanResponse saveEmpSalaryDetails(@RequestBody EmployeeSalaryDetails empSalDetails) {
+		EmployeeDetails byEmpId = empRepo.findByEmpId(empSalDetails.getEmployeeDetails().getEmpId());
+		empSalDetails.setEmployeeDetails(byEmpId);
+		return empService.saveSalaryDetails(empSalDetails);
+	}
+	@PutMapping("/updateSalaryDetails")
+	public EntityBeanResponse updateEmpSalaryDetails(@RequestBody EmployeeSalaryDetails empSalDetails) {
+		EmployeeDetails byEmp = empRepo.findByEmpId(empSalDetails.getEmployeeDetails().getEmpId());
+		empSalDetails.setEmployeeDetails(byEmp);
+		return empService.updateSalaryDetails(empSalDetails);
+	}
 
-	    @GetMapping("/getEmpInfo/{id}")
-	    public ResponseEntity<EmployeeInformation> findEmpInfoById(@PathVariable Integer id){
-	    	EmployeeInformation empInfoById = empService.getEmpInfoById(id);
-	    	return new ResponseEntity<>(empInfoById,HttpStatus.OK);
-	    }
 
-	
+	/*
+	 * @GetMapping("/getSalaryByEmpId/{empId}") public List<EmployeeSalaryDetails>
+	 * getSalaryByEmpId(@PathVariable String empId){ return
+	 * empService.getSalaryByEmpId(empId); }
+	 */
+	@GetMapping("/getEmployeeSalaryDetail/{id}")
+	public ResponseEntity<EmployeeSalaryDetails> findSalaryById(@PathVariable Integer id){
+		EmployeeSalaryDetails empSalaryDetailsById = empService.getEmpSalaryDetailsById(id);
+		return new ResponseEntity<>(empSalaryDetailsById,HttpStatus.OK);
+	}
+
+	@PostMapping("/saveEmpInfo") 
+	public EntityBeanResponse saveEmployeeInformation(@RequestBody EmployeeInformation empInformation) {
+
+		return empService.saveEmployeeInformation(empInformation);
+	}   
+
+	@PutMapping("/UpdateEmpInfo")
+	public EntityBeanResponse updateEmpInfo(@RequestBody EmployeeInformation empInfo) {
+		EmployeeDetails byEmp = empRepo.findByEmpId(empInfo.getEmployeeDetails().getEmpId());
+		empInfo.setEmployeeDetails(byEmp);
+		return empService.updateEmployeeInformation(empInfo);
+	}
+
+
+	@GetMapping("/getEmpInfo/{id}")
+	public ResponseEntity<EmployeeInformation> findEmpInfoById(@PathVariable Integer id){
+		EmployeeInformation empInfoById = empService.getEmpInfoById(id);
+		return new ResponseEntity<>(empInfoById,HttpStatus.OK);
+	}
+
+
 }

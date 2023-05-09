@@ -13,10 +13,20 @@
     hibernate:
       ddl-auto: update
     show-sql: true
-   
- springdoc:
-    packagesToScan: com.hrms.controller
-
+   mail:
+    host: 213.164.178.68.host.secureserver.net
+    port: 25
+    username: _mainaccount@hrmsapp.com
+    password: Shekar!123
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    default-encoding: UTF-8
 
 #server:
 #  port: 9090
