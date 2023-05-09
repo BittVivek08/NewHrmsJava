@@ -1,6 +1,7 @@
 package com.hrms.entity;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,6 +50,9 @@ public class EmployeeJobHistory {
 
 	@Column(name = "end_date")
 	private Date toDate;
-
+	
+	private LocalDateTime createdOn;
+	
+	private LocalDateTime lastUpdatedOn;
 
 }
