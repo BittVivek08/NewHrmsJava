@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.hrms.entity.EmployeeInformation;
 import com.hrms.entity.EmployeeSalaryDetails;
 
-public interface EmployeeSalaryRepository extends JpaRepository<EmployeeSalaryDetails, Integer>{
-
+public interface EmployeeInformationRepository extends JpaRepository<EmployeeInformation, Integer>{
 	
-	// @JoinColumn(name = "emp_id",referencedColumnName = "emp_id")   
+//	  public List<EmployeeInformation> findByEmpId(String empId);
+
+
 }

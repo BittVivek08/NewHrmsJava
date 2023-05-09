@@ -20,7 +20,7 @@ import com.hrms.beans.EmpBirthResponse;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
 import com.hrms.entity.EmployeeDetails;
-
+import com.hrms.entity.EmployeeInformation;
 import com.hrms.entity.EmployeeSalaryDetails;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.service.EmployeeDetailsService;
@@ -158,9 +158,34 @@ public class EmployeeDetailsController {
 	    	return empService.updateSalaryDetails(empSalDetails);
 	    }
 	    
-	    @GetMapping("/getSalaryByEmpName/{empName}")
-		public List<EmployeeSalaryDetails> getSalaryByEmpName(@PathVariable String empName){
-			return empService.getSalaryByEmpName(empName);
-		}
-	
+		/*
+		 * @GetMapping("/getSalaryByEmpId/{empId}") public List<EmployeeSalaryDetails>
+		 * getSalaryByEmpId(@PathVariable String empId){ return
+		 * empService.getSalaryByEmpId(empId); }
+		 */
+	    @GetMapping("/getEmployeeSalaryDetail/{id}")
+	    public ResponseEntity<EmployeeSalaryDetails> findSalaryById(@PathVariable Integer id){
+	    	EmployeeSalaryDetails empSalaryDetailsById = empService.getEmpSalaryDetailsById(id);
+	    	return new ResponseEntity<>(empSalaryDetailsById,HttpStatus.OK);
+	    }
+	    
+	    @PostMapping("/saveEmpInfo") 
+        public EntityBeanResponse saveEmployeeInformation(@RequestBody EmployeeInformation empInformation) {
+      
+  		return empService.saveEmployeeInformation(empInformation);
+  	}   
+	    
+	    @PutMapping("/UpdateEmpInfo")
+	    public EntityBeanResponse updateEmpInfo(@RequestBody EmployeeInformation empInfo) {
+	    	EmployeeDetails byEmp = empRepo.findByEmpId(empInfo.getEmployeeDetails().getEmpId());
+	    	empInfo.setEmployeeDetails(byEmp);
+	    	return empService.updateEmployeeInformation(empInfo);
+	    }
+	 
+
+	    @GetMapping("/getEmpInfo/{id}")
+	    public ResponseEntity<EmployeeInformation> findEmpInfoById(@PathVariable Integer id){
+	    	EmployeeInformation empInfoById = empService.getEmpInfoById(id);
+	    	return new ResponseEntity<>(empInfoById,HttpStatus.OK);
+	    }
 }

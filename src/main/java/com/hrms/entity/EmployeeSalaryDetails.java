@@ -22,9 +22,7 @@ public class EmployeeSalaryDetails implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	
-	private String empName;
-	
+		
 	private String currency;
 	
 	private String salary;

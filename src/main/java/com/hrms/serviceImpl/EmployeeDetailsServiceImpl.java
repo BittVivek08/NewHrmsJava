@@ -16,6 +16,8 @@ import com.hrms.beans.EmployeeDto;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.EmployeeInformation;
+import com.hrms.repository.EmployeeInformationRepository;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.entity.EmployeeSalaryDetails;
 
@@ -24,35 +26,39 @@ import com.hrms.repository.EmployeeSalaryRepository;
 import com.hrms.service.EmployeeDetailsService;
 
 @Service
-public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
+public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Autowired
 	private EmployeeRepository empRepo;
 
 	@Autowired
+	private EmployeeInformationRepository empInfRepo;
+
+	@Autowired
 	private EntityBeanResponse ebr;
-	
-  @Autowired
+
+	@Autowired
 	private EmployeeSalaryRepository empSalRepo;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public EntityBeanResponse saveEmpDetails(EmployeeDetails employeeDetails)  {
+	public EntityBeanResponse saveEmpDetails(EmployeeDetails employeeDetails) {
 		String encode = this.passwordEncoder.encode(employeeDetails.getPassword());
 		employeeDetails.setPassword(encode);
-		
-		  EmployeeDetails saved = empRepo.save(employeeDetails);
 
-		// parent + child record data 
-	//	EmployeeDetails empDetails = new EmployeeDetails();
-		
-		//		empDetails.getEmpSalDetails().setDetails(empDetails);
-		//only save parent entity class
+		EmployeeDetails saved = empRepo.save(employeeDetails);
 
-		//		EmployeeSalaryDetails sal = new EmployeeSalaryDetails(employeeDetails.getChild());
-		//		empDetails.setEmpSalDetails(sal);
+		// parent + child record data
+		// EmployeeDetails empDetails = new EmployeeDetails();
+
+		// empDetails.getEmpSalDetails().setDetails(empDetails);
+		// only save parent entity class
+
+		// EmployeeSalaryDetails sal = new
+		// EmployeeSalaryDetails(employeeDetails.getChild());
+		// empDetails.setEmpSalDetails(sal);
 
 		if (saved != null) {
 			ebr.setMsg("Employee Details Saved Successfully");
@@ -75,10 +81,10 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 	public EmployeeDetails getEmpById(Integer id) {
 		Optional<EmployeeDetails> findById = empRepo.findById(id);
 
-		if(findById.isPresent()) {
+		if (findById.isPresent()) {
 			return findById.get();
 		}
-		return null ;
+		return null;
 	}
 
 	@Override
@@ -94,10 +100,11 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 		}
 		return ebr;
 	}
+
 	@Override
 	public List<EmpBirthResponse> findBirthdayDetails() {
 
-		List<EmployeeDetails> empList =  empRepo.findAll();
+		List<EmployeeDetails> empList = empRepo.findAll();
 		List<EmployeeDetails> empListBirhdays = new ArrayList<>();
 		List<EmpBirthResponse> lis = new ArrayList<>();
 		LocalDate today = LocalDate.now();
@@ -107,8 +114,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 
 				Date dob = sdf.parse(emp.getDateOfBirth());
 
-				if (dob.getDate() == today.getDayOfMonth()
-						&& dob.getMonth()+1 == today.getMonthValue()) {
+				if (dob.getDate() == today.getDayOfMonth() && dob.getMonth() + 1 == today.getMonthValue()) {
 
 					EmpBirthResponse res = new EmpBirthResponse();
 					res.setFirstname(emp.getFirstName());
@@ -119,8 +125,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 					empListBirhdays.add(emp);
 				}
 			}
-		}catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -174,46 +179,103 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService{
 		return ebr;
 	}
 
-
 	@Override
 	public EntityBeanResponse saveSalaryDetails(EmployeeSalaryDetails empSalaryDetails) {
 		EmployeeDetails empDetail = empRepo.findByEmpId(empSalaryDetails.getEmployeeDetails().getEmpId());
 		empSalaryDetails.setEmployeeDetails(empDetail);
-		EmployeeSalaryDetails saved= empSalRepo.save(empSalaryDetails);
-	
-		if(saved != null) {
+		EmployeeSalaryDetails saved = empSalRepo.save(empSalaryDetails);
+
+		if (saved != null) {
 			ebr.setMsg("Salary Details Added successfully !");
 			ebr.setStatus(true);
 			ebr.setEmployeeDto(null);
-		}else {
+		} else {
 			ebr.setMsg("Adding Salary Details Failed");
 			ebr.setStatus(false);
 			ebr.setEmployeeDto(null);
 		}
 		return ebr;
 	}
+
 	@Override
 	public EntityBeanResponse updateSalaryDetails(EmployeeSalaryDetails empSalaryDetails) {
 		EmployeeDetails empDetails = empRepo.findByEmpId(empSalaryDetails.getEmployeeDetails().getEmpId());
 		empSalaryDetails.setEmployeeDetails(empDetails);
 		EmployeeSalaryDetails updated = empSalRepo.save(empSalaryDetails);
-		
-		if(updated != null) {
+
+		if (updated != null) {
 			ebr.setMsg("Salary Details Updated Successfully");
 			ebr.setStatus(true);
-		}else {
+		} else {
 			ebr.setMsg("Salary Updation Failed");
 			ebr.setStatus(false);
 		}
 		return ebr;
 	}
 
+	/*
+	 * @Override public List<EmployeeSalaryDetails> getSalaryByEmpId(String empId) {
+	 * 
+	 * return empSalRepo.findByEmpId(empId); }
+	 */
+
 	@Override
-	public List<EmployeeSalaryDetails> getSalaryByEmpName(String empName) {
+	public EmployeeSalaryDetails getEmpSalaryDetailsById(Integer id) {
+		Optional<EmployeeSalaryDetails> findById = empSalRepo.findById(id);
+		if(findById.isPresent()) {
+			return findById.get();
+	}
+		return null;
+	}
+	@Override
+	public EntityBeanResponse saveEmployeeInformation(EmployeeInformation empInformation) {
+EmployeeDetails employeeDetails=empRepo.findByEmpId(empInformation.getEmployeeDetails().getEmpId());
 		
-		return empSalRepo.findByEmpName(empName);
+		empInformation.setEmployeeDetails(employeeDetails);
+		
+
+		EmployeeInformation empInfo = empInfRepo.save(empInformation);
+		
+         if (empInfo != null) {
+			ebr.setMsg("Employee Information saved successfully");
+			ebr.setStatus(true);
+		} else {
+			ebr.setMsg("Employee Information Saving Failed !");
+			ebr.setStatus(false);
+		}
+         
+		return ebr ;
+	}
+
+	@Override
+	public EntityBeanResponse updateEmployeeInformation(EmployeeInformation entity) {
+		
+		EmployeeDetails emp = empRepo.findByEmpId(entity.getEmployeeDetails().getEmpId());
+		entity.setEmployeeDetails(emp);
+            
+		EmployeeInformation updated = empInfRepo.save(entity);
+		
+		if (updated != null) {
+			ebr.setMsg("Employee Information Updated Successfully");
+			ebr.setStatus(true);
+		} else {
+			ebr.setMsg("Employee Information Updation Failed");
+			ebr.setStatus(false);
+		}
+		
+		return ebr;
+	}
+
+	
+
+	@Override
+	public EmployeeInformation getEmpInfoById(Integer id) {
+         Optional<EmployeeInformation> findById = empInfRepo.findById(id);
+         if(findById.isPresent()) {
+        	 return findById.get();
+         }
+		return null;
 	}
 
 }
-
 
