@@ -10,12 +10,11 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.hrms</groupId>
-	<artifactId>0001_Dummy_Hrms</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>0001_Dummy_Hrms</name>
+	<artifactId>hrms_dev</artifactId>
+	<name>hrms_dev</name>
 	<description>project on hrms</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>18</java.version>
 	</properties>
 	<dependencies>
 
