@@ -35,7 +35,7 @@ public class ContactDetails {
 	
 	private String pincode1;
 	
-	private String province1;
+	private String city1;
 	
 	private String status2;
 	
@@ -47,9 +47,9 @@ public class ContactDetails {
 	
 	private String effectiveDate2;
 	
-	private String Pincode2;
+	private String pincode2;
 	
-	private String Province2;
+	private String city2;
 
 	
 		
