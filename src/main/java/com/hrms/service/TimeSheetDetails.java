@@ -7,8 +7,6 @@ import java.util.List;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.entity.SaveTimeSheet;
 
-
-
 public interface TimeSheetDetails {
 //	public void saveTimeSheet(SaveTimesheetRequestBean saveBean);
 //	public void getMonthlyDataInTimeSheet(int userid, String monthStartDate, String monthEndDate);

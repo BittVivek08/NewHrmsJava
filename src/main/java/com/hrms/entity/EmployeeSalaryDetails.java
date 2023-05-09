@@ -23,9 +23,6 @@ public class EmployeeSalaryDetails implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
-	@Transient
-	private String emp_Idd;
-	
 	private String empName;
 	
 	private String currency;
