@@ -21,10 +21,6 @@ public class EmployeeInformation {
 	@JoinColumn(name = "emp_id",referencedColumnName = "emp_id") 
 	private EmployeeDetails employeeDetails;
 
-	private String gender;
-
-	private String dob;
-
 	private String birthCountry;
 
 	private String language;
@@ -35,7 +31,7 @@ public class EmployeeInformation {
 
 	private String country;
 
-	private String effectiveDate;
+	private String maritalEffectiveDate;
 
 	private String citizenshipEffectiveDate;
 
