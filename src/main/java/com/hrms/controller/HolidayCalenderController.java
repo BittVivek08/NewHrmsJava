@@ -1,6 +1,6 @@
 package com.hrms.controller;
 
-import java.sql.Date;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.EntityBeanResponseCommon;
 import com.hrms.entity.HolidayCalenderEntity;
 import com.hrms.service.HolidayCalenderService;

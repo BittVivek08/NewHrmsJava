@@ -22,4 +22,5 @@ public interface HolidayCalenderRepository extends JpaRepository<HolidayCalender
 
 	List<HolidayCalenderEntity> findByDateBetween(LocalDate startDate, LocalDate endDate);
 
+ 
 }

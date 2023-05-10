@@ -15,13 +15,12 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="Leave_Apply_Details")
+@Table(name="req_leave_Details")
 public class RequestForLeave {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private int mappingId;
 	private String leaveType;
 	private LocalDate startDate;
 	private LocalDate endDate;
@@ -30,8 +29,7 @@ public class RequestForLeave {
 	private Integer avalSickLeave;
 	private String reason;
 	private String status;
+	private String emp_id;
 	
-	@ManyToOne
-	@JoinColumn(name="emp_id", nullable = false)
-	private EmployeeDetails details;
+
 }

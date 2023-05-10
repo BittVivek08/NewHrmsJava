@@ -13,6 +13,7 @@ import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.RequestForLeave;
 import com.hrms.service.IRequestForLeaveService;
 import com.hrms.repository.EmployeeRepository;
+import com.hrms.repository.HolidayCalenderRepository;
 import com.hrms.repository.ILeaveDetailsRepository;
 import com.hrms.repository.IRequestForLeaveRepository;
 import com.hrms.request.bean.RequestForLeaveBinding;
@@ -26,6 +27,9 @@ import java.util.List;
 @Service
 public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 
+	@Autowired
+	HolidayCalenderRepository holidayRepo;
+	
 	@Autowired
 	private IRequestForLeaveRepository reqLeaveRepo;
 	
@@ -46,23 +50,19 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		//leave.setId((details.getId()));
 		leave.setLeaveType(details.getLeaveType());
 		leave.setReason(details.getReason());
-		leave.setMappingId(details.getMappingId());
+		//leave.setMappingId(details.getMappingId());
 		leave.setStatus("Panding");
-		
-		//holiday
-		String dateString3="2023-04-09";
-		
+	
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate startDate=LocalDate.parse(details.getStartDate(), formatter);
 		leave.setStartDate(startDate);
 		LocalDate endDate=LocalDate.parse(details.getEndDate(), formatter);
 		leave.setEndDate(endDate);
-		 LocalDate holiday1=LocalDate.parse(dateString3,formatter);
 		
-		 List<LocalDate> holidays = new ArrayList<>();
-	       holidays.add(startDate);
-	       holidays.add(holiday1);
-	      // holidays.add(LocalDate.of(date1));
+		//adding Holidays
+		 List<LocalDate> holidays = new ArrayList<>();	 
+	   	holidays.addAll( holidayRepo.finDates());
+	    
 
 	       Predicate<LocalDate> isHoliday = holidays::contains;
 	       Predicate<LocalDate> isWeekend = date -> date.getDayOfWeek() == DayOfWeek.SATURDAY
@@ -95,42 +95,48 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		//leave applied condition
 		if(details.getLeaveType().equalsIgnoreCase("casual")) {
 			//check avalCasualLeave is null or not
-			if(reqLeaveRepo.minCasualLeave(details.getMappingId())==null)
+			if(reqLeaveRepo.minCasualLeave(details.getEmp_id())==null)
 				avalCasualLeave=leaveRepo.getTotalLeave("casual")-reqDays;
 			else
-				avalCasualLeave=reqLeaveRepo.minCasualLeave(details.getMappingId())-reqDays;
+				avalCasualLeave=reqLeaveRepo.minCasualLeave(details.getEmp_id())-reqDays;
 		}
 		else{
-			if(reqLeaveRepo.minCasualLeave(details.getMappingId())==null)
+			if(reqLeaveRepo.minCasualLeave(details.getEmp_id())==null)
 				avalCasualLeave=leaveRepo.getTotalLeave("casual");
 			else
-				avalCasualLeave=reqLeaveRepo.minCasualLeave(details.getMappingId());
+				avalCasualLeave=reqLeaveRepo.minCasualLeave(details.getEmp_id());
 		}
 		
 		
 		//check avalSickLeave is null or not
 		if(details.getLeaveType().equalsIgnoreCase("sick")){
-			if(reqLeaveRepo.minSickLeave(details.getMappingId())==null)
+			if(reqLeaveRepo.minSickLeave(details.getEmp_id())==null)
 				avalSickLeave=leaveRepo.getTotalLeave("sick")-reqDays;
 			else
-				avalSickLeave=reqLeaveRepo.minSickLeave(details.getMappingId())-reqDays;
+				avalSickLeave=reqLeaveRepo.minSickLeave(details.getEmp_id())-reqDays;
 		}
 		else{
-			if(reqLeaveRepo.minSickLeave(details.getMappingId())==null)
+			if(reqLeaveRepo.minSickLeave(details.getEmp_id())==null)
 				avalSickLeave=leaveRepo.getTotalLeave("sick");
 			else
-				avalSickLeave=reqLeaveRepo.minSickLeave(details.getMappingId());
+				avalSickLeave=reqLeaveRepo.minSickLeave(details.getEmp_id());
 		}
 		
 		//set final leave 
 		leave.setAvalCasualLeave(avalCasualLeave);
 		leave.setAvalSickLeave(avalSickLeave);
 			
-			EmployeeDetails empDetails=employeeRepo.findById(details.getMappingId()).get();
-			leave.setDetails(empDetails);
+			EmployeeDetails empDetails=employeeRepo.findByEmpId(details.getEmp_id());
+			int id= empDetails.getId();
 			
+			EmployeeDetails empDetails1= employeeRepo.findById(id).get();
+			leave.setEmp_id(empDetails1.getEmpId());
+		
+	//		leave.setEmpid(empDetails.getEmpId());
+			
+			LocalDate  currentDate= LocalDate.now();
 			//save
-			if(avalCasualLeave>=0 && avalCasualLeave<=leaveRepo.getTotalLeave("casual") && avalSickLeave>=0 && avalSickLeave<=leaveRepo.getTotalLeave("sick")) {
+			if(avalCasualLeave>=0 && avalCasualLeave<=leaveRepo.getTotalLeave("casual") && avalSickLeave>=0 && avalSickLeave<=leaveRepo.getTotalLeave("sick") && (currentDate.isBefore(startDate)==true)) {
 				reqLeaveRepo.save(leave);
 		
 				response.setMsg("Done with your leave");

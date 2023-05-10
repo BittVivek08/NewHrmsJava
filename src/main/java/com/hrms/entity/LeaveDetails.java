@@ -18,10 +18,6 @@ public class LeaveDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer Id;
-	//private Integer empId;
-	//@ManyToOne
-	//@JoinColumn(name="emp_by_id", nullable = false)
-//	private EmployeeDetails details;
 	private String leaveType;
 	private Integer totalLeave;
 }
