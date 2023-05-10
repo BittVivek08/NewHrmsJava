@@ -64,17 +64,17 @@ public class HolidayCalenderServiceImpl implements HolidayCalenderService {
 		this.logging.info("updateHoliday.getHolidayName()"+updateHoliday.getHolidayName());
 
 		Optional<HolidayCalenderEntity> holiday = holiRepo.findById(id);
-
+		HolidayCalenderEntity holidayDB = null;
 		if(holiday.isPresent()) {
-			List<HolidayCalenderEntity> list = holiday.stream().collect(Collectors.toList());
-			list.get(0).setDate(updateHoliday.getDate());
-			list.get(0).setHolidayName(updateHoliday.getHolidayName());
-			list.get(0).setHolidayDescription(updateHoliday.getHolidayDescription());
+			//			List<HolidayCalenderEntity> list = holiday.stream().collect(Collectors.toList());
+			holidayDB = holiday.get();
+			holidayDB.setDate(updateHoliday.getDate());
+			holidayDB.setHolidayName(updateHoliday.getHolidayName());
+			holidayDB.setHolidayDescription(updateHoliday.getHolidayDescription());
 		}
 
 
-		//HolidayCalenderEntity updatedHloiday = holiRepo.save(holiday);
-		return this.holiRepo.save(holiday.orElseThrow());
+		return  holiRepo.save(holidayDB);
 	}
 	/*
 	 * //GetbyDate
@@ -102,7 +102,7 @@ public class HolidayCalenderServiceImpl implements HolidayCalenderService {
 
 		this.logging.info("Successfully get Holiday by id in service");
 
-		return findById.orElseThrow();
+		return findById.get();
 	}
 
 

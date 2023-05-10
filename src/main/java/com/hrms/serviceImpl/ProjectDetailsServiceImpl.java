@@ -66,24 +66,24 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 	public EntityBeanResponseCommon updateProjectDetails(int pid, ProjectDetailsEntity entity) {
 
 		Optional<ProjectDetailsEntity> updateEntity = this.projectRepo.findById(pid);
-
+		ProjectDetailsEntity entityDB = updateEntity.get();
 		ClientDetailsEntity client = clientRepo.findByClientid(entity.getClient().getClientid());
 
-		if (entity != null) {
-			updateEntity.orElseThrow().setCurrencyname(entity.getCurrencyname());
-			updateEntity.orElseThrow().setProjectId(entity.getProjectId());
-			updateEntity.orElseThrow().setClient(client);
-			updateEntity.orElseThrow().setDescription(entity.getCurrencyname());
-			updateEntity.orElseThrow().setEnddate(entity.getEnddate());
-			updateEntity.orElseThrow().setStartdate(entity.getStartdate());
-			updateEntity.orElseThrow().setEstimatedhours(entity.getEstimatedhours());
-			updateEntity.orElseThrow().setIsactive(entity.getIsactive());
-			updateEntity.orElseThrow().setLeadapprove(entity.getLeadapprove());
-			updateEntity.orElseThrow().setProjectName(entity.getProjectName());
-			updateEntity.orElseThrow().setProjectstatus(entity.getProjectstatus());
-			updateEntity.orElseThrow().setProjecttype(entity.getProjecttype());
+		if (entityDB != null) {
+			entityDB.setCurrencyname(entity.getCurrencyname());
+			entityDB.setProjectId(entity.getProjectId());
+			entityDB.setClient(client);
+			entityDB.setDescription(entity.getCurrencyname());
+			entityDB.setEnddate(entity.getEnddate());
+			entityDB.setStartdate(entity.getStartdate());
+			entityDB.setEstimatedhours(entity.getEstimatedhours());
+			entityDB.setIsactive(entity.getIsactive());
+			entityDB.setLeadapprove(entity.getLeadapprove());
+			entityDB.setProjectName(entity.getProjectName());
+			entityDB.setProjectstatus(entity.getProjectstatus());
+			entityDB.setProjecttype(entity.getProjecttype());
 
-			this.projectRepo.save(updateEntity.orElseThrow());
+			this.projectRepo.save(entityDB);
 
 			beanResponse.setMsg("Successfully Updated Project Details of Project Id :" + entity.getProjectId());
 			beanResponse.setStatus(true);

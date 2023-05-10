@@ -19,6 +19,7 @@ import com.hrms.request.bean.RequestForLeaveBinding;
 import com.hrms.response.bean.EntityResponse;
 
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.List;
 
@@ -72,10 +73,15 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	       int totaldays=(int) daysBetween + 1;
 	       System.out.println("Days between = " + totaldays);
 
+//	       List<LocalDate> workDays = Stream.iterate(startDate, date -> date.plusDays(1))
+//	               .limit(totaldays)
+//	               .filter(isHoliday.or(isWeekend).negate())
+//	               .toList();
+	       
 	       List<LocalDate> workDays = Stream.iterate(startDate, date -> date.plusDays(1))
-	               .limit(totaldays)
-	               .filter(isHoliday.or(isWeekend).negate())
-	               .toList();
+	    	        .limit(totaldays)
+	    	        .filter(isHoliday.or(isWeekend).negate())
+	    	        .collect(Collectors.toList());
 
 	       long actualDaysBetween = workDays.size();
 	     //  System.out.println("Actual days between = " + actualDaysBetween);
