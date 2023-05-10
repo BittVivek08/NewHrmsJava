@@ -3,13 +3,13 @@ package com.hrms.entity;
 
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -43,6 +43,8 @@ public class EmployeeDetails implements Serializable{
 
 	private String empRole;
 	
+	private Date dateOfJoining;
+	
 	private String designation;
 	
 	private String reportingManagerName;
@@ -56,17 +58,35 @@ public class EmployeeDetails implements Serializable{
 	private String password;
 
 	private String gender;
-
+	
 	private String image;
 	
-//	@OneToMany(mappedBy = "details")
-//	private RequestForLeave leaveReq;
+	private Date effectiveStartDate;
 	
-	/*
-	 * private String createdOn;
-	 * 
-	 * private String lastUpdatedOn;
-	 */
+	private Date effectiveEndDate;
+	
+	private Date createdDate;
+	
+	private Date updatedDate;
+	
+	// Salary Details
+	
+    private String currency;
+	
+	private String salary;
+	
+	private String bankName;
+	
+	private String accountHolderName;
+
+	private String accountType;
+
+	private String accountNumber;
+	
+	private String ifscCode;
+	
+	private Integer isActive;
+	
 	
 }
 

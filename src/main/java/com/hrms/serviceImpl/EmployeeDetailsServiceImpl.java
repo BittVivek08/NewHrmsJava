@@ -52,23 +52,28 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		employeeDetails.setPassword(encode);
 
 		EmployeeDetails saved = empRepo.save(employeeDetails);
-
-		// parent + child record data
-		// EmployeeDetails empDetails = new EmployeeDetails();
-
-		// empDetails.getEmpSalDetails().setDetails(empDetails);
-		// only save parent entity class
-
-		// EmployeeSalaryDetails sal = new
-		// EmployeeSalaryDetails(employeeDetails.getChild());
-		// empDetails.setEmpSalDetails(sal);
+         EmployeeDetails findByEmail = empRepo.findByEmail(employeeDetails.getEmail());
 
 		if (saved != null) {
+			EmployeeDto empDto = new EmployeeDto();
+
+			empDto.setId(findByEmail.getId());
+			empDto.setEmpId(findByEmail.getEmpId());
+			empDto.setFirstName(findByEmail.getFirstName());
+			empDto.setLastName(findByEmail.getLastName());
+			empDto.setEmpRole(findByEmail.getEmpRole());
+			empDto.setEmail(findByEmail.getEmail());
+			empDto.setGender(findByEmail.getGender());
+			empDto.setDateOfBirth(findByEmail.getDateOfBirth());
+			empDto.setQualification(findByEmail.getQualification());
+			empDto.setMobileNumber(findByEmail.getMobileNumber());
+			ebr.setEmployeeDto(empDto);
 			ebr.setMsg("Employee Details Saved Successfully");
 			ebr.setStatus(true);
 		} else {
 			ebr.setMsg("Employee Details Saving Failed");
 			ebr.setStatus(false);
+			ebr.setEmployeeDto(null);
 		}
 		return ebr;
 
@@ -96,7 +101,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 //		EmployeeDetails employeeDetails = empRepo.findByEmpId(emplDetails.getEmpId());
 		emplDetails.setPassword(employeeDetails.get().getPassword());
 		
-		
+	    Date effectiveStartDate = employeeDetails.get().getEffectiveStartDate();
 		
 		
 		EmployeeDetails update = empRepo.save(emplDetails);
@@ -191,7 +196,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	
 	@Override
 	public EntityBeanResponse saveEmployeeInformation(EmployeeInformation empInformation) {
-EmployeeDetails employeeDetails=empRepo.findByEmpId(empInformation.getEmployeeDetails().getEmpId());
+     EmployeeDetails employeeDetails=empRepo.findByEmpId(empInformation.getEmployeeDetails().getEmpId());
 		
 		empInformation.setEmployeeDetails(employeeDetails);
 		
