@@ -64,6 +64,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		EmployeeDetails saved = empRepo.save(employeeDetails);
 		EmployeeDetails findByEmail = empRepo.findByEmail(employeeDetails.getEmail());
 
+
 		if (saved != null) {
 			EmployeeDto empDto = new EmployeeDto();
 
@@ -108,11 +109,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	@Override
 	public EntityBeanResponse updateEmpDetails(EmployeeDetails emplDetails) {
 		Optional<EmployeeDetails> employeeDetails = empRepo.findById(emplDetails.getId());
-		//		EmployeeDetails employeeDetails = empRepo.findByEmpId(emplDetails.getEmpId());
 		emplDetails.setPassword(employeeDetails.get().getPassword());
-
-		Date effectiveStartDate = employeeDetails.get().getEffectiveStartDate();
-
 
 		EmployeeDetails update = empRepo.save(emplDetails);
 		if (update != null) {
@@ -203,10 +200,11 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		return ebr;
 	}
 
+	public EntityBeanResponse saveEmployeeInformation(String empId,EmployeeInformation empInformation) {
 
-	@Override
-	public EntityBeanResponse saveEmployeeInformation(EmployeeInformation empInformation) {
-		EmployeeDetails employeeDetails=empRepo.findByEmpId(empInformation.getEmployeeDetails().getEmpId());
+
+		EmployeeDetails employeeDetails=empRepo.findByEmpId(empId);
+		empInformation.setEmployeeDetails(employeeDetails);
 
 		empInformation.setEmployeeDetails(employeeDetails);
 		EmployeeInformation empInfo = empInfRepo.save(empInformation);
@@ -269,11 +267,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			contactbean.setMessage("contact details not saved");
 			contactbean.setStatus(false);
 		}
-
-
 		return contactbean ;
-
-
 	}
 
 

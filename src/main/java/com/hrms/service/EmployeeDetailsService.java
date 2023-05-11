@@ -29,13 +29,12 @@ public interface EmployeeDetailsService {
 
 	// saving employee information
 	
-	public EntityBeanResponse saveEmployeeInformation(EmployeeInformation empinformation);
+	public EntityBeanResponse saveEmployeeInformation(String empId, EmployeeInformation empinformation);
 	
 	public EntityBeanResponse updateEmployeeInformation(EmployeeInformation entity);
 	
 	public EmployeeInformation getEmpInfoById(Integer id);
-	
-	// Contact Details
+
 	public ContactBean saveContactdata(ContactDetails details);
 
 	public List<ContactDetails> getContactdata();
