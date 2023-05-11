@@ -15,7 +15,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="holiday_calender")
+@Table(name="main_holidaydates")
 public class HolidayCalenderEntity {
 	
 	
