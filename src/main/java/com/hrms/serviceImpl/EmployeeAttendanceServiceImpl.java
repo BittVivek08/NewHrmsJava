@@ -222,18 +222,21 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
             LocalDate today = LocalDate.now();
             LocalDate leaveStartDate = employee.get().getStartDate();
             LocalDate leaveEndDate = employee.get().getEndDate();
-            if (leaveStartDate != null && leaveEndDate != null) {
-                return today.isEqual(leaveStartDate) || (today.isAfter(leaveStartDate) && today.isBefore(leaveEndDate));
+//            if (leaveStartDate != null && leaveEndDate != null) {
+//                return today.isEqual(leaveStartDate) || (today.isAfter(leaveStartDate) && today.isBefore(leaveEndDate));
+//            }
+            if (today.isEqual(leaveStartDate) || (today.isAfter(leaveStartDate) && today.isBefore(leaveEndDate))) {
+                return false ;
             }
         }
-        return false;
+        return true;
 
 		
 		
 	}
 
 	@Override
-	public EmployeeAttendancebean saveCheckInTimeForcly(String empId, String ipAddress, String workFrom) {
+	public EmployeeAttendancebean saveCheckInTimeForcely(String empId, String ipAddress, String workFrom) {
 		
 		EmployeeAttendancebean attendancebean= new EmployeeAttendancebean();
 		if(!checkIfCheckedInToday(empId)) {
