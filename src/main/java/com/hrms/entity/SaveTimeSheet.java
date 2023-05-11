@@ -1,13 +1,22 @@
 package com.hrms.entity;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
+import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -25,11 +34,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Component
+@Table(name = "tm_emp_timesheets")
 public class SaveTimeSheet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private Integer empId;
+	
 	@Column(name = "status")
 	private String status;
 	@Column(name="cal_week")
@@ -41,18 +51,9 @@ public class SaveTimeSheet {
     private Integer month;
 	private  String customer;
 	private String project;
-	
-	@Column(name = "project_task_id", updatable = false)
-	private int projectTaskId;
-	
-	@Column(name="client_id")
-	private int clientId;
 	@Transient
 	private String clientName;
-
-	@Column(name = "project_id")
-	private int projectId;
-    private String task;
+    private String taskName;
     @Column(name = "ts_week")
 	private Integer weekNo;
     @Column(name = "mon_duration")
@@ -107,6 +108,35 @@ public class SaveTimeSheet {
 	@Column(name = "week_duration")
 	private String TotalWeekHours;
 	
+	@Column(name = "created", updatable = false)
+	private LocalDateTime created_Date;
 	
+	@Column(name = "modified")
+	private LocalDateTime modifiedDate;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "emp_id",referencedColumnName = "emp_id")
+	private EmployeeDetails emp;
+	
+	@ManyToOne(fetch=FetchType.LAZY)
+//	@JoinColumn(name = "client_id",referencedColumnName = "client_id")
+	private ClientDetailsEntity client;
+	
+	@ManyToOne
+	@JoinColumn(name = "project_id")
+	private ProjectDetailsEntity proj;
+	
+	@ManyToOne
+	@JoinColumn(name = "project_task_id")
+	private TaskDetailsEntity task;
+    
+	
+	@Column(name = "is_active")
+	private Boolean isActive;
+	@Transient
+	private String request;
+
+	
+
 
 }
