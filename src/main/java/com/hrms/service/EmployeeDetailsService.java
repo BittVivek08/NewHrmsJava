@@ -4,10 +4,12 @@ import java.util.List;
 
 import com.hrms.beans.ContactBean;
 import com.hrms.beans.EmpBirthResponse;
+import com.hrms.beans.EmployeeEducationDetailsBean;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
 import com.hrms.entity.ContactDetails;
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.EmployeeEducationDetails;
 import com.hrms.entity.EmployeeInformation;
 
 public interface EmployeeDetailsService {
@@ -39,5 +41,15 @@ public interface EmployeeDetailsService {
 	public List<ContactDetails> getContactdata();
 
 	public ContactDetails updateContact(ContactDetails entity);
+
 	public ContactDetails getcontactDetails(int id);
+	
+	public EmployeeEducationDetailsBean saveEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails,String empId);
+
+	public EmployeeEducationDetailsBean updateEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails);
+
+	public EmployeeEducationDetails getEmpeducationdetalsById(Integer id);
+
+	public List<EmployeeEducationDetails> getAllEmpeducationdetails();
+
 }
