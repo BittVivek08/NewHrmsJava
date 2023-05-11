@@ -1,4 +1,4 @@
-package com.hrms.entity;
+	package com.hrms.entity;
 
 import java.io.Serializable;
 
