@@ -39,10 +39,10 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private ContactRepo contactrepo;
-	
+
 	@Autowired
 	private ContactBean contactbean;
 
@@ -52,7 +52,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		employeeDetails.setPassword(encode);
 
 		EmployeeDetails saved = empRepo.save(employeeDetails);
-         EmployeeDetails findByEmail = empRepo.findByEmail(employeeDetails.getEmail());
+		EmployeeDetails findByEmail = empRepo.findByEmail(employeeDetails.getEmail());
 
 		if (saved != null) {
 			EmployeeDto empDto = new EmployeeDto();
@@ -98,12 +98,12 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	@Override
 	public EntityBeanResponse updateEmpDetails(EmployeeDetails emplDetails) {
 		Optional<EmployeeDetails> employeeDetails = empRepo.findById(emplDetails.getId());
-//		EmployeeDetails employeeDetails = empRepo.findByEmpId(emplDetails.getEmpId());
+		//		EmployeeDetails employeeDetails = empRepo.findByEmpId(emplDetails.getEmpId());
 		emplDetails.setPassword(employeeDetails.get().getPassword());
-		
-	    Date effectiveStartDate = employeeDetails.get().getEffectiveStartDate();
-		
-		
+
+		Date effectiveStartDate = employeeDetails.get().getEffectiveStartDate();
+
+
 		EmployeeDetails update = empRepo.save(emplDetails);
 		if (update != null) {
 			ebr.setMsg("Employee Details Updated Successfully");
@@ -193,35 +193,33 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		return ebr;
 	}
 
-	
+
 	@Override
 	public EntityBeanResponse saveEmployeeInformation(EmployeeInformation empInformation) {
-     EmployeeDetails employeeDetails=empRepo.findByEmpId(empInformation.getEmployeeDetails().getEmpId());
-		
-		empInformation.setEmployeeDetails(employeeDetails);
-		
+		EmployeeDetails employeeDetails=empRepo.findByEmpId(empInformation.getEmployeeDetails().getEmpId());
 
+		empInformation.setEmployeeDetails(employeeDetails);
 		EmployeeInformation empInfo = empInfRepo.save(empInformation);
-		
-         if (empInfo != null) {
+
+		if (empInfo != null) {
 			ebr.setMsg("Employee Information saved successfully");
 			ebr.setStatus(true);
 		} else {
 			ebr.setMsg("Employee Information Saving Failed !");
 			ebr.setStatus(false);
 		}
-         
+
 		return ebr ;
 	}
 
 	@Override
 	public EntityBeanResponse updateEmployeeInformation(EmployeeInformation entity) {
-		
+
 		EmployeeDetails emp = empRepo.findByEmpId(entity.getEmployeeDetails().getEmpId());
 		entity.setEmployeeDetails(emp);
-            
+
 		EmployeeInformation updated = empInfRepo.save(entity);
-		
+
 		if (updated != null) {
 			ebr.setMsg("Employee Information Updated Successfully");
 			ebr.setStatus(true);
@@ -229,35 +227,34 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			ebr.setMsg("Employee Information Updation Failed");
 			ebr.setStatus(false);
 		}
-		
+
 		return ebr;
 	}
 
-	
+
 
 	@Override
 	public EmployeeInformation getEmpInfoById(Integer id) {
-         Optional<EmployeeInformation> findById = empInfRepo.findById(id);
-         if(findById.isPresent()) {
-        	 return findById.get();
-         }
+		Optional<EmployeeInformation> findById = empInfRepo.findById(id);
+		if(findById.isPresent()) {
+			return findById.get();
+		}
 		return null;
 	}
-	
-	
+
+
 	@Override
 	public ContactBean saveContactdata(ContactDetails details) {
-		
-       EmployeeDetails employeedetails=empRepo.findByEmpId(details.getEmployeedetails().getEmpId());
-		
-       details.setEmployeedetails(employeedetails);
-		
 
-       ContactDetails contactdetails =contactrepo.save(details);
-		
-         if (contactdetails != null) {
-        	 contactbean.setMessage("contact details save successfully");
-        	 contactbean.setStatus(true);
+		EmployeeDetails employeedetails=empRepo.findByEmpId(details.getEmployeedetails().getEmpId());
+
+		details.setEmployeedetails(employeedetails);
+
+		ContactDetails contactdetails =contactrepo.save(details);
+
+		if (contactdetails != null) {
+			contactbean.setMessage("contact details save successfully");
+			contactbean.setStatus(true);
 		} else {
 			contactbean.setMessage("contact details not saved");
 			contactbean.setStatus(false);
@@ -272,24 +269,32 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Override
 	public List<ContactDetails> getContactdata() {
-		
+
 		return contactrepo.findAll();
 	}
 
 	@Override
 	public ContactDetails updateContact(ContactDetails entity) {
-		
+
 		EmployeeDetails emp = empRepo.findByEmpId(entity.getEmployeedetails().getEmpId());
 		entity.setEmployeedetails(emp);
 
 		return contactrepo.save(entity);
-		
+
+	}
+	public ContactDetails getcontactDetails(int id) {
+
+		Optional<ContactDetails> contact= contactrepo.findById(id);
+		if(contact.isPresent()) {
+			return contact.get();
+
+		}
+		return null;
 	}
 
-}
-	
-	
-	
+}	
+
+
 
 
 

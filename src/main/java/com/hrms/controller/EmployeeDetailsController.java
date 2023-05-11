@@ -187,5 +187,11 @@ public class EmployeeDetailsController {
 		ContactDetails updatedetails = empService.updateContact(entity);
 		return ResponseEntity.ok(updatedetails);
 	}
+	@GetMapping("/getContactDetails/{id}")
+public ContactDetails getContactDataById(@PathVariable int id) {
+	
+		ContactDetails details=empService.getcontactDetails(id);
+		return details;
+}
 
 }

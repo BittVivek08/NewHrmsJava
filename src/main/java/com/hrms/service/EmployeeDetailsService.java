@@ -33,10 +33,11 @@ public interface EmployeeDetailsService {
 	
 	public EmployeeInformation getEmpInfoById(Integer id);
 	
-	
+	// Contact Details
 	public ContactBean saveContactdata(ContactDetails details);
 
 	public List<ContactDetails> getContactdata();
 
 	public ContactDetails updateContact(ContactDetails entity);
+	public ContactDetails getcontactDetails(int id);
 }
