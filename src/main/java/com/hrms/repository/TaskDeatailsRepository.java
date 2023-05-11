@@ -19,7 +19,9 @@ public interface TaskDeatailsRepository extends JpaRepository<TaskDetailsEntity,
 	@Query("FROM TaskDetailsEntity as e WHERE e.emp.empId = :empid")
 	List<TaskDetailsEntity> findByEmp(@Param("empid") String empid);
 	
+
 	TaskDetailsEntity getById(Integer id);
+
 	
 	
 	

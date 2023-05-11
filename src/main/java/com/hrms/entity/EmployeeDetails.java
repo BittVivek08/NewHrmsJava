@@ -17,10 +17,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Data
 @Table(name= "main_employees")
 public class EmployeeDetails implements Serializable{
 
@@ -60,6 +61,9 @@ public class EmployeeDetails implements Serializable{
 	private String gender;
 	
 	private String image;
+
+	
+	
 	
 	private Date effectiveStartDate;
 	
