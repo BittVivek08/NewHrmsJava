@@ -17,6 +17,7 @@ import com.hrms.beans.EmployeeAttendanceRequest;
 import com.hrms.beans.EmployeeAttendancebean;
 import com.hrms.entity.EmployeeAttendance;
 import com.hrms.entity.HolidayCalenderEntity;
+import com.hrms.entity.RequestForLeave;
 import com.hrms.service.EmployeeAttendanceService;
 import com.hrms.util.IPAddress;
 
@@ -24,63 +25,65 @@ import com.hrms.util.IPAddress;
 @RequestMapping("/attendance")
 @CrossOrigin
 public class EmployeeAttendanceController {
-	
-	   @Autowired
-	   private EmployeeAttendanceService attendanceService;
-	   
-//	   @Autowired
-//	   private AttendanceRepository attendanceRepo;
-//	   
-	   @PostMapping("/check-in/{empId}" )
-	    public ResponseEntity<EmployeeAttendancebean> checkIn(@PathVariable String empId, @RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
-		   
-		   EmployeeAttendancebean attendancebean=  attendanceService.saveCheckInTime(empId,IPAddress.getCurrentIp(),employeeAttendanceRequest.getWorkFrom());
-	        return ResponseEntity.ok(attendancebean);
-	    }
-	   
-	   @PostMapping("/check-out/{empId}")
-	    public ResponseEntity<EmployeeAttendancebean> checkOut(@PathVariable String empId) {
-		   
-		   EmployeeAttendancebean attendancebean = new EmployeeAttendancebean();
-	        attendanceService.saveCheckOutTime(empId);
-	        attendancebean.setMsg("Employee checked out successfully");
-        	attendancebean.setStatus(true);
-	        return ResponseEntity.ok(attendancebean);
-	    }
-	   
-	   @GetMapping("/employee/weekly/{empId}")
-	    public ResponseEntity<List<Object>> getEmployeeWeeklyAttendance(@PathVariable String empId,
-	    		@QueryParam("startDate") String startDate,
-	    		@QueryParam("endDate") String endDate) throws ParseException {
-		   
-//		   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	        List<EmployeeAttendance> attendanceList = attendanceService.getEmployeeWeeklyAttendance(empId, startDate, endDate);
-	        
-	        List<HolidayCalenderEntity> holidaylist =attendanceService.findHolidaysByDateRange(startDate, endDate);
-	        
-	        List<String> weekendList = attendanceService.getWeekendsBetweenDates(startDate, endDate);
-	        // Combine all results into a single list
-	        List<Object> result = new ArrayList<>();
-	        result.addAll(attendanceList);
-	        result.addAll(holidaylist);
-//	        result.addAll(leaveList);
-	        result.addAll(weekendList);
-	        
-	        return ResponseEntity.ok(result);
-	        
+
+	@Autowired
+	private EmployeeAttendanceService attendanceService;
+
+	@PostMapping("/check-in/{empId}")
+	public ResponseEntity<EmployeeAttendancebean> checkIn(@PathVariable String empId,
+			@RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
+
+		EmployeeAttendancebean attendancebean = attendanceService.saveCheckInTime(empId, IPAddress.getCurrentIp(),
+				employeeAttendanceRequest.getWorkFrom());
+		return ResponseEntity.ok(attendancebean);
 	}
-	   
-	   
-	   
-	   
-	   
 
-	//	   @PostMapping("/saveEmployee")
-	//		public  EmployeeAttendancebean recordAttendance(@RequestBody EmployeeAttendance employeeattend){
-	//			
-	//			return attendanceService.saveAttendanceDetails(employeeattend);
+	@PostMapping("/check-out/{empId}")
+	public ResponseEntity<EmployeeAttendancebean> checkOut(@PathVariable String empId) {
+
+		EmployeeAttendancebean attendancebean = new EmployeeAttendancebean();
+		attendanceService.saveCheckOutTime(empId);
+		attendancebean.setMsg("Employee checked out successfully");
+		attendancebean.setStatus(true);
+		return ResponseEntity.ok(attendancebean);
+	}
+
+	@GetMapping("/employee/weekly/{empId}")
+	public ResponseEntity<List<Object>> getEmployeeWeeklyAttendance(@PathVariable String empId,
+			@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) throws ParseException {
+
+//		   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		List<EmployeeAttendance> attendanceList = attendanceService.getEmployeeWeeklyAttendance(empId, startDate,endDate);
+		List<HolidayCalenderEntity> holidaylist = attendanceService.findHolidaysByDateRange(startDate, endDate);
+		List<String> weekendList = attendanceService.getWeekendsBetweenDates(startDate, endDate);
+		List<RequestForLeave> leaveList = attendanceService.getLeaveRecords(startDate, endDate);
+
+		// Combine all results into a single list
+		List<Object> result = new ArrayList<>();
+		result.addAll(attendanceList);
+		result.addAll(holidaylist);
+	    result.addAll(leaveList);
+		result.addAll(weekendList);
+
+		return ResponseEntity.ok(result);
+
+	}
+	
+	@PostMapping("/check-in-forcly/{empId}")
+	public ResponseEntity<EmployeeAttendancebean> checkInForcly(@PathVariable String empId,
+			@RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
+
+		EmployeeAttendancebean attendancebean = attendanceService.saveCheckInTimeForcly(empId, IPAddress.getCurrentIp(),
+				employeeAttendanceRequest.getWorkFrom());
+		return ResponseEntity.ok(attendancebean);
+	}
+
+	// @PostMapping("/saveEmployee")
+	// public EmployeeAttendancebean recordAttendance(@RequestBody
+	// EmployeeAttendance employeeattend){
 	//
-	//		}
-
+	// return attendanceService.saveAttendanceDetails(employeeattend);
+	//
+	// }
 
 }

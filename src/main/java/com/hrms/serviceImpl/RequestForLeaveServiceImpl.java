@@ -126,8 +126,12 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		leave.setAvalCasualLeave(avalCasualLeave);
 		leave.setAvalSickLeave(avalSickLeave);
 			
+
 			EmployeeDetails empDetails=employeeRepo.findByEmpId(details.getEmp_id());
 			int id= empDetails.getId();
+
+//			leave.setEmpid(empDetails.getEmpId());
+
 			
 			EmployeeDetails empDetails1= employeeRepo.findById(id).get();
 			leave.setEmp_id(empDetails1.getEmpId());
