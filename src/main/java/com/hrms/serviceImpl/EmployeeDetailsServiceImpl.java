@@ -14,12 +14,15 @@ import org.springframework.stereotype.Service;
 import com.hrms.beans.ContactBean;
 import com.hrms.beans.EmpBirthResponse;
 import com.hrms.beans.EmployeeDto;
+import com.hrms.beans.EmployeeEducationDetailsBean;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
 import com.hrms.entity.ContactDetails;
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.EmployeeEducationDetails;
 import com.hrms.entity.EmployeeInformation;
 import com.hrms.repository.ContactRepo;
+import com.hrms.repository.EmployeeEducationDetailsRepository;
 import com.hrms.repository.EmployeeInformationRepository;
 import com.hrms.repository.EmployeeRepository;
 
@@ -45,6 +48,14 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Autowired
 	private ContactBean contactbean;
+
+	@Autowired
+	public EmployeeEducationDetailsBean empeducationbean;
+
+
+	@Autowired
+	public EmployeeEducationDetailsRepository empeducationrepo;
+
 
 	@Override
 	public EntityBeanResponse saveEmpDetails(EmployeeDetails employeeDetails) {
@@ -292,9 +303,66 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		return null;
 	}
 
-}	
+	@Override
+	public EmployeeEducationDetailsBean saveEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails,String empId) {
 
 
+		//	EmployeeDetails employeeDetails=empRepo.findByEmpId(empeducationdetails.getEmployeeDetails().getEmpId());
+
+		EmployeeDetails employeeDetails=empRepo.findByEmpId(empId);
+
+		empeducationdetails.setEmployeeDetails(employeeDetails);
 
 
+		EmployeeEducationDetails empeducation = empeducationrepo.save(empeducationdetails);
 
+		if (empeducation != null) {
+			empeducationbean.setMessage("EmployeeEducation details saved successfully");
+			empeducationbean.setStatus(true);
+		} else {
+			empeducationbean.setMessage("EmployeeEducation details Saving Failed !");
+			empeducationbean.setStatus(false);
+		}
+
+		return empeducationbean ;
+
+
+	}
+
+	@Override
+	public EmployeeEducationDetailsBean updateEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails) {
+
+		EmployeeDetails employeeDetails=empRepo.findByEmpId(empeducationdetails.getEmployeeDetails().getEmpId());
+
+		empeducationdetails.setEmployeeDetails(employeeDetails);
+
+
+		EmployeeEducationDetails empeducation = empeducationrepo.save(empeducationdetails);
+
+		if (empeducation != null) {
+			empeducationbean.setMessage("EmployeeEducation details updated successfully");
+			empeducationbean.setStatus(true);
+		} else {
+			empeducationbean.setMessage("EmployeeEducation details Failed !");
+			empeducationbean.setStatus(false);
+		}
+
+		return empeducationbean ;
+	}
+
+	@Override
+	public EmployeeEducationDetails getEmpeducationdetalsById(Integer id) {
+
+		Optional<EmployeeEducationDetails> empeducation = empeducationrepo.findById(id);
+		if(empeducation.isPresent()) {
+			return empeducation.get();
+		}
+		return null;
+	}
+
+	@Override
+	public List<EmployeeEducationDetails> getAllEmpeducationdetails() {
+
+		return empeducationrepo.findAll();
+	}
+}

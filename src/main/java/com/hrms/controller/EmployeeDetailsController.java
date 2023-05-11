@@ -22,10 +22,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hrms.beans.ContactBean;
 import com.hrms.beans.EmpBirthResponse;
+import com.hrms.beans.EmployeeEducationDetailsBean;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
 import com.hrms.entity.ContactDetails;
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.EmployeeEducationDetails;
 import com.hrms.entity.EmployeeInformation;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.service.EmployeeDetailsService;
@@ -136,9 +138,9 @@ public class EmployeeDetailsController {
 		 */
 	}
 
-	
-	   
-	    
+
+
+
 
 
 	/*
@@ -187,11 +189,38 @@ public class EmployeeDetailsController {
 		ContactDetails updatedetails = empService.updateContact(entity);
 		return ResponseEntity.ok(updatedetails);
 	}
+
 	@GetMapping("/getContactDetails/{id}")
-public ContactDetails getContactDataById(@PathVariable int id) {
-	
+	public ContactDetails getContactDataById(@PathVariable int id) {
+
 		ContactDetails details=empService.getcontactDetails(id);
 		return details;
-}
+	}
+
+
+	@PostMapping("/saveEmpeducationdetails/{empId}")
+	public EmployeeEducationDetailsBean saveEmployeeeducationdetails(@RequestBody EmployeeEducationDetails empeducationdetails,String empId) {
+
+		return empService.saveEmployeeeducationdetails(empeducationdetails,empId);
+	}   
+
+	@PutMapping("/UpdateEmpeducationdetails")
+	public EmployeeEducationDetailsBean updateEmployeeeducationdetails(@RequestBody EmployeeEducationDetails empeducationdetails) {
+		EmployeeDetails byEmp = empRepo.findByEmpId(empeducationdetails.getEmployeeDetails().getEmpId());
+		empeducationdetails.setEmployeeDetails(byEmp);
+		return empService.updateEmployeeeducationdetails(empeducationdetails);
+	}
+
+	@GetMapping("/getEmpeducationdetails/{id}")
+	public ResponseEntity<EmployeeEducationDetails> findEmpeducationdetailsById(@PathVariable Integer id){
+		EmployeeEducationDetails empeducationById = empService.getEmpeducationdetalsById(id);
+		return new ResponseEntity<>(empeducationById,HttpStatus.OK);
+	}
+
+	@GetMapping("/getEmpeducationdetails")
+	public ResponseEntity<List<EmployeeEducationDetails>> getAllEmployeeEducationdetails() {
+		List<EmployeeEducationDetails> allEmpeducationDetails = empService.getAllEmpeducationdetails();
+		return new ResponseEntity<>(allEmpeducationDetails, HttpStatus.OK);
+	}
 
 }
