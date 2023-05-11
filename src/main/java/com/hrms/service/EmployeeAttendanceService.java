@@ -2,10 +2,11 @@ package com.hrms.service;
 
 import java.time.LocalDate;
 import java.util.List;
-
 import com.hrms.beans.EmployeeAttendancebean;
 import com.hrms.entity.EmployeeAttendance;
 import com.hrms.entity.HolidayCalenderEntity;
+import com.hrms.entity.RequestForLeave;
+
 
 public interface EmployeeAttendanceService {
 		
@@ -30,6 +31,12 @@ public interface EmployeeAttendanceService {
 	public List<HolidayCalenderEntity> findHolidaysByDateRange(String startDate, String endDate);
 	
 	public List<String> getWeekendsBetweenDates(String startDate, String endDate);
+	
+	public List<RequestForLeave> getLeaveRecords(String startDate, String endDate);
+	
+	public boolean getEmployeeOnLeaveToday(String empId);
+	
+	public EmployeeAttendancebean saveCheckInTimeForcly(String empId, String ipAddress, String workFrom);
 
 	
 }

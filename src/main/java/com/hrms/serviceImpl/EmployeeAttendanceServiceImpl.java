@@ -9,15 +9,17 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hrms.beans.EmployeeAttendancebean;
 import com.hrms.entity.EmployeeAttendance;
 import com.hrms.entity.HolidayCalenderEntity;
+import com.hrms.entity.RequestForLeave;
 import com.hrms.repository.AttendanceRepository;
 import com.hrms.repository.HolidayCalenderRepository;
+import com.hrms.repository.IRequestForLeaveRepository;
 import com.hrms.service.EmployeeAttendanceService;
 
 @Service
@@ -31,6 +33,9 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Autowired
 	private EmployeeAttendancebean eab;
+	
+	@Autowired
+	private IRequestForLeaveRepository leaveRepository;
 
 	@Override
 	public boolean checkIfCheckedInToday(String empId) {
@@ -57,6 +62,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 		if(findHolidayDetails()) {
 			if(findWeekends()) {
+				if(getEmployeeOnLeaveToday(empId)) {
 				if(!checkIfCheckedInToday(empId)) {
 					EmployeeAttendance employeeAttendance = new EmployeeAttendance();
 					employeeAttendance.setCheckInTime(LocalTime.now());
@@ -78,7 +84,13 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 					attendancebean.setMsg("Employee has already checked in today");
 					attendancebean.setStatus(false);
 				}
-			}else {
+				}else {
+					
+					attendancebean.setMsg("Employee is on leave today");
+					attendancebean.setStatus(false);
+				}
+			}
+				else {
 				attendancebean.setMsg("Attendance not allowed on weekends....!");
 				attendancebean.setStatus(true);
 			}
@@ -142,6 +154,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 		return true;
 	}
+	
 
 	@Override
 	public boolean findWeekends() {
@@ -191,50 +204,61 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 		}
 		return weekends;
 	}
+	
+	@Override
+	 public List<RequestForLeave> getLeaveRecords(String startDateRequest, String endDateRequest) {
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate startDate = LocalDate.parse(startDateRequest, formatter);
+		LocalDate endDate = LocalDate.parse(endDateRequest, formatter);
+	    return leaveRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(startDate, endDate);
+	  }
 
+	@Override
+	public boolean getEmployeeOnLeaveToday(String empid) {
+	
+		Optional<RequestForLeave> employee = leaveRepository.findByEmpid(empid);
+        if (employee.isPresent()) {
+            LocalDate today = LocalDate.now();
+            LocalDate leaveStartDate = employee.get().getStartDate();
+            LocalDate leaveEndDate = employee.get().getEndDate();
+            if (leaveStartDate != null && leaveEndDate != null) {
+                return today.isEqual(leaveStartDate) || (today.isAfter(leaveStartDate) && today.isBefore(leaveEndDate));
+            }
+        }
+        return false;
 
+		
+		
+	}
 
+	@Override
+	public EmployeeAttendancebean saveCheckInTimeForcly(String empId, String ipAddress, String workFrom) {
+		
+		EmployeeAttendancebean attendancebean= new EmployeeAttendancebean();
+		if(!checkIfCheckedInToday(empId)) {
+			EmployeeAttendance employeeAttendance = new EmployeeAttendance();
+			employeeAttendance.setCheckInTime(LocalTime.now());
+			employeeAttendance.setDate(LocalDate.now());
+			employeeAttendance.setEmpId(empId);
+			employeeAttendance.setIpAddress(ipAddress);
+			employeeAttendance.setWorkFrom(workFrom);
+			attendanceRepo.save(employeeAttendance);
 
+			if(employeeAttendance != null) {
+				employeeAttendance.setStatus("present");
+				attendanceRepo.save(employeeAttendance);
 
-
-
-
-
-
-
-
-
-	//	@Override
-	//	public HolidayCalendarEntity getHolidays (LocalDate date)
-	//	{
-	//		LocalDate currentDate = LocalDate.now();
-	//		HolidayCalendarEntity holidays = holidayRepo.findAllByDate(currentDate);
-	//		return null;
-	//		
-	//
-	////		EmployeeAttendance findByCalenderEntity = attendanceRepo.findByCalenderEntity(date);
-	////		
-	////		if(findByCalenderEntity.getCalenderEntity().getDate2()==LocalDate.now())
-	////		{
-	////			System.out.println("today is holiday ");
-	////		}
-	////		
-	//		
-	//	}
-	//	
-	//	@Override
-	//	public HolidayCalendarEntity getHolidays(LocalDate date) {
-	//		
-	//	    List<HolidayCalendarEntity> holidays = holidayRepo.findAllByDate(date);
-	//	    return holidays.isEmpty() ? null : holidays.get(0);
-	//
-	//	}
-
-
-
-
-
-
+				attendancebean.setMsg("Employee checked in successfully");
+				attendancebean.setStatus(true);
+			}
+		}
+		else {
+			attendancebean.setMsg("Employee has already checked in today");
+			attendancebean.setStatus(false);
+		}
+		return attendancebean;
+	}
 
 
 
