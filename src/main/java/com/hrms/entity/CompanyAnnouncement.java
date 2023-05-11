@@ -1,6 +1,9 @@
 package com.hrms.entity;
 
 
+import java.time.LocalDateTime;
+import java.util.BitSet;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,13 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.springframework.stereotype.Component;
 
 import lombok.Data;
 @Data
 @Entity
-@Table(name = "Company_Announcement")
-@Component
+@Table(name = "annoncement_details")
 public class CompanyAnnouncement {
 	
 	
@@ -25,7 +26,7 @@ public class CompanyAnnouncement {
 	@Column(name = "Announ_Subject", length = 100)
 	private String subject;
 
-	@Column(name = "Announ_description", length = 2000)
+	@Column(name = "description", length = 2000)
 	private String description;
 	
 	@Column(name="announ_startdate")
@@ -34,7 +35,24 @@ public class CompanyAnnouncement {
 	@Column(name="announ_enddate")
 	private String enddate;
 	
-
+	@Column(name="announcement_time")
+    private String announcementtime;
+	
+	@Column(name="announcement_name")
+    private String announcementname;
+	
+	@Column(name="business_unit_id")
+    private int businessunitid;
+	
+	@Column(name="department_id")
+    private int departmentid;
+	
+	@Column(name="employee_user_id")
+    private String employeeuserid;
+	
+	
+    private BitSet deleted;
+    
 
 	
 }

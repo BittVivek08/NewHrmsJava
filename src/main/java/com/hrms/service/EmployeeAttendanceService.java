@@ -29,7 +29,7 @@ public interface EmployeeAttendanceService {
 	
 	public boolean getEmployeeOnLeaveToday(String empId);
 	
-	public EmployeeAttendancebean saveCheckInTimeForcly(String empId, String ipAddress, String workFrom);
+	public EmployeeAttendancebean saveCheckInTimeForcely(String empId, String ipAddress, String workFrom);
 
 	
 }

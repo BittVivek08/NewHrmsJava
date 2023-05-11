@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.hrms.beans.EmailDetails;
 
 @Service
+
 public class EmailServiceImpl {
 
 	@Autowired

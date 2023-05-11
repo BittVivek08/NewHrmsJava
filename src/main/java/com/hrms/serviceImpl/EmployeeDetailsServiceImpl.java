@@ -43,7 +43,6 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Autowired
 	private ContactRepo contactrepo;
 
 	@Autowired
@@ -303,9 +302,9 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		return null;
 	}
 
+
 	@Override
 	public EmployeeEducationDetailsBean saveEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails,String empId) {
-
 
 		//	EmployeeDetails employeeDetails=empRepo.findByEmpId(empeducationdetails.getEmployeeDetails().getEmpId());
 

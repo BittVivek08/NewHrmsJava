@@ -69,11 +69,11 @@ public class EmployeeAttendanceController {
 
 	}
 	
-	@PostMapping("/check-in-forcly/{empId}")
-	public ResponseEntity<EmployeeAttendancebean> checkInForcly(@PathVariable String empId,
+	@PostMapping("/check-in-forcely/{empId}")
+	public ResponseEntity<EmployeeAttendancebean> checkInForcely(@PathVariable String empId,
 			@RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
 
-		EmployeeAttendancebean attendancebean = attendanceService.saveCheckInTimeForcly(empId, IPAddress.getCurrentIp(),
+		EmployeeAttendancebean attendancebean = attendanceService.saveCheckInTimeForcely(empId, IPAddress.getCurrentIp(),
 				employeeAttendanceRequest.getWorkFrom());
 		return ResponseEntity.ok(attendancebean);
 	}

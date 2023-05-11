@@ -12,40 +12,53 @@ import javax.persistence.Table;
 import lombok.Data;
 @Data
 @Entity
-@Table(name="Department_Entity")
+@Table(name="department_details")
 public class Department {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	@Column(name="Business_Id")
+	@Column(name="business_id")
 	private int businessId;
 	
-	@Column(name="Department_Name")
+	@Column(name="deptname")
 	private String depName;
 	
-	@Column(name="Department_Code")
+	@Column(name="deptcode")
 	private String dipCode;
 	
-	@Column(name="Description")
+	@Column(name="description")
 	private String description;
 	
-	@Column(name="StartDate")
+	@Column(name="startdate")
 	private String startDate;
 	
-	@Column(name="Country")
+	@Column(name="country")
 	private String country;
 	
-	@Column(name="State")
+	@Column(name="state")
 	private String state;
 	
-	@Column(name="City")
+	@Column(name="city")
 	private String city;
 	
-	@Column(name="Department_Head")
+	@Column(name="depthead")
 	private String depHead;
 	
-	@Column(name="BusinessUnit_Name")
+	@Column(name="businessunit_name")
 	private String businessunitName;
 	
+	private String address1;
+	
+	private String address2;
+	
+	private String address3;
+	
+	private int createdby;
+	
+	private int modifiedby;
+	
+	private int timezone;
+	
+	private int unitid;
 }

@@ -22,12 +22,11 @@ public interface IRequestForLeaveRepository extends JpaRepository<RequestForLeav
 
 	public List<RequestForLeave> findByStartDateLessThanEqualAndEndDateGreaterThanEqual(LocalDate startDate,LocalDate endDate);
 
-	public List<LocalDate> findByStartDateAndEndDate(LocalDate startDate,LocalDate endDate);
-	
-	@Query("FROM RequestForLeave where startDate <= CURDATE() AND endDate >= CURDATE()")
-	public List<RequestForLeave> getCurrentRequestForLeave();
-
-	@Query("FROM RequestForLeave where empId=:empId")
+//	public List<LocalDate> findByStartDateAndEndDate(LocalDate startDate,LocalDate endDate);
+//	
+//	@Query("FROM RequestForLeave where startDate <= CURDATE() AND endDate >= CURDATE()")
+//	public List<RequestForLeave> getCurrentRequestForLeave();
+//
+	@Query("FROM RequestForLeave where emp_id=:empId")
 	public Optional<RequestForLeave> findByEmpid(String empId);
-
 }
