@@ -20,10 +20,6 @@ public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementServ
 	@Autowired
 	private AnnouncementBean announcementbean;
 	
-	@Autowired
-	CompanyAnnouncement companyanoun;
-
-
 	@Override
 	public AnnouncementBean saveAnnouncementDetails(CompanyAnnouncement companyannouncement) {
 
@@ -62,6 +58,12 @@ public class CompanyAnnouncementServiceImpl   implements CompanyAnnouncementServ
 	    	details.setEnddate(announcement.getEnddate());
 	    	details.setStartdate(announcement.getStartdate());
 	    	details.setSubject(announcement.getSubject());
+	    	details.setAnnouncementname(announcement.getAnnouncementname());
+	    	details.setAnnouncementtime(announcement.getAnnouncementtime());
+	    	details.setDepartmentid(announcement.getDepartmentid());
+	    	details.setDeleted(announcement.getDeleted());
+	    	details.setEmployeeuserid(announcement.getEmployeeuserid());
+	    	details.setBusinessunitid(announcement.getBusinessunitid());
 	        announcementrepo.save(details);
 	        announcementbean.setMessage("announcement details updated succefully");
 	        announcementbean.setStatus(true);
