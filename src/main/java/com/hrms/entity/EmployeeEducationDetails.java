@@ -1,6 +1,7 @@
 package com.hrms.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,11 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import lombok.Data;
 
 @Data
 @Entity
+@Table(name="emp_education_Details")
 public class EmployeeEducationDetails implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -63,6 +66,53 @@ public class EmployeeEducationDetails implements Serializable {
 
 	@Column(name = "otherDegreeName")
 	private String otherDegreeInstituteName;
+	
+	@Column(name = "user_id")
+	private Integer userId;
+
+	@Column(name = "educationlevel")
+	private int educationLevel;
+
+	@Column(name = "institution_name")
+	private String institutionName;
+
+	@Column(name = "course")
+	private String course;
+
+	@Column(name = "from_date")
+	private java.sql.Date fromDate;
+
+	@Column(name = "to_date")
+	private java.sql.Date toDate;
+
+	@Column(name = "percentage")
+	private double percentage;
+
+	
+	@Column(name = "createddate")
+	private Date createdDate;
+
+
+	@Column(name = "modifieddate")
+	private Date modifiedDate;
+
+	
+	@Column(name = "isactive")
+	private int isactive;
+
+	@Column(name = "educationLevelName")
+	private String educationLevelName;
+	
+	
+	@Column(name = "modifiedby")
+	private int modifiedBy;
+	
+	@Column(name = "createdby")
+	private int createdBy;
+
+
+	
+	
 
 
 }
