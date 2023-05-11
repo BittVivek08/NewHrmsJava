@@ -138,21 +138,10 @@ public class EmployeeDetailsController {
 		 */
 	}
 
+	@PostMapping("/saveEmpInfo/{empId}") 
+	public EntityBeanResponse saveEmployeeInformation(@PathVariable String empId,@RequestBody EmployeeInformation empInformation) {
 
-
-
-
-
-	/*
-	 * @GetMapping("/getSalaryByEmpId/{empId}") public List<EmployeeSalaryDetails>
-	 * getSalaryByEmpId(@PathVariable String empId){ return
-	 * empService.getSalaryByEmpId(empId); }
-	 */
-
-	@PostMapping("/saveEmpInfo") 
-	public EntityBeanResponse saveEmployeeInformation(@RequestBody EmployeeInformation empInformation) {
-
-		return empService.saveEmployeeInformation(empInformation);
+		return empService.saveEmployeeInformation(empId,empInformation);
 	}   
 
 	@PutMapping("/UpdateEmpInfo")
@@ -169,7 +158,7 @@ public class EmployeeDetailsController {
 		return new ResponseEntity<>(empInfoById,HttpStatus.OK);
 	}
 
-	@PostMapping("/saveContactDetails") 
+	@PostMapping("/saveContactDetails/{empId}") 
 	public ContactBean saveContactDetails(@RequestBody ContactDetails details) {
 
 		return empService.saveContactdata(details);
