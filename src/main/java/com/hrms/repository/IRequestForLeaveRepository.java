@@ -16,9 +16,6 @@ public interface IRequestForLeaveRepository extends JpaRepository<RequestForLeav
 	@Query("select min(avalSickLeave) from com.hrms.entity.RequestForLeave t where t.emp_id=:emp_id")
 	public Integer minSickLeave(String  emp_id);
 
-	@Query("select min(avalSickLeave) from com.hrms.entity.RequestForLeave t where t.mappingId=:mappingId")
-	public Integer minSickLeave(int mappingId);
-
     @Query("select startDate from RequestForLeave where startDate=?1")
 	public LocalDate findByStartDate(LocalDate date);
 
@@ -32,7 +29,5 @@ public interface IRequestForLeaveRepository extends JpaRepository<RequestForLeav
 
 	@Query("FROM RequestForLeave where empId=:empId")
 	public Optional<RequestForLeave> findByEmpid(String empId);
-	
-	@Query("select details From RequestForLeave where emp_id=?1")
-    public String findByEmpId(String emp);
+
 }
