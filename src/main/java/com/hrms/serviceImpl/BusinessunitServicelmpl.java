@@ -1,7 +1,6 @@
 package com.hrms.serviceImpl;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class BusinessunitServicelmpl implements BusinessunitService {
 
 		Businessunit save = businessunitrepository.save(businessunit);
 		if (save != null) {
-			businessbean.setMessage("data save successfully");
+			businessbean.setMessage("Bussiness data save successfully");
 			businessbean.setStatus(true);
 		} else {
 			businessbean.setMessage("data not saved");
@@ -62,6 +61,15 @@ public Businessunit updatebusinessdetails(int bid, Businessunit entity) {
 			bean.setAddress1(entity.getAddress1());
 			bean.setAddress2(entity.getAddress2());
 			bean.setAddress3(entity.getAddress3());
+			bean.setCreatedby(entity.getCreatedby());
+			bean.setCreateddate(entity.getCreateddate());
+			bean.setIsactive(entity.getIsactive());
+			bean.setModifiedBy(entity.getModifiedBy());
+			bean.setModifiedDate(entity.getModifiedDate());
+			bean.setUnitcode(entity.getUnitcode());
+			bean.setUnitname(entity.getUnitname());
+			bean.setTimezone(entity.getTimezone());
+			bean.setService_desk_flag(entity.getService_desk_flag());
 
 		return businessunitrepository.save(bean);
 		}
