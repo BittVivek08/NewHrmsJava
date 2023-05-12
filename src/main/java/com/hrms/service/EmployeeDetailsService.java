@@ -45,10 +45,13 @@ public interface EmployeeDetailsService {
 	
 	public EmployeeEducationDetailsBean saveEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails,String empId);
 
-	public EmployeeEducationDetailsBean updateEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails);
 
 	public EmployeeEducationDetails getEmpeducationdetalsById(Integer id);
 
 	public List<EmployeeEducationDetails> getAllEmpeducationdetails();
+
+
+	EmployeeEducationDetailsBean updateEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails);
+			
 
 }

@@ -326,9 +326,8 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	public EmployeeEducationDetailsBean updateEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails) {
 
 		EmployeeDetails employeeDetails=empRepo.findByEmpId(empeducationdetails.getEmployeeDetails().getEmpId());
-
+		//EmployeeDetails employeeDetails=empRepo.findByEmpId(empId);
 		empeducationdetails.setEmployeeDetails(employeeDetails);
-
 
 		EmployeeEducationDetails empeducation = empeducationrepo.save(empeducationdetails);
 

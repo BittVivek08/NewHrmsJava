@@ -186,16 +186,15 @@ public class EmployeeDetailsController {
 	}
 
 	@PostMapping("/saveEmpeducationdetails/{empId}")
-	public EmployeeEducationDetailsBean saveEmployeeeducationdetails(@RequestBody EmployeeEducationDetails empeducationdetails,String empId) {
+	public EmployeeEducationDetailsBean saveEmployeeeducationdetails(@RequestBody EmployeeEducationDetails empeducationdetails,@PathVariable String empId) {
 
 		return empService.saveEmployeeeducationdetails(empeducationdetails,empId);
 	}   
 
 	@PutMapping("/UpdateEmpeducationdetails")
 	public EmployeeEducationDetailsBean updateEmployeeeducationdetails(@RequestBody EmployeeEducationDetails empeducationdetails) {
-		EmployeeDetails byEmp = empRepo.findByEmpId(empeducationdetails.getEmployeeDetails().getEmpId());
-		empeducationdetails.setEmployeeDetails(byEmp);
-		return empService.updateEmployeeeducationdetails(empeducationdetails);
+		
+		return empService.updateEmployeeeducationdetails( empeducationdetails);
 	}
 
 	@GetMapping("/getEmpeducationdetails/{id}")

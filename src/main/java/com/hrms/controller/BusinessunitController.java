@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hrms.beans.Businessbean;
 import com.hrms.entity.Businessunit;
 import com.hrms.serviceImpl.BusinessunitServicelmpl;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -27,7 +26,7 @@ public class BusinessunitController {
 
 	@Autowired
 	private BusinessunitServicelmpl BusinessunitService;
-
+	
 	@PostMapping("/savebusinessdetails")
 	public Businessbean saveBusinessDetails(@RequestBody Businessunit businessunit) {
 		log.info("BusinessunitController , savebusinessdetails");
