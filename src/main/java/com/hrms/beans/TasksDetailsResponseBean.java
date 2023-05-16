@@ -4,8 +4,6 @@ import java.sql.Date;
 
 import org.springframework.stereotype.Component;
 
-import com.hrms.entity.ProjectDetailsEntity;
-
 import lombok.Data;
 
 @Data

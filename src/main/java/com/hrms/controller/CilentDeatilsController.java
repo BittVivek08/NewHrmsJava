@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.ClientsResponseBean;
-import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.EntityBeanResponseCommon;
 import com.hrms.entity.ClientDetailsEntity;
 import com.hrms.service.ClientDetailsService;
