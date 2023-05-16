@@ -2,6 +2,7 @@ package com.hrms.serviceImpl;
 
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -105,13 +106,21 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 	public void saveCheckOutTime(String empId) {
 
 		List<EmployeeAttendance> employeeAttendanceList = attendanceRepo.findByEmpId(empId);
-
+		
+		if (!employeeAttendanceList.isEmpty()) {
+			
 		EmployeeAttendance employeeAttendance = employeeAttendanceList.get(employeeAttendanceList.size()-1);
 		employeeAttendance.setCheckOutTime(LocalTime.now());
 		employeeAttendance.setDate(LocalDate.now());
 		employeeAttendance.setWorkFrom(employeeAttendance.getWorkFrom());
+		
+		Duration duration = Duration.between(employeeAttendance.getCheckInTime(), employeeAttendance.getCheckOutTime());
+        long workingHours = duration.toMinutes(); // Calculate the working hours
+        employeeAttendance.setTotalWorkingHours(workingHours);
+        
 		attendanceRepo.save(employeeAttendance);
-
+		
+		}
 	}
 
 	@Override

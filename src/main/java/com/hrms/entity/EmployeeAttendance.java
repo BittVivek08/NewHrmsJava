@@ -3,7 +3,6 @@ package com.hrms.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,13 +42,17 @@ public class EmployeeAttendance {
 	
 	private String status;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "date2" , referencedColumnName = "date")
-	private HolidayCalenderEntity calendarEntity;
+	private double totalWorkingHours;
 	
+	@Column(name = "created_on")
 	private LocalDateTime createdOn;
 	
+	@Column(name = "last_updated_on")
 	private LocalDateTime lastUpdatedOn;
+	
+//	@OneToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "date2" , referencedColumnName = "date")
+//	private HolidayCalenderEntity calendarEntity;
 	
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	private EmployeeDetails employee;
