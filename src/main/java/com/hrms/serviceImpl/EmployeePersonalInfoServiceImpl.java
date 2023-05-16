@@ -3,6 +3,8 @@ package com.hrms.serviceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import com.hrms.beans.JobHistoryResponse;
 import com.hrms.entity.EmployeeJobHistory;
 import com.hrms.repository.EmployeePersonalInfoRepository;
@@ -71,7 +73,7 @@ public class EmployeePersonalInfoServiceImpl implements EmployeePersonalInfoServ
 		try {
 			if (empjh != null) {
 				
-				empjh.setPositionId(employeeJobHistory.getPositionId());
+//				empjh.setPositionId(employeeJobHistory.getPositionId());
 				empjh.setPositionName(employeeJobHistory.getPositionName());
 				empjh.setDepartmentName(employeeJobHistory.getDepartmentName());
 				empjh.setJobTitleId(employeeJobHistory.getJobTitleId());
@@ -80,7 +82,13 @@ public class EmployeePersonalInfoServiceImpl implements EmployeePersonalInfoServ
 				empjh.setVendorName(employeeJobHistory.getVendorName());
 				empjh.setAmountPaid(employeeJobHistory.getAmountPaid());
 				empjh.setFromDate(employeeJobHistory.getFromDate());
-				empjh.setToDate(employeeJobHistory.getToDate());
+				empjh.setUserId(employeeJobHistory.getUserId());
+				empjh.setAmountRecieved(employeeJobHistory.getAmountRecieved());
+				empjh.setCreatedDate(employeeJobHistory.getCreatedDate());
+				empjh.setCreatedBy(employeeJobHistory.getCreatedBy());
+				empjh.setModifiedby(employeeJobHistory.getModifiedby());
+				empjh.setModifiedDate(employeeJobHistory.getModifiedDate());
+				empjh.setIsactive(employeeJobHistory.getIsactive());
 
 				return employeePersonalInfoRepository.save(empjh);
 			}

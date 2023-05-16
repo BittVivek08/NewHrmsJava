@@ -50,11 +50,7 @@ public class Businessunit {
 
 	private String unitname;
 
-	private String unitcode;
-	
-
-	private Date createddate;
-	
+	private String unitcode;	
 	
 	private int createdby;
 	
@@ -69,7 +65,8 @@ public class Businessunit {
 	
 	private int isactive;
 	
-	
+	private Timestamp createddate;
+
 	private Integer timezone;
 
 }
