@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hrms.beans.CommonResponseBean;
 import com.hrms.beans.ContactBean;
 import com.hrms.beans.EmpBirthResponse;
 import com.hrms.beans.EmployeeEducationDetailsBean;
@@ -29,7 +29,9 @@ import com.hrms.entity.ContactDetails;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeEducationDetails;
 import com.hrms.entity.EmployeeInformation;
+import com.hrms.entity.EmployeeSalaryDetails;
 import com.hrms.repository.EmployeeRepository;
+import com.hrms.request.bean.EmployeeSalaryRequestBean;
 import com.hrms.service.EmployeeDetailsService;
 import com.hrms.service.FileStorageService;
 
@@ -63,7 +65,7 @@ public class EmployeeDetailsController {
 			String fileName = fileStorageService.storeFile(file);
 			EmployeeDetails empDetails = new ObjectMapper().readValue(jsonData, EmployeeDetails.class);
 			new ObjectMapper().writeValueAsString(jsonData);
-			empDetails.setImage(fileName); 
+			empDetails.setProfileImg(fileName); 
 			EntityBeanResponse response = empService.saveEmpDetails(empDetails);
 			return response;
 		}
@@ -159,9 +161,9 @@ public class EmployeeDetailsController {
 	}
 
 	@PostMapping("/saveContactDetails/{empId}") 
-	public ContactBean saveContactDetails(@RequestBody ContactDetails details) {
+	public ContactBean saveContactDetails(@PathVariable String empId,  @RequestBody ContactDetails details) {
 
-		return empService.saveContactdata(details);
+		return empService.saveContactdata(empId,details);
 	} 
 
 	@GetMapping("/getAllContactDetails")
@@ -207,6 +209,22 @@ public class EmployeeDetailsController {
 	public ResponseEntity<List<EmployeeEducationDetails>> getAllEmployeeEducationdetails() {
 		List<EmployeeEducationDetails> allEmpeducationDetails = empService.getAllEmpeducationdetails();
 		return new ResponseEntity<>(allEmpeducationDetails, HttpStatus.OK);
+	}
+	
+	@PostMapping("/saveEmpSalary/{empId}")
+	public CommonResponseBean saveEmpSalDetails(@PathVariable String empId,@RequestBody EmployeeSalaryRequestBean empSalReqBean) {
+		return empService.saveSalaryDetails(empId, empSalReqBean);
+	}
+	
+	@PutMapping("/updateEmpSalary")
+	public CommonResponseBean updateEmpSalDetails(@RequestBody EmployeeSalaryDetails empsalDetails) {
+		return empService.updateSalaryDetails(empsalDetails);
+	}
+	
+	@GetMapping("/salById/{id}")
+	public ResponseEntity<EmployeeSalaryDetails> getEmpSalById(@PathVariable Integer id){
+		EmployeeSalaryDetails empSalaryById = empService.getEmpSalaryById(id);
+		return new ResponseEntity<>(empSalaryById,HttpStatus.OK);
 	}
 
 }

@@ -17,7 +17,7 @@ import com.hrms.service.EmployeePersonalInfoService;
 
 
 @RestController
-public class EmployeePersonalInfoController {
+public class EmployeeJobHistoryController {
 	
 	@Autowired
 	private EmployeePersonalInfoService employeePersonalInfoService;

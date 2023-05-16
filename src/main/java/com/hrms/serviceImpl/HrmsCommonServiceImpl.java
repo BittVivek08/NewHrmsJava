@@ -2,15 +2,19 @@ package com.hrms.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.hrms.beans.CommonResponseBean;
+import com.hrms.entity.EmpRole;
 import com.hrms.entity.GenderEntity;
 import com.hrms.entity.JobTitlesEntity;
 import com.hrms.entity.MaritalStatusEntity;
 import com.hrms.entity.NationalityEntity;
 import com.hrms.entity.SalaryAccountClassTypeEntity;
 import com.hrms.entity.SalaryCurrencyEntity;
+import com.hrms.repository.EmpRoleRepo;
 import com.hrms.repository.GenderRepository;
 import com.hrms.repository.JobTitleRepository;
 import com.hrms.repository.MaritalStatusRepository;
@@ -24,6 +28,7 @@ import com.hrms.request.bean.PersonalNationalityBean;
 import com.hrms.request.bean.SalaryAccountClassTypeRequestBean;
 import com.hrms.request.bean.SalaryCurrencyRequestBean;
 import com.hrms.service.HrmsCommonService;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -32,6 +37,9 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 
 	@Autowired
 	private SalaryCurrencyRepo salCurrRepo;
+	
+	@Autowired
+	private EmpRoleRepo empRoleRepo;
 	
 	@Autowired
 	private SalaryAccountClassTypeRepo accTypeRepo;
@@ -119,6 +127,27 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 		log.info("Fetching All Account Type");
 		return accTypeRepo.findAll();
 	}
+	
+	//Fetching EmpRole
+
+	@Override
+	public List<EmpRole> getAllEmpRole(){
+		
+		return empRoleRepo.findAll();
+
+	}
+
+	@Override
+	public EmpRole getEmpRoleById(Integer id) {
+		Optional<EmpRole> findById = empRoleRepo.findById(id);
+		
+		if(findById.isPresent()) {
+			return findById.get();
+		}
+		return null;
+	}
+	
+	
 
 	@Override
 	public CommonResponseBean saveJobTitle(JobTitleBean bean) {

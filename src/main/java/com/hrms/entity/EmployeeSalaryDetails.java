@@ -1,17 +1,21 @@
 package com.hrms.entity;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
 
 @Data
+@Entity
 @Table(name = "main_empsalarydetails")
 public class EmployeeSalaryDetails {
 	
@@ -20,14 +24,12 @@ public class EmployeeSalaryDetails {
 	@Column(name = "id")
 	private int id;
 
-	@Column(name = "user_id")
-	private Integer userId;
+	@OneToOne(cascade=CascadeType.ALL )
+	@JoinColumn(name="emp_id",referencedColumnName = "emp_id")
+	private EmployeeDetails employeeDetails;
 
 	@Column(name = "currencyid")
 	private Integer currencyId;
-
-	@Column(name = "salarytype")
-	private Integer salaryTypeId;
 
 	@Column(name = "salary")
 	private String salary;
@@ -44,23 +46,23 @@ public class EmployeeSalaryDetails {
 	@Column(name = "accountclasstypeid")
 	private Integer accountClassTypeId;
 
-	@Column(name = "bankaccountid")
-	private Integer bankAccountId;
-
 	@Column(name = "accountnumber")
 	private String accountNumber;
+	
+	@Column(name = "ifsccode")
+	private String ifscCode;
+	
+	@Column(name = "effective_start_date")
+	private Date effectiveStartDate;
+	
+	@Column(name = "effective_end_date")
+	private Date effectiveEndDate;
 
-	@Column(name = "createdby", updatable = false)
-	private Integer createdBy;
-
-	@Column(name = "modifiedby")
-	private Integer modifiedBy;
-
-	@Column(name = "createddate", updatable = false)
-	private Timestamp createdDate;
+	@Column(name = "createddate")
+	private Date createdDate;
 
 	@Column(name = "modifieddate")
-	private Timestamp modifiedDate;
+	private Date modifiedDate;
 
 	@Column(name = "isactive")
 	private Integer isActive;
