@@ -8,17 +8,11 @@ import org.springframework.data.repository.query.Param;
 
 import com.hrms.entity.ProjectDetailsEntity;
 
-public interface ProjectDetailsRepository extends JpaRepository<ProjectDetailsEntity, Integer>{
-	
+public interface ProjectDetailsRepository extends JpaRepository<ProjectDetailsEntity, Integer> {
+
 	@Query("FROM  ProjectDetailsEntity as p WHERE p.client.clientid = :clientid")
-    List<ProjectDetailsEntity> findByClient(@Param("clientid") Integer clientid);
-	
-	
+	List<ProjectDetailsEntity> findByClient(@Param("clientid") Integer clientid);
+
 	ProjectDetailsEntity findByProjectId(int projectId);
-	
-	
-	
-	
-	
 
 }
