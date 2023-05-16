@@ -9,9 +9,8 @@ import com.hrms.entity.HolidayCalenderEntity;
 
 public interface HolidayCalenderRepository extends JpaRepository<HolidayCalenderEntity, Integer> {
 
-
 //	 getHloidayByName
-    public  HolidayCalenderEntity findByDate(LocalDate date);
+	public HolidayCalenderEntity findByDate(LocalDate date);
 
 	/*
 	 * @Query("SELECT l.date FROM HolidayCalenderEntity l") public List<Date>
@@ -23,14 +22,11 @@ public interface HolidayCalenderRepository extends JpaRepository<HolidayCalender
 
 	List<HolidayCalenderEntity> findByDateBetween(LocalDate startDate, LocalDate endDate);
 
-
- 
-
 //    @Query("select date from HolidayCalenderEntity where id=?1 ")
 //    @Query("select date from HolidayCalenderEntity where  date:?1") 
 //	public Date findByDateDate(LocalDate date);
 //	
 	@Query("select date from HolidayCalenderEntity where date=?1")
-	public  LocalDate findByDate1(LocalDate date);
+	public LocalDate findByDate1(LocalDate date);
 
 }

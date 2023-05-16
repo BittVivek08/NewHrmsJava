@@ -1,6 +1,5 @@
 package com.hrms.entity;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -28,6 +27,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @Entity
 @AllArgsConstructor
@@ -39,24 +39,24 @@ public class SaveTimeSheet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Column(name = "status")
 	private String status;
-	@Column(name="cal_week")
-	private  Integer calweek;
+	@Column(name = "cal_week")
+	private Integer calweek;
 
 	@Column(name = "ts_year")
 	private Integer year;
 	@Column(name = "ts_month")
-    private Integer month;
-	private  String customer;
+	private Integer month;
+	private String customer;
 	private String project;
 	@Transient
 	private String clientName;
-    private String taskName;
-    @Column(name = "ts_week")
+	private String taskName;
+	@Column(name = "ts_week")
 	private Integer weekNo;
-    @Column(name = "mon_duration")
+	@Column(name = "mon_duration")
 	private String mon_hours;
 
 	@Column(name = "mon_date")
@@ -107,36 +107,38 @@ public class SaveTimeSheet {
 
 	@Column(name = "week_duration")
 	private String TotalWeekHours;
-	
+
+	@Column(name = "created_by", updatable = false)
+	private int createdBy;
+
+	@Column(name = "modified_by")
+	private int modifiedBy;
+
 	@Column(name = "created", updatable = false)
 	private LocalDateTime created_Date;
-	
+
 	@Column(name = "modified")
 	private LocalDateTime modifiedDate;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "emp_id",referencedColumnName = "emp_id")
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "emp_id", referencedColumnName = "emp_id")
 	private EmployeeDetails emp;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
+
+	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "client_id",referencedColumnName = "client_id")
 	private ClientDetailsEntity client;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "project_id")
 	private ProjectDetailsEntity proj;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "project_task_id")
 	private TaskDetailsEntity task;
-    
-	
+
 	@Column(name = "is_active")
 	private Boolean isActive;
 	@Transient
 	private String request;
-
-	
-
 
 }
