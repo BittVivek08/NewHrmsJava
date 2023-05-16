@@ -17,10 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.CommonResponseBean;
+
 import com.hrms.entity.GenderEntity;
 import com.hrms.entity.JobTitlesEntity;
 import com.hrms.entity.MaritalStatusEntity;
 import com.hrms.entity.NationalityEntity;
+
+import com.hrms.entity.EmpRole;
+
 import com.hrms.entity.SalaryAccountClassTypeEntity;
 import com.hrms.entity.SalaryCurrencyEntity;
 import com.hrms.request.bean.JobTitleBean;
@@ -190,4 +194,18 @@ public class CommonServiceController {
 		return hrmsCommomService.updateByNationaliyId(id, bean);
 	}
 	
+	@GetMapping("/getAllEmpRole")
+	public ResponseEntity<List<EmpRole>> getAllEmpRole(){
+		log.info("Fetching All Emp Role");
+		List<EmpRole> allEmpRole = hrmsCommomService.getAllEmpRole();
+		return new ResponseEntity<> (allEmpRole, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getEmpRoleById/{id}")
+	public ResponseEntity<EmpRole> getEmpRoleById(@PathVariable Integer id){
+		log.info("Fetching Emp Role By Id");
+		EmpRole empRoleById = hrmsCommomService.getEmpRoleById(id);
+		return new ResponseEntity<> (empRoleById,HttpStatus.OK);
+	}
+
 }

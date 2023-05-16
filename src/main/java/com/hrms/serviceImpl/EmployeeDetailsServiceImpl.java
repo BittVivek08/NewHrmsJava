@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.hrms.beans.CommonResponseBean;
 import com.hrms.beans.ContactBean;
 import com.hrms.beans.EmpBirthResponse;
 import com.hrms.beans.EmployeeDto;
@@ -21,11 +22,13 @@ import com.hrms.entity.ContactDetails;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeEducationDetails;
 import com.hrms.entity.EmployeeInformation;
+import com.hrms.entity.EmployeeSalaryDetails;
 import com.hrms.repository.ContactRepo;
 import com.hrms.repository.EmployeeEducationDetailsRepository;
 import com.hrms.repository.EmployeeInformationRepository;
 import com.hrms.repository.EmployeeRepository;
-
+import com.hrms.repository.EmployeeSalaryDetailsRepo;
+import com.hrms.request.bean.EmployeeSalaryRequestBean;
 import com.hrms.service.EmployeeDetailsService;
 
 @Service
@@ -43,17 +46,24 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
 	private ContactRepo contactrepo;
+	
+	@Autowired
+	private EmployeeSalaryDetailsRepo empSalRepo;
 
 	@Autowired
 	private ContactBean contactbean;
 
 	@Autowired
-	public EmployeeEducationDetailsBean empeducationbean;
+	private EmployeeEducationDetailsBean empeducationbean;
+	
+	@Autowired
+	private CommonResponseBean comnResBean;
 
 
 	@Autowired
-	public EmployeeEducationDetailsRepository empeducationrepo;
+	private EmployeeEducationDetailsRepository empeducationrepo;
 
 
 	@Override
@@ -70,14 +80,56 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 			empDto.setId(findByEmail.getId());
 			empDto.setEmpId(findByEmail.getEmpId());
+			empDto.setUserId(findByEmail.getUserId());
 			empDto.setFirstName(findByEmail.getFirstName());
 			empDto.setLastName(findByEmail.getLastName());
+			empDto.setEmployeeName(findByEmail.getEmployeeName());
 			empDto.setEmpRole(findByEmail.getEmpRole());
 			empDto.setEmail(findByEmail.getEmail());
-			empDto.setGender(findByEmail.getGender());
-			empDto.setDateOfBirth(findByEmail.getDateOfBirth());
-			empDto.setQualification(findByEmail.getQualification());
-			empDto.setMobileNumber(findByEmail.getMobileNumber());
+			empDto.setBackgroundchk_status(findByEmail.getBackgroundchk_status());
+			empDto.setBusinessunitId(findByEmail.getBusinessunitId());
+			empDto.setBusinessunitName(findByEmail.getBusinessunitName());
+			empDto.setCandidatereferredby(findByEmail.getCandidatereferredby());
+			empDto.setContactnumber(findByEmail.getContactnumber());
+			empDto.setCreatedby(findByEmail.getCreatedby());
+			empDto.setCreatedby_name(findByEmail.getCreatedby_name());
+			empDto.setCreateddate(findByEmail.getCreateddate());
+			empDto.setDateOfJoining(findByEmail.getDateOfJoining());
+			empDto.setDateOfleaving(findByEmail.getDateOfleaving());
+			empDto.setDepartmentId(findByEmail.getDepartmentId());
+			empDto.setDepartmentName(findByEmail.getDepartmentName());
+			empDto.setDesignation(findByEmail.getDesignation());
+			empDto.setEmp_status_id(findByEmail.getEmp_status_id());
+			empDto.setEmployeeName(findByEmail.getEmployeeName());
+			empDto.setEmployeeStatus(findByEmail.getEmployeeStatus());
+			empDto.setEmploymentStatus(findByEmail.getEmploymentStatus());
+			empDto.setExtensionNo(findByEmail.getExtensionNo());
+			empDto.setFaxNo(findByEmail.getFaxNo());
+			empDto.setHoliday_group(findByEmail.getHoliday_group());
+			empDto.setHoliday_group_name(findByEmail.getHoliday_group_name());
+			empDto.setHrManagerId(findByEmail.getHrManagerId());
+			empDto.setHrManagerName(findByEmail.getHrManagerName());
+			empDto.setImmManagerId(findByEmail.getImmManagerId());
+			empDto.setImmManagerName(findByEmail.getImmManagerName());
+			empDto.setIsactive(findByEmail.getIsactive());
+			empDto.setJobtitle_id(findByEmail.getJobtitle_id());
+			empDto.setJobTitleName(findByEmail.getJobTitleName());
+			empDto.setModeOfEntry(findByEmail.getModeOfEntry());
+			empDto.setModifiedBy(findByEmail.getModifiedBy());
+			empDto.setModifieddate(findByEmail.getModifieddate());
+			empDto.setNumberType(findByEmail.getNumberType());
+			empDto.setOther_modeofentry(findByEmail.getOther_modeofentry());
+			empDto.setPosition_id(findByEmail.getPosition_id());
+			empDto.setReferer_name(findByEmail.getReferer_name());
+			empDto.setReportingManager(findByEmail.getReportingManager());
+			empDto.setReportingManagerId(findByEmail.getReportingManagerId());
+			empDto.setSelecteddate(findByEmail.getSelecteddate());
+			empDto.setSelectedDocumentsIds(findByEmail.getSelectedDocumentsIds());
+			empDto.setSignature(findByEmail.getSignature());
+			empDto.setSsnNumber(findByEmail.getSsnNumber());
+			empDto.setVisaId(findByEmail.getVisaId());
+			empDto.setWorkTelephoneNo(findByEmail.getWorkTelephoneNo());
+			empDto.setYearOfExp(findByEmail.getYearOfExp());
 			ebr.setEmployeeDto(empDto);
 			ebr.setMsg("Employee Details Saved Successfully");
 			ebr.setStatus(true);
@@ -169,14 +221,56 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 				EmployeeDto empDto = new EmployeeDto();
 				empDto.setId(employee1.getId());
 				empDto.setEmpId(employee1.getEmpId());
+				empDto.setUserId(employee1.getUserId());
 				empDto.setFirstName(employee1.getFirstName());
 				empDto.setLastName(employee1.getLastName());
+				empDto.setEmployeeName(employee1.getEmployeeName());
 				empDto.setEmpRole(employee1.getEmpRole());
 				empDto.setEmail(employee1.getEmail());
-				empDto.setGender(employee1.getGender());
-				empDto.setDateOfBirth(employee1.getDateOfBirth());
-				empDto.setQualification(employee1.getQualification());
-				empDto.setMobileNumber(employee1.getMobileNumber());
+				empDto.setBackgroundchk_status(employee1.getBackgroundchk_status());
+				empDto.setBusinessunitId(employee1.getBusinessunitId());
+				empDto.setBusinessunitName(employee1.getBusinessunitName());
+				empDto.setCandidatereferredby(employee1.getCandidatereferredby());
+				empDto.setContactnumber(employee1.getContactnumber());
+				empDto.setCreatedby(employee1.getCreatedby());
+				empDto.setCreatedby_name(employee1.getCreatedby_name());
+				empDto.setCreateddate(employee1.getCreateddate());
+				empDto.setDateOfJoining(employee1.getDateOfJoining());
+				empDto.setDateOfleaving(employee1.getDateOfleaving());
+				empDto.setDepartmentId(employee1.getDepartmentId());
+				empDto.setDepartmentName(employee1.getDepartmentName());
+				empDto.setDesignation(employee1.getDesignation());
+				empDto.setEmp_status_id(employee1.getEmp_status_id());
+				empDto.setEmployeeName(employee1.getEmployeeName());
+				empDto.setEmployeeStatus(employee1.getEmployeeStatus());
+				empDto.setEmploymentStatus(employee1.getEmploymentStatus());
+				empDto.setExtensionNo(employee1.getExtensionNo());
+				empDto.setFaxNo(employee1.getFaxNo());
+				empDto.setHoliday_group(employee1.getHoliday_group());
+				empDto.setHoliday_group_name(employee1.getHoliday_group_name());
+				empDto.setHrManagerId(employee1.getHrManagerId());
+				empDto.setHrManagerName(employee1.getHrManagerName());
+				empDto.setImmManagerId(employee1.getImmManagerId());
+				empDto.setImmManagerName(employee1.getImmManagerName());
+				empDto.setIsactive(employee1.getIsactive());
+				empDto.setJobtitle_id(employee1.getJobtitle_id());
+				empDto.setJobTitleName(employee1.getJobTitleName());
+				empDto.setModeOfEntry(employee1.getModeOfEntry());
+				empDto.setModifiedBy(employee1.getModifiedBy());
+				empDto.setModifieddate(employee1.getModifieddate());
+				empDto.setNumberType(employee1.getNumberType());
+				empDto.setOther_modeofentry(employee1.getOther_modeofentry());
+				empDto.setPosition_id(employee1.getPosition_id());
+				empDto.setReferer_name(employee1.getReferer_name());
+				empDto.setReportingManager(employee1.getReportingManager());
+				empDto.setReportingManagerId(employee1.getReportingManagerId());
+				empDto.setSelecteddate(employee1.getSelecteddate());
+				empDto.setSelectedDocumentsIds(employee1.getSelectedDocumentsIds());
+				empDto.setSignature(employee1.getSignature());
+				empDto.setSsnNumber(employee1.getSsnNumber());
+				empDto.setVisaId(employee1.getVisaId());
+				empDto.setWorkTelephoneNo(employee1.getWorkTelephoneNo());
+				empDto.setYearOfExp(employee1.getYearOfExp());
 				ebr.setEmployeeDto(empDto);
 				if (employee.isPresent()) {
 					ebr.setStatus(true);
@@ -252,9 +346,9 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 
 	@Override
-	public ContactBean saveContactdata(ContactDetails details) {
+	public ContactBean saveContactdata(String empId, ContactDetails details) {
 
-		EmployeeDetails employeedetails=empRepo.findByEmpId(details.getEmployeedetails().getEmpId());
+		EmployeeDetails employeedetails=empRepo.findByEmpId(empId);
 
 		details.setEmployeedetails(employeedetails);
 
@@ -356,5 +450,72 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	public List<EmployeeEducationDetails> getAllEmpeducationdetails() {
 
 		return empeducationrepo.findAll();
+	}
+
+	@Override
+	public CommonResponseBean saveSalaryDetails(String empId, EmployeeSalaryRequestBean empSalReqBean) {
+		EmployeeDetails employeeDetails = empRepo.findByEmpId(empId);
+		EmployeeSalaryDetails entity = new EmployeeSalaryDetails();
+		entity.setEmployeeDetails(employeeDetails);
+		
+		entity.setSalary(empSalReqBean.getSalary());
+		entity.setAccountClassTypeId(empSalReqBean.getAccountClassTypeId());
+		entity.setAccountHolderName(empSalReqBean.getAccountHolderName());
+		entity.setAccountNumber(empSalReqBean.getAccountNumber());
+		entity.setAccountHoldingSince(empSalReqBean.getAccountHoldingSince());
+		entity.setBankName(empSalReqBean.getBankName());
+		entity.setCurrencyId(empSalReqBean.getCurrencyId());
+		entity.setCreatedDate(empSalReqBean.getCreatedDate());
+		entity.setEffectiveStartDate(empSalReqBean.getEffectiveStartDate());
+		entity.setEffectiveEndDate(empSalReqBean.getEffectiveEndDate());
+		entity.setIfscCode(empSalReqBean.getIfscCode());
+		entity.setIsActive(empSalReqBean.getIsActive());
+		entity.setModifiedDate(empSalReqBean.getModifiedDate());
+		
+		EmployeeSalaryDetails saved = empSalRepo.save(entity);
+		
+		if(saved != null) {
+			comnResBean.setMsg("Salary Details Saved Successfully");
+			comnResBean.setStatus(true);
+		}else {
+			comnResBean.setMsg("Salary Details Saving Failed!!");
+			comnResBean.setStatus(false);
+		}
+		
+		return comnResBean;
+	}
+
+	@Override
+	public CommonResponseBean updateSalaryDetails(EmployeeSalaryDetails empSalDetails) {
+		
+		Optional<EmployeeSalaryDetails> empSalOpt = empSalRepo.findById(empSalDetails.getId());
+		
+		EmployeeDetails findByEmpId = empRepo.findByEmpId(empSalOpt.get().getEmployeeDetails().getEmpId());
+		empSalDetails.setEmployeeDetails(findByEmpId);
+		
+		EmployeeSalaryDetails updated = empSalRepo.save(empSalDetails);
+		 
+		  if(updated != null) {
+		  comnResBean.setMsg("Salary Details Updated Successfully");
+		  comnResBean.setStatus(true);
+		 }else {
+		 
+		 comnResBean.setMsg("Salary Details Updation Failed");
+		 
+		 comnResBean.setStatus(false); 
+		 }
+		 
+		return comnResBean;
+	}
+
+	@Override
+	public EmployeeSalaryDetails getEmpSalaryById(Integer id) {
+		
+		Optional<EmployeeSalaryDetails> findById = empSalRepo.findById(id);
+		
+		if(findById.isPresent()) {
+			return findById.get();
+		}
+		return null;
 	}
 }

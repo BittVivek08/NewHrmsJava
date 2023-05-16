@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import com.hrms.beans.CommonResponseBean;
+
 import com.hrms.entity.GenderEntity;
 import com.hrms.entity.JobTitlesEntity;
 import com.hrms.entity.MaritalStatusEntity;
 import com.hrms.entity.NationalityEntity;
+import com.hrms.entity.EmpRole;
+
 import com.hrms.entity.SalaryAccountClassTypeEntity;
 import com.hrms.entity.SalaryCurrencyEntity;
 import com.hrms.request.bean.JobTitleBean;
@@ -20,6 +23,7 @@ import com.hrms.request.bean.SalaryCurrencyRequestBean;
 
 public interface HrmsCommonService {
 	
+	// Salary Related Api's
 	public CommonResponseBean saveSalaryCurrency(SalaryCurrencyRequestBean salaryCurrencyReqBean);
 	
 	public List<SalaryCurrencyEntity> getAllSalaryCurrency();
@@ -67,5 +71,12 @@ public interface HrmsCommonService {
 	public CommonResponseBean deleteByNatioalityId(int id);
 	
 	public CommonResponseBean updateByNationaliyId(int id, PersonalNationalityBean nationalityBean);
+
+	// Fetching EmpRole
+	
+	public List<EmpRole> getAllEmpRole();
+	
+	public EmpRole getEmpRoleById(Integer id);
+
 
 }
