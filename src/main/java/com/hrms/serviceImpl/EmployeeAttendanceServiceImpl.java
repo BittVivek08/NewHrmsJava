@@ -34,7 +34,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Autowired
 	private EmployeeAttendancebean eab;
-	
+
 	@Autowired
 	private IRequestForLeaveRepository leaveRepository;
 
@@ -43,11 +43,10 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 		List<EmployeeAttendance> employeeAttendance = attendanceRepo.findByEmpId(empId);
 
-		if ( employeeAttendance.size() <= 0 ) {
+		if (employeeAttendance.size() <= 0) {
 			return false;
-		}
-		else {
-			LocalDate checkInTime = employeeAttendance.get(employeeAttendance.size()-1).getDate();
+		} else {
+			LocalDate checkInTime = employeeAttendance.get(employeeAttendance.size() - 1).getDate();
 			if (checkInTime != null && checkInTime.isEqual(LocalDate.now())) {
 				eab.setStatus(true);
 				return true;
@@ -59,39 +58,37 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 	@Override
 	public EmployeeAttendancebean saveCheckInTime(String empId, String ipAddress, String workFrom) {
 
-		EmployeeAttendancebean attendancebean= new EmployeeAttendancebean();
+		EmployeeAttendancebean attendancebean = new EmployeeAttendancebean();
 
-		if(findHolidayDetails()) {
-			if(findWeekends()) {
-				if(getEmployeeOnLeaveToday(empId)) {
-				if(!checkIfCheckedInToday(empId)) {
-					EmployeeAttendance employeeAttendance = new EmployeeAttendance();
-					employeeAttendance.setCheckInTime(LocalTime.now());
-					employeeAttendance.setDate(LocalDate.now());
-					employeeAttendance.setEmpId(empId);
-					employeeAttendance.setIpAddress(ipAddress);
-					employeeAttendance.setWorkFrom(workFrom);
-					attendanceRepo.save(employeeAttendance);
-
-					if(employeeAttendance != null) {
-						employeeAttendance.setStatus("present");
+		if (findHolidayDetails()) {
+			if (findWeekends()) {
+				if (getEmployeeOnLeaveToday(empId)) {
+					if (!checkIfCheckedInToday(empId)) {
+						EmployeeAttendance employeeAttendance = new EmployeeAttendance();
+						employeeAttendance.setCheckInTime(LocalTime.now());
+						employeeAttendance.setDate(LocalDate.now());
+						employeeAttendance.setEmpId(empId);
+						employeeAttendance.setIpAddress(ipAddress);
+						employeeAttendance.setWorkFrom(workFrom);
 						attendanceRepo.save(employeeAttendance);
 
-						attendancebean.setMsg("Employee checked in successfully");
-						attendancebean.setStatus(true);
+						if (employeeAttendance != null) {
+							employeeAttendance.setStatus("present");
+							attendanceRepo.save(employeeAttendance);
+
+							attendancebean.setMsg("Employee checked in successfully");
+							attendancebean.setStatus(true);
+						}
+					} else {
+						attendancebean.setMsg("Employee has already checked in today");
+						attendancebean.setStatus(false);
 					}
-				}
-				else {
-					attendancebean.setMsg("Employee has already checked in today");
-					attendancebean.setStatus(false);
-				}
-				}else {
-					
+				} else {
+
 					attendancebean.setMsg("Employee is on leave today");
 					attendancebean.setStatus(false);
 				}
-			}
-				else {
+			} else {
 				attendancebean.setMsg("Attendance not allowed on weekends....!");
 				attendancebean.setStatus(true);
 			}
@@ -106,20 +103,28 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 	public void saveCheckOutTime(String empId) {
 
 		List<EmployeeAttendance> employeeAttendanceList = attendanceRepo.findByEmpId(empId);
-		
+
 		if (!employeeAttendanceList.isEmpty()) {
-			
-		EmployeeAttendance employeeAttendance = employeeAttendanceList.get(employeeAttendanceList.size()-1);
-		employeeAttendance.setCheckOutTime(LocalTime.now());
-		employeeAttendance.setDate(LocalDate.now());
-		employeeAttendance.setWorkFrom(employeeAttendance.getWorkFrom());
-		
-		Duration duration = Duration.between(employeeAttendance.getCheckInTime(), employeeAttendance.getCheckOutTime());
-        long workingHours = duration.toMinutes(); // Calculate the working hours
-        employeeAttendance.setTotalWorkingHours(workingHours);
-        
-		attendanceRepo.save(employeeAttendance);
-		
+
+			EmployeeAttendance employeeAttendance = employeeAttendanceList.get(employeeAttendanceList.size() - 1);
+			employeeAttendance.setCheckOutTime(LocalTime.now());
+			employeeAttendance.setDate(LocalDate.now());
+			employeeAttendance.setWorkFrom(employeeAttendance.getWorkFrom());
+
+			// Calculate the working hours
+			LocalTime checkInTime = employeeAttendance.getCheckInTime();
+			LocalTime checkOutTime = employeeAttendance.getCheckOutTime();
+
+			Duration workingTime = Duration.between(checkInTime, checkOutTime);
+
+			long hours = workingTime.toHours();
+			long minutes = workingTime.toMinutesPart();
+			long seconds = workingTime.toSecondsPart();
+
+			String result = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+
+			employeeAttendance.setTotalWorkingHours(result);
+			attendanceRepo.save(employeeAttendance);
 		}
 	}
 
@@ -133,17 +138,15 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 			LocalDate date2 = sdf.parse(endDate).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
 			return attendanceRepo.findByEmpIdAndDateBetween(empId, date1, date2);
-		}
-		catch(Exception e)
-		{
-			return null;	
+		} catch (Exception e) {
+			return null;
 		}
 	}
 
 	@Override
 	public boolean findHolidayDetails() {
 
-		List<HolidayCalenderEntity> holidayList =  holidayRepo.findAll();
+		List<HolidayCalenderEntity> holidayList = holidayRepo.findAll();
 		LocalDate today = LocalDate.now();
 		try {
 			for (HolidayCalenderEntity holiday : holidayList) {
@@ -155,15 +158,13 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 					return false;
 				}
 			}
-		}catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 			return true;
 		}
 
 		return true;
 	}
-	
 
 	@Override
 	public boolean findWeekends() {
@@ -189,9 +190,9 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 			LocalDate date1 = sdf.parse(startDate).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 			LocalDate date2 = sdf.parse(endDate).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-			return holidayRepo.findByDateBetween(date1,date2);
+			return holidayRepo.findByDateBetween(date1, date2);
 
-		}catch(Exception e){
+		} catch (Exception e) {
 
 			e.printStackTrace();
 			return Collections.emptyList();
@@ -213,42 +214,40 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 		}
 		return weekends;
 	}
-	
+
 	@Override
-	 public List<RequestForLeave> getLeaveRecords(String startDateRequest, String endDateRequest) {
-		
+	public List<RequestForLeave> getLeaveRecords(String startDateRequest, String endDateRequest) {
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate startDate = LocalDate.parse(startDateRequest, formatter);
 		LocalDate endDate = LocalDate.parse(endDateRequest, formatter);
-	    return leaveRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(startDate, endDate);
-	  }
+		return leaveRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(startDate, endDate);
+	}
 
 	@Override
 	public boolean getEmployeeOnLeaveToday(String empid) {
-	
+
 		Optional<RequestForLeave> employee = leaveRepository.findByEmpid(empid);
-        if (employee.isPresent()) {
-            LocalDate today = LocalDate.now();
-            LocalDate leaveStartDate = employee.get().getStartDate();
-            LocalDate leaveEndDate = employee.get().getEndDate();
+		if (employee.isPresent()) {
+			LocalDate today = LocalDate.now();
+			LocalDate leaveStartDate = employee.get().getStartDate();
+			LocalDate leaveEndDate = employee.get().getEndDate();
 //            if (leaveStartDate != null && leaveEndDate != null) {
 //                return today.isEqual(leaveStartDate) || (today.isAfter(leaveStartDate) && today.isBefore(leaveEndDate));
 //            }
-            if (today.isEqual(leaveStartDate) || (today.isAfter(leaveStartDate) && today.isBefore(leaveEndDate))) {
-                return false ;
-            }
-        }
-        return true;
+			if (today.isEqual(leaveStartDate) || (today.isAfter(leaveStartDate) && today.isBefore(leaveEndDate))) {
+				return false;
+			}
+		}
+		return true;
 
-		
-		
 	}
 
 	@Override
 	public EmployeeAttendancebean saveCheckInTimeForcely(String empId, String ipAddress, String workFrom) {
-		
-		EmployeeAttendancebean attendancebean= new EmployeeAttendancebean();
-		if(!checkIfCheckedInToday(empId)) {
+
+		EmployeeAttendancebean attendancebean = new EmployeeAttendancebean();
+		if (!checkIfCheckedInToday(empId)) {
 			EmployeeAttendance employeeAttendance = new EmployeeAttendance();
 			employeeAttendance.setCheckInTime(LocalTime.now());
 			employeeAttendance.setDate(LocalDate.now());
@@ -257,54 +256,50 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 			employeeAttendance.setWorkFrom(workFrom);
 			attendanceRepo.save(employeeAttendance);
 
-			if(employeeAttendance != null) {
+			if (employeeAttendance != null) {
 				employeeAttendance.setStatus("present");
 				attendanceRepo.save(employeeAttendance);
 
 				attendancebean.setMsg("Employee checked in successfully");
 				attendancebean.setStatus(true);
 			}
-		}
-		else {
+		} else {
 			attendancebean.setMsg("Employee has already checked in today");
 			attendancebean.setStatus(false);
 		}
 		return attendancebean;
 	}
 
+	// @Override
+	// public EmployeeAttendancebean saveAttendanceDetails(EmployeeAttendance
+	// employeeattend) {
+	//
+	// EmployeeAttendance ss = attendanceRepo.save(employeeattend);
+	// if(ss !=null ) {
+	// eab.setMsg("Employee attendance details saved Successfully");
+	// eab.setStatus(true);
+	// }else {
+	// eab.setMsg("failed !");
+	// eab.setStatus(false);
+	// }
+	// return eab;
+	// }
 
-
-	//	@Override
-	//	public EmployeeAttendancebean saveAttendanceDetails(EmployeeAttendance employeeattend) {
+	// @Override
+	// public EmployeeAttendance findByEmpId(int empId) {
 	//
-	//		EmployeeAttendance ss = attendanceRepo.save(employeeattend);
-	//		if(ss !=null ) {
-	//			eab.setMsg("Employee attendance details  saved Successfully");
-	//			eab.setStatus(true);
-	//		}else {
-	//			eab.setMsg("failed !");
-	//			eab.setStatus(false);
-	//		}
-	//		return eab;
-	//	}
-
-	//	@Override
-	//	public EmployeeAttendance findByEmpId(int empId) {
+	// Optional<EmployeeAttendance> empatt = attendanceRepo.findById(empId);
 	//
-	//		Optional<EmployeeAttendance> empatt = attendanceRepo.findById(empId);
+	// if(empatt.isPresent()) {
+	// return empatt.get();
+	// }
+	// else {
 	//
-	//		if(empatt.isPresent()) {
-	//			return empatt.get();
-	//		}
-	//		else {
+	// eab.setStatus(false);
+	// System.out.println("invalid details");
+	// }
 	//
-	//			eab.setStatus(false);
-	//			System.out.println("invalid details");
-	//		}
-	//
-	//		return null ;
-	//	}
+	// return null ;
+	// }
 
 }
-
-
