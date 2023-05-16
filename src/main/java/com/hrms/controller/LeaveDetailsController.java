@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.EntityBeanResponse;
-import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.LeaveDetails;
 import com.hrms.request.bean.LeaveDetailsBinding;
 import com.hrms.response.bean.EntityResponse;

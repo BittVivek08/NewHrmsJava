@@ -1,24 +1,15 @@
 package com.hrms.controller;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
 
-import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.CurrentWeekDatesResponse;
 import com.hrms.beans.CurrentWeekRequest;
-import com.hrms.beans.EntityBeanResponse;
-import com.hrms.entity.EmployeeDetails;
 //import com.hrms.beans.SaveTimesheetRequestBean;
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.repository.HolidayCalenderRepository;
@@ -37,7 +26,6 @@ import com.hrms.responsebean.TimeSheetResponseForMonth;
 import com.hrms.responsebean.TimeSheetResponseForMonthYearWeek;
 import com.hrms.serviceImpl.TimeSheetDetailsImpl;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
