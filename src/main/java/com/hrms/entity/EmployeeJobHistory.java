@@ -1,8 +1,6 @@
 package com.hrms.entity;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +18,9 @@ public class EmployeeJobHistory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	
+	@Column(name = "user_id")
+	private int userId;
 
 	@Column(name = "position_id")
 	private int positionId;
@@ -41,6 +42,9 @@ public class EmployeeJobHistory {
 
 	@Column(name = "vendor")
 	private String vendorName;
+	
+	@Column(name = "received_amount")
+	private double amountRecieved;
 
 	@Column(name = "paid_amount")
 	private double amountPaid;
@@ -51,8 +55,20 @@ public class EmployeeJobHistory {
 	@Column(name = "end_date")
 	private Date toDate;
 	
-	private LocalDateTime createdOn;
-	
-	private LocalDateTime lastUpdatedOn;
+	@Column(name = "createddate")
+	private Date createdDate;
 
+	@Column(name = "modifieddate")
+	private Date modifiedDate;
+	
+	@Column(name = "createdby")
+	private int createdBy;
+	
+	@Column(name = "modifiedby")
+	private int modifiedby;
+
+	@Column(name = "isactive")
+	private int isactive;
+	
+	
 }

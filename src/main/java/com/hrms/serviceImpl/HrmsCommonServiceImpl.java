@@ -1,19 +1,29 @@
 package com.hrms.serviceImpl;
 
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.hrms.beans.CommonResponseBean;
+import com.hrms.entity.GenderEntity;
+import com.hrms.entity.JobTitlesEntity;
+import com.hrms.entity.MaritalStatusEntity;
+import com.hrms.entity.NationalityEntity;
 import com.hrms.entity.SalaryAccountClassTypeEntity;
 import com.hrms.entity.SalaryCurrencyEntity;
+import com.hrms.repository.GenderRepository;
+import com.hrms.repository.JobTitleRepository;
+import com.hrms.repository.MaritalStatusRepository;
+import com.hrms.repository.NationalityRepository;
 import com.hrms.repository.SalaryAccountClassTypeRepo;
 import com.hrms.repository.SalaryCurrencyRepo;
+import com.hrms.request.bean.JobTitleBean;
+import com.hrms.request.bean.PersonalGenderBean;
+import com.hrms.request.bean.PersonalMaritalStatusBean;
+import com.hrms.request.bean.PersonalNationalityBean;
 import com.hrms.request.bean.SalaryAccountClassTypeRequestBean;
 import com.hrms.request.bean.SalaryCurrencyRequestBean;
 import com.hrms.service.HrmsCommonService;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -25,6 +35,18 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 	
 	@Autowired
 	private SalaryAccountClassTypeRepo accTypeRepo;
+	
+	@Autowired
+	private JobTitleRepository jobTitleRepo;
+	
+	@Autowired
+	private GenderRepository genderRepo;
+	
+	@Autowired
+	private MaritalStatusRepository statusRepo;
+	
+	@Autowired
+	private NationalityRepository nationalityRepo;
 
 	@Autowired
 	private CommonResponseBean comResBean;
@@ -98,4 +120,316 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 		return accTypeRepo.findAll();
 	}
 
+	@Override
+	public CommonResponseBean saveJobTitle(JobTitleBean bean) {
+		
+		log.info("save the jobtitle serviceimpl method");
+		JobTitlesEntity entity = new JobTitlesEntity();
+//		entity.setId(bean.getId());
+		entity.setJobTitleName(bean.getJobTitleName());
+		entity.setJobTitleCode(bean.getJobTitleCode());
+		entity.setJobDescription(bean.getJobDescription());
+		entity.setMinExpReq(bean.getMinExpReq());
+		entity.setJobPayGradeCode(bean.getJobPayGradeCode());
+		entity.setJobPayFrequency(bean.getJobPayFrequency());
+		entity.setCreatedBy(bean.getCreatedOrModifiedBy());
+		entity.setCreatedDate(bean.getCreatedDate());
+		entity.setIsActive(bean.getIsActive());
+//		if (bean.getId() > 0) {
+		entity.setModifiedBy(bean.getCreatedOrModifiedBy());
+		entity.setModifiedDate(bean.getModifiedDate());
+//		}
+		
+		JobTitlesEntity saved = jobTitleRepo.save(entity);
+		if (saved != null) {
+			
+			comResBean.setMsg("Job Title Saved Successfully............!");
+			comResBean.setStatus(true);
+		}else {
+			
+			comResBean.setMsg("Something went wrong............");
+			comResBean.setStatus(false);
+		}
+		return comResBean;
+	}
+
+	@Override
+	public Optional<JobTitlesEntity> getById(int id) {
+		log.info("get by id jobtitle detail serviceimpl method");
+		Optional<JobTitlesEntity> entity = jobTitleRepo.findById(id);
+		return entity;
+	}
+
+	@Override
+	public List<JobTitlesEntity> getAllDetails() {
+		log.info("get the all jobtitle details serviceimpl method");
+		List<JobTitlesEntity> AllDetails = jobTitleRepo.findAll();
+		return AllDetails;
+	}
+
+	@Override
+	public CommonResponseBean deleteById(int id) {
+		log.info("delete by id jobtitle detail serviceimpl method");
+		jobTitleRepo.deleteById(id);
+		comResBean.setMsg("Job Title deleted Successfully.....!");
+		comResBean.setStatus(true);
+		return comResBean;
+	}
+
+	@Override
+	public CommonResponseBean updateByid(int id,JobTitleBean bean ) {
+		
+		log.info("updated the jobtitle detail serviceimpl method");
+		Optional<JobTitlesEntity> list = jobTitleRepo.findById(id);
+		
+		if(list.isPresent()) {
+			
+		JobTitlesEntity entity = list.get();
+		
+		entity.setJobTitleName(bean.getJobTitleName());
+		entity.setJobTitleCode(bean.getJobTitleCode());
+		entity.setJobDescription(bean.getJobDescription());
+		entity.setMinExpReq(bean.getMinExpReq());
+		entity.setJobPayGradeCode(bean.getJobPayGradeCode());
+		entity.setJobPayFrequency(bean.getJobPayFrequency());
+		entity.setCreatedBy(bean.getCreatedOrModifiedBy());
+		entity.setCreatedDate(bean.getCreatedDate());
+		entity.setIsActive(bean.getIsActive());
+		entity.setModifiedBy(bean.getCreatedOrModifiedBy());
+		entity.setModifiedDate(bean.getModifiedDate());
+		
+		JobTitlesEntity saved = jobTitleRepo.save(entity);
+		
+		if (saved != null) {
+			
+			comResBean.setMsg("Job Title updated Successfully..........!");
+			comResBean.setStatus(true);
+		}else {
+			
+			comResBean.setMsg("Job Title Not updated ..........!");
+			comResBean.setStatus(false);
+		}
+		}
+		return comResBean;
+	}
+
+	@Override
+	public CommonResponseBean saveGenderDetails(PersonalGenderBean genderbean) {
+		log.info("save the gender detail serviceimpl method");
+		GenderEntity entity = new GenderEntity();
+		entity.setGenderName(genderbean.getGenderName());
+		entity.setGenderCode(genderbean.getGenderCode());
+		entity.setCreatedDate(genderbean.getCreatedDate());
+		entity.setModifiedDate(genderbean.getModifiedDate());
+		entity.setIsActive(genderbean.getIsActive());
+		GenderEntity save = genderRepo.save(entity);
+		
+		if(save != null) {
+			
+			comResBean.setMsg("gender details are saved successfully ........!");
+			comResBean.setStatus(true);
+		}else {
+			comResBean.setMsg("gender details not saved ...........!");
+			comResBean.setStatus(false);
+		}
+		return comResBean;
+	}
+
+	@Override
+	public Optional<GenderEntity> getByGenderId(int id) {
+		log.info("get by Id gender detail serviceimpl method");
+		Optional<GenderEntity> getid = genderRepo.findById(id);
+		return getid;
+	}
+	
+	@Override
+	public List<GenderEntity> getAllGenders() {
+		 
+		log.info("get the all gender details serviceimpl method");
+		List<GenderEntity> AllDetails = genderRepo.findAll();
+		return AllDetails;
+	}
+	
+	@Override
+	public CommonResponseBean deleteByGenderId(int id) {
+		log.info("delete the gender detail serviceimpl method");
+		 genderRepo.deleteById(id);
+		 comResBean.setMsg("gender detail delete successfully........!");
+		 comResBean.setStatus(true);
+		 
+		return comResBean;
+	}
+
+	@Override
+	public CommonResponseBean updateByGenderId(int id, PersonalGenderBean genderBean) {
+		log.info("updated the gender detail serviceimpl method");
+		Optional<GenderEntity> entity=genderRepo.findById(id);
+		if(entity.isPresent()) {
+			
+			GenderEntity entity1 = entity.get();
+			entity1.setGenderName(genderBean.getGenderName());
+			entity1.setGenderCode(genderBean.getGenderCode());
+			entity1.setCreatedDate(genderBean.getCreatedDate());
+			entity1.setModifiedDate(genderBean.getModifiedDate());
+			entity1.setIsActive(genderBean.getIsActive());
+			GenderEntity save = genderRepo.save(entity1);
+			
+			if(save != null) {
+				
+				comResBean.setMsg("gender details are updated successfully ........!");
+				comResBean.setStatus(true);
+			}else {
+				comResBean.setMsg("gender details not updated ...........!");
+				comResBean.setStatus(false);
+			}
+		}
+		return comResBean;
+	}
+
+	@Override
+	public CommonResponseBean saveMaritialDetails(PersonalMaritalStatusBean maritalbean) {
+		
+		log.info("save the maritalStatus detail serviceimpl method");
+		MaritalStatusEntity entity = new MaritalStatusEntity();
+		entity.setMaritalStatusName(maritalbean.getMaritalStatusName());
+		entity.setMaritalCode(maritalbean.getMaritalCode());
+		entity.setCreatedDate(maritalbean.getCreatedDate());
+		entity.setModifiedDate(maritalbean.getModifiedDate());
+		entity.setIsActive(maritalbean.getIsActive());
+		MaritalStatusEntity save = statusRepo.save(entity);
+		
+		if(save != null) {
+			
+			comResBean.setMsg("marital status are saved successfully ........!");
+			comResBean.setStatus(true);
+		}else {
+			comResBean.setMsg("marital status not saved ...........!");
+			comResBean.setStatus(false);
+		}
+		return comResBean;
+	}
+
+	@Override
+	public Optional<MaritalStatusEntity> getByMaritalId(int id) {
+		log.info("get by id maritalStatus detail serviceimpl method");
+		Optional<MaritalStatusEntity> getid = statusRepo.findById(id);
+		return getid;
+	}
+	
+	@Override
+	public List<MaritalStatusEntity> getAllMaritalStatus() {
+		
+		log.info("get the all Marital details serviceimpl method");
+		List<MaritalStatusEntity> AllDetails = statusRepo.findAll();
+		return AllDetails;
+	}
+
+	@Override
+	public CommonResponseBean deleteByMaritalId(int id) {
+		log.info("delete the maritalStatus detail serviceimpl method");
+		 statusRepo.deleteById(id);
+		 comResBean.setMsg("marital Status delete successfully........!");
+		 comResBean.setStatus(true);
+		 
+		return comResBean;
+	}
+
+	@Override
+	public CommonResponseBean updateByMaritalId(int id, PersonalMaritalStatusBean maritalBean) {
+		log.info("update the maritalStatus detail serviceimpl method");
+		Optional<MaritalStatusEntity> entity=statusRepo.findById(id);
+		if(entity.isPresent()) {
+			
+			MaritalStatusEntity entity1 = entity.get();
+			
+			entity1.setMaritalStatusName(maritalBean.getMaritalStatusName());
+			entity1.setMaritalCode(maritalBean.getMaritalCode());
+			entity1.setCreatedDate(maritalBean.getCreatedDate());
+			entity1.setModifiedDate(maritalBean.getModifiedDate());
+			entity1.setIsActive(maritalBean.getIsActive());
+			MaritalStatusEntity save = statusRepo.save(entity1);
+			
+			if(save != null) {
+				
+				comResBean.setMsg("Marital status are updated successfully ........!");
+				comResBean.setStatus(true);
+			}else {
+				comResBean.setMsg("Marital status not updated ...........!");
+				comResBean.setStatus(false);
+			}
+		}
+		return comResBean;
+	}
+
+	@Override
+	public CommonResponseBean saveNationality(PersonalNationalityBean nationalityBean) {
+		
+		log.info("save the Natiobality detail serviceimpl method");
+		NationalityEntity entity = new NationalityEntity();
+		
+		entity.setNationalityCode(nationalityBean.getNationalityCode());
+		entity.setCreatedBy(nationalityBean.getCreatedBy());
+		entity.setCreatedDate(nationalityBean.getCreatedDate());
+		entity.setModifiedDate(nationalityBean.getModifiedDate());
+		entity.setIsActive(nationalityBean.getIsActive());
+		NationalityEntity save = nationalityRepo.save(entity);
+		
+		if(save != null) {
+			
+			comResBean.setMsg(" Nationality are saved successfully ........!");
+			comResBean.setStatus(true);
+		}else {
+			comResBean.setMsg(" something went wrong...........!");
+			comResBean.setStatus(false);
+		}
+		return comResBean;
+	}
+
+	@Override
+	public Optional<NationalityEntity> getByNationalityId(int id) {
+		Optional<NationalityEntity> nationality = nationalityRepo.findById(id);
+		return nationality;
+	}
+	
+	@Override
+	public List<NationalityEntity> getAllNationality() {
+		log.info("get the all Nationality details serviceimpl method");
+		List<NationalityEntity> AllDetails = nationalityRepo.findAll();
+		return AllDetails;
+	}
+
+	@Override
+	public CommonResponseBean deleteByNatioalityId(int id) {
+		nationalityRepo.deleteById(id);
+		comResBean.setMsg("nationality delete successfully........!");
+		comResBean.setStatus(true);
+		return comResBean;
+	}
+
+	@Override
+	public CommonResponseBean updateByNationaliyId(int id, PersonalNationalityBean nationalityBean) {
+		log.info("update the Nationality serviceimpl method");
+		Optional<NationalityEntity> entity=nationalityRepo.findById(id);
+		if(entity.isPresent()) {
+			
+			NationalityEntity entity1 = entity.get();
+			
+			entity1.setNationalityCode(nationalityBean.getNationalityCode());
+			entity1.setCreatedBy(nationalityBean.getCreatedBy());
+			entity1.setCreatedDate(nationalityBean.getCreatedDate());
+			entity1.setModifiedDate(nationalityBean.getModifiedDate());
+			entity1.setIsActive(nationalityBean.getIsActive());
+			NationalityEntity save = nationalityRepo.save(entity1);
+			
+			if(save != null) {
+				
+				comResBean.setMsg("Nationality are updated successfully ........!");
+				comResBean.setStatus(true);
+			}else {
+				comResBean.setMsg("Nationality not updated ...........!");
+				comResBean.setStatus(false);
+			}
+		}
+		return comResBean;
+	}
 }
