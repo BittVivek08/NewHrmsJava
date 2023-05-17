@@ -162,30 +162,6 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 		return beanResponse;
 	}
 
-	//TaskEmpRelationship
-	@Override
-	public EntityBeanResponseCommon addListOfTaskToEmployee(String eid,int id) {
-		
-		Optional<TaskDetailsEntity> task = this.taskRepo.findById(id);
-		
-		EmployeeDetails emp = this.employeeRepo.findByEmpId(eid);
-		task.orElseThrow().setEmp(emp);
-		
-		TaskDetailsEntity save = this.taskRepo.save(task.orElseThrow());
-		if(save!=null) {
-			beanResponse.setMsg("successfully saved");
-			beanResponse.setStatus(true);
-		}
-		else {
-			beanResponse.setMsg("not saved");	
-			beanResponse.setStatus(false);
-		}
-		
-		return beanResponse;
-	}
-	
-	
-	
 	
 	
 	
