@@ -21,10 +21,10 @@ import com.hrms.entity.EmployeeDetails;
 //import com.hrms.beans.SaveTimesheetRequestBean;
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.repository.HolidayCalenderRepository;
-import com.hrms.responsebean.DateResponseTimeSheet;
-import com.hrms.responsebean.TimeSheetResponse;
-import com.hrms.responsebean.TimeSheetResponseForMonth;
-import com.hrms.responsebean.TimeSheetResponseForMonthYearWeek;
+import com.hrms.response.bean.DateResponseTimeSheet;
+import com.hrms.response.bean.TimeSheetResponse;
+import com.hrms.response.bean.TimeSheetResponseForMonth;
+import com.hrms.response.bean.TimeSheetResponseForMonthYearWeek;
 import com.hrms.serviceImpl.TimeSheetDetailsImpl;
 
 import lombok.extern.slf4j.Slf4j;

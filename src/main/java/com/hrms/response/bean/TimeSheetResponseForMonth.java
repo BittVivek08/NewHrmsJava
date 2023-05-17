@@ -1,4 +1,4 @@
-package com.hrms.responsebean;
+package com.hrms.response.bean;
 
 import java.util.List;
 
