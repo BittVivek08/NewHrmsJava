@@ -16,8 +16,8 @@ public interface IRequestForLeaveRepository extends JpaRepository<RequestForLeav
 	@Query("select min(avalSickLeave) from com.hrms.entity.RequestForLeave t where t.emp_id=:emp_id")
 	public Integer minSickLeave(String emp_id);
 
-    @Query("select startDate from RequestForLeave where startDate=?1")
-	public LocalDate findByStartDate(LocalDate date);
+//    @Query("select startDate from RequestForLeave where startDate=?1")
+//	public LocalDate findByStartDate(LocalDate date);
 
 
 	public List<RequestForLeave> findByStartDateLessThanEqualAndEndDateGreaterThanEqual(LocalDate startDate,LocalDate endDate);

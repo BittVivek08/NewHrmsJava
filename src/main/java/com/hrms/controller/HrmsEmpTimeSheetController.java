@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.CurrentWeekDatesResponse;
 import com.hrms.beans.CurrentWeekRequest;
+import com.hrms.entity.EmployeeDetails;
 //import com.hrms.beans.SaveTimesheetRequestBean;
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.repository.HolidayCalenderRepository;
@@ -101,7 +102,7 @@ public class HrmsEmpTimeSheetController {
 
 	@GetMapping("/getTimeSheetDetailUsingMon")
 	public ResponseEntity<TimeSheetResponseForMonth> getEmployeeDetailByMonYearandWeek(@QueryParam("month") int month,
-			@QueryParam("empId") int empId, @QueryParam("year") int year) {
+			@QueryParam("empId") String empId, @QueryParam("year") int year) {
 		log.info("entered into getTimeSheetDetailUsingMon method of HrmsEmpTimeSheetController class");
 		TimeSheetResponseForMonth response = new TimeSheetResponseForMonth();
 		List<Object[]> timesheet = impl.getTimeSheetDetailsByMonth(month, empId, year);
@@ -126,13 +127,13 @@ public class HrmsEmpTimeSheetController {
 		}
 	}
 
-//	 @GetMapping("/getEmployeesByReportingManagerId")
-//	 public ResponseEntity<List<EmployeeDetails>> getEmpByRepID(@QueryParam("repId")
-//	 int repId){
-//	 List<EmployeeDetails> ob=impl.getEmpByReportingId(repId);
-//	 return new ResponseEntity<List<EmployeeDetails>>(ob,HttpStatus.OK);
-//	
-//	 }
+	 @GetMapping("/getEmployeesByReportingManagerId")
+	 public ResponseEntity<List<EmployeeDetails>> getEmpByRepID(@QueryParam("repId")
+	 int repId){
+	 List<EmployeeDetails> ob=impl.getEmpByReportingId(repId);
+	 return new ResponseEntity<List<EmployeeDetails>>(ob,HttpStatus.OK);
+	
+	 }
 	
 	
 //	@GetMapping("/getCalWeekMonthNameByMonthId")
@@ -148,10 +149,14 @@ public class HrmsEmpTimeSheetController {
 	
 	@GetMapping("/getDateByYearAndCalWeek")
 	public DateResponseTimeSheet getDateByYearAndCalWeek(@QueryParam("year") int year, @QueryParam("calWeek") int calWeek) {
-		log.info("entered into getDateByYearAndCalWeek method of HrmsEmpTimeSheetService class");
+		log.info("entered into getDateByYearAndCalWeek method of HrmsEmpTimeSheetController class");
 		return impl.dateResponse(year, calWeek);
 	}
 
+	@GetMapping("/getEmployeesWhoDidNotAccessTimeSheet")
+	public void getEmployeesWhoDidNotAccessTimeSheet(@QueryParam("year") int year, @QueryParam("month") int month) {
+		 impl.getEmployeesWhoDidNotAccessTimeSheet(year, month);
+	}
 	
 
 	// @PostMapping("/timeSheetApproval")
