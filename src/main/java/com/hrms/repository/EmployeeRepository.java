@@ -23,8 +23,11 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
 
 	EmployeeDetails findByFirstName(String firstName);
     
-	
-//	List<EmployeeDetails> getDetailByRepId(int repId);
-	
-	
+	@Query(" from EmployeeDetails where reportingManagerId=?1")
+	List<EmployeeDetails> getDetailByRepId(int repId);
+
+	@Query(" from EmployeeDetails where reportingManagerId=?1")
+   int  getByRepId(int repId);
+    @Query("select employeeName from EmployeeDetails  where reportingManagerId=?1")
+	String empName(int repManId);
 }
