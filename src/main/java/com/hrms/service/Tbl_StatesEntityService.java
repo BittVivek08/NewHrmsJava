@@ -14,6 +14,10 @@ public interface Tbl_StatesEntityService {
 
 	List<Tbl_StatesEntity> getallstatesdetails();
 
+	Tbl_StatesEntity updatestatesdetails(int id, Tbl_StatesEntity entity);
+
+	Tbl_StatesEntityBean deleteById(int id);
+
 	
 
 }

@@ -54,8 +54,48 @@ public class Tbl_StatesEntityServiceimpl implements Tbl_StatesEntityService {
 		
 		return statesentityrepo.findAll();
 	}
+
+	@Override
+	public Tbl_StatesEntity updatestatesdetails(int id, Tbl_StatesEntity entity) {
+		
+		
+		Tbl_StatesEntity statesentity = statesentityrepo.getById(id);
+			if (statesentity != null)
+			{
+				statesentity.setCountryId(entity.getCountryId());
+				statesentity.setCreatedDate(entity.getCreatedDate());
+				statesentity.setIsactive(entity.getIsactive());
+				statesentity.setModifiedDate(entity.getModifiedDate());
+				statesentity.setStateCode(entity.getStateCode());
+				statesentity.setStateName(entity.getStateName());
+				return statesentityrepo.save(statesentity);
+				
+			}
+		
+		
+		return null;
+			
+	}
+
+	@Override
+	public Tbl_StatesEntityBean deleteById(int id) {
+		Tbl_StatesEntity countrie = statesentityrepo.getById(id);
+		if (countrie != null) {
+			statesentityrepo.delete(countrie);
+			statesentitybean.setMessage("countriesdetails deleted successfully");
+			statesentitybean.setStatus(true);
+		} else {
+			statesentitybean.setMessage("Failed to Delete details ");
+			statesentitybean.setStatus(false);
+		}
+		return statesentitybean;
+		}
+		
+		
+		
+	}
 	
 	
 
 
-}
+

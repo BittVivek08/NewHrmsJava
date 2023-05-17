@@ -1,7 +1,7 @@
 package com.hrms.entity;
 
 import java.sql.Date;
-import java.sql.Timestamp;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,16 +52,16 @@ public class SkillEnitity {
 
 		@ManyToOne
 		@JoinColumn(name = "state_id")
-		private Tbl_StatesEntity stateId;
+		private Tbl_StatesEntity state;
 
 		@ManyToOne
 		@JoinColumn(name = "country_id")
-		private Tbl_CountriesEntity countryId;
+		private Tbl_CountriesEntity country;
 
 		@ManyToOne
 		@JoinColumn(name = "city_id")
-		private Tbl_CitiesEntity cityId;
-
+		private Tbl_CitiesEntity city;
+		
 		@Column(name = "course_name")
 		private String courseName;
 
