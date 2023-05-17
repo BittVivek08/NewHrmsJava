@@ -15,8 +15,8 @@ import com.hrms.entity.ClientDetailsEntity;
 import com.hrms.entity.ProjectDetailsEntity;
 import com.hrms.entity.SalaryCurrencyEntity;
 import com.hrms.repository.ClientDetailsRepository;
-import com.hrms.repository.CurrencyRepository;
 import com.hrms.repository.ProjectDetailsRepository;
+import com.hrms.repository.SalaryCurrencyRepo;
 import com.hrms.service.ProjectDetailsService;
 
 @Service
@@ -26,8 +26,12 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 	@Autowired
 	private ProjectDetailsRepository projectRepo;
 	
+//	@Autowired
+//	private CurrencyRepository currencyRepo;
+	
 	@Autowired
-	private CurrencyRepository currencyRepo;
+	private SalaryCurrencyRepo salaCurrencyRepo;
+	
 
 	@Autowired
 	private EntityBeanResponseCommon beanResponse;
@@ -45,8 +49,11 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 	public EntityBeanResponseCommon saveProjectDetails(ProjectDetailsEntity projentity) {
 
 		//ClientDetailsEntity client = clientRepo.findByClientid(projentity.getClient().getClientid());
+		//Optional<ClientDetailsEntity> client = this.clientRepo.findById(projentity.getClient().getId());
 		Optional<ClientDetailsEntity> client = this.clientRepo.findById(projentity.getClient().getId());
-		Optional<SalaryCurrencyEntity> currency = this.currencyRepo.findById(projentity.getCurrency().getId());
+
+		//Optional<Currency> currency = this.currencyRepo.findById(projentity.getCurrency().getCurrencyId());
+		Optional<SalaryCurrencyEntity> currency = this.salaCurrencyRepo.findById(projentity.getCurrency().getId());
 		
 		if (client != null && currency!=null) {
 			projentity.setCreated_date(LocalDateTime.now());

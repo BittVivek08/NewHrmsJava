@@ -42,8 +42,8 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 	@Autowired
 	private EmployeeTaskDetailsBean emptasjbean;
 
-	//@Autowired
-	//EmployeeRepository employeeRepo;
+	@Autowired
+	EmployeeRepository employeeRepo;
 
 	@Autowired
 	ClientDetailsRepository clientRepo;
@@ -161,6 +161,33 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 
 		return beanResponse;
 	}
+
+	//TaskEmpRelationship
+	@Override
+	public EntityBeanResponseCommon addListOfTaskToEmployee(String eid,int id) {
+		
+		Optional<TaskDetailsEntity> task = this.taskRepo.findById(id);
+		
+		EmployeeDetails emp = this.employeeRepo.findByEmpId(eid);
+		task.orElseThrow().setEmp(emp);
+		
+		TaskDetailsEntity save = this.taskRepo.save(task.orElseThrow());
+		if(save!=null) {
+			beanResponse.setMsg("successfully saved");
+			beanResponse.setStatus(true);
+		}
+		else {
+			beanResponse.setMsg("not saved");	
+			beanResponse.setStatus(false);
+		}
+		
+		return beanResponse;
+	}
+	
+	
+	
+	
+	
 	
 	
 
@@ -434,7 +461,33 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 	
 	
 	
+//..................oldHrms.........................	
 	
+	  //OldHrms
+		//addListOfTaskToEmp
+//		@Override
+//		public EntityBeanResponseCommon addListOfTaskToEmp(TaskDetailsEntity task) {
+	//
+//			EmployeeDetails empl = employeeRepo.findByEmpId(task.getEmp().getEmpId());
+//			task.setEmp(empl);
+//			// ProjectDetailsEntity project =
+//			// projrepo.findByProjectId(task.getProject().getProjectId());
+//			// ClientDetailsEntity client =
+//			// clientRepo.findByClientid(project.getClient().getClientid());
+//			// project.setClient(client);
+//			// task.setProject(project);
+//			TaskDetailsEntity save = this.taskRepo.save(task);
+	//
+//			if (save != null) {
+//				beanResponse.setMsg("successfully saved List of Task Details to One Employee ");
+//				beanResponse.setStatus(true);
+//			} else {
+//				beanResponse.setMsg("failed to save Task details to emp");
+//				beanResponse.setStatus(false);
+//			}
+//			return beanResponse;
+//		}
+	    
 	
 	
 	

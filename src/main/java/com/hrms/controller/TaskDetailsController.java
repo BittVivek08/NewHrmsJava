@@ -66,15 +66,20 @@ public class TaskDetailsController {
 		
 	}
 	
+	@PostMapping("/saveListTaskToEmp/{eid}/{tid}")
+	public EntityBeanResponseCommon saveTaskToEmp(@PathVariable("eid") String empid,@PathVariable("tid") int taskid) {
+		
+		EntityBeanResponseCommon addListOfTaskToEmp = this.service.addListOfTaskToEmployee(empid, taskid);
+		return addListOfTaskToEmp;
+		
+	}
 	
 	
 	
 	//TaskEmployee
-	
 	//OldHrms
-	
 //	@PostMapping("/saveListTaskToEmp")
-//	public EntityBeanResponseCommon saveTaskToEmp(@RequestBody TaskDetailsEntity task) {
+//	public EntityBeanResponseCommon saveTaskToEmp(@PathVariable String empid) {
 //		
 //		EntityBeanResponseCommon addListOfTaskToEmp = this.service.addListOfTaskToEmp(task);
 //		return addListOfTaskToEmp;
@@ -118,24 +123,7 @@ public class TaskDetailsController {
 	 */
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	//@PostMapping("/saveTask")
 	//public EntityBeanResponse saveTaskdetails(@RequestBody TaskDetailsEntity entity) {
@@ -171,4 +159,23 @@ public class TaskDetailsController {
 		//return allTasks;
 
 //	}
+	
+	
+	/////............................OldHrms...................................
+	
+	
+//	@PostMapping("/saveListTaskToEmp")
+//	public EntityBeanResponseCommon saveTaskToEmp(@RequestBody TaskDetailsEntity task) {
+//		
+//		EntityBeanResponseCommon addListOfTaskToEmp = this.service.addListOfTaskToEmp(task);
+//		return addListOfTaskToEmp;
+//		
+//	}
+	
+	
+	
+	
+	
+	
+	
 }
