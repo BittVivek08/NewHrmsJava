@@ -10,6 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "main_leaverequest")
 public class MyLeaveRequestEntity {
@@ -18,8 +21,8 @@ public class MyLeaveRequestEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "user_id")
-	private int userId;
+	
+	private String emp_id;
 
 	@Column(name = "leavetypeid")
 	private Integer leaveTypeId;

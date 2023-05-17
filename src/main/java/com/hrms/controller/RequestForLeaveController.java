@@ -32,13 +32,13 @@ public class RequestForLeaveController {
 	private IRequestForLeaveService reqLeaveService;
 	
 	
-//     	// My Leaves , Employee Leaves		
-//		@GetMapping("/getLeaveDetails")
-//		public Response leaveDetails(@QueryParam(value = "user_id") String user_id,
-//				@QueryParam(value = "leavestatus") String leavestatus, @QueryParam(value = "view") String view) {
-//			logger.info("entered into leaveDetails method of service class...");
-//			return (Response) reqLeaveService.getLeavesDetails(user_id, leavestatus, view);
-//		}
+     	// My Leaves , Employee Leaves		
+		@GetMapping("/getLeaveDetails")
+		public Response leaveDetails(@QueryParam(value = "user_id") String user_id,
+				@QueryParam(value = "leavestatus") String leavestatus, @QueryParam(value = "view") String view) {
+			logger.info("entered into leaveDetails method of service class...");
+			return (Response) reqLeaveService.getLeavesDetails(user_id, leavestatus, view);
+		}
 
 	
 	
