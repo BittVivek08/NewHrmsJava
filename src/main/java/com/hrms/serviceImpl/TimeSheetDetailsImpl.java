@@ -111,7 +111,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 				savetimesheet.setIsActive(0<1);
 				EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
 				ClientDetailsEntity client = this.clientDetailsRepository
-						.findByClientid(savetimesheet.getClient().getId());
+						.findById(savetimesheet.getClient().getId()).get();
 				ProjectDetailsEntity proj = this.pojectDetailsRepository
 						.findByProjectId(savetimesheet.getProj().getProjectId());
 				TaskDetailsEntity task = this.taskDetailsRepository.getById(savetimesheet.getTask().getTaskid());
@@ -145,7 +145,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 						savetimesheet.setStatus("pending");
 						EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
 						ClientDetailsEntity client = this.clientDetailsRepository
-								.findByClientid(savetimesheet.getClient().getId());
+								.findById(savetimesheet.getClient().getId()).get();
 						ProjectDetailsEntity proj = this.pojectDetailsRepository
 								.findByProjectId(savetimesheet.getProj().getProjectId());
 						TaskDetailsEntity task = this.taskDetailsRepository
@@ -199,7 +199,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		int creat = this.saveTimeSheetRepo.findByCretedBy(savetimesheet.getEmp().getEmpId(), id);
 		int modified = this.saveTimeSheetRepo.findmodiBy(savetimesheet.getEmp().getEmpId(), id);
 		ClientDetailsEntity client = this.clientDetailsRepository
-				.findByClientid(savetimesheet.getClient().getId());
+				.findById(savetimesheet.getClient().getId()).get();
 		ProjectDetailsEntity proj = this.pojectDetailsRepository
 				.findByProjectId(savetimesheet.getProj().getProjectId());
 		TaskDetailsEntity task = this.taskDetailsRepository.getById(savetimesheet.getTask().getTaskid());
