@@ -8,9 +8,9 @@ import java.util.List;
 import com.hrms.beans.CurrentWeekDatesResponse;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.entity.SaveTimeSheet;
-import com.hrms.responsebean.DateResponseTimeSheet;
-import com.hrms.responsebean.TimeSheetResponse;
-import com.hrms.responsebean.TimeSheetResponseForMonthYearWeek;
+import com.hrms.response.bean.DateResponseTimeSheet;
+import com.hrms.response.bean.TimeSheetResponse;
+import com.hrms.response.bean.TimeSheetResponseForMonthYearWeek;
 
 public interface TimeSheetDetails {
 //	public void saveTimeSheet(SaveTimesheetRequestBean saveBean);
