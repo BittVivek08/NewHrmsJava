@@ -12,8 +12,8 @@ import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.EntityBeanResponseCommon;
 import com.hrms.beans.ProjectResponseBean;
 import com.hrms.entity.ClientDetailsEntity;
-import com.hrms.entity.Currency;
 import com.hrms.entity.ProjectDetailsEntity;
+import com.hrms.entity.SalaryCurrencyEntity;
 import com.hrms.repository.ClientDetailsRepository;
 import com.hrms.repository.CurrencyRepository;
 import com.hrms.repository.ProjectDetailsRepository;
@@ -46,7 +46,7 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 
 		//ClientDetailsEntity client = clientRepo.findByClientid(projentity.getClient().getClientid());
 		Optional<ClientDetailsEntity> client = this.clientRepo.findById(projentity.getClient().getId());
-		Optional<Currency> currency = this.currencyRepo.findById(projentity.getCurrency().getCurrencyId());
+		Optional<SalaryCurrencyEntity> currency = this.currencyRepo.findById(projentity.getCurrency().getId());
 		
 		if (client != null && currency!=null) {
 			projentity.setCreated_date(LocalDateTime.now());
@@ -65,7 +65,7 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 				beanResponse.setStatus(false);
 			}
 		} else {
-			beanResponse.setMsg("No Clients : and Currency:  details not found  " + projentity.getClient().getId()+projentity.getCurrency().getCurrencyId());
+			beanResponse.setMsg("No Clients : and Currency:  details not found  " + projentity.getClient().getId()+projentity.getCurrency().getId());
 			beanResponse.setStatus(false);
 		}
 		return beanResponse;
@@ -134,7 +134,7 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			res.setClientid(proj.getClient().getId());
 			res.setDescription(proj.getDescription());
 			//res.setCurrencyName(proj.getCurrencyname());
-			res.setCurrencyid(proj.getCurrency().getCurrencyId());
+			res.setCurrencyid(proj.getCurrency().getId());
 			//res.setEndDate(proj.getEnddate());
 			res.setEndDate(proj.getEnddate());
 			res.setEstimatedhours(proj.getEstimatedhours());
