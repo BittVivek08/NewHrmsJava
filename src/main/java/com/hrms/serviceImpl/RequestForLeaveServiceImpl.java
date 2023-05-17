@@ -13,14 +13,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.hrms.entity.EmployeeDetails;
-
+import com.hrms.entity.LeaveRequestEntity;
 import com.hrms.entity.RequestForLeave;
 import com.hrms.service.IRequestForLeaveService;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.HolidayCalenderRepository;
 import com.hrms.repository.ILeaveDetailsRepository;
 import com.hrms.repository.IRequestForLeaveRepository;
-
+import com.hrms.repository.LeaveRequestRepository;
+import com.hrms.request.bean.LeavesResponseBean;
 import com.hrms.request.bean.RequestForLeaveBinding;
 import com.hrms.response.bean.EntityResponse;
 
@@ -53,8 +54,8 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	@Autowired
 	private EntityResponse response;
 	
-//	@Autowired
-//	private LeaveRequestEntityRepo leaveRequestEntiryRepo;
+	@Autowired
+	private LeaveRequestRepository leaveRequestRepo;
 
 	@Override
 	public EntityResponse saveRequestForLeave(RequestForLeaveBinding details) {
@@ -159,72 +160,72 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	}
 
 	
-//	// Leaves Details List
-//	@Override
-//	public List<LeaveRequestEntity> getLeavesDetails(String user_id, String leavestatus, String view) {
-//		
-//		
-//		logger.info("entered into getLeavesDetails of businessClass");
-//		
-//		
-//		
-//		List<LeaveRequestEntity>listOfLeaves=new ArrayList<>();
-//		
-//		int countAll = 0, countPending = 0, countApproved = 0, countRejected = 0, countCancel = 0;
-//		if (leavestatus.equalsIgnoreCase("pendingforapproval")) {
-//			leavestatus = "pending for approval";
-//		}
-//		
-//		if (view.equalsIgnoreCase("Employee")) {
-//			
-//			listOfLeaves.addAll(leaveRequestEntiryRepo.findByEmp_id(user_id));
-//			
-//		} else if (view.equalsIgnoreCase("superAdmin")) {
-//			listOfLeaves.addAll(leaveRequestEntiryRepo.listOfLeavesByLeavestatus(leavestatus));
-//			
-//		} else {
-//					
-//			listOfLeaves.addAll(leaveRequestEntiryRepo.listOfLeavesByUid(user_id, leavestatus));
-//		} 
-//		LeavesResponseBean response = new LeavesResponseBean();	
-//		
-//		if (!listOfLeaves.isEmpty()) {
-//			response.setMessage("Retrival of Leave Details Successfull.");
-//			response.setStatus(true);
-//
-//			if (user_id != null && "Employee".equalsIgnoreCase(view)) {
-//				for (LeaveRequestEntity leave : listOfLeaves) {
-//					countAll++;
-//					if ("Pending for approval".equalsIgnoreCase(leave.getLeaveStatus()))
-//						countPending++;
-//					else if ("Approved".equalsIgnoreCase(leave.getLeaveStatus()))
-//						countApproved++;
-//					else if ("Rejected".equalsIgnoreCase(leave.getLeaveStatus()))
-//						countRejected++;
-//					else if ("Cancel".equalsIgnoreCase(leave.getLeaveStatus()))
-//						countCancel++;
-//					else
-//						logger.info("Nothing to count.");
-//
-//				}
-//				response.setCountAll(countAll);
-//				response.setCountPending(countPending);
-//				response.setCountApproved(countApproved);
-//				response.setCountRejected(countRejected);
-//				response.setCountCancel(countCancel);
-//			}
-//
-//			response.setListOfLeaves(listOfLeaves);
-//		} else {
-//			response.setMessage("No Leave Details are available.");
-//			response.setStatus(false);
-//			response.setListOfLeaves(listOfLeaves);
-//		}	
-//		
-//		
-//	//	return (List<LeaveRequestEntity>) Response.status(Response.Status.OK).entity(response).build();
-//	//	return (List<LeaveRequestEntity>) response;
-//		return null;
-//				
-//	}
+	// Leaves Details List
+	@Override
+	public List<LeaveRequestEntity> getLeavesDetails(String user_id, String leavestatus, String view) {
+		
+		
+		logger.info("entered into getLeavesDetails of businessClass");
+		
+		
+		
+		List<LeaveRequestEntity>listOfLeaves=new ArrayList<>();
+		
+		int countAll = 0, countPending = 0, countApproved = 0, countRejected = 0, countCancel = 0;
+		if (leavestatus.equalsIgnoreCase("pendingforapproval")) {
+			leavestatus = "pending for approval";
+		}
+		
+		if (view.equalsIgnoreCase("Employee")) {
+			
+			listOfLeaves.addAll(leaveRequestRepo.findByEmp_id(user_id));
+			
+		} else if (view.equalsIgnoreCase("superAdmin")) {
+			listOfLeaves.addAll(leaveRequestRepo.listOfLeavesByLeavestatus(leavestatus));
+			
+		} else {
+					
+			listOfLeaves.addAll(leaveRequestRepo.listOfLeavesByUid(user_id, leavestatus));
+		} 
+		LeavesResponseBean response = new LeavesResponseBean();	
+		
+		if (!listOfLeaves.isEmpty()) {
+			response.setMessage("Retrival of Leave Details Successfull.");
+			response.setStatus(true);
+
+			if (user_id != null && "Employee".equalsIgnoreCase(view)) {
+				for (LeaveRequestEntity leave : listOfLeaves) {
+					countAll++;
+					if ("Pending for approval".equalsIgnoreCase(leave.getLeaveStatus()))
+						countPending++;
+					else if ("Approved".equalsIgnoreCase(leave.getLeaveStatus()))
+						countApproved++;
+					else if ("Rejected".equalsIgnoreCase(leave.getLeaveStatus()))
+						countRejected++;
+					else if ("Cancel".equalsIgnoreCase(leave.getLeaveStatus()))
+						countCancel++;
+					else
+						logger.info("Nothing to count.");
+
+				}
+				response.setCountAll(countAll);
+				response.setCountPending(countPending);
+				response.setCountApproved(countApproved);
+				response.setCountRejected(countRejected);
+				response.setCountCancel(countCancel);
+			}
+
+			response.setListOfLeaves(listOfLeaves);
+		} else {
+			response.setMessage("No Leave Details are available.");
+			response.setStatus(false);
+			response.setListOfLeaves(listOfLeaves);
+		}	
+		
+		
+	//	return (List<LeaveRequestEntity>) Response.status(Response.Status.OK).entity(response).build();
+	//	return (List<LeaveRequestEntity>) response;
+		return null;
+				
+	}
 }
