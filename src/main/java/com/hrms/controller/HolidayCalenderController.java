@@ -42,7 +42,6 @@ public class HolidayCalenderController {
 		return saveHoliday;
 
 	}
-	 
 	
     //GetAllHolidays
 	@GetMapping("/GetHolidays")
@@ -67,8 +66,8 @@ public class HolidayCalenderController {
 		
 		log.info("Entered Update Holiday method in controller");
 		log.info("updateHoliday.getDate()"+entity.getDate());
-		log.info("updateHoliday.getHolidayDescription()"+entity.getHolidayDescription());
-		log.info("updateHoliday.getHolidayName()"+entity.getHolidayName());
+		log.info("updateHoliday.getHolidayDescription()"+entity.getHolidaydescription());
+		log.info("updateHoliday.getHolidayName()"+entity.getHolidayname());
 
 		HolidayCalenderEntity updateHoliday = this.service.updateHoliday(id, entity);
 		
@@ -159,6 +158,18 @@ public class HolidayCalenderController {
 		return getalllocaldates;
 		
 	}
+	
+	
+	//updateThroughBean
+	@PutMapping("updateholidayById/{id}")
+	public EntityBeanResponseCommon update(@PathVariable("id") int id,@RequestBody HolidayCalenderEntity entity) {
+		
+		EntityBeanResponseCommon updateHoliday = this.service.updateHolidayById(id, entity);
+		
+		return updateHoliday;
+		
+	}
+	
 	
 	
 	

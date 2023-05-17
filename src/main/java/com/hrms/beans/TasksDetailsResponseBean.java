@@ -1,6 +1,7 @@
 package com.hrms.beans;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
@@ -17,9 +18,9 @@ public class TasksDetailsResponseBean {
 	
 	private int is_active;
 	
-	private Date createddate;
+	private LocalDateTime createddate;
 	
-	private Date modifiedDate;
+	private LocalDateTime modifiedDate;
 	
 	private int projectId;
 	

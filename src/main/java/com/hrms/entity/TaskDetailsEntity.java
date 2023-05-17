@@ -2,6 +2,7 @@ package com.hrms.entity;
 
 //my changes
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import javax.persistence.CascadeType;
@@ -21,34 +22,47 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "task_details")
+@Table(name = "tm_tasks")
 public class TaskDetailsEntity  {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int taskid;
-
+    
+	@Column(name = "task")
 	private String tasknmae;
+	
+	@Column(name = "is_default")
+	private Boolean is_default;
+	
+	@Column(name = "created_by", updatable = false)
+	private int created_by;
+	
+	@Column(name = "modified_by")
+	private int modified_by;
 
 	private int is_active;
 
-	@Column(name = "created_date")
-	private Date createddate;
+	@Column(name = "created")
+	private LocalDateTime createddate;
 
-	@Column(name = "modified_date")
-	private Date modifieddate;
+	@Column(name = "modified")
+	private LocalDateTime modifieddate;
 	
 	//@ManyToOne(cascade = CascadeType.PERSIST)
 	//@ManyToOne(cascade = CascadeType.ALL)
 	//@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	
+	//oldHrms
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "project_id", referencedColumnName = "projectid")
+	@JoinColumn(name = "project_id", referencedColumnName = "id")
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	private ProjectDetailsEntity project;
+	private ProjectDetailsEntity project; 
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "emp_id",referencedColumnName = "emp_id")
-	private EmployeeDetails emp;
+//	@ManyToOne(fetch=FetchType.LAZY)
+//	@JoinColumn(name = "emp_id",referencedColumnName = "emp_id")
+//	private EmployeeDetails emp;
 
 	
 

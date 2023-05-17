@@ -24,6 +24,7 @@ public class ProjectDetailsController {
 	@Autowired
 	private ProjectDetailsService service;
 	
+	 //oldHrms
 	//saveProject
 	@PostMapping("/saveProjectDetails")
 	public EntityBeanResponseCommon saveProjectDetails(@RequestBody ProjectDetailsEntity entity) {
@@ -34,6 +35,7 @@ public class ProjectDetailsController {
 		
 	}
 	
+	 //oldHrms
 	//getProjectDeatilsByClientId
 	@GetMapping("/getProjectsByClientId/{id}")
 	public List<ProjectResponseBean> getProjectsBYClientId(@PathVariable("id")  int id){
@@ -43,10 +45,10 @@ public class ProjectDetailsController {
 		return projectListByClienyId;
 		
 	}
+	
 	 
-	
+	 //oldHrms
 	//updateProjectDetailsByProjectId
-	
 	@PutMapping("/updateProjectById/{id}")
 	public EntityBeanResponseCommon updateProject(@PathVariable("id") int id,@RequestBody ProjectDetailsEntity entity) {
 		

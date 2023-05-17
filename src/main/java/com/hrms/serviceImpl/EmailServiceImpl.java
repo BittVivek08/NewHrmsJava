@@ -1,6 +1,8 @@
 package com.hrms.serviceImpl;
 
 import java.io.File;
+
+//import java.io.File;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,7 @@ public class EmailServiceImpl {
 		}
 	}
 
+	
 	// To send an email with attachment
 	public String sendMailWithAttachment(EmailDetails details) {
 

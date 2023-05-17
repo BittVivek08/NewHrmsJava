@@ -1,5 +1,6 @@
 package com.hrms.serviceImpl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,34 +12,49 @@ import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.EntityBeanResponseCommon;
 import com.hrms.beans.ProjectResponseBean;
 import com.hrms.entity.ClientDetailsEntity;
+import com.hrms.entity.Currency;
 import com.hrms.entity.ProjectDetailsEntity;
 import com.hrms.repository.ClientDetailsRepository;
+import com.hrms.repository.CurrencyRepository;
 import com.hrms.repository.ProjectDetailsRepository;
 import com.hrms.service.ProjectDetailsService;
 
 @Service
 public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 
+	// //oldHrms
 	@Autowired
 	private ProjectDetailsRepository projectRepo;
+	
+	@Autowired
+	private CurrencyRepository currencyRepo;
 
 	@Autowired
 	private EntityBeanResponseCommon beanResponse;
 
 	@Autowired
 	private ClientDetailsRepository clientRepo;
+	
 
-	/*
-	 * @Autowired private ProjectRespoonseBean projectbean;
-	 */
+	//@Autowired
+	//private ProjectRespoonseBean projectbean;
 
 	// save
+	// oldhrms
 	@Override
 	public EntityBeanResponseCommon saveProjectDetails(ProjectDetailsEntity projentity) {
 
-		ClientDetailsEntity client = clientRepo.findByClientid(projentity.getClient().getClientid());
-		if (client != null) {
-			projentity.setClient(client);
+		//ClientDetailsEntity client = clientRepo.findByClientid(projentity.getClient().getClientid());
+		Optional<ClientDetailsEntity> client = this.clientRepo.findById(projentity.getClient().getId());
+		Optional<Currency> currency = this.currencyRepo.findById(projentity.getCurrency().getCurrencyId());
+		
+		if (client != null && currency!=null) {
+			projentity.setCreated_date(LocalDateTime.now());
+			projentity.setModifiedDate(LocalDateTime.now());
+			
+			projentity.setClient(client.orElseThrow());
+			projentity.setCurrency(currency.orElseThrow());
+			
 			ProjectDetailsEntity save = this.projectRepo.save(projentity);
 
 			if (save != null) {
@@ -49,31 +65,34 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 				beanResponse.setStatus(false);
 			}
 		} else {
-			beanResponse.setMsg("No Clients found with clientId " + projentity.getClient().getClientid());
+			beanResponse.setMsg("No Clients : and Currency:  details not found  " + projentity.getClient().getId()+projentity.getCurrency().getCurrencyId());
 			beanResponse.setStatus(false);
 		}
 		return beanResponse;
 	}
 
+	// oldHrms
 	// FindProjectDetailsByClienId
-	@Override
-	public List<ProjectDetailsEntity> getProjectListByClienyId(int cid) {
-		List<ProjectDetailsEntity> listProjects = this.projectRepo.findByClient(cid);
-		return listProjects;
-	}
+//	@Override
+//	public List<ProjectDetailsEntity> getProjectListByClienyId(int cid) {
+//		List<ProjectDetailsEntity> listProjects = this.projectRepo.findByClient(cid);
+//		return listProjects;
+//	}
 
-	@Override
+	// oldhrms
+	// @Override
 	public EntityBeanResponseCommon updateProjectDetails(int pid, ProjectDetailsEntity entity) {
 
 		Optional<ProjectDetailsEntity> updateEntity = this.projectRepo.findById(pid);
 		ProjectDetailsEntity entityDB = updateEntity.get();
-		ClientDetailsEntity client = clientRepo.findByClientid(entity.getClient().getClientid());
+		//ClientDetailsEntity client = clientRepo.findByClientid(entity.getClient().getClientid());
 
 		if (entityDB != null) {
-			entityDB.setCurrencyname(entity.getCurrencyname());
-			entityDB.setProjectId(entity.getProjectId());
-			entityDB.setClient(client);
-			entityDB.setDescription(entity.getCurrencyname());
+			//entityDB.setCurrencyname(entity.getCurrencyname());
+			//entityDB.setCurrency(entity.getCurrency().getCurrencyId());
+			//entityDB.setProjectId(entity.getProjectId());
+			//entityDB.setClient(client);
+			entityDB.setDescription(entity.getDescription());
 			entityDB.setEnddate(entity.getEnddate());
 			entityDB.setStartdate(entity.getStartdate());
 			entityDB.setEstimatedhours(entity.getEstimatedhours());
@@ -81,11 +100,12 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			entityDB.setLeadapprove(entity.getLeadapprove());
 			entityDB.setProjectName(entity.getProjectName());
 			entityDB.setProjectstatus(entity.getProjectstatus());
-			entityDB.setProjecttype(entity.getProjecttype());
+			//entityDB.setProjecttype(entity.getProjecttype());
+			entityDB.setProject_type(entity.getProject_type());
 
 			this.projectRepo.save(entityDB);
 
-			beanResponse.setMsg("Successfully Updated Project Details of Project Id :" + entity.getProjectId());
+			beanResponse.setMsg("Successfully Updated Project Details of Project Id :" + pid);
 			beanResponse.setStatus(true);
 		} else {
 			beanResponse.setMsg("ProjectDetails Not Updated");
@@ -95,25 +115,35 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 		return beanResponse;
 	}
 
+	// oldhrms
 	// specificFiledsOfprojectsByProjectId
 	@Override
 	public List<ProjectResponseBean> getAllProjects(int id) {
-		ClientDetailsEntity clientInfo = clientRepo.findByClientid(id);
+		//ClientDetailsEntity clientInfo = clientRepo.findByClientid(id);
+		Optional<ClientDetailsEntity> clientInfo = this.clientRepo.findById(id);
+		
+		
 		ProjectResponseBean res;
 		List<ProjectResponseBean> list = new ArrayList<ProjectResponseBean>();
-		List<ProjectDetailsEntity> projectList = this.projectRepo.findByClient(clientInfo.getClientid() );
+		//List<ProjectDetailsEntity> projectList = this.projectRepo.findByClient(clientInfo.getClientid() );
+		List<ProjectDetailsEntity> projectList= this.projectRepo.findByClient(clientInfo.get().getId());
 		for (ProjectDetailsEntity proj : projectList) {
 			res = new ProjectResponseBean();
 			res.setProjectId(proj.getProjectId());
-			res.setClientid(proj.getClient().getClientid());
+			//res.setClientid(proj.getClient().getClientid());
+			res.setClientid(proj.getClient().getId());
 			res.setDescription(proj.getDescription());
-			res.setCurrencyName(proj.getCurrencyname());
+			//res.setCurrencyName(proj.getCurrencyname());
+			res.setCurrencyid(proj.getCurrency().getCurrencyId());
+			//res.setEndDate(proj.getEnddate());
 			res.setEndDate(proj.getEnddate());
 			res.setEstimatedhours(proj.getEstimatedhours());
 			res.setIs_active(proj.getIsactive());
 			res.setLeadAppove(proj.getLeadapprove());
 			res.setProjectName(proj.getProjectName());
-			res.setProjectType(proj.getProjecttype());
+			//res.setProjectType(proj.getProjecttype());
+			res.setProjectType(proj.getProject_type());
+			//res.setStartDate(proj.getStartdate());
 			res.setStartDate(proj.getStartdate());
 			res.setStatus(proj.getProjectstatus());
 		
@@ -191,5 +221,46 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 //
 //		return projectList;
 //	}
+	
+	
+//...................................OldHrms............................................................	
+	
+	// save
+		// oldhrms
+//		@Override
+//		public EntityBeanResponseCommon saveProjectDetails(ProjectDetailsEntity projentity) {
+//
+//			ClientDetailsEntity client = clientRepo.findByClientid(projentity.getClient().getClientid());
+//			if (client != null) {
+//				projentity.setClient(client);
+//				ProjectDetailsEntity save = this.projectRepo.save(projentity);
+//
+//				if (save != null) {
+//					beanResponse.setMsg("Successfully Project Details Saved");
+//					beanResponse.setStatus(true);
+//				} else {
+//					beanResponse.setMsg("ProjectDeatails not saved");
+//					beanResponse.setStatus(false);
+//				}
+//			} else {
+//				beanResponse.setMsg("No Clients found with clientId " + projentity.getClient().getClientid());
+//				beanResponse.setStatus(false);
+//			}
+//			return beanResponse;
+//		}
+//	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

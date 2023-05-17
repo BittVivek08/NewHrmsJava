@@ -9,16 +9,18 @@ import com.hrms.entity.ProjectDetailsEntity;
 
 public interface ProjectDetailsService {
 	
+	 //oldHrms
 	public EntityBeanResponseCommon saveProjectDetails(ProjectDetailsEntity porjentity);
 	
     // public ProjectRespoonseBean getListOfProjectDetailsByid(int client);
 	
-	public List<ProjectDetailsEntity> getProjectListByClienyId(int cid);
+	 //oldHrms
+	//public List<ProjectDetailsEntity> getProjectListByClienyId(int cid);
 	
-	
+	 //oldHrms
 	public EntityBeanResponseCommon updateProjectDetails(int pid,ProjectDetailsEntity entity);
 	
-	
+	 //oldHrms
 	public List<ProjectResponseBean> getAllProjects(int id);
 	
 	

@@ -12,16 +12,19 @@ import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.TaskDetailsEntity;
 
 public interface TaskDetailsService {
-	
+	//OldHrms
 	public EntityBeanResponseCommon saveTaskDeatils(TaskDetailsEntity entity);
 	
+	//OldHrms
 	public List<TasksDetailsResponseBean> getTaskByProjectId(int id);
 	
 	//duplicate
 	//public List<TaskDetailsEntity> getTaskByProjectId(int id);
 	
+	//OldHrms
 	public EntityBeanResponseCommon deleteTaskById(int id);
-	
+
+	//OldHrms
 	public EntityBeanResponseCommon updateTaskByTaskId(int id, TaskDetailsEntity entity);
 	
 	
@@ -32,12 +35,14 @@ public interface TaskDetailsService {
 	
 	
 	//EmployeAndTaskRelationOperations
+//OldHrms	
+ // public EntityBeanResponseCommon addListOfTaskToEmp(TaskDetailsEntity emp);
 	
-  public EntityBeanResponseCommon addListOfTaskToEmp(TaskDetailsEntity emp);
+	//OldHrms	
+  //public List<TaskDetailsEntity> getListTasksByEmpid(String id);
 	
-  public List<TaskDetailsEntity> getListTasksByEmpid(String id);
-	
-  public List<EmployeeTaskDetailsBean> getEmpListOfTasksByEmpId(String eid);
+	//OldHrms
+  //public List<EmployeeTaskDetailsBean> getEmpListOfTasksByEmpId(String eid);
 	
 	
 	
