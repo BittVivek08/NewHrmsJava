@@ -41,7 +41,6 @@ public interface TaskDetailsService {
 	
 //newHrms
 	
-	public EntityBeanResponseCommon addListOfTaskToEmployee(String eid,int taskid);
 	
 	//OldHrms	
   //public List<TaskDetailsEntity> getListTasksByEmpid(String id);

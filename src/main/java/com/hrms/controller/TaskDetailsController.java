@@ -66,13 +66,7 @@ public class TaskDetailsController {
 		
 	}
 	
-	@PostMapping("/saveListTaskToEmp/{eid}/{tid}")
-	public EntityBeanResponseCommon saveTaskToEmp(@PathVariable("eid") String empid,@PathVariable("tid") int taskid) {
-		
-		EntityBeanResponseCommon addListOfTaskToEmp = this.service.addListOfTaskToEmployee(empid, taskid);
-		return addListOfTaskToEmp;
-		
-	}
+	
 	
 	
 	
