@@ -1,6 +1,8 @@
 package com.hrms.serviceImpl;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +27,22 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 	@Autowired
 	private ClientsResponseBean clientBean;
 
+//	@Override
+//	public EntityBeanResponseCommon saveClientDetails(ClientDetailsEntity entity) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
+	 //oldHrms
 	// saveClient
 	@Override
 	public EntityBeanResponseCommon saveClientDetails(ClientDetailsEntity entity) {
-
+		
+		entity.setCreatedBy(0);
+		entity.setCreatedDate(LocalDateTime.now());
+		entity.setIs_active((byte) 1);
+		entity.setModifiedBy(1);
+		entity.setModifiedDate(LocalDateTime.now());
 		ClientDetailsEntity clientDeatils = this.clientRepo.save(entity);
 
 		if (clientDeatils != null) {
@@ -46,10 +60,10 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 	}
 	
 	
-	
-    	
-    //getAllClients
-	@Override
+	 //oldHrms	
+//    	
+//    //getAllClients
+//	@Override
 	public ClientsResponseBean getAllClients() {
 
 		List<ClientDetailsEntity> findAll = this.clientRepo.findAll();
@@ -68,70 +82,100 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 	}
 
 
-
+// //oldHrms
 	
-	 //GetSingleClientByClientID
-	@Override
+//	 //GetSingleClientByClientID
+//	@Override
 	public ClientDetailsEntity getClientByClientId(int clientId) {
-		ClientDetailsEntity findByClientid = this.clientRepo.findByClientid(clientId);
+		//ClientDetailsEntity findByClientid = this.clientRepo.findByClientid(clientId);
+		Optional<ClientDetailsEntity> client = this.clientRepo.findById(clientId);
 		
-		return findByClientid;
+		return client.orElseThrow();
 	}
 
 
-
+     //oldHrms
 	//update
-	@Override
-	public EntityBeanResponseCommon updateClientDetails(ClientDetailsEntity entity) {
-		ClientDetailsEntity save = this.clientRepo.save(entity);
-		
-		if(save!=null) {
-			bean.setMsg("successfully Updated id of client:"+save.getClientid());
-			bean.setStatus(true);
-			
-
-		}else {
-			bean.setMsg("Not updated");
-			bean.setStatus(true);
-		}
-		
-		
-		return bean;
-	}
-
-
+//	@Override
+//	public EntityBeanResponseCommon updateClientDetails(ClientDetailsEntity entity) {
+//		ClientDetailsEntity save = this.clientRepo.save(entity);
+//		if(save!=null) {
+//			
+//			bean.setMsg("successfully Updated id of client:"+save.getId());
+//			bean.setStatus(true);
+//			
+//
+//		}else {
+//			bean.setMsg("Not updated");
+//			bean.setStatus(false);
+//		}
+//		
+//		
+//		return bean;
+//	}
 
 
-	@Override
+
+	 //oldHrms
+//	@Override
 	public EntityBeanResponseCommon deletedClient(int id) {
-		ClientDetailsEntity findByClientid = this.clientRepo.findByClientid(id);
+		//ClientDetailsEntity findByClientid = this.clientRepo.findByClientid(id);
 		
-		this.clientRepo.delete(findByClientid);
-		bean.setMsg("successfully cilent deleted");
+		Optional<ClientDetailsEntity> client = this.clientRepo.findById(id);
+		
+		this.clientRepo.delete(client.orElseThrow());
+		bean.setMsg("successfully deleted client  id : "+id);
 		bean.setStatus(true);
 		return bean;
 	}
 
-
-
-  //updateByID
-	@Override
+// //oldHrms
+//
+//  //updateByID
+//	@Override
 	public ClientDetailsEntity updateClientById(int cliId, ClientDetailsEntity entity) {
 		
-		ClientDetailsEntity Client = this.clientRepo.findByClientid(cliId);
-		Client.setAddress(entity.getAddress());
-		Client.setClientname(entity.getClientname());
-		Client.setCountryname(entity.getCountryname());
-		Client.setEmail(entity.getEmail());
-		Client.setPhonenum(entity.getPhonenum());
-		Client.setStatename(entity.getStatename());
-		Client.setIs_active(entity.getIs_active());
-		Client.setId(entity.getId());
+		//ClientDetailsEntity Client = this.clientRepo.findByClientid(cliId);
+		Optional<ClientDetailsEntity> client = this.clientRepo.findById(cliId);
 		
-		ClientDetailsEntity save = this.clientRepo.save(Client);
+		if(!client.isEmpty()) {
+			
+			client.orElseThrow().setClientName(entity.getClientName());
+			client.orElseThrow().setAddress(entity.getAddress());
+			client.orElseThrow().setCountryId(entity.getCountryId());
+			client.orElseThrow().setCreatedBy(1);
+			client.orElseThrow().setCreatedDate(LocalDateTime.now());
+			client.orElseThrow().setEmail(entity.getEmail());
+			client.orElseThrow().setFax(entity.getFax());
+            client.orElseThrow().setIs_active((byte) 1);
+            client.orElseThrow().setModifiedBy(1);
+            client.orElseThrow().setModifiedDate(LocalDateTime.now());
+            client.orElseThrow().setPhoneNo(entity.getPhoneNo());
+            client.orElseThrow().setPoc(entity.getPoc());
+            client.orElseThrow().setStateId(entity.getStateId());
+            
+           // ClientDetailsEntity save = this.clientRepo.save(client.orElseThrow());
+            
 		
-		return save;
+		
+		//Client.setAddress(entity.getAddress());
+		//Client.setClientname(entity.getClientname());
+		//Client.setCountryname(entity.getCountryname());
+		//Client.setEmail(entity.getEmail());
+		//Client.setPhonenum(entity.getPhonenum());
+		//Client.setStatename(entity.getStatename());
+		//Client.setIs_active(entity.getIs_active());
+		//Client.setId(entity.getId());
+		
+		//ClientDetailsEntity save = this.clientRepo.save(Client);
+		
+		}
+		
+		return clientRepo.save(client.orElseThrow());
 	}
+
+
+	
 
 
 
@@ -230,6 +274,48 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 		
 		//return findById.orElseThrow();
 	//}
+	
+	
+	
+	//........................................Old-code......................................
+	
+	 //oldHrms
+		// saveClient
+//		@Override
+//		public EntityBeanResponseCommon saveClientDetails(ClientDetailsEntity entity) {
+	//
+//			ClientDetailsEntity clientDeatils = this.clientRepo.save(entity);
+	//
+//			if (clientDeatils != null) {
+	//
+//				bean.setMsg("Successfully Client  Details Saved");
+//				bean.setStatus(true);
+	//
+//			} else {
+	//
+//				bean.setMsg("Client Details not saved");
+//				bean.setStatus(false);
+//			}
+	//
+//			return bean;
+//		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 }

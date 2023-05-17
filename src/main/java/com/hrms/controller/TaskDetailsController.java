@@ -28,16 +28,17 @@ public class TaskDetailsController {
 	@Autowired
 	private TaskDetailsService service;
 
+	//OldHrms
 	@PostMapping("/savetask")
 	public EntityBeanResponseCommon saveTask(@RequestBody TaskDetailsEntity entity) {
 		
 		EntityBeanResponseCommon saveTaskDeatils = this.service.saveTaskDeatils(entity);
 		
 		return saveTaskDeatils;
-		
-		
 	}
 	
+	
+	//OldHrms
 	@GetMapping("/gettasks/{id}")
 	public List<TasksDetailsResponseBean> getAllTasks(@PathVariable("id") int id){
 		
@@ -45,14 +46,16 @@ public class TaskDetailsController {
 		return taskByProjectId;	
 	}
 	
+	
+	//OldHrms
 	@DeleteMapping("/deletetaskById/{id}")
 	public EntityBeanResponseCommon deleteTaskById(@PathVariable("id") int id) {
 		
 		EntityBeanResponseCommon deleteTaskById = this.service.deleteTaskById(id);
-		return deleteTaskById;
-		
+		return deleteTaskById;	
 	}
 	
+	//OldHrms
 	@PutMapping("/updateTask/{id}")
 	public EntityBeanResponseCommon updateTaskById(@PathVariable("id") int id,@RequestBody TaskDetailsEntity entity) {
 		
@@ -68,33 +71,36 @@ public class TaskDetailsController {
 	
 	//TaskEmployee
 	
+	//OldHrms
 	
-	@PostMapping("/saveListTaskToEmp")
-	public EntityBeanResponseCommon saveTaskToEmp(@RequestBody TaskDetailsEntity task) {
-		
-		EntityBeanResponseCommon addListOfTaskToEmp = this.service.addListOfTaskToEmp(task);
-		return addListOfTaskToEmp;
-		
-	}
-	
-	
-	@GetMapping("getListTaskSOfEmp/{sid}")
-	public List<TaskDetailsEntity> listOfTasksOfEmp(@PathVariable("sid") String id){
-		List<TaskDetailsEntity> listTasksByEmpid = this.service.getListTasksByEmpid(id);
-		return listTasksByEmpid;
-		
-	}
+//	@PostMapping("/saveListTaskToEmp")
+//	public EntityBeanResponseCommon saveTaskToEmp(@RequestBody TaskDetailsEntity task) {
+//		
+//		EntityBeanResponseCommon addListOfTaskToEmp = this.service.addListOfTaskToEmp(task);
+//		return addListOfTaskToEmp;
+//		
+//	}
 	
 	
-	@GetMapping("getTaskOfEmpByEmpId/{empid}")
-	public List<EmployeeTaskDetailsBean> getListOfTaskOfEmpByEmpid(@PathVariable("empid") String eid){
-		
-		List<EmployeeTaskDetailsBean> empListOfTasksByEmpId = this.service.getEmpListOfTasksByEmpId(eid);
-		
-		
-		return empListOfTasksByEmpId;
-		
-	}
+	//OldHrms
+//	@GetMapping("getListTaskSOfEmp/{sid}")
+//	public List<TaskDetailsEntity> listOfTasksOfEmp(@PathVariable("sid") String id){
+//		List<TaskDetailsEntity> listTasksByEmpid = this.service.getListTasksByEmpid(id);
+//		return listTasksByEmpid;
+//		
+//	}
+	
+	
+	//OldHrms
+//	@GetMapping("getTaskOfEmpByEmpId/{empid}")
+//	public List<EmployeeTaskDetailsBean> getListOfTaskOfEmpByEmpid(@PathVariable("empid") String eid){
+//		
+//		List<EmployeeTaskDetailsBean> empListOfTasksByEmpId = this.service.getEmpListOfTasksByEmpId(eid);
+//		
+//		
+//		return empListOfTasksByEmpId;
+//		
+//	}
 	
 	
 	

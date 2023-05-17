@@ -1,7 +1,8 @@
 package com.hrms.entity;
 
-
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,58 +12,81 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "tm_projects")
 public class ProjectDetailsEntity {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "projectid")
+	@Column(name = "id")
 	private int projectId;
 
-	@Column(name = "project_name")
+	@Column(name = "project_Name")
 	private String projectName;
-	
-	@Column(name="Project_status")
+
+	@Column(name = "project_status")
 	private String projectstatus;
-	
-	@Column(name="project_description")
+
+	@Column(name = "description")
 	private String description;
-	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name="client_id", referencedColumnName = "client_id")
+
+	@Column(name = "base_project")
+	private int baseProject;
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinColumn(name = "client_id", referencedColumnName = "id")
 	private ClientDetailsEntity client;
-	
-	@Column(name="currency_name")
-	private String currencyname;
-	
-	private String projecttype;
-	
-	@Column(name="lead_approve_status")
+
+	@ManyToOne
+	@JoinColumn(name = "currency_id", referencedColumnName = "id")
+	private Currency currency;
+
+	private String project_type;
+
+	@Column(name = "lead_approve_ts")
 	private Boolean leadapprove;
-	
-	@Column(name="estimated_hours")
+
+	@Column(name = "estimated_hrs")
 	private int estimatedhours;
-	
-	@Column(name="start_date")
-	private Date startdate;
-	
-	@Column(name="end_date")
-	private Date enddate;
-	
-	@Column(name="is_active")
+
+	@Column(name = "start_date")
+	private LocalDate startdate;
+
+	@Column(name = "end_date")
+	private LocalDate enddate;
+
+	@Column(name = "is_active")
 	private Boolean isactive;
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	@Column(name = "created_by")
+	private int created_by;
+
+	@Column(name = "modified_by")
+	private int modified_by;
+
+	@Column(name = "created")
+	private LocalDateTime created_date;
+
+	@Column(name = "modified")
+	private LocalDateTime modifiedDate;
+
+	@JsonIgnore
+	@Column(name = "initiated_date")
+	private LocalDateTime initiated_date;
+
+	@JsonIgnore
+	@Column(name = "hold_date")
+	private LocalDateTime hold_date;
+
+	@JsonIgnore
+	@Column(name = "completed_date")
+	private LocalDateTime completed_date;
 
 }

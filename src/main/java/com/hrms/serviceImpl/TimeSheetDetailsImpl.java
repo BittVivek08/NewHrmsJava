@@ -108,7 +108,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 				savetimesheet.setIsActive(0<1);
 				EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
 				ClientDetailsEntity client = this.clientDetailsRepository
-						.findByClientid(savetimesheet.getClient().getClientid());
+						.findByClientid(savetimesheet.getClient().getId());
 				ProjectDetailsEntity proj = this.pojectDetailsRepository
 						.findByProjectId(savetimesheet.getProj().getProjectId());
 				TaskDetailsEntity task = this.taskDetailsRepository.getById(savetimesheet.getTask().getTaskid());
@@ -142,7 +142,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 						savetimesheet.setStatus("pending");
 						EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
 						ClientDetailsEntity client = this.clientDetailsRepository
-								.findByClientid(savetimesheet.getClient().getClientid());
+								.findByClientid(savetimesheet.getClient().getId());
 						ProjectDetailsEntity proj = this.pojectDetailsRepository
 								.findByProjectId(savetimesheet.getProj().getProjectId());
 						TaskDetailsEntity task = this.taskDetailsRepository
@@ -187,16 +187,16 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	{
 		log.info("entered into updateTimeSheet  method of HrmsEmpTimeSheetService class");
 		int cal = Integer.parseInt(savetimesheet.getFri_hours()) + Integer.parseInt(savetimesheet.getMon_hours())
-				+ Integer.parseInt(savetimesheet.getSat_hours()) + Integer.parseInt(savetimesheet.getThurs_hours())
-				+ Integer.parseInt(savetimesheet.getSun_hours()) + Integer.parseInt(savetimesheet.getTue_hours())
-				+ Integer.parseInt(savetimesheet.getWed_hours());
+		+ Integer.parseInt(savetimesheet.getSat_hours()) + Integer.parseInt(savetimesheet.getThurs_hours())
+		+ Integer.parseInt(savetimesheet.getSun_hours()) + Integer.parseInt(savetimesheet.getTue_hours())
+		+ Integer.parseInt(savetimesheet.getWed_hours());
 		savetimesheet.setTotalWeekHours(String.valueOf(cal));
 		savetimesheet.setStatus("pending");
 		EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
 		int creat = this.saveTimeSheetRepo.findByCretedBy(savetimesheet.getEmp().getEmpId(), id);
 		int modified = this.saveTimeSheetRepo.findmodiBy(savetimesheet.getEmp().getEmpId(), id);
 		ClientDetailsEntity client = this.clientDetailsRepository
-				.findByClientid(savetimesheet.getClient().getClientid());
+				.findByClientid(savetimesheet.getClient().getId());
 		ProjectDetailsEntity proj = this.pojectDetailsRepository
 				.findByProjectId(savetimesheet.getProj().getProjectId());
 		TaskDetailsEntity task = this.taskDetailsRepository.getById(savetimesheet.getTask().getTaskid());
@@ -262,16 +262,16 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 			res.setMessage("Date Retrived UnSuccessFul");
 		}
 		return res;
-		
+
 	}
 
-//	public List<SaveTimeSheet> getWeekMonthNameByMonthId(int month) {
-//		List<SaveTimeSheet> listOfWeeks = saveTimeSheetRepo.getWeekMonthNameByMonthId(month);
-//		
-//		return listOfWeeks;
-//		
-//		
-//	}
+	//	public List<SaveTimeSheet> getWeekMonthNameByMonthId(int month) {
+	//		List<SaveTimeSheet> listOfWeeks = saveTimeSheetRepo.getWeekMonthNameByMonthId(month);
+	//		
+	//		return listOfWeeks;
+	//		
+	//		
+	//	}
 
 	// public TimeSheetApprovalStatus timeSheetApproval(int empid) {
 	// log.info("entered into timeSheetApproval Method of TimeSheetDetails
@@ -287,8 +287,8 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	//
 	// }
 
-//	 public List<EmployeeDetails> getEmpByReportingId(int repId) {
-//	
-//	 return this.employeeRepository.getDetailByRepId(repId);
-//	 }
+	//	 public List<EmployeeDetails> getEmpByReportingId(int repId) {
+	//	
+	//	 return this.employeeRepository.getDetailByRepId(repId);
+	//	 }
 }

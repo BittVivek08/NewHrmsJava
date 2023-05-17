@@ -1,6 +1,7 @@
 package com.hrms.beans;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,7 @@ public class ProjectResponseBean {
 	
 	private int clientid;
 	
-	private String currencyName;
+	private int  currencyid;
 	
 	private String projectType;
 	
@@ -28,9 +29,9 @@ public class ProjectResponseBean {
     
     private int estimatedhours;
     
-    private Date StartDate;
+    private LocalDate StartDate;
     
-    private Date EndDate;
+    private LocalDate EndDate;
     
     private Boolean is_active;
     

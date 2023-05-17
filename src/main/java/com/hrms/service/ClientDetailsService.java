@@ -9,21 +9,24 @@ import com.hrms.entity.ClientDetailsEntity;
 
 public interface ClientDetailsService {
 	
-	
+	 //oldHrms
 	public EntityBeanResponseCommon saveClientDetails(ClientDetailsEntity entity);
 	
+	 //oldHrms
 	public ClientsResponseBean getAllClients();
 	
 	//public ClientDetailsEntity getSingleClientrByid(int clientId);
 	
-	
+	 //oldHrms
 	public ClientDetailsEntity getClientByClientId(int clientId);
 	
-	public EntityBeanResponseCommon updateClientDetails(ClientDetailsEntity entity);
+	 //oldHrms
+	//public EntityBeanResponseCommon updateClientDetails(ClientDetailsEntity entity);
 	
+	 //oldHrms
 	public 	EntityBeanResponseCommon deletedClient(int id);
 	
-	
+	 //oldHrms
 	public ClientDetailsEntity updateClientById(int cliId,ClientDetailsEntity entity);
 	
 	

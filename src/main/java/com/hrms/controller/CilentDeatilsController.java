@@ -24,6 +24,7 @@ public class CilentDeatilsController {
 	@Autowired
 	private ClientDetailsService ClientService;
 	
+	 //oldHrms
 	//SaveClient
 	@PostMapping("/saveClient")
 	public EntityBeanResponseCommon saveClientDetails(@RequestBody ClientDetailsEntity entity) {
@@ -34,20 +35,21 @@ public class CilentDeatilsController {
 		
 	}
 	
+	
+	
+	
+	
+	 //oldHrms
 	//GetAllClients
 	@GetMapping("/GetAllClients")
 	public ResponseEntity<ClientsResponseBean> getallClients(){
 		
 		ClientsResponseBean allClients = this.ClientService.getAllClients();
-		
-		
-	
-		
-		
 		return new ResponseEntity<ClientsResponseBean>(allClients,HttpStatus.OK);
 		
 	}
 	
+	//oldHrms
 	//GetSingleClientByClientId
 	
 	@GetMapping("/GetSingleClientByClientId/{clientId}")
@@ -62,7 +64,7 @@ public class CilentDeatilsController {
 	
 	
 	
-	
+	 //oldHrms
 	//delete
 	@DeleteMapping("/deleteClient/{clientid}")
 	public EntityBeanResponseCommon deleteClient(@PathVariable("clientid") int id) {
@@ -76,7 +78,7 @@ public class CilentDeatilsController {
 	
 	
 	
-	
+	 //oldHrms
 	//updateById
 	@PutMapping("/putClient/{cid}")
 	public ClientDetailsEntity updateCliDetails(@PathVariable("cid") int id,@RequestBody ClientDetailsEntity entity) {
@@ -187,7 +189,18 @@ public class CilentDeatilsController {
 	
 	
 	
+//.........................................Old-Code................................
 	
+	 //oldHrms
+		//SaveClient
+//		@PostMapping("/saveClient")
+//		public EntityBeanResponseCommon saveClientDetails(@RequestBody ClientDetailsEntity entity) {
+//			
+//			EntityBeanResponseCommon saveClientDetails = this.ClientService.saveClientDetails(entity);
+//			
+//			return saveClientDetails;
+//			
+//		}
 	
 	
 	

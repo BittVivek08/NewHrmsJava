@@ -28,6 +28,9 @@ public interface HolidayCalenderService {
     
     public EntityBeanResponseCommon deleteHoliday(int id);
     
+    
+    public EntityBeanResponseCommon updateHolidayById(int id,HolidayCalenderEntity update);
+    
 	/*
 	 * //findAllDates public List<Date> getAllDates();
 	 */
