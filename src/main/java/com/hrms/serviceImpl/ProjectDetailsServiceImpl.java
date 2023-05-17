@@ -15,7 +15,6 @@ import com.hrms.entity.ClientDetailsEntity;
 import com.hrms.entity.ProjectDetailsEntity;
 import com.hrms.entity.SalaryCurrencyEntity;
 import com.hrms.repository.ClientDetailsRepository;
-import com.hrms.repository.CurrencyRepository;
 import com.hrms.repository.ProjectDetailsRepository;
 import com.hrms.repository.SalaryCurrencyRepo;
 import com.hrms.service.ProjectDetailsService;
