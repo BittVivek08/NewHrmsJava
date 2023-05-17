@@ -60,9 +60,9 @@ public class TaskDetailsEntity  {
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private ProjectDetailsEntity project; 
 
-//	@ManyToOne(fetch=FetchType.LAZY)
-//	@JoinColumn(name = "emp_id",referencedColumnName = "emp_id")
-//	private EmployeeDetails emp;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "emp_id",referencedColumnName = "emp_id")
+	private EmployeeDetails emp;
 
 	
 
