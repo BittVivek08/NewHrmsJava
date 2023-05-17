@@ -46,7 +46,7 @@ public class ProjectDetailsEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "currency_id", referencedColumnName = "id")
-	private Currency currency;
+	private SalaryCurrencyEntity currency;
 
 	private String project_type;
 
