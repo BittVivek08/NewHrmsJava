@@ -5,13 +5,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hrms.beans.Tbl_CountriesEntityBean;
 import com.hrms.beans.Tbl_StatesEntityBean;
 import com.hrms.entity.Tbl_CountriesEntity;
 import com.hrms.entity.Tbl_StatesEntity;
@@ -49,6 +52,20 @@ public class Tbl_StatesEntityController {
 		return new ResponseEntity<>(details, HttpStatus.OK);
 
 		
+	}
+	
+	@PutMapping("/Updatestatesdetails/{id}")
+	public Tbl_StatesEntity updatestatesdetails(@PathVariable("id") int id,@RequestBody Tbl_StatesEntity entity) {
+
+		Tbl_StatesEntity updatedetails = statesentityservice.updatestatesdetails(id, entity);
+		return updatedetails;
+
+		
+	}
+
+	@DeleteMapping("/delete/{id}")
+	public Tbl_StatesEntityBean deleteById(@PathVariable("id") int id) {
+		return statesentityservice.deleteById(id);
 	}
 	
 	
