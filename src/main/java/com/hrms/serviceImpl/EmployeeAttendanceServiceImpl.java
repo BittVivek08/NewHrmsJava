@@ -118,8 +118,8 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 			Duration workingTime = Duration.between(checkInTime, checkOutTime);
 
 			long hours = workingTime.toHours();
-			long minutes = workingTime.toMinutesPart();
-			long seconds = workingTime.toSecondsPart();
+			long minutes = workingTime.toMinutes();
+			long seconds = workingTime.getSeconds();
 
 			String result = String.format("%02d:%02d:%02d", hours, minutes, seconds);
 

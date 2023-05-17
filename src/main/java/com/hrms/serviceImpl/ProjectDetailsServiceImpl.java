@@ -59,8 +59,8 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			projentity.setCreated_date(LocalDateTime.now());
 			projentity.setModifiedDate(LocalDateTime.now());
 			
-			projentity.setClient(client.orElseThrow());
-			projentity.setCurrency(currency.orElseThrow());
+			projentity.setClient(client.get());
+			projentity.setCurrency(currency.get());
 			
 			ProjectDetailsEntity save = this.projectRepo.save(projentity);
 

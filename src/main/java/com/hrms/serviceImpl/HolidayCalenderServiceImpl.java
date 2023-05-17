@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +77,6 @@ public class HolidayCalenderServiceImpl implements HolidayCalenderService {
 		Optional<HolidayCalenderEntity> holiday = holiRepo.findById(id);
 		HolidayCalenderEntity holidayDB = null;
 		if (holiday.isPresent()) { //
-			List<HolidayCalenderEntity> list = holiday.stream().collect(Collectors.toList());
 			holidayDB = holiday.get();
 			holidayDB.setDate(updateHoliday.getDate());
 			holidayDB.setCreatedby(1);
@@ -150,7 +150,6 @@ public class HolidayCalenderServiceImpl implements HolidayCalenderService {
 		Optional<HolidayCalenderEntity> holiday = holiRepo.findById(id);
 		HolidayCalenderEntity holidayDB = null;
 		if (holiday.isPresent()) { //
-			List<HolidayCalenderEntity> list = holiday.stream().collect(Collectors.toList());
 			holidayDB = holiday.get();
 			holidayDB.setDate(update.getDate());
 			holidayDB.setCreatedby(1);

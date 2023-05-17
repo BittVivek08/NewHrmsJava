@@ -90,7 +90,7 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 		//ClientDetailsEntity findByClientid = this.clientRepo.findByClientid(clientId);
 		Optional<ClientDetailsEntity> client = this.clientRepo.findById(clientId);
 		
-		return client.orElseThrow();
+		return client.get();
 	}
 
 
@@ -123,7 +123,7 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 		
 		Optional<ClientDetailsEntity> client = this.clientRepo.findById(id);
 		
-		this.clientRepo.delete(client.orElseThrow());
+		this.clientRepo.delete(client.get());
 		bean.setMsg("successfully deleted client  id : "+id);
 		bean.setStatus(true);
 		return bean;
@@ -138,22 +138,21 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 		//ClientDetailsEntity Client = this.clientRepo.findByClientid(cliId);
 		Optional<ClientDetailsEntity> client = this.clientRepo.findById(cliId);
 		
-		if(!client.isEmpty()) {
+		if(client.isPresent()) {
 			
-			client.orElseThrow().setClientName(entity.getClientName());
-			client.orElseThrow().setAddress(entity.getAddress());
-			client.orElseThrow().setCountryId(entity.getCountryId());
-			client.orElseThrow().setCreatedBy(1);
-			client.orElseThrow().setCreatedDate(LocalDateTime.now());
-			client.orElseThrow().setEmail(entity.getEmail());
-			client.orElseThrow().setFax(entity.getFax());
-            client.orElseThrow().setIs_active((byte) 1);
-            client.orElseThrow().setModifiedBy(1);
-            client.orElseThrow().setModifiedDate(LocalDateTime.now());
-            client.orElseThrow().setPhoneNo(entity.getPhoneNo());
-            client.orElseThrow().setPoc(entity.getPoc());
-            client.orElseThrow().setStateId(entity.getStateId());
-            
+			client.get().setClientName(entity.getClientName());
+			client.get().setAddress(entity.getAddress());
+			client.get().setCountryId(entity.getCountryId());
+			client.get().setCreatedBy(1);
+			client.get().setCreatedDate(LocalDateTime.now());
+			client.get().setEmail(entity.getEmail());
+			client.get().setFax(entity.getFax());
+            client.get().setIs_active((byte) 1);
+            client.get().setModifiedBy(1);
+            client.get().setModifiedDate(LocalDateTime.now());
+            client.get().setPhoneNo(entity.getPhoneNo());
+            client.get().setPoc(entity.getPoc());
+            client.get().setStateId(entity.getStateId());           
            // ClientDetailsEntity save = this.clientRepo.save(client.orElseThrow());
             
 		
@@ -171,7 +170,7 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 		
 		}
 		
-		return clientRepo.save(client.orElseThrow());
+		return clientRepo.save(client.get());
 	}
 
 
