@@ -52,8 +52,10 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 		//Optional<ClientDetailsEntity> client = this.clientRepo.findById(projentity.getClient().getId());
 		Optional<ClientDetailsEntity> client = this.clientRepo.findById(projentity.getClient().getId());
 
+
 		//Optional<Currency> currency = this.currencyRepo.findById(projentity.getCurrency().getCurrencyId());
 		Optional<SalaryCurrencyEntity> currency = this.salaCurrencyRepo.findById(projentity.getCurrency().getId());
+
 		
 		if (client != null && currency!=null) {
 			projentity.setCreated_date(LocalDateTime.now());

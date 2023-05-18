@@ -114,7 +114,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 						.findById(savetimesheet.getClient().getId()).get();
 				ProjectDetailsEntity proj = this.pojectDetailsRepository
 						.findByProjectId(savetimesheet.getProj().getProjectId());
-				TaskDetailsEntity task = this.taskDetailsRepository.getById(savetimesheet.getTask().getTaskid());
+				TaskDetailsEntity task = this.taskDetailsRepository.findById(savetimesheet.getTask().getTaskid()).get();
 				savetimesheet.setTask(task);
 				savetimesheet.setProj(proj);
 				savetimesheet.setClient(client);
@@ -149,7 +149,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 						ProjectDetailsEntity proj = this.pojectDetailsRepository
 								.findByProjectId(savetimesheet.getProj().getProjectId());
 						TaskDetailsEntity task = this.taskDetailsRepository
-								.getById(savetimesheet.getTask().getTaskid());
+								.findById(savetimesheet.getTask().getTaskid()).get();
 						savetimesheet.setTask(task);
 						savetimesheet.setProj(proj);
 						savetimesheet.setClient(client);
@@ -202,7 +202,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 				.findById(savetimesheet.getClient().getId()).get();
 		ProjectDetailsEntity proj = this.pojectDetailsRepository
 				.findByProjectId(savetimesheet.getProj().getProjectId());
-		TaskDetailsEntity task = this.taskDetailsRepository.getById(savetimesheet.getTask().getTaskid());
+		TaskDetailsEntity task = this.taskDetailsRepository.findById(savetimesheet.getTask().getTaskid()).get();
 		savetimesheet.setTask(task);
 		savetimesheet.setProj(proj);
 		savetimesheet.setClient(client);
