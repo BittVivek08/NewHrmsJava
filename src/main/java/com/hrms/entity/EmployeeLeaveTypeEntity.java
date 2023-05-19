@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 import lombok.Data;
 
-@Data
+@Data   
 @Entity
 @Table(name = "main_employeeleavetypes")
 public class EmployeeLeaveTypeEntity {

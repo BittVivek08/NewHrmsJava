@@ -1,6 +1,8 @@
 package com.hrms.service;
 
 
+import com.hrms.request.bean.EmployeeLeaveTypeBean;
+import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
 import com.hrms.request.bean.RequestForLeaveBinding;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
@@ -13,4 +15,7 @@ public interface IRequestForLeaveService {
 	public LeavesResponseBean getLeavesDetails(String user_id, String leavestatus, String view);
 	
 	public LeaveManagementOptionsResponseBean leaveManagementOptions();
+
+	public EmployeeLeaveTypeResponseBean saveEmployeeLeaveData(EmployeeLeaveTypeBean leaveBean);
+
 }
