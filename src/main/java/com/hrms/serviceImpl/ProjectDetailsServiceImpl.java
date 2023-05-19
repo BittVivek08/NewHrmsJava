@@ -40,8 +40,8 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 	private ClientDetailsRepository clientRepo;
 	
 
-	//@Autowired
-	//private ProjectRespoonseBean projectbean;
+    @Autowired
+	private ProjectResponseBean projectbean;
 
 	// save
 	// oldhrms
