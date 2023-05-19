@@ -1,14 +1,21 @@
 package com.hrms.serviceImpl;
 
+import java.util.List;
+
 import javax.ws.rs.core.Response;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hrms.entity.LeaveRequestEntity;
+import com.hrms.entity.Privileges;
+import com.hrms.repository.LeaveRequestRepository;
 import com.hrms.repository.MyLeaveRequestRepository;
+import com.hrms.repository.PrivilegesRepo;
 import com.hrms.request.bean.LeaveRequestBean;
 import com.hrms.request.bean.LeaveResponseBean;
+import com.hrms.response.bean.CommonResponseBean;
 import com.hrms.service.IHrmsSelfService;
 
 import ch.qos.logback.classic.Logger;
@@ -20,6 +27,12 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	
 	@Autowired
 	private MyLeaveRequestRepository myLeaveRepo;
+	
+	@Autowired
+	private LeaveRequestRepository leaveRequestRepo;
+	
+	@Autowired
+	private PrivilegesRepo privilegeRepo;
 
 	@Override
 	public Response saveLeaveRequest(LeaveRequestBean leaverequestBean, int roleId, int menuId) {
@@ -55,6 +68,26 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	public Response employeetotalleave(int id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<LeaveRequestEntity> getHistoryOfAppliedLeaveDetails(String emp_id, int roleId, int menuId) {
+		logger.info("entered into getHistoryOfAppliedLeaveDetails method of business class");
+		CommonResponseBean response = new CommonResponseBean();
+		List<LeaveRequestEntity> fetchAppliedLeaveRequest = leaveRequestRepo.fetchAppliedLeaveRequest(emp_id);
+				
+		List<Privileges> listOfPrivilleges = privilegeRepo.getPrivileges(roleId, menuId);
+		if (!fetchAppliedLeaveRequest.isEmpty()) {
+			response.setMessage("History of applied leave Details Retrieved Successfully.");
+			response.setStatus(true);
+			response.setList(fetchAppliedLeaveRequest);
+			response.setPrivilleges(listOfPrivilleges);
+		} else {
+			response.setMessage("Failed to Retrieved applied  Leaves History .");
+			response.setStatus(false);
+		}
+		return fetchAppliedLeaveRequest;		
+		//return null;
 	}
 
 }
