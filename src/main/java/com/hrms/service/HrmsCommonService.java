@@ -7,6 +7,7 @@ import com.hrms.beans.CommonResponseBean;
 
 import com.hrms.entity.GenderEntity;
 import com.hrms.entity.JobTitlesEntity;
+import com.hrms.entity.LanguageEntity;
 import com.hrms.entity.MaritalStatusEntity;
 import com.hrms.entity.NationalityEntity;
 import com.hrms.entity.EmpRole;
@@ -19,6 +20,7 @@ import com.hrms.request.bean.PersonalMaritalStatusBean;
 import com.hrms.request.bean.PersonalNationalityBean;
 import com.hrms.request.bean.SalaryAccountClassTypeRequestBean;
 import com.hrms.request.bean.SalaryCurrencyRequestBean;
+import com.hrms.request.bean.personalLanguageBean;
 
 
 public interface HrmsCommonService {
@@ -77,6 +79,17 @@ public interface HrmsCommonService {
 	public List<EmpRole> getAllEmpRole();
 	
 	public EmpRole getEmpRoleById(Integer id);
+	
+	public CommonResponseBean saveLanguageDetails(personalLanguageBean bean);
+	
+	public Optional<LanguageEntity> getBylanguageId(int id);
+	
+	public List<LanguageEntity> getAlllanguages();
+	
+	public CommonResponseBean deleteBylanguageId(int id);
+	
+	public CommonResponseBean updateBylanguageId(int id, personalLanguageBean Bean);
+
 
 
 }
