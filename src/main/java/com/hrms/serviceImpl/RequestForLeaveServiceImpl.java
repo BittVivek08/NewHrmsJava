@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.hrms.entity.EmployeeDetails;
@@ -21,6 +22,7 @@ import com.hrms.repository.HolidayCalenderRepository;
 import com.hrms.repository.ILeaveDetailsRepository;
 import com.hrms.repository.IRequestForLeaveRepository;
 import com.hrms.repository.LeaveRequestRepository;
+import com.hrms.request.bean.LeaveResponseBean;
 import com.hrms.request.bean.LeavesResponseBean;
 import com.hrms.request.bean.RequestForLeaveBinding;
 import com.hrms.response.bean.EntityResponse;
@@ -158,26 +160,15 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 
 		return response;
 	}
-
 	
 	// Leaves Details List
 	@Override
 	public List<LeaveRequestEntity> getLeavesDetails(String user_id, String leavestatus, String view) {
-		
-		
-		logger.info("entered into getLeavesDetails of businessClass");
-		
-		
-		
-		List<LeaveRequestEntity>listOfLeaves=new ArrayList<>();
-		
+		logger.info("entered into getLeavesDetails of businessClass");			
+		List<LeaveRequestEntity>listOfLeaves=new ArrayList<>();		
 		int countAll = 0, countPending = 0, countApproved = 0, countRejected = 0, countCancel = 0;
-		if (leavestatus.equalsIgnoreCase("pendingforapproval")) {
-			leavestatus = "pending for approval";
-		}
-		
-		if (view.equalsIgnoreCase("Employee")) {
-			
+				
+		if (view.equalsIgnoreCase("Employee")) {			
 			listOfLeaves.addAll(leaveRequestRepo.findByEmp_id(user_id));
 			
 		} else if (view.equalsIgnoreCase("superAdmin")) {
@@ -223,9 +214,9 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		}	
 		
 		
-	//	return (List<LeaveRequestEntity>) Response.status(Response.Status.OK).entity(response).build();
-	//	return (List<LeaveRequestEntity>) response;
-		return null;
+	//	return (List<ResponseEntity<LeaveRequestEntity>>) Response.status(Response.Status.OK).entity(response).build();
+	//	return (List<ResponseEntity<LeaveRequestEntity>>) response;
+		return listOfLeaves;
 				
 	}
 }

@@ -1,5 +1,7 @@
 package com.hrms.controller;
 
+import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -13,11 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hrms.entity.LeaveRequestEntity;
 import com.hrms.request.bean.RequestForLeaveBinding;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.service.IRequestForLeaveService;
@@ -33,11 +37,11 @@ public class RequestForLeaveController {
 	
 	
      	// My Leaves , Employee Leaves		
-		@GetMapping("/getLeaveDetails")
-		public Response leaveDetails(@QueryParam(value = "user_id") String user_id,
-				@QueryParam(value = "leavestatus") String leavestatus, @QueryParam(value = "view") String view) {
+		@GetMapping("/getLeaveDetails/{user_id}/{leavestatus}/{view}")
+		public List<LeaveRequestEntity> leaveDetails(@PathVariable(value = "user_id") String user_id,
+				@PathVariable(value = "leavestatus") String leavestatus, @PathVariable(value = "view") String view) {
 			logger.info("entered into leaveDetails method of service class...");
-			return (Response) reqLeaveService.getLeavesDetails(user_id, leavestatus, view);
+			return reqLeaveService.getLeavesDetails(user_id, leavestatus, view);
 		}
 
 	

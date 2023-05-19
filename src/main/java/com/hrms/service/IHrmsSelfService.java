@@ -1,8 +1,13 @@
 package com.hrms.service;
 
 
+import java.util.List;
+
 import javax.ws.rs.core.Response;
 
+import org.springframework.http.ResponseEntity;
+
+import com.hrms.entity.LeaveRequestEntity;
 import com.hrms.request.bean.LeaveRequestBean;
 import com.hrms.request.bean.LeaveResponseBean;
 
@@ -16,4 +21,7 @@ public interface IHrmsSelfService {
 	public Response fetchAppliedLeaveData(int userId,  int roleId, int menuId);
 	
 	public Response employeetotalleave(int id);
+	
+	// history of applied leave Details.
+	public  List<LeaveRequestEntity> getHistoryOfAppliedLeaveDetails(String userId, int roleId, int menuId);
 }

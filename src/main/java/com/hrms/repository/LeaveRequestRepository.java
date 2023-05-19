@@ -24,4 +24,9 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequestEntity
 	
 	@Query("From LeaveRequestEntity  where emp_id=:emp_id")
 	List<LeaveRequestEntity> findByEmp_id(String emp_id);
+	
+	@Query("from LeaveRequestEntity where isActive=1 and emp_id=:emp_id ")
+	public List<LeaveRequestEntity> fetchAppliedLeaveRequest(String emp_id);
 }
+
+
