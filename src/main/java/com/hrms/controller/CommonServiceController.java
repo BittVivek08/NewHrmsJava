@@ -20,6 +20,7 @@ import com.hrms.beans.CommonResponseBean;
 
 import com.hrms.entity.GenderEntity;
 import com.hrms.entity.JobTitlesEntity;
+import com.hrms.entity.LanguageEntity;
 import com.hrms.entity.MaritalStatusEntity;
 import com.hrms.entity.NationalityEntity;
 
@@ -33,6 +34,7 @@ import com.hrms.request.bean.PersonalMaritalStatusBean;
 import com.hrms.request.bean.PersonalNationalityBean;
 import com.hrms.request.bean.SalaryAccountClassTypeRequestBean;
 import com.hrms.request.bean.SalaryCurrencyRequestBean;
+import com.hrms.request.bean.personalLanguageBean;
 import com.hrms.service.HrmsCommonService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -206,6 +208,37 @@ public class CommonServiceController {
 		log.info("Fetching Emp Role By Id");
 		EmpRole empRoleById = hrmsCommomService.getEmpRoleById(id);
 		return new ResponseEntity<> (empRoleById,HttpStatus.OK);
+	}
+	
+	@PostMapping("/save_language")
+	public CommonResponseBean saveLanguage( @RequestBody personalLanguageBean bean) {
+		log.info("saving Language api");
+		return hrmsCommomService.saveLanguageDetails(bean);
+		
+	}
+	
+	@GetMapping("/get_language/{id}")
+	public Optional<LanguageEntity> getlanguage(@PathVariable int id) {
+		log.info("get by Language id api");
+		return hrmsCommomService.getBylanguageId(id);
+	}
+	
+	@GetMapping("/getalllanguage")
+	public List<LanguageEntity> getAlllanguages(){
+		log.info("get all Language api");
+		return hrmsCommomService.getAlllanguages();
+	}
+	
+	@DeleteMapping("/delete_language/{id}")
+	public CommonResponseBean deletelaguage(@PathVariable int id) {
+		log.info("delete by Language id api");
+		return hrmsCommomService.deleteBylanguageId(id);
+	}
+	
+	@PutMapping("/update_language/{id}")
+	public CommonResponseBean updatedlanguage(@PathVariable int id, @RequestBody personalLanguageBean bean) {
+		log.info("updated by Language id api");
+		return hrmsCommomService.updateBylanguageId(id, bean);
 	}
 
 }

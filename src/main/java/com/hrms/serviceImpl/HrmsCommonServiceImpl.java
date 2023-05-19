@@ -10,6 +10,7 @@ import com.hrms.beans.CommonResponseBean;
 import com.hrms.entity.EmpRole;
 import com.hrms.entity.GenderEntity;
 import com.hrms.entity.JobTitlesEntity;
+import com.hrms.entity.LanguageEntity;
 import com.hrms.entity.MaritalStatusEntity;
 import com.hrms.entity.NationalityEntity;
 import com.hrms.entity.SalaryAccountClassTypeEntity;
@@ -17,6 +18,7 @@ import com.hrms.entity.SalaryCurrencyEntity;
 import com.hrms.repository.EmpRoleRepo;
 import com.hrms.repository.GenderRepository;
 import com.hrms.repository.JobTitleRepository;
+import com.hrms.repository.LanguageRepository;
 import com.hrms.repository.MaritalStatusRepository;
 import com.hrms.repository.NationalityRepository;
 import com.hrms.repository.SalaryAccountClassTypeRepo;
@@ -27,6 +29,7 @@ import com.hrms.request.bean.PersonalMaritalStatusBean;
 import com.hrms.request.bean.PersonalNationalityBean;
 import com.hrms.request.bean.SalaryAccountClassTypeRequestBean;
 import com.hrms.request.bean.SalaryCurrencyRequestBean;
+import com.hrms.request.bean.personalLanguageBean;
 import com.hrms.service.HrmsCommonService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +58,9 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 	
 	@Autowired
 	private NationalityRepository nationalityRepo;
+	
+	@Autowired
+	private LanguageRepository languageRepo;
 
 	@Autowired
 	private CommonResponseBean comResBean;
@@ -458,6 +464,85 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 				comResBean.setMsg("Nationality not updated ...........!");
 				comResBean.setStatus(false);
 			}
+		}
+		return comResBean;
+	}
+
+	@Override
+	public CommonResponseBean saveLanguageDetails(personalLanguageBean bean) {
+		
+		log.info("save the Language details serviceimpl method");
+		LanguageEntity entity = new LanguageEntity();
+		entity.setLanguageName(bean.getLanguageName());
+		entity.setDescription(bean.getDescription());
+		entity.setCreatedDate(bean.getCreatedDate());
+		entity.setModifiedDate(bean.getModifiedDate());
+		entity.setIsActive(bean.getIsActive());
+		
+		LanguageEntity save = languageRepo.save(entity);
+		
+		if(save != null) {
+			
+			comResBean.setMsg("language deatils are saved successfully ........!");
+			comResBean.setStatus(true);
+		}else {
+			comResBean.setMsg("details not saved ...........!");
+			comResBean.setStatus(false);
+		}
+		return comResBean;
+
+	}
+
+	@Override
+	public Optional<LanguageEntity> getBylanguageId(int id) {
+		
+		log.info("get by LanguageId serviceimpl method");
+		Optional<LanguageEntity> findId = languageRepo.findById(id);
+		return findId;
+	}
+
+	@Override
+	public List<LanguageEntity> getAlllanguages() {
+		
+		log.info("get all Language details serviceimpl method");
+		List<LanguageEntity> allLang = languageRepo.findAll();
+		return allLang;
+	}
+
+	@Override
+	public CommonResponseBean deleteBylanguageId(int id) {
+		
+		log.info("delete the Language details serviceimpl method");
+		languageRepo.deleteById(id);
+		comResBean.setMsg("Language is delete successfully........!");
+		comResBean.setStatus(true);
+		return comResBean;
+	}
+
+	@Override
+	public CommonResponseBean updateBylanguageId(int id, personalLanguageBean bean) {
+		
+		log.info("update the Language details serviceimpl method");
+		Optional<LanguageEntity> entity1=languageRepo.findById(id);
+		
+		if(entity1.isPresent()) {
+		LanguageEntity entity = entity1.get();
+		entity.setLanguageName(bean.getLanguageName());
+		entity.setDescription(bean.getDescription());
+		entity.setCreatedDate(bean.getCreatedDate());
+		entity.setModifiedDate(bean.getModifiedDate());
+		entity.setIsActive(bean.getIsActive());
+		
+		LanguageEntity save = languageRepo.save(entity);
+		
+		if(save != null) {
+			
+			comResBean.setMsg("language details are updated successfully ........!");
+			comResBean.setStatus(true);
+		}else {
+			comResBean.setMsg("details not Updated ...........!");
+			comResBean.setStatus(false);
+		}
 		}
 		return comResBean;
 	}
