@@ -21,7 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.entity.LeaveRequestEntity;
-import com.hrms.request.bean.LeaveResponseBean;
+import com.hrms.response.bean.CommonResponseBean;
+import com.hrms.response.bean.LeaveResponseBean;
 import com.hrms.serviceImpl.HrmsSelfServiceImpl;
 import ch.qos.logback.classic.Logger;
 
@@ -46,7 +47,7 @@ public class HrmsSelfServiceController {
 		
 		// Applied Leave History Data.
 		@GetMapping("/appliedLeavesHistory/{emp_id}/{roleId}/{menuId}")
-		public  List<LeaveRequestEntity> fetchAppliedLeaveData(@PathVariable(value = "emp_id") String emp_id, @PathVariable("roleId") int roleId,
+		public  CommonResponseBean fetchAppliedLeaveData(@PathVariable(value = "emp_id") String emp_id, @PathVariable("roleId") int roleId,
 				@PathVariable("menuId") int menuId) {
 			logger.info("Entered into fetchAppliedLeaveData() ");
 			logger.error("Existed from fetchAppliedLeaveData() ");

@@ -1,4 +1,4 @@
-package com.hrms.request.bean;
+package com.hrms.response.bean;
 
 import lombok.Data;
 

@@ -1,4 +1,8 @@
-package com.hrms.request.bean;
+package com.hrms.response.bean;
+
+import java.util.List;
+
+import com.hrms.entity.LeaveRequestEntity;
 
 import lombok.Data;
 
@@ -13,6 +17,7 @@ public class LeavesResponseBean {
 	private int countApproved;
 	private int countRejected;
 	private int countCancel;
-	private Object listOfLeaves;
+//	private Object listOfLeaves;
 	private int ablLeave;
+	private List<LeaveRequestEntity> list;
 }
