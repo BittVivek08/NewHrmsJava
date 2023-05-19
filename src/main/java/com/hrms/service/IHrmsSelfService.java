@@ -9,7 +9,8 @@ import org.springframework.http.ResponseEntity;
 
 import com.hrms.entity.LeaveRequestEntity;
 import com.hrms.request.bean.LeaveRequestBean;
-import com.hrms.request.bean.LeaveResponseBean;
+import com.hrms.response.bean.CommonResponseBean;
+import com.hrms.response.bean.LeaveResponseBean;
 
 public interface IHrmsSelfService {
 
@@ -23,5 +24,5 @@ public interface IHrmsSelfService {
 	public Response employeetotalleave(int id);
 	
 	// history of applied leave Details.
-	public  List<LeaveRequestEntity> getHistoryOfAppliedLeaveDetails(String userId, int roleId, int menuId);
+	public CommonResponseBean getHistoryOfAppliedLeaveDetails(String userId, int roleId, int menuId);
 }

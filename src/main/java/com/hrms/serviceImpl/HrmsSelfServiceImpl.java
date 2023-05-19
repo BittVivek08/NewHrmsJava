@@ -14,8 +14,8 @@ import com.hrms.repository.LeaveRequestRepository;
 import com.hrms.repository.MyLeaveRequestRepository;
 import com.hrms.repository.PrivilegesRepo;
 import com.hrms.request.bean.LeaveRequestBean;
-import com.hrms.request.bean.LeaveResponseBean;
 import com.hrms.response.bean.CommonResponseBean;
+import com.hrms.response.bean.LeaveResponseBean;
 import com.hrms.service.IHrmsSelfService;
 
 import ch.qos.logback.classic.Logger;
@@ -71,7 +71,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	}
 
 	@Override
-	public List<LeaveRequestEntity> getHistoryOfAppliedLeaveDetails(String emp_id, int roleId, int menuId) {
+	public CommonResponseBean getHistoryOfAppliedLeaveDetails(String emp_id, int roleId, int menuId) {
 		logger.info("entered into getHistoryOfAppliedLeaveDetails method of business class");
 		CommonResponseBean response = new CommonResponseBean();
 		List<LeaveRequestEntity> fetchAppliedLeaveRequest = leaveRequestRepo.fetchAppliedLeaveRequest(emp_id);
@@ -86,7 +86,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 			response.setMessage("Failed to Retrieved applied  Leaves History .");
 			response.setStatus(false);
 		}
-		return fetchAppliedLeaveRequest;		
+		return response;		
 		//return null;
 	}
 

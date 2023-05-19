@@ -5,36 +5,33 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
-import com.hrms.entity.EmployeeDetails;
-import com.hrms.entity.LeaveRequestEntity;
-import com.hrms.entity.RequestForLeave;
-import com.hrms.service.IRequestForLeaveService;
-import com.hrms.repository.EmployeeRepository;
-import com.hrms.repository.HolidayCalenderRepository;
-import com.hrms.repository.ILeaveDetailsRepository;
-import com.hrms.repository.IRequestForLeaveRepository;
-import com.hrms.repository.LeaveRequestRepository;
-import com.hrms.request.bean.LeaveResponseBean;
-import com.hrms.request.bean.LeavesResponseBean;
-import com.hrms.request.bean.RequestForLeaveBinding;
-import com.hrms.response.bean.EntityResponse;
-
-
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.ws.rs.core.Response;
 
-import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.LeaveManagementEntity;
+import com.hrms.entity.LeaveRequestEntity;
+import com.hrms.entity.RequestForLeave;
+import com.hrms.repository.EmployeeRepository;
+import com.hrms.repository.HolidayCalenderRepository;
+import com.hrms.repository.ILeaveDetailsRepository;
+import com.hrms.repository.IRequestForLeaveRepository;
+import com.hrms.repository.LeaveManagementRepository;
+import com.hrms.repository.LeaveRequestRepository;
+import com.hrms.request.bean.RequestForLeaveBinding;
+import com.hrms.response.bean.EntityResponse;
+import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
+import com.hrms.response.bean.LeavesResponseBean;
+import com.hrms.service.IRequestForLeaveService;
 
 @Service
 public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
@@ -58,6 +55,9 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	
 	@Autowired
 	private LeaveRequestRepository leaveRequestRepo;
+	
+	@Autowired
+	private LeaveManagementRepository leaveManagementRepository;
 
 	@Override
 	public EntityResponse saveRequestForLeave(RequestForLeaveBinding details) {
@@ -163,7 +163,7 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	
 	// Leaves Details List
 	@Override
-	public List<LeaveRequestEntity> getLeavesDetails(String user_id, String leavestatus, String view) {
+	public LeavesResponseBean getLeavesDetails(String user_id, String leavestatus, String view) {
 		logger.info("entered into getLeavesDetails of businessClass");			
 		List<LeaveRequestEntity>listOfLeaves=new ArrayList<>();		
 		int countAll = 0, countPending = 0, countApproved = 0, countRejected = 0, countCancel = 0;
@@ -206,17 +206,40 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 				response.setCountCancel(countCancel);
 			}
 
-			response.setListOfLeaves(listOfLeaves);
+			response.setList(listOfLeaves);
 		} else {
 			response.setMessage("No Leave Details are available.");
 			response.setStatus(false);
-			response.setListOfLeaves(listOfLeaves);
+			response.setList(listOfLeaves);
 		}	
 		
 		
 	//	return (List<ResponseEntity<LeaveRequestEntity>>) Response.status(Response.Status.OK).entity(response).build();
-	//	return (List<ResponseEntity<LeaveRequestEntity>>) response;
-		return listOfLeaves;
-				
+		return  response;
+					
 	}
+
+	@Override
+	public LeaveManagementOptionsResponseBean leaveManagementOptions() {
+		
+		logger.info("entered into getLeaveManagementOptions of businessClass");
+		List<LeaveManagementEntity> listOfLeaveManagementOptions = leaveManagementRepository.listOfLeaveManagementOptions();
+		
+		LeaveManagementOptionsResponseBean response = new LeaveManagementOptionsResponseBean();
+
+		if (!listOfLeaveManagementOptions.isEmpty()) {
+			response.setMessage("Retrival of Leave Management Options Successfull.");
+			response.setStatus(true);
+
+			response.setListOfLeaveManagementOptions(listOfLeaveManagementOptions);
+		} else {
+			response.setMessage("No Leave Management Options are available.");
+			response.setStatus(false);
+			response.setListOfLeaveManagementOptions(listOfLeaveManagementOptions);
+		}
+		return response;		
+		
+	}
+	
+	
 }
