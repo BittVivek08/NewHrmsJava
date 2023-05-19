@@ -10,33 +10,40 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.EmployeeLeaveTypeEntity;
 import com.hrms.entity.LeaveManagementEntity;
 import com.hrms.entity.LeaveRequestEntity;
 import com.hrms.entity.RequestForLeave;
+import com.hrms.repository.EmployeeLeaveTypeRepository;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.HolidayCalenderRepository;
 import com.hrms.repository.ILeaveDetailsRepository;
 import com.hrms.repository.IRequestForLeaveRepository;
 import com.hrms.repository.LeaveManagementRepository;
 import com.hrms.repository.LeaveRequestRepository;
+import com.hrms.request.bean.EmployeeLeaveTypeBean;
+import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
 import com.hrms.request.bean.RequestForLeaveBinding;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
 import com.hrms.response.bean.LeavesResponseBean;
 import com.hrms.service.IRequestForLeaveService;
+import com.hrms.util.HrmsGetDateAndTime;
+
 
 @Service
 public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 
 	private static final Logger logger=LoggerFactory.getLogger(RequestForLeaveServiceImpl.class);
+	
+	@Autowired
+	EmployeeLeaveTypeRepository leaveTypeRepo;
 	
 	@Autowired
 	HolidayCalenderRepository holidayRepo;
@@ -58,6 +65,9 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	
 	@Autowired
 	private LeaveManagementRepository leaveManagementRepository;
+
+	private EmployeeLeaveTypeResponseBean leaveTyperes;
+
 
 	@Override
 	public EntityResponse saveRequestForLeave(RequestForLeaveBinding details) {
@@ -241,5 +251,43 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		
 	}
 	
+	public EmployeeLeaveTypeResponseBean saveEmployeeLeaveData(EmployeeLeaveTypeBean leaveBean) {
+		EmployeeLeaveTypeEntity employeeLeaveEntity = new EmployeeLeaveTypeEntity();
+		
+		if(leaveTypeRepo.getId(leaveBean.getLeaveType(), leaveBean.getYear())==null) {
+		
+			try {
+				employeeLeaveEntity.setCreatedDate(new HrmsGetDateAndTime().GetUTCdatetimeAsString());
+				employeeLeaveEntity.setModifiedDate(new HrmsGetDateAndTime().GetUTCdatetimeAsString());
+				employeeLeaveEntity.setCreatedBy(leaveBean.getEmp_id());
+				employeeLeaveEntity.setModifiedBy(leaveBean.getEmp_id());
+				employeeLeaveEntity.setLeaveType(leaveBean.getLeaveType());
+				employeeLeaveEntity.setNoOfDays(leaveBean.getNoOfDays());
+				employeeLeaveEntity.setNoOfDaysMonth(leaveBean.getNoOfDays() / 12);
+				employeeLeaveEntity.setYear(leaveBean.getYear());
+				employeeLeaveEntity.setLeaveTypeId(leaveBean.getId());
+			    employeeLeaveEntity.setLeaveType(leaveBean.getLeaveType());
+
+				leaveTypeRepo.save(employeeLeaveEntity);
+				// System.out.println(inserted);
+				leaveTyperes.setLeaveTypelist(employeeLeaveEntity);
+				leaveTyperes.setStatus(true);
+				leaveTyperes.setMesssage("leave type saved successfully for the year : "+leaveBean.getYear());
+			} 
+		
+			catch (Exception e) {
+				e.printStackTrace();
+				}
+		}
+		
+		else {
+			leaveTyperes.setLeaveTypelist(null);
+			leaveTyperes.setMesssage("already leave type is available for the year : "+leaveBean.getYear());
+			leaveTyperes.setStatus(false);
+			}
+		
+		
+	return leaveTyperes;
 	
+	}
 }

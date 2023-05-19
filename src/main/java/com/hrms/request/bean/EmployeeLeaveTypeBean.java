@@ -9,10 +9,8 @@ public class EmployeeLeaveTypeBean {
 	private String leaveType;
 	private int noOfDays;
 	private int year;
-	private int userId;
+	private String emp_id;
 	private String leaveCode;
 	private int leaveTypeId;
-	private int createdBy;
-	private int modifiedBy;
 	private int noOfDaysMonth;
 }

@@ -1,6 +1,9 @@
 package com.hrms.controller;
 
 
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.hrms.request.bean.EmployeeLeaveTypeBean;
+import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
 import com.hrms.request.bean.RequestForLeaveBinding;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
@@ -24,8 +28,8 @@ import com.hrms.service.IRequestForLeaveService;
 @RequestMapping("/requestLeave")
 public class RequestForLeaveController {
 
-	private Logger logger=LoggerFactory.getLogger(RequestForLeaveController.class);
-	
+	private Logger logger = LoggerFactory.getLogger(RequestForLeaveController.class);
+
 	@Autowired
 	private IRequestForLeaveService reqLeaveService;
 	
@@ -38,11 +42,16 @@ public class RequestForLeaveController {
 			return reqLeaveService.getLeavesDetails(user_id, leavestatus, view);
 		}
 
-	
-	
 	@PostMapping("/save")
-	public ResponseEntity<EntityResponse> saveRequestForLeave(@RequestBody RequestForLeaveBinding details){
-		return new ResponseEntity<EntityResponse>(reqLeaveService.saveRequestForLeave(details),HttpStatus.OK);
+	public ResponseEntity<EntityResponse> saveRequestForLeave(@RequestBody RequestForLeaveBinding details) {
+		return new ResponseEntity<EntityResponse>(reqLeaveService.saveRequestForLeave(details), HttpStatus.OK);
+	}
+
+	@PostMapping("/addNoOFDaysForEachUserID")
+	public EmployeeLeaveTypeResponseBean saveEmployeeLeave(@RequestBody EmployeeLeaveTypeBean bean) {
+		// return crud.saveEmployeeLeaveData(bean);
+		return reqLeaveService.saveEmployeeLeaveData(bean);
+
 	}
 	
 	
