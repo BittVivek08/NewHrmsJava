@@ -65,7 +65,7 @@ public class Businessunit {
 	
 	private int isactive;
 	
-	private Timestamp createddate;
+	private Date createddate;
 
 	private Integer timezone;
 
