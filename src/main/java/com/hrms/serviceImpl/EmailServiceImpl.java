@@ -38,6 +38,7 @@ public class EmailServiceImpl {
 			javaMailSender.send(mailMessage);
 			return "Mail Sent Successfully...";
 		} catch (Exception e) {
+			e.printStackTrace();
 			return "Error while Sending Mail";
 		}
 	}
