@@ -3,6 +3,8 @@ package com.hrms.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.ws.rs.core.Response;
+
 import com.hrms.beans.CommonResponseBean;
 
 import com.hrms.entity.GenderEntity;
@@ -21,6 +23,7 @@ import com.hrms.request.bean.PersonalNationalityBean;
 import com.hrms.request.bean.SalaryAccountClassTypeRequestBean;
 import com.hrms.request.bean.SalaryCurrencyRequestBean;
 import com.hrms.request.bean.personalLanguageBean;
+import com.hrms.response.bean.ListOfPositionsResponseBean;
 
 
 public interface HrmsCommonService {
@@ -80,6 +83,16 @@ public interface HrmsCommonService {
 	
 	public EmpRole getEmpRoleById(Integer id);
 	
+	public CommonResponseBean fetchHRmanager(int businessunitId);
+	
+	public CommonResponseBean fetchIMMmanager(int businessunitId);
+	
+	public CommonResponseBean fetchReportingManagerList(int empRoleId, int businessunitId, int departmentId);
+	
+	public ListOfPositionsResponseBean listOfPositions(int jobTitleId);
+	
+	
+	// Language Service
 	public CommonResponseBean saveLanguageDetails(personalLanguageBean bean);
 	
 	public Optional<LanguageEntity> getBylanguageId(int id);
@@ -90,6 +103,6 @@ public interface HrmsCommonService {
 	
 	public CommonResponseBean updateBylanguageId(int id, personalLanguageBean Bean);
 
-
+    
 
 }

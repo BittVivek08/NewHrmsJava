@@ -1,6 +1,7 @@
 package com.hrms.request.bean;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import lombok.Data;
 
@@ -8,8 +9,7 @@ import lombok.Data;
 public class LeaveRequestBean {
 
 	
-	private int id;
-	private int userId;
+	private String emp_id;
 	private int leaveTypeId;
 	private String leaveType;
 	private String leaveStatus;
@@ -19,8 +19,8 @@ public class LeaveRequestBean {
 	private int appliedLeavesCount;
 	private float availableLeaves;
 	private String reason;
-	private Date fromDate;
-	private Date toDate;
+	private String fromDate;
+	private String toDate;
 	private String leaveFor;
 	private int days;
 	private String avilableCasualLeaves;

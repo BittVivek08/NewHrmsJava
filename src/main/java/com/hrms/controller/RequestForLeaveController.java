@@ -1,8 +1,7 @@
 package com.hrms.controller;
 
 
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,9 @@ import com.hrms.beans.MailStatusResponse;
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
 import com.hrms.request.bean.RequestForLeaveBinding;
+
 import com.hrms.request.bean.UpdateEmployeeLeaveDetails;
+import com.hrms.response.bean.Common;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
 import com.hrms.response.bean.LeavesResponseBean;
@@ -35,15 +36,15 @@ public class RequestForLeaveController {
 
 	@Autowired
 	private IRequestForLeaveService reqLeaveService;
-	
-	
-     	// My Leaves , Employee Leaves		
-		@GetMapping("/getLeaveDetails/{user_id}/{leavestatus}/{view}")
-		public LeavesResponseBean leaveDetails(@PathVariable(value = "user_id") String user_id,
-				@PathVariable(value = "leavestatus") String leavestatus, @PathVariable(value = "view") String view) {
-			logger.info("entered into leaveDetails method of service class...");	
-			return reqLeaveService.getLeavesDetails(user_id, leavestatus, view);
-		}
+
+
+	// My Leaves , Employee Leaves		
+	@GetMapping("/getLeaveDetails/{user_id}/{leavestatus}/{view}")
+	public LeavesResponseBean leaveDetails(@PathVariable(value = "user_id") String user_id,
+			@PathVariable(value = "leavestatus") String leavestatus, @PathVariable(value = "view") String view) {
+		logger.info("entered into leaveDetails method of service class...");	
+		return reqLeaveService.getLeavesDetails(user_id, leavestatus, view);
+	}
 
 	@PostMapping("/save")
 	public ResponseEntity<EntityResponse> saveRequestForLeave(@RequestBody RequestForLeaveBinding details) {
@@ -56,26 +57,31 @@ public class RequestForLeaveController {
 		return reqLeaveService.saveEmployeeLeaveData(bean);
 
 	}
-	
+
 	// Leave Management Option
-		@GetMapping("/getLeaveManagementOptions")
-		public LeaveManagementOptionsResponseBean leaveManagementOptions() {
-			logger.info("entered into leaveManagementOptions method of service class...");
-			return reqLeaveService.leaveManagementOptions();
-		}
-		
-		
-		
+	@GetMapping("/getLeaveManagementOptions")
+	public LeaveManagementOptionsResponseBean leaveManagementOptions() {
+		logger.info("entered into leaveManagementOptions method of service class...");
+		return reqLeaveService.leaveManagementOptions();
+	}
+
+
 	//Update Apply Leave Requeste
 	@PutMapping("/updateEmpLeaveStatMail/{eid}")	
 	public MailStatusResponse updateLeaveReqOfEmp(@RequestBody UpdateEmployeeLeaveDetails bean,@PathVariable("eid") String eid) {
-		
+
 		MailStatusResponse mailsend = this.reqLeaveService.mailsend(bean, eid);
-		
+
 		return mailsend;
-		
+
 	}
-		
-		
+
+
+
+	//get leave based on year
+	@GetMapping("/getLeavesBasedOnYear/{year}")
+	public Common getLeavesBasedOnYear(@PathVariable("year") int year) {
+		return reqLeaveService.getLeavesBasedOnYear(year);
+	}
 
 }

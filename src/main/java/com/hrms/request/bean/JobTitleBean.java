@@ -13,6 +13,7 @@ public class JobTitleBean {
 	private String jobTitleName;
 	private String jobDescription;
 	private String minExpReq;
+	private String comments;
 	private String jobPayGradeCode;
 	private String jobPayFrequency;
 	private int createdOrModifiedBy;

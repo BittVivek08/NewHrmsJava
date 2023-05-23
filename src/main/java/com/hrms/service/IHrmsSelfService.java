@@ -1,20 +1,15 @@
 package com.hrms.service;
 
 
-import java.util.List;
-
 import javax.ws.rs.core.Response;
 
-import org.springframework.http.ResponseEntity;
-
-import com.hrms.entity.LeaveRequestEntity;
 import com.hrms.request.bean.LeaveRequestBean;
 import com.hrms.response.bean.CommonResponseBean;
 import com.hrms.response.bean.LeaveResponseBean;
 
 public interface IHrmsSelfService {
 
-	public Response saveLeaveRequest(LeaveRequestBean leaverequestBean, int roleId, int menuId);
+	public CommonResponseBean saveLeaveRequest(LeaveRequestBean leaverequestBean, int roleId, int menuId);
 	
 	
 	public LeaveResponseBean deleteMyLeave(int id);
@@ -25,4 +20,10 @@ public interface IHrmsSelfService {
 	
 	// history of applied leave Details.
 	public CommonResponseBean getHistoryOfAppliedLeaveDetails(String userId, int roleId, int menuId);
+	
+	//get total leaves taken 
+	public CommonResponseBean totalLeaveTaken(int id);
+	
+//	public Response saveLeaveRequest(LeaveRequestBean leaverequestBean, int roleId, int menuId);
+
 }

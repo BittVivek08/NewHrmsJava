@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.CurrentWeekDatesResponse;
@@ -21,7 +22,11 @@ import com.hrms.entity.EmployeeDetails;
 //import com.hrms.beans.SaveTimesheetRequestBean;
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.repository.HolidayCalenderRepository;
+import com.hrms.response.bean.CommonTimeSheetbean;
 import com.hrms.response.bean.DateResponseTimeSheet;
+import com.hrms.response.bean.EmployeesForReportingManagerResponse;
+import com.hrms.response.bean.ProjectListResponse;
+import com.hrms.response.bean.TSResponseObj;
 import com.hrms.response.bean.TimeSheetResponse;
 import com.hrms.response.bean.TimeSheetResponseForMonth;
 import com.hrms.response.bean.TimeSheetResponseForMonthYearWeek;
@@ -31,14 +36,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@RequestMapping("/TimeSheet")
 public class HrmsEmpTimeSheetController {
 	@Autowired
 	private TimeSheetDetailsImpl impl;
-	@Autowired
-	private HolidayCalenderRepository holidayCalenderRepository;
 
 	@PostMapping("/saveTimeSheet")
-	public ResponseEntity<TimeSheetResponse> saveTimeSheett(@RequestBody SaveTimeSheet timesheet) {
+	public ResponseEntity<TimeSheetResponse> saveTimeSheett(@RequestBody List<SaveTimeSheet> timesheet) {
 		log.info("entered into saveTimeSheet method of HrmsEmpTimeSheetController class");
 		try {
 			TimeSheetResponse saveTimeSheett1 = this.impl.saveTimeSheett(timesheet);
@@ -49,7 +53,7 @@ public class HrmsEmpTimeSheetController {
 		}
 	}
 
-	@DeleteMapping("/DeleteTimeSheet")
+	@DeleteMapping("/DeleteWeekDetailsById")
 	public ResponseEntity<String> deleteTimeSheetById(@QueryParam("id") int id) {
 
 		log.info("entered into DeleteTimeSheet method of HrmsEmpTimeSheetController class");
@@ -86,10 +90,10 @@ public class HrmsEmpTimeSheetController {
 	@GetMapping("/getDetailUsingMonYearWeek")
 	public ResponseEntity<TimeSheetResponseForMonthYearWeek> getEmployeeDetailByMonYearandWeek(
 			@QueryParam("month") int month, @QueryParam("year") int year, @QueryParam("calweek") int calweek,
-			@QueryParam("id") int id) {
+			@QueryParam("userid") int Userid) {
 		log.info("entered into getDetailUsingMonYearWeek method of HrmsEmpTimeSheetController class");
 		TimeSheetResponseForMonthYearWeek response = new TimeSheetResponseForMonthYearWeek();
-		SaveTimeSheet timesheet = impl.getTimeSheetDetails(month, year, calweek, id);
+		List<SaveTimeSheet> timesheet = impl.getTimeSheetDetails(month, year, calweek, Userid);
 		if (timesheet != null) {
 			response.setMessage("timesheet detail retrived successfully");
 			response.setSaveTimeSheet(timesheet);
@@ -115,6 +119,49 @@ public class HrmsEmpTimeSheetController {
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		}
 	}
+	
+//New Api
+	@GetMapping("/getTimeSheetDetails")
+	public ResponseEntity<TimeSheetResponseForMonthYearWeek> getEmployeeDetails(@QueryParam("month") Integer month,
+			@QueryParam("empId") String empId, @QueryParam("year") Integer year,@QueryParam("calweek")Integer calweek,@QueryParam("id") Integer id) {
+		log.info("entered into getTimeSheetDetailUsingMon method of HrmsEmpTimeSheetController class");
+//		TimeSheetResponseForMonth response = new TimeSheetResponseForMonth();
+		TimeSheetResponseForMonthYearWeek response1 = new TimeSheetResponseForMonthYearWeek();
+//		if(month!=0 &&  year!=0 && empId!=null) {
+			if( empId!=null) {
+		List<Object[]> timesheet = impl.getTimeSheetDetailsByMonth(month, empId, year);
+		
+		if (timesheet != null) {
+			response1.setMessage("timesheet detail retrived successfully");
+			response1.setList(timesheet);
+			return new ResponseEntity<TimeSheetResponseForMonthYearWeek>(response1, HttpStatus.OK);
+		} else {
+			response1.setMessage("timesheet detail not retrived");
+			return new ResponseEntity<>(response1, HttpStatus.NOT_FOUND);
+		}
+	     
+		}
+//		else if(calweek!=0 && id !=0 && month!=0 && year!=0 ) {
+		else if(calweek!=0) {		
+
+			List<SaveTimeSheet> timesheet = impl.getTimeSheetDetails(month, year, calweek, id);
+			if (timesheet != null) {
+				response1.setMessage("timesheet detail retrived successfully");
+				response1.setSaveTimeSheet(timesheet);
+				return new ResponseEntity<TimeSheetResponseForMonthYearWeek>(response1, HttpStatus.OK);
+			} else {
+				response1.setMessage("timesheet detail not retrived");
+				return new ResponseEntity<>(response1, HttpStatus.NOT_FOUND);
+			}
+		     
+			}
+		
+		 return new ResponseEntity<TimeSheetResponseForMonthYearWeek>(response1, HttpStatus.OK);
+	}
+	
+	
+	
+	
 
 	@PostMapping("/getWeekDates")
 	public ResponseEntity<CurrentWeekDatesResponse> getWeekDates(@RequestBody CurrentWeekRequest currentWeekRequest) {
@@ -129,7 +176,7 @@ public class HrmsEmpTimeSheetController {
 
 	 @GetMapping("/getEmployeesByReportingManagerId")
 	 public ResponseEntity<List<EmployeeDetails>> getEmpByRepID(@QueryParam("repId")
-	 int repId){
+	 Integer repId){
 	 List<EmployeeDetails> ob=impl.getEmpByReportingId(repId);
 	 return new ResponseEntity<List<EmployeeDetails>>(ob,HttpStatus.OK);
 	
@@ -154,9 +201,40 @@ public class HrmsEmpTimeSheetController {
 	}
 
 	@GetMapping("/getEmployeesWhoDidNotAccessTimeSheet")
-	public void getEmployeesWhoDidNotAccessTimeSheet(@QueryParam("year") int year, @QueryParam("month") int month) {
-		 impl.getEmployeesWhoDidNotAccessTimeSheet(year, month);
+	public CommonTimeSheetbean getEmployeesWhoDidNotAccessTimeSheet(@QueryParam("year") int year, @QueryParam("month") int month) {
+		log.info("entered into getEmployeesWhoDidNotAccessTimeSheet method of HrmsEmpTimeSheetController class");
+		 return impl.getEmployeesWhoDidNotAccessTimeSheet(year, month);
 	}
+	
+	
+	
+
+	@GetMapping("/getEmplTimeSheetDetailsByReportingManagerId")
+	public TimeSheetResponse getTimeSheetDetailsByReportingManagerId(@QueryParam("repId") int repId,
+			@QueryParam("status") String status) {
+		log.info("entered into getEmplTimeSheetDetailsByReportingManagerId method of HrmsEmpTimeSheetController class");
+		return impl.getEmplTimeSheetDetailsByReportingManagerId(repId, status);
+	}
+	
+
+	@GetMapping("/getProjectIdList")
+		public ProjectListResponse getProjectIdList() {
+		log.info("entered into getProjectIdList method of HrmsEmpTimeSheetController class");
+		return impl.getProjectList();
+	}
+	
+	
+	@GetMapping("/getEmplDetailsByReportingManagerId")
+	
+	public TSResponseObj getEmpDetailsByReportingManagerId(@QueryParam("repId") int repId,
+			@QueryParam("calWeek") short calWeek) {
+		log.info("entered into getEmpDetailsByReportingManagerId method of HrmsEmpTimeSheetService class");
+		return impl.getEmplDetailsByReportingManagerId(repId, calWeek);
+	}
+	
+
+
+
 	
 
 	// @PostMapping("/timeSheetApproval")

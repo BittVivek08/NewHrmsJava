@@ -11,5 +11,7 @@ public class CommonResponseBean {
 	private String msg;
 	
 	private boolean status;
+	
+	private Object list;
 
 }

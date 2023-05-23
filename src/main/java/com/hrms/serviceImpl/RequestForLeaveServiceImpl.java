@@ -34,8 +34,11 @@ import com.hrms.repository.LeaveRequestRepository;
 import com.hrms.repository.MyLeaveRequestRepository;
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
+import com.hrms.request.bean.LeaveDetailsFiltaring;
 import com.hrms.request.bean.RequestForLeaveBinding;
+
 import com.hrms.request.bean.UpdateEmployeeLeaveDetails;
+import com.hrms.response.bean.Common;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
 import com.hrms.response.bean.LeavesResponseBean;
@@ -47,10 +50,10 @@ import com.hrms.util.HrmsGetDateAndTime;
 public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 
 	private static final Logger logger=LoggerFactory.getLogger(RequestForLeaveServiceImpl.class);
-	
+
 	@Autowired
 	EmployeeLeaveTypeRepository leaveTypeRepo;
-	
+
 	@Autowired
 	HolidayCalenderRepository holidayRepo;
 
@@ -65,28 +68,30 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 
 	@Autowired
 	private EntityResponse response;
-	
+
 	@Autowired
 	private LeaveRequestRepository leaveRequestRepo;
-	
+
 	@Autowired
 	private LeaveManagementRepository leaveManagementRepository;
 
+	@Autowired
 	private EmployeeLeaveTypeResponseBean leaveTyperes;
-	
+
 	@Autowired
 	private MailStatusResponse mailresponse;
-	
+
 	@Autowired
 	private EmailController mailcontroller;
-	
+
 	@Autowired
 	private MyLeaveRequestRepository myleaveReqRepo;
-	
+
 	@Autowired
 	EmailServiceImpl emailService;
-	
-	
+
+
+
 
 
 	@Override
@@ -119,10 +124,10 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		int totaldays = (int) daysBetween + 1;
 		System.out.println("Days between = " + totaldays);
 
-//	       List<LocalDate> workDays = Stream.iterate(startDate, date -> date.plusDays(1))
-//	               .limit(totaldays)
-//	               .filter(isHoliday.or(isWeekend).negate())
-//	               .toList();
+		//	       List<LocalDate> workDays = Stream.iterate(startDate, date -> date.plusDays(1))
+		//	               .limit(totaldays)
+		//	               .filter(isHoliday.or(isWeekend).negate())
+		//	               .toList();
 
 		List<LocalDate> workDays = Stream.iterate(startDate, date -> date.plusDays(1)).limit(totaldays)
 				.filter(isHoliday.or(isWeekend).negate()).collect(Collectors.toList());
@@ -190,26 +195,27 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 
 		return response;
 	}
-	
+
 	// Leaves Details List
 	@Override
 	public LeavesResponseBean getLeavesDetails(String user_id, String leavestatus, String view) {
 		logger.info("entered into getLeavesDetails of businessClass");			
 		List<LeaveRequestEntity>listOfLeaves=new ArrayList<>();		
 		int countAll = 0, countPending = 0, countApproved = 0, countRejected = 0, countCancel = 0;
-				
-		if (view.equalsIgnoreCase("Employee")) {			
+
+		if (view.equalsIgnoreCase("Employee")) {	
+
 			listOfLeaves.addAll(leaveRequestRepo.findByEmp_id(user_id));
-			
+
 		} else if (view.equalsIgnoreCase("superAdmin")) {
 			listOfLeaves.addAll(leaveRequestRepo.listOfLeavesByLeavestatus(leavestatus));
-			
+
 		} else {
-					
+
 			listOfLeaves.addAll(leaveRequestRepo.listOfLeavesByUid(user_id, leavestatus));
 		} 
 		LeavesResponseBean response = new LeavesResponseBean();	
-		
+
 		if (!listOfLeaves.isEmpty()) {
 			response.setMessage("Retrival of Leave Details Successfull.");
 			response.setStatus(true);
@@ -227,7 +233,6 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 						countCancel++;
 					else
 						logger.info("Nothing to count.");
-
 				}
 				response.setCountAll(countAll);
 				response.setCountPending(countPending);
@@ -241,20 +246,17 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 			response.setMessage("No Leave Details are available.");
 			response.setStatus(false);
 			response.setList(listOfLeaves);
-		}	
-		
-		
-	//	return (List<ResponseEntity<LeaveRequestEntity>>) Response.status(Response.Status.OK).entity(response).build();
-		return  response;
-					
+		}			
+		return  response;				
 	}
+
 
 	@Override
 	public LeaveManagementOptionsResponseBean leaveManagementOptions() {
-		
+
 		logger.info("entered into getLeaveManagementOptions of businessClass");
 		List<LeaveManagementEntity> listOfLeaveManagementOptions = leaveManagementRepository.listOfLeaveManagementOptions();
-		
+
 		LeaveManagementOptionsResponseBean response = new LeaveManagementOptionsResponseBean();
 
 		if (!listOfLeaveManagementOptions.isEmpty()) {
@@ -268,14 +270,14 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 			response.setListOfLeaveManagementOptions(listOfLeaveManagementOptions);
 		}
 		return response;		
-		
+
 	}
-	
+
 	public EmployeeLeaveTypeResponseBean saveEmployeeLeaveData(EmployeeLeaveTypeBean leaveBean) {
 		EmployeeLeaveTypeEntity employeeLeaveEntity = new EmployeeLeaveTypeEntity();
-		
+
 		if(leaveTypeRepo.getId(leaveBean.getLeaveType(), leaveBean.getYear())==null) {
-		
+
 			try {
 				employeeLeaveEntity.setCreatedDate(new HrmsGetDateAndTime().GetUTCdatetimeAsString());
 				employeeLeaveEntity.setModifiedDate(new HrmsGetDateAndTime().GetUTCdatetimeAsString());
@@ -286,7 +288,7 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 				employeeLeaveEntity.setNoOfDaysMonth(leaveBean.getNoOfDays() / 12);
 				employeeLeaveEntity.setYear(leaveBean.getYear());
 				employeeLeaveEntity.setLeaveTypeId(leaveBean.getId());
-			    employeeLeaveEntity.setLeaveType(leaveBean.getLeaveType());
+				employeeLeaveEntity.setLeaveType(leaveBean.getLeaveType());
 
 				leaveTypeRepo.save(employeeLeaveEntity);
 				// System.out.println(inserted);
@@ -294,37 +296,35 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 				leaveTyperes.setStatus(true);
 				leaveTyperes.setMesssage("leave type saved successfully for the year : "+leaveBean.getYear());
 			} 
-		
+
 			catch (Exception e) {
 				e.printStackTrace();
-				}
-		}
-		
+			}
+		}		
 		else {
 			leaveTyperes.setLeaveTypelist(null);
 			leaveTyperes.setMesssage("already leave type is available for the year : "+leaveBean.getYear());
 			leaveTyperes.setStatus(false);
-			}
-		
-		
-	return leaveTyperes;
-	
+		}		
+		return leaveTyperes;
+
 	}
 
-	
-	
+
+
+
 	//updateEmpLeaveReaquest
 	@Override
 	public MailStatusResponse mailsend(UpdateEmployeeLeaveDetails updateBean, String eid) {
-		
+
 		String mailIdofEmp = this.myleaveReqRepo.mailIdofEmp(eid);
-		
+
 		MyLeaveRequestEntity leaveEntity = this.myleaveReqRepo.findByEmpid(eid);
-		
+
 		EmailDetails mailData=new EmailDetails();
-		
+
 		if(updateBean.getLeaveStatus().equalsIgnoreCase("Approved")) {
-			
+
 			//MyLeaveRequestEntity leaveEntity = this.myleaveReqRepo.findByEmpid(eid);
 			leaveEntity.setLeaveStatus("Approved");
 			MyLeaveRequestEntity save = this.myleaveReqRepo.save(leaveEntity);
@@ -337,10 +337,10 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 
 			if(save!=null) {
 				mailresponse.setStatus(true);
-                mailresponse.setMessage("Leave Approved and "+mailMessage);				
+				mailresponse.setMessage("Leave Approved and "+mailMessage);				
 			}	
 		}else {
-		     
+
 			mailData.setRecipient(mailIdofEmp);
 			mailData.setSubject("Applied leave Status");
 			mailData.setMsgBody("Hi Mr/Ms "+leaveEntity.getName()+"  your's applied leave request has been Cancelled");
@@ -350,8 +350,35 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 			mailresponse.setMessage("leave not approved and " + mailMessage);
 			//mailresponse.setStatus(false);
 		}
-		
+
 		return mailresponse;
 	}
 
+	@Override
+	public Common getLeavesBasedOnYear(LeaveDetailsFiltaring detailsFiltaring) {
+
+		LeaveRequestEntity leaveRequestEntity=new LeaveRequestEntity();		
+
+		return null;
+	}
+
+
+
+	//Get Leaves based on year like old hrms
+	@Override
+	public Common getLeavesBasedOnYear(int year) {
+
+		Common common=new Common();
+		List<EmployeeLeaveTypeEntity> leavesBasedOnYear = leaveTypeRepo.getLeavesBasedOnYear(year);
+
+		if (leavesBasedOnYear.size() > 0 && leavesBasedOnYear != null) {
+			common.setMessage("Leaves Information based on year fetched successfully");
+			common.setStatus(true);
+			common.setList(leavesBasedOnYear);
+		} else {
+			common.setMessage("Unable to fetch Leaves Information based on year");
+			common.setStatus(false);
+		}		
+		return common;
+	}
 }

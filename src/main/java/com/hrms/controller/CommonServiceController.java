@@ -3,6 +3,9 @@ package com.hrms.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +38,8 @@ import com.hrms.request.bean.PersonalNationalityBean;
 import com.hrms.request.bean.SalaryAccountClassTypeRequestBean;
 import com.hrms.request.bean.SalaryCurrencyRequestBean;
 import com.hrms.request.bean.personalLanguageBean;
+import com.hrms.response.bean.ListOfPositionsResponseBean;
+import com.hrms.service.EmployeeDetailsService;
 import com.hrms.service.HrmsCommonService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +52,7 @@ public class CommonServiceController {
 
 	@Autowired
 	private HrmsCommonService hrmsCommomService;
+	
 
 	@PostMapping("/addCurrency")
 	public CommonResponseBean saveSalaryCurrency(@RequestBody SalaryCurrencyRequestBean salaryCurrencyReqBean) {
@@ -105,7 +111,7 @@ public class CommonServiceController {
 		return hrmsCommomService.updateByid(id, bean);
 	}
 	
-	@PostMapping("/save_gender")
+	@PostMapping("/savegender")
 	public CommonResponseBean saveGender(@RequestBody PersonalGenderBean genderBean) {
 		log.info("save gender api");
 		return hrmsCommomService.saveGenderDetails(genderBean);
@@ -123,19 +129,19 @@ public class CommonServiceController {
 		return hrmsCommomService.getAllGenders();
 	}
 	
-	@DeleteMapping("/delete_detail/{id}")
+	@DeleteMapping("/deletedetail/{id}")
 	public CommonResponseBean deleteByGenderId(@PathVariable int id) {
 		log.info("delete by id gender api");
 		return hrmsCommomService.deleteByGenderId(id);
 	}
 	
-	@PutMapping("/update_details/{id}")
+	@PutMapping("/updatedetails/{id}")
 	public CommonResponseBean updateByGenderId(@PathVariable int id, @RequestBody PersonalGenderBean genderBean) {
 		log.info("updated by id gender api");
 		return hrmsCommomService.updateByGenderId(id, genderBean);
 	}
 	
-	@PostMapping("/save_maritalstatus")
+	@PostMapping("/savemaritalstatus")
 	public CommonResponseBean saveMarital(@RequestBody PersonalMaritalStatusBean maritalBean) {
 		log.info("save maritalstatus api");
 		return hrmsCommomService.saveMaritialDetails(maritalBean);
@@ -153,26 +159,26 @@ public class CommonServiceController {
 		return hrmsCommomService.getAllMaritalStatus();
 	}
 	
-	@DeleteMapping("/delete_maritaldetail/{id}")
+	@DeleteMapping("/deletemaritaldetail/{id}")
 	public CommonResponseBean deleteByMaritalId(@PathVariable int id) {
 		log.info("delete by id maritalstatus api");
 		return hrmsCommomService.deleteByMaritalId(id);
 	}
 	
-	@PutMapping("/update_maritaldetails/{id}")
+	@PutMapping("/updatemaritaldetails/{id}")
 	public CommonResponseBean updateByMaritalId(@PathVariable int id, @RequestBody PersonalMaritalStatusBean maritalBean) {
 		log.info("updated by id maritalstatus api");
 		return hrmsCommomService.updateByMaritalId(id, maritalBean);
 	}
 	
-	@PostMapping("/save_nationality")
+	@PostMapping("/savenationality")
 	public CommonResponseBean saveNationality( @RequestBody PersonalNationalityBean bean) {
 		log.info("saving Nationality api");
 		return hrmsCommomService.saveNationality(bean);
 		
 	}
 	
-	@GetMapping("/get_nationality/{id}")
+	@GetMapping("/getnationality/{id}")
 	public Optional<NationalityEntity> getNationality(@PathVariable int id) {
 		log.info("get by id nationality api");
 		return hrmsCommomService.getByNationalityId(id);
@@ -184,13 +190,13 @@ public class CommonServiceController {
 		return hrmsCommomService.getAllNationality();
 	}
 	
-	@DeleteMapping("/delete_nationality/{id}")
+	@DeleteMapping("/deletenationality/{id}")
 	public CommonResponseBean deleteNationality(@PathVariable int id) {
 		log.info("delete by id naionality api");
 		return hrmsCommomService.deleteByNatioalityId(id);
 	}
 	
-	@PutMapping("/update_nationality/{id}")
+	@PutMapping("/updatenationality/{id}")
 	public CommonResponseBean updatedNationality(@PathVariable int id, @RequestBody PersonalNationalityBean bean) {
 		log.info("updated by id naionality api");
 		return hrmsCommomService.updateByNationaliyId(id, bean);
@@ -210,14 +216,14 @@ public class CommonServiceController {
 		return new ResponseEntity<> (empRoleById,HttpStatus.OK);
 	}
 	
-	@PostMapping("/save_language")
+	@PostMapping("/savelanguage")
 	public CommonResponseBean saveLanguage( @RequestBody personalLanguageBean bean) {
 		log.info("saving Language api");
 		return hrmsCommomService.saveLanguageDetails(bean);
 		
 	}
 	
-	@GetMapping("/get_language/{id}")
+	@GetMapping("/getlanguage/{id}")
 	public Optional<LanguageEntity> getlanguage(@PathVariable int id) {
 		log.info("get by Language id api");
 		return hrmsCommomService.getBylanguageId(id);
@@ -229,16 +235,40 @@ public class CommonServiceController {
 		return hrmsCommomService.getAlllanguages();
 	}
 	
-	@DeleteMapping("/delete_language/{id}")
+	@DeleteMapping("/deletelanguage/{id}")
 	public CommonResponseBean deletelaguage(@PathVariable int id) {
 		log.info("delete by Language id api");
 		return hrmsCommomService.deleteBylanguageId(id);
 	}
 	
-	@PutMapping("/update_language/{id}")
+	@PutMapping("/updatelanguage/{id}")
 	public CommonResponseBean updatedlanguage(@PathVariable int id, @RequestBody personalLanguageBean bean) {
 		log.info("updated by Language id api");
 		return hrmsCommomService.updateBylanguageId(id, bean);
 	}
-
+	
+	@GetMapping("/HrManagerList")
+	public CommonResponseBean hrManagerList(@QueryParam(value = "businessunitId") int businessunitId) {
+		log.info("Entered into hrManagerList()");
+		return hrmsCommomService.fetchHRmanager(businessunitId);
+	}
+	
+	@GetMapping("/IMMManagerList")
+	public CommonResponseBean superImmManagerList(@QueryParam(value = "businessunitId") int businessunitId) {
+		log.info("Entered into superImmManagerList()");
+		return hrmsCommomService.fetchIMMmanager(businessunitId);
+	}
+	
+	@GetMapping("/AllReportingManagerList")
+	public CommonResponseBean allReportingManagerList(@QueryParam(value = "empRoleId") int empRoleId,
+			@QueryParam(value = "businessunitId") int businessunitId,
+			@QueryParam(value = "departmentId") int departmentId) {
+		log.info("Entered into allReportingManagerList()");
+		return hrmsCommomService.fetchReportingManagerList(empRoleId, businessunitId, departmentId);
+	}
+	@GetMapping("/getPositionList")
+	public ListOfPositionsResponseBean getPositionsList(@QueryParam(value = "jobTitleId") int jobTitleId) {
+		log.info("entered into getPositionsList service class method..");
+		return hrmsCommomService.listOfPositions(jobTitleId);
+	}
 }
