@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.hrms.entity.ProjectDetailsEntity;
+import com.hrms.response.bean.ProjectResponse;
 
 
 
@@ -16,5 +17,7 @@ public interface ProjectDetailsRepository extends JpaRepository<ProjectDetailsEn
 	List<ProjectDetailsEntity> findByClient(@Param("clientid") Integer clientid);
 
 	ProjectDetailsEntity findByProjectId(int projectId);
+    @Query("From  projectName,projectId ProjectDetailsEntity")
+	List<ProjectDetailsEntity> getProjectAndId();
 
 }

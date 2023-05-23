@@ -1,5 +1,7 @@
 package com.hrms.response.bean;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.hrms.entity.SaveTimeSheet;
@@ -11,7 +13,10 @@ import lombok.Data;
 public class TimeSheetResponseForMonthYearWeek {
 	String message;
 		
-	SaveTimeSheet saveTimeSheet;
+	List<SaveTimeSheet> saveTimeSheet;
+	List<Object[]> list;
+
+	
 	
 	
 }
