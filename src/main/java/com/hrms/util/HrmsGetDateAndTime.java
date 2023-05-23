@@ -14,7 +14,10 @@ import ch.qos.logback.classic.Logger;
 
 
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+
+@Component
 public class HrmsGetDateAndTime {
 
 	private final static Logger logger =(Logger) LoggerFactory.getLogger(HrmsGetDateAndTime.class);

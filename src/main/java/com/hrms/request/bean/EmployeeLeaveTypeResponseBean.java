@@ -13,3 +13,9 @@ public class EmployeeLeaveTypeResponseBean {
 	private boolean status;
 	private Object leaveTypelist;
 }
+
+
+
+
+
+

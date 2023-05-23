@@ -32,6 +32,9 @@ public class EmployeeLeaveRequestSummaryEntity {
 	@Column(name = "department_id")
 	private int departmentId;
 
+	@Column (name = "leave_status")
+	private String leaveStatus;
+	
 	@Column(name = "department_name")
 	private String departmentName;
 
@@ -86,6 +89,8 @@ public class EmployeeLeaveRequestSummaryEntity {
 
 	@Column(name = "is_sat_holiday")
 	private int isSatHoliday;
+	
+	private Timestamp createddate; 
 
 	@Column(name = "modifieddate")
 	private Timestamp modifieddate;
