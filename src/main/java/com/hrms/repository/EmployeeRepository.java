@@ -50,6 +50,11 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
 	
     @Query("select employeeName from EmployeeDetails  where reportingManagerId=?1")
 	String empName(int repManId);
+
+
+    
+    @Query("From EmployeeDetails where reportingManagerId=?1 ")
+	List<EmployeeDetails> getEmpUserListByReportingManagerId(int repId);
     
     @Query("from EmployeeDetails where empRoleId in(1,2) or empRoleId=4 and businessunitId=:businessunitId")
     List<EmployeeDetails> getHrManager(int businessunitId);

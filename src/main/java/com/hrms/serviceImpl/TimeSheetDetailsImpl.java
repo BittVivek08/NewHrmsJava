@@ -38,6 +38,7 @@ import com.hrms.repository.SaveTimeSheetRepo;
 import com.hrms.repository.TaskDeatailsRepository;
 import com.hrms.response.bean.CommonTimeSheetbean;
 import com.hrms.response.bean.DateResponseTimeSheet;
+import com.hrms.response.bean.EmployeesForReportingManagerResponse;
 import com.hrms.response.bean.ProjectListResponse;
 import com.hrms.response.bean.ProjectResponse;
 import com.hrms.response.bean.TSResponseEmployeeName;
@@ -273,18 +274,18 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 			for(String emp : empTSet) {
 				boolean duplicate = false;
 				for(String empT : empTimeList) {
-					
+
 					if(emp.equalsIgnoreCase(empT)) {
 						duplicate = true;
 						break;
 					}
 				}
-			
+
 				if(!duplicate) {
 					if (year != 0 && month != 0) {
 						objList.add(employeeRepository.getuserID(employeeRepository.findEmpIdId(emp)));
-				}
-					  else  if(year != 0 && month == 0) {
+					}
+					else  if(year != 0 && month == 0) {
 						objList.add(employeeRepository.getuserID(employeeRepository.findEmpIdId(emp)));
 					}
 				}
@@ -331,39 +332,39 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 
 		return response;
 	}
-	
+
 	public List<EmployeeDetails> getEmpByReportingId(Integer repId) {
 
 		return this.employeeRepository.getDetailByRepId(repId);
 	}
-	
-	
-	
+
+
+
 	public TimeSheetResponse getEmplTimeSheetDetailsByReportingManagerId(int repId, String status) {
 		log.info("entered into getEmplTimeSheetDetailsByReportingManagerId method of TimeSheetDetails class");
 		List<EmployeeDetails> empUserList =employeeRepository.getDetailByRepId(repId);
 		List<TSResponseEmployeeName> listOfDetails = new ArrayList<>();
 		TSResponseObj tsResp = new TSResponseObj();
 		TSResponseEmployeeName tsEmp = null;
-//		if (empUserList != null && empUserList.size() != 0) {
-//			for (EmployeeDetails empEntity : empUserList) {
-//				ArrayList<SaveTimeSheet> listofMonthlyTSDetails = saveTimeSheetRepo
-//						.getLeaveStatusByUserId(empEntity.getUserId(), status);
-//				String employeeName = null;
-//				if (listofMonthlyTSDetails != null && listofMonthlyTSDetails.size() != 0) {
-//					tsEmp = new TSResponseEmployeeName();
-//					employeeName = empEntity.getEmployeeName();
-//					tsEmp.setEmployeeName(employeeName);
-//					tsEmp.setStartDate(listofMonthlyTSDetails.get(0).getMon_date());
-//					tsEmp.setEndDate(listofMonthlyTSDetails.get(0).getSun_Date());
-//					tsEmp.setTotalHours(listofMonthlyTSDetails.get(0).getTotalWeekHours());
-//					tsEmp.setWeekNo(listofMonthlyTSDetails.get(0).getWeekNo());
-//					tsEmp.setStatus(status);
-//					tsEmp.setTimeSheetListForEmployee(listofMonthlyTSDetails);
-//					listOfDetails.add(tsEmp);
-//				}
-//			}
-//		}
+		//		if (empUserList != null && empUserList.size() != 0) {
+		//			for (EmployeeDetails empEntity : empUserList) {
+		//				ArrayList<SaveTimeSheet> listofMonthlyTSDetails = saveTimeSheetRepo
+		//						.getLeaveStatusByUserId(empEntity.getUserId(), status);
+		//				String employeeName = null;
+		//				if (listofMonthlyTSDetails != null && listofMonthlyTSDetails.size() != 0) {
+		//					tsEmp = new TSResponseEmployeeName();
+		//					employeeName = empEntity.getEmployeeName();
+		//					tsEmp.setEmployeeName(employeeName);
+		//					tsEmp.setStartDate(listofMonthlyTSDetails.get(0).getMon_date());
+		//					tsEmp.setEndDate(listofMonthlyTSDetails.get(0).getSun_Date());
+		//					tsEmp.setTotalHours(listofMonthlyTSDetails.get(0).getTotalWeekHours());
+		//					tsEmp.setWeekNo(listofMonthlyTSDetails.get(0).getWeekNo());
+		//					tsEmp.setStatus(status);
+		//					tsEmp.setTimeSheetListForEmployee(listofMonthlyTSDetails);
+		//					listOfDetails.add(tsEmp);
+		//				}
+		//			}
+		//		}
 		if (listOfDetails != null && listOfDetails.size() != 0) {
 			tsResp.setMessage("TimeSheet Details are retrieved successfully");
 			tsResp.setStatus(true);
@@ -372,24 +373,24 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 			tsResp.setMessage("TimeSheet Details are not found");
 			tsResp.setStatus(false);
 		}
-//		return Response.ok().entity(tsResp).build();
-//	}
+		//		return Response.ok().entity(tsResp).build();
+		//	}
 
 		return null;
 	}
 	public ProjectListResponse getProjectList() {
 		ProjectListResponse response = new ProjectListResponse();
-	 ProjectResponse listOfProjectResponse=new ProjectResponse();
-	 List<Integer> id1=new ArrayList<>();
-	 List<String> Pr=new ArrayList<>();
+		ProjectResponse projectResponse=null;
+		List<ProjectResponse> listOfProjectResponse = new ArrayList<>();
 		List<ProjectDetailsEntity> ListProject =pojectDetailsRepository.findAll();
-	    
-	for (ProjectDetailsEntity emp : ListProject) {
-			listOfProjectResponse.setProjectId(emp.getProjectId());
-			listOfProjectResponse.setProjectName(emp.getProjectName());	
-			}
-//		 List<ProjectResponse> listOfProjectResponse=null;
-		if (listOfProjectResponse != null) {
+
+		for (ProjectDetailsEntity emp : ListProject) {
+			projectResponse=new ProjectResponse();
+			projectResponse.setProjectId(emp.getProjectId());
+			projectResponse.setProjectName(emp.getProjectName());	
+			listOfProjectResponse.add(projectResponse);		
+		}
+		if (listOfProjectResponse != null && listOfProjectResponse.size()>0) {
 			response.setListOfProjectResponse(listOfProjectResponse);
 			response.setStatus(true);
 			response.setMessage("Project Retrived Successful");
@@ -399,6 +400,34 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 			response.setMessage("Project Retrived UnSuccessful");
 			return response;
 		}
-	
+
 	}
-}
+	public EmployeesForReportingManagerResponse  getEmpUserListByReportingManagerId(int repId) {
+		log.info("entered into getReportingManagerNameById Method of TimeSheetDetails Service class..");
+		List<EmployeeDetails> empDetailsList = employeeRepository.getEmpUserListByReportingManagerId(repId);
+		EmployeesForReportingManagerResponse empListResponse = new EmployeesForReportingManagerResponse();
+		if (empDetailsList != null && !empDetailsList.isEmpty()) {
+			empListResponse.setMessage("Timesheet Details Fetched Successfully.");
+			empListResponse.setStatus(true);
+			empListResponse.setReportingMangerId(repId);
+			empListResponse.setEmpDetailsList(empDetailsList);
+		} else {
+			empListResponse.setReportingMangerId(repId);
+			empListResponse.setMessage("Timesheet Details Not Found for Employees Under ReportingManager : " + repId);
+			empListResponse.setStatus(false);
+		}
+
+		return empListResponse;
+	}
+	public TSResponseObj getEmplDetailsByReportingManagerId(int repId, int calWeek) {
+		List<EmployeeDetails> empUserList = employeeRepository.getEmpUserListByReportingManagerId(repId);
+		List<TSResponseEmployeeName> listOfDetails = new ArrayList<>();
+		TSResponseObj tsResp = new TSResponseObj();
+		
+		return null;
+	}
+
+	}
+	
+	
+
