@@ -1,7 +1,5 @@
 package com.hrms.response.bean;
 
-import java.util.List;
-
 import lombok.Data;
 
 @Data
