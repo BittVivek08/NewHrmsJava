@@ -90,4 +90,22 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 		//return null;
 	}
 
+	@Override
+	public CommonResponseBean totalLeaveTaken(int id) {
+		
+		CommonResponseBean commonResponse = new CommonResponseBean();
+		List<LeaveRequestEntity> totalLeaveTaken = leaveRequestRepo.totalLeaveTaken(id);
+		if (totalLeaveTaken != null) {
+			commonResponse.setMessage("Successfully");
+			commonResponse.setStatus(true);
+			commonResponse.setList(totalLeaveTaken);
+		} else {
+			commonResponse.setMessage("UnSuccessfully");
+			commonResponse.setStatus(false);
+		}
+		
+		
+		return commonResponse;
+	}
+
 }

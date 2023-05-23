@@ -1,14 +1,8 @@
 package com.hrms.controller;
 
 
-import java.util.List;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +46,13 @@ public class HrmsSelfServiceController {
 			logger.info("Entered into fetchAppliedLeaveData() ");
 			logger.error("Existed from fetchAppliedLeaveData() ");
 			return hrmsSelfService.getHistoryOfAppliedLeaveDetails(emp_id, roleId, menuId);
+		}
+		
+		
+		//get total leave by id
+		@GetMapping("/employeetotalleave/{id}")		
+		public CommonResponseBean employeetotalleave(@PathVariable("id") int id) {
+			return hrmsSelfService.totalLeaveTaken(id);
 		}
 
 }

@@ -18,4 +18,8 @@ public interface EmployeeLeaveTypeRepository extends JpaRepository<EmployeeLeave
 	@Query("select id from com.hrms.entity.EmployeeLeaveTypeEntity t where t.leaveType=:leaveType and year=:year")
 	public Integer getId(@Param("leaveType") String leaveType, @Param("year") int year );
 	
+	
+	@Query("from EmployeeLeaveTypeEntity where year=:year")
+	public List<EmployeeLeaveTypeEntity> getLeavesBasedOnYear(int year);
+	
 }
