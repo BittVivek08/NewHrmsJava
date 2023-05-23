@@ -1,5 +1,6 @@
 package com.hrms.repository;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import com.hrms.entity.RequestForLeave;
+import com.hrms.response.bean.LeavesResponseBean;
 
 public interface IRequestForLeaveRepository extends JpaRepository<RequestForLeave, Integer> {
 
@@ -30,5 +32,7 @@ public interface IRequestForLeaveRepository extends JpaRepository<RequestForLeav
 
 	@Query("select emp_id From RequestForLeave where emp_id=?1")
 	public String findByEmpId(String emp);
-
+	
+	
+	
 }

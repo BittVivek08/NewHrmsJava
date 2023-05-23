@@ -29,7 +29,9 @@ import com.hrms.repository.LeaveManagementRepository;
 import com.hrms.repository.LeaveRequestRepository;
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
+import com.hrms.request.bean.LeaveDetailsFiltaring;
 import com.hrms.request.bean.RequestForLeaveBinding;
+import com.hrms.response.bean.Common;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
 import com.hrms.response.bean.LeavesResponseBean;
@@ -66,8 +68,10 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	@Autowired
 	private LeaveManagementRepository leaveManagementRepository;
 
+	@Autowired
 	private EmployeeLeaveTypeResponseBean leaveTyperes;
-
+	
+	
 
 	@Override
 	public EntityResponse saveRequestForLeave(RequestForLeaveBinding details) {
@@ -178,7 +182,8 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		List<LeaveRequestEntity>listOfLeaves=new ArrayList<>();		
 		int countAll = 0, countPending = 0, countApproved = 0, countRejected = 0, countCancel = 0;
 				
-		if (view.equalsIgnoreCase("Employee")) {			
+		if (view.equalsIgnoreCase("Employee")) {	
+			
 			listOfLeaves.addAll(leaveRequestRepo.findByEmp_id(user_id));
 			
 		} else if (view.equalsIgnoreCase("superAdmin")) {
@@ -207,7 +212,6 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 						countCancel++;
 					else
 						logger.info("Nothing to count.");
-
 				}
 				response.setCountAll(countAll);
 				response.setCountPending(countPending);
@@ -221,13 +225,10 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 			response.setMessage("No Leave Details are available.");
 			response.setStatus(false);
 			response.setList(listOfLeaves);
-		}	
-		
-		
-	//	return (List<ResponseEntity<LeaveRequestEntity>>) Response.status(Response.Status.OK).entity(response).build();
-		return  response;
-					
+		}			
+		return  response;				
 	}
+	
 
 	@Override
 	public LeaveManagementOptionsResponseBean leaveManagementOptions() {
@@ -278,16 +279,41 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 			catch (Exception e) {
 				e.printStackTrace();
 				}
-		}
-		
+			}		
 		else {
 			leaveTyperes.setLeaveTypelist(null);
 			leaveTyperes.setMesssage("already leave type is available for the year : "+leaveBean.getYear());
 			leaveTyperes.setStatus(false);
-			}
-		
-		
+			}		
 	return leaveTyperes;
 	
+	}
+
+	@Override
+	public Common getLeavesBasedOnYear(LeaveDetailsFiltaring detailsFiltaring) {
+		
+		LeaveRequestEntity leaveRequestEntity=new LeaveRequestEntity();		
+		
+		return null;
+	}
+
+	
+	
+	//Get Leaves based on year like old hrms
+	@Override
+	public Common getLeavesBasedOnYear(int year) {
+		
+		Common common=new Common();
+		List<EmployeeLeaveTypeEntity> leavesBasedOnYear = leaveTypeRepo.getLeavesBasedOnYear(year);
+		
+		if (leavesBasedOnYear.size() > 0 && leavesBasedOnYear != null) {
+			common.setMessage("Leaves Information based on year fetched successfully");
+			common.setStatus(true);
+			common.setList(leavesBasedOnYear);
+		} else {
+			common.setMessage("Unable to fetch Leaves Information based on year");
+			common.setStatus(false);
+		}		
+		return common;
 	}
 }

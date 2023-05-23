@@ -1,8 +1,7 @@
 package com.hrms.controller;
 
 
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
 import com.hrms.request.bean.RequestForLeaveBinding;
+import com.hrms.response.bean.Common;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
 import com.hrms.response.bean.LeavesResponseBean;
@@ -61,6 +61,13 @@ public class RequestForLeaveController {
 		public LeaveManagementOptionsResponseBean leaveManagementOptions() {
 			logger.info("entered into leaveManagementOptions method of service class...");
 			return reqLeaveService.leaveManagementOptions();
+		}
+		
+	
+	//get leave based on year
+		@GetMapping("/getLeavesBasedOnYear/{year}")
+		public Common getLeavesBasedOnYear(@PathVariable("year") int year) {
+			return reqLeaveService.getLeavesBasedOnYear(year);
 		}
 
 }

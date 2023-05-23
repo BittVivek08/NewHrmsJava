@@ -25,4 +25,9 @@ public interface IHrmsSelfService {
 	
 	// history of applied leave Details.
 	public CommonResponseBean getHistoryOfAppliedLeaveDetails(String userId, int roleId, int menuId);
+
+	
+	//get total leaves taken 
+	public CommonResponseBean totalLeaveTaken(int id);
+	
 }
