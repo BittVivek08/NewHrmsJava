@@ -5,19 +5,18 @@ import java.io.File;
 //import java.io.File;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.hrms.beans.EmailDetails;
 
 @Service
-
 public class EmailServiceImpl {
 
 	@Autowired
@@ -26,11 +25,13 @@ public class EmailServiceImpl {
 	@Value("${spring.mail.username}")
 	private String sender;
    
+	
 	public String sendSimpleMail(EmailDetails details) {
 		try {
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
 			mailMessage.setFrom(sender);
+			//mailMessage.setFrom("yadavtest45@gmail.com");
 			mailMessage.setTo(details.getRecipient());
 			mailMessage.setText(details.getMsgBody());
 			mailMessage.setSubject(details.getSubject());
@@ -38,6 +39,7 @@ public class EmailServiceImpl {
 			javaMailSender.send(mailMessage);
 			return "Mail Sent Successfully...";
 		} catch (Exception e) {
+			e.printStackTrace();
 			return "Error while Sending Mail";
 		}
 	}
@@ -68,4 +70,45 @@ public class EmailServiceImpl {
 			return "Error while sending mail!!!";
 		}
 	}
+
+
 }
+	//withMvc
+	
+//	@Override
+//	public String mailsend(EmailDetails details) {
+//		try {
+//			SimpleMailMessage mailMessage = new SimpleMailMessage();
+//
+//			mailMessage.setFrom(sender);
+//			mailMessage.setTo(details.getRecipient());
+//			mailMessage.setText(details.getMsgBody());
+//			mailMessage.setSubject(details.getSubject());
+//
+//			javaMailSender.send(mailMessage);
+//			return "Mail Sent Successfully...";
+//		} catch (Exception e) {
+//			return "Error while Sending Mail";
+//		}
+//	}
+	
+	
+//MadhuAnnaCode	
+//public String sendSimpleMail(EmailDetails details) {
+//	try {
+//		SimpleMailMessage mailMessage = new SimpleMailMessage();
+//
+//		mailMessage.setFrom(sender);
+//		mailMessage.setTo(details.getRecipient());
+//		mailMessage.setText(details.getMsgBody());
+//		mailMessage.setSubject(details.getSubject());
+//
+//		javaMailSender.send(mailMessage);
+//		return "Mail Sent Successfully...";
+//	} catch (Exception e) {
+//		e.printStackTrace();
+//		return "Error while Sending Mail";
+//	}
+//}
+	
+

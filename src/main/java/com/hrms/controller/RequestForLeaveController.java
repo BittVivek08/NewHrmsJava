@@ -12,13 +12,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hrms.beans.MailStatusResponse;
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
 import com.hrms.request.bean.RequestForLeaveBinding;
+import com.hrms.request.bean.UpdateEmployeeLeaveDetails;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
 import com.hrms.response.bean.LeavesResponseBean;
@@ -54,13 +57,25 @@ public class RequestForLeaveController {
 
 	}
 	
-	
-	
 	// Leave Management Option
 		@GetMapping("/getLeaveManagementOptions")
 		public LeaveManagementOptionsResponseBean leaveManagementOptions() {
 			logger.info("entered into leaveManagementOptions method of service class...");
 			return reqLeaveService.leaveManagementOptions();
 		}
+		
+		
+		
+	//Update Apply Leave Requeste
+	@PutMapping("/updateEmpLeaveStatMail/{eid}")	
+	public MailStatusResponse updateLeaveReqOfEmp(@RequestBody UpdateEmployeeLeaveDetails bean,@PathVariable("eid") String eid) {
+		
+		MailStatusResponse mailsend = this.reqLeaveService.mailsend(bean, eid);
+		
+		return mailsend;
+		
+	}
+		
+		
 
 }

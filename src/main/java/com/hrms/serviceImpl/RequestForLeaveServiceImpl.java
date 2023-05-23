@@ -15,10 +15,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hrms.beans.EmailDetails;
+import com.hrms.beans.MailStatusResponse;
+import com.hrms.controller.EmailController;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeLeaveTypeEntity;
 import com.hrms.entity.LeaveManagementEntity;
 import com.hrms.entity.LeaveRequestEntity;
+import com.hrms.entity.MyLeaveRequestEntity;
 import com.hrms.entity.RequestForLeave;
 import com.hrms.repository.EmployeeLeaveTypeRepository;
 import com.hrms.repository.EmployeeRepository;
@@ -27,9 +31,11 @@ import com.hrms.repository.ILeaveDetailsRepository;
 import com.hrms.repository.IRequestForLeaveRepository;
 import com.hrms.repository.LeaveManagementRepository;
 import com.hrms.repository.LeaveRequestRepository;
+import com.hrms.repository.MyLeaveRequestRepository;
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
 import com.hrms.request.bean.RequestForLeaveBinding;
+import com.hrms.request.bean.UpdateEmployeeLeaveDetails;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
 import com.hrms.response.bean.LeavesResponseBean;
@@ -67,6 +73,20 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	private LeaveManagementRepository leaveManagementRepository;
 
 	private EmployeeLeaveTypeResponseBean leaveTyperes;
+	
+	@Autowired
+	private MailStatusResponse mailresponse;
+	
+	@Autowired
+	private EmailController mailcontroller;
+	
+	@Autowired
+	private MyLeaveRequestRepository myleaveReqRepo;
+	
+	@Autowired
+	EmailServiceImpl emailService;
+	
+	
 
 
 	@Override
@@ -290,4 +310,48 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	return leaveTyperes;
 	
 	}
+
+	
+	
+	//updateEmpLeaveReaquest
+	@Override
+	public MailStatusResponse mailsend(UpdateEmployeeLeaveDetails updateBean, String eid) {
+		
+		String mailIdofEmp = this.myleaveReqRepo.mailIdofEmp(eid);
+		
+		MyLeaveRequestEntity leaveEntity = this.myleaveReqRepo.findByEmpid(eid);
+		
+		EmailDetails mailData=new EmailDetails();
+		
+		if(updateBean.getLeaveStatus().equalsIgnoreCase("Approved")) {
+			
+			//MyLeaveRequestEntity leaveEntity = this.myleaveReqRepo.findByEmpid(eid);
+			leaveEntity.setLeaveStatus("Approved");
+			MyLeaveRequestEntity save = this.myleaveReqRepo.save(leaveEntity);
+			////EmailDetails mailData=new EmailDetails();
+			mailData.setRecipient(mailIdofEmp);
+			mailData.setSubject("Applied leave Status");
+			mailData.setMsgBody("Hi Mr/Ms "+leaveEntity.getName()+"   your's applied leave request has been  approved");
+			String mailMessage = this.emailService.sendSimpleMail(mailData);
+			//MyLeaveRequestEntity leaveEntity = this.myleaveReqRepo.findByEmp_id(eid);
+
+			if(save!=null) {
+				mailresponse.setStatus(true);
+                mailresponse.setMessage("Leave Approved and "+mailMessage);				
+			}	
+		}else {
+		     
+			mailData.setRecipient(mailIdofEmp);
+			mailData.setSubject("Applied leave Status");
+			mailData.setMsgBody("Hi Mr/Ms "+leaveEntity.getName()+"  your's applied leave request has been Cancelled");
+			//mailData.setMsgBody("Levae Approval Canceled");
+			//String sendEmail = this.mailcontroller.sendEmail(mailData);
+			String mailMessage = this.emailService.sendSimpleMail(mailData);
+			mailresponse.setMessage("leave not approved and " + mailMessage);
+			//mailresponse.setStatus(false);
+		}
+		
+		return mailresponse;
+	}
+
 }

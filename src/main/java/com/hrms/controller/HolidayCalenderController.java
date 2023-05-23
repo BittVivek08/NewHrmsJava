@@ -95,26 +95,7 @@ public class HolidayCalenderController {
 	
 	
 	
-		/*
-		 * //GetSingleHolidayByName
-		 * 
-		 * @GetMapping("/GetSingleHolidayByDate/{HolidayDate}") public
-		 * ResponseEntity<HolidayCalenderEntity>
-		 * getHolidayByDate(@PathVariable("HolidayDate") Date HolidayDate){
-		 * 
-		 * log.info("Entered Get Holiday By Date method in Controller");
-		 * 
-		 * HolidayCalenderEntity holidayByName =
-		 * this.service.getHolidayBydate(HolidayDate);
-		 * 
-		 * log.info("Successfully fetched Holiday By Date in contoller");
-		 * 
-		 * return new ResponseEntity<>(holidayByName,HttpStatus.OK);
-		 * 
-		 * 
-		 * 
-		 * }
-		 */
+		
 	
    //GetSinglrHolidayById
 	@GetMapping("/GetById/{id}")
@@ -188,7 +169,26 @@ public class HolidayCalenderController {
 	
 	
 	
-	
+	/*
+	 * //GetSingleHolidayByName
+	 * 
+	 * @GetMapping("/GetSingleHolidayByDate/{HolidayDate}") public
+	 * ResponseEntity<HolidayCalenderEntity>
+	 * getHolidayByDate(@PathVariable("HolidayDate") Date HolidayDate){
+	 * 
+	 * log.info("Entered Get Holiday By Date method in Controller");
+	 * 
+	 * HolidayCalenderEntity holidayByName =
+	 * this.service.getHolidayBydate(HolidayDate);
+	 * 
+	 * log.info("Successfully fetched Holiday By Date in contoller");
+	 * 
+	 * return new ResponseEntity<>(holidayByName,HttpStatus.OK);
+	 * 
+	 * 
+	 * 
+	 * }
+	 */
 	
 	
 	

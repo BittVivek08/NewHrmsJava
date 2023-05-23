@@ -35,10 +35,6 @@ public class CilentDeatilsController {
 		
 	}
 	
-	
-	
-	
-	
 	 //oldHrms
 	//GetAllClients
 	@GetMapping("/GetAllClients")
@@ -202,8 +198,4 @@ public class CilentDeatilsController {
 //			
 //		}
 	
-	
-	
-	
-
 }
