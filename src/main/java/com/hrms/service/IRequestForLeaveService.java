@@ -1,12 +1,12 @@
 package com.hrms.service;
 
 
-
-
+import com.hrms.beans.MailStatusResponse;
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
 import com.hrms.request.bean.LeaveDetailsFiltaring;
 import com.hrms.request.bean.RequestForLeaveBinding;
+import com.hrms.request.bean.UpdateEmployeeLeaveDetails;
 import com.hrms.response.bean.Common;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
@@ -21,6 +21,9 @@ public interface IRequestForLeaveService {
 	public LeaveManagementOptionsResponseBean leaveManagementOptions();
 
 	public EmployeeLeaveTypeResponseBean saveEmployeeLeaveData(EmployeeLeaveTypeBean leaveBean);
+	
+	//mailLeave
+	public  MailStatusResponse mailsend(UpdateEmployeeLeaveDetails updateBean,String eid );
 
 	public Common getLeavesBasedOnYear(LeaveDetailsFiltaring detailsFiltaring);
 	
