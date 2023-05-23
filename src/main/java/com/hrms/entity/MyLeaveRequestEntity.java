@@ -1,6 +1,7 @@
 package com.hrms.entity;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,10 +35,10 @@ public class MyLeaveRequestEntity {
 	private String reason;
 
 	@Column(name = "from_date")
-	private Date fromDate;
+	private LocalDate fromDate;
 
 	@Column(name = "to_date")
-	private Date toDate;
+	private LocalDate toDate;
 
 	@Column(name = "leaveday")
 	private String leaveFor;
@@ -74,10 +75,10 @@ public class MyLeaveRequestEntity {
 	private Timestamp createdDdate;
 
 	@Column(name = "modifiedby")
-	private Integer modifiedBy;
+	private String modifiedBy;
 
 	@Column(name = "createdby")
-	private Integer createdBy;
+	private String createdBy;
 
 	@Column(name = "appliedleavescount")
 	private Integer appliedLeavescount;
@@ -88,3 +89,42 @@ public class MyLeaveRequestEntity {
 	@Column(name = "name")
 	private String name;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
