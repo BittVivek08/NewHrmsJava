@@ -13,5 +13,8 @@ public interface TaskDeatailsRepository extends JpaRepository<TaskDetailsEntity,
 
 	@Query("FROM TaskDetailsEntity as t WHERE t.project.projectId = :projectId")
 	List<TaskDetailsEntity> findByProject(@Param("projectId") Integer projectId);
+    @Query("select tasknmae from TaskDetailsEntity where taskid=?1")
+	 public String findByTaskName(int task);
+ 
 
 }

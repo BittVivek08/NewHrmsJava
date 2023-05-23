@@ -121,7 +121,7 @@ public class SaveTimeSheet {
 	private LocalDateTime modifiedDate;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "emp_id", referencedColumnName = "emp_id")
+	@JoinColumn(name = "emp_id" ,referencedColumnName = "emp_id" )
 	private EmployeeDetails emp;
 
 	@ManyToOne(fetch = FetchType.LAZY)
