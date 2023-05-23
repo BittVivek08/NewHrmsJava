@@ -1,51 +1,53 @@
 package com.hrms.entity;
 
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "main_jobtitles")
-public class JobTitlesEntity {
-
+@Table(name = "main_positions")
+public class PositionEntity {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
 
-	@Column(name = "jobtitlecode")
-    private String jobTitleCode;
+	@Column(name = "positionname")
+	private String positionName;
 
-	@Column(name = "jobtitlename")
-	private String jobTitleName;
+	// @Column(name = "jobtitleid")
+	// private Integer jobTitleId;
 
-	@Column(name = "jobdescription")
-	private String jobDescription;
+	// @Column(name = "jobtitleid")
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "jobtitleid", referencedColumnName = "id")
+	private JobTitlesEntity jobTitleId;
 
-	@Column(name = "minexperiencerequired")
-	private String minExpReq;
+	@JsonIgnore
+	@Column(name = "isactive")
+	private int isActive;
 
-	@Column(name = "jobpaygradecode")
-	private String jobPayGradeCode;
-
-	@Column(name = "jobpayfrequency")
-	private String jobPayFrequency;
-
+	@JsonIgnore
 	@Column(name = "createdby", updatable = false)
 	private int createdBy;
 
+	@JsonIgnore
 	@Column(name = "modifiedby")
 	private int modifiedBy;
-	
-	
-	private String comments;
 
 	@JsonIgnore
 	@Column(name = "createddate", updatable = false)
@@ -55,7 +57,4 @@ public class JobTitlesEntity {
 	@Column(name = "modifieddate")
 	private Date modifiedDate;
 
-	@JsonIgnore
-	@Column(name = "isactive")
-	private int isActive;
 }

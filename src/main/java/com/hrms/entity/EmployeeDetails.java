@@ -35,6 +35,7 @@ public class EmployeeDetails implements Serializable{
 	private String empId;
 
 	@Column(name = "user_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userId;
 	
     @Temporal(TemporalType.DATE)
@@ -71,6 +72,8 @@ public class EmployeeDetails implements Serializable{
 
     @Column(name = "jobtitle_id")
     private Integer jobtitle_id;
+    
+    private String gender;
 
     @Column(name = "jobtitle_name")
     private String jobTitleName;
