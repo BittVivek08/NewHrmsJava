@@ -3,19 +3,24 @@ package com.hrms.serviceImpl;
 import java.util.List;
 import java.util.Optional;
 
+import javax.ws.rs.core.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hrms.beans.CommonResponseBean;
 import com.hrms.entity.EmpRole;
+import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.GenderEntity;
 import com.hrms.entity.JobTitlesEntity;
 import com.hrms.entity.LanguageEntity;
 import com.hrms.entity.MaritalStatusEntity;
 import com.hrms.entity.NationalityEntity;
+import com.hrms.entity.PositionEntity;
 import com.hrms.entity.SalaryAccountClassTypeEntity;
 import com.hrms.entity.SalaryCurrencyEntity;
 import com.hrms.repository.EmpRoleRepo;
+import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.GenderRepository;
 import com.hrms.repository.JobTitleRepository;
 import com.hrms.repository.LanguageRepository;
@@ -30,6 +35,7 @@ import com.hrms.request.bean.PersonalNationalityBean;
 import com.hrms.request.bean.SalaryAccountClassTypeRequestBean;
 import com.hrms.request.bean.SalaryCurrencyRequestBean;
 import com.hrms.request.bean.personalLanguageBean;
+import com.hrms.response.bean.ListOfPositionsResponseBean;
 import com.hrms.service.HrmsCommonService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +67,9 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 	
 	@Autowired
 	private LanguageRepository languageRepo;
+	
+	@Autowired
+	private EmployeeRepository empRepo;
 
 	@Autowired
 	private CommonResponseBean comResBean;
@@ -165,6 +174,7 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 		entity.setJobTitleCode(bean.getJobTitleCode());
 		entity.setJobDescription(bean.getJobDescription());
 		entity.setMinExpReq(bean.getMinExpReq());
+		entity.setComments(bean.getComments());
 		entity.setJobPayGradeCode(bean.getJobPayGradeCode());
 		entity.setJobPayFrequency(bean.getJobPayFrequency());
 		entity.setCreatedBy(bean.getCreatedOrModifiedBy());
@@ -225,6 +235,7 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 		entity.setJobTitleCode(bean.getJobTitleCode());
 		entity.setJobDescription(bean.getJobDescription());
 		entity.setMinExpReq(bean.getMinExpReq());
+		entity.setComments(bean.getComments());
 		entity.setJobPayGradeCode(bean.getJobPayGradeCode());
 		entity.setJobPayFrequency(bean.getJobPayFrequency());
 		entity.setCreatedBy(bean.getCreatedOrModifiedBy());
@@ -546,4 +557,78 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 		}
 		return comResBean;
 	}
+
+	@Override
+	public CommonResponseBean fetchHRmanager(int businessunitId) {
+		
+		CommonResponseBean response = new CommonResponseBean();
+		
+		List<EmployeeDetails> hrSuperManagerList = empRepo.getHrManager(businessunitId);
+		if (hrSuperManagerList.size() != 0) {
+			response.setMsg("HR manager list  With management Retrived Successfully.");
+			response.setStatus(true);
+			response.setList(hrSuperManagerList);
+		} else {
+			response.setMsg("Please Select Other Role.");
+			response.setStatus(true);
+		}
+		return response;
+	}
+
+	@Override
+	public CommonResponseBean fetchIMMmanager(int businessunitId) {
+		
+        CommonResponseBean response = new CommonResponseBean();
+		
+		List<EmployeeDetails> hrSuperManagerList = empRepo.getImmManager(businessunitId);
+		if (hrSuperManagerList.size() != 0) {
+			response.setMsg("Imm Manager With Management Retrived Successfully.");
+			response.setStatus(true);
+			response.setList(hrSuperManagerList);
+		} else {
+			response.setMsg("Please Select Other Role.");
+			response.setStatus(true);
+		}
+		return response;
+	}
+
+	@Override
+	public CommonResponseBean fetchReportingManagerList(int empRoleId, int businessunitId, int departmentId) {
+		CommonResponseBean response = new CommonResponseBean();
+		List<EmployeeDetails> reportingManagerListAddEmployee =null;
+		if(empRoleId <= 4) {
+			reportingManagerListAddEmployee = empRepo.reportingManagerListAddEmployee(empRoleId, businessunitId, departmentId);
+		
+		}else if(empRoleId == 5){
+			reportingManagerListAddEmployee  = empRepo.reportingManagerListAddEmployee2(empRoleId, businessunitId, departmentId);
+		}
+		
+		if(reportingManagerListAddEmployee.size() != 0) {
+			response.setMsg("Report Manager With Management Retrived Successfully.");
+			response.setStatus(true);
+			response.setList(reportingManagerListAddEmployee);
+		}else {
+			response.setMsg("Please Select Other Role.");
+			response.setStatus(false);
+		}
+		return response;
+	}
+
+	@Override
+	public ListOfPositionsResponseBean listOfPositions(int jobTitleId) {
+		ListOfPositionsResponseBean response = new ListOfPositionsResponseBean();
+		List<PositionEntity> listOfPositions = jobTitleRepo.listOfPositions(jobTitleId);
+		
+		if(!listOfPositions.isEmpty()) {
+			response.setMsg("List Of Positions Retrived Successfully.");
+			response.setStatus(true);
+			response.setListOfPositions(listOfPositions);
+		}else {
+			response.setMsg("List Of Positions is empty.");
+			response.setStatus(false);
+		}
+		return response;
+	}
+
+		
 }

@@ -20,6 +20,7 @@ public class EmployeeDto {
     private String reportingManager;
     private String emp_status_id;
     private String employmentStatus;
+    private String gender;
     private String businessunitName;
     private Integer departmentId;
     private String departmentName;

@@ -18,12 +18,18 @@ import com.hrms.beans.EmployeeDto;
 import com.hrms.beans.EmployeeEducationDetailsBean;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
+import com.hrms.entity.Businessunit;
 import com.hrms.entity.ContactDetails;
+import com.hrms.entity.Department;
+import com.hrms.entity.EmpRole;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeEducationDetails;
 import com.hrms.entity.EmployeeInformation;
 import com.hrms.entity.EmployeeSalaryDetails;
+import com.hrms.repository.BusinessunitRepository;
 import com.hrms.repository.ContactRepo;
+import com.hrms.repository.DepartmentRepo;
+import com.hrms.repository.EmpRoleRepo;
 import com.hrms.repository.EmployeeEducationDetailsRepository;
 import com.hrms.repository.EmployeeInformationRepository;
 import com.hrms.repository.EmployeeRepository;
@@ -46,6 +52,15 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
+	private BusinessunitRepository businessUnitRepository;
+	
+	@Autowired
+	private DepartmentRepo departmentRepo;
+	
+	@Autowired
+	private EmpRoleRepo empRoleRepo;
+	
 	@Autowired
 	private ContactRepo contactrepo;
 	
@@ -78,6 +93,15 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		if (saved != null) {
 			EmployeeDto empDto = new EmployeeDto();
 
+			Optional<Businessunit> businessUnit = businessUnitRepository.findById(findByEmail.getBusinessunitId());
+			
+			Optional<Department> department = departmentRepo.findById(findByEmail.getDepartmentId());
+			
+			Optional<EmpRole> empRole = empRoleRepo.findById(findByEmail.getEmpRoleId());
+			
+			
+			
+			
 			empDto.setId(findByEmail.getId());
 			empDto.setEmpId(findByEmail.getEmpId());
 			empDto.setUserId(findByEmail.getUserId());
@@ -86,9 +110,10 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			empDto.setEmployeeName(findByEmail.getEmployeeName());
 			empDto.setEmpRole(findByEmail.getEmpRole());
 			empDto.setEmail(findByEmail.getEmail());
+		    empDto.setGender(findByEmail.getGender());
 			empDto.setBackgroundchk_status(findByEmail.getBackgroundchk_status());
 			empDto.setBusinessunitId(findByEmail.getBusinessunitId());
-			empDto.setBusinessunitName(findByEmail.getBusinessunitName());
+			empDto.setBusinessunitName(businessUnit.get().getName());
 			empDto.setCandidatereferredby(findByEmail.getCandidatereferredby());
 			empDto.setContactnumber(findByEmail.getContactnumber());
 			empDto.setCreatedby(findByEmail.getCreatedby());
@@ -97,7 +122,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			empDto.setDateOfJoining(findByEmail.getDateOfJoining());
 			empDto.setDateOfleaving(findByEmail.getDateOfleaving());
 			empDto.setDepartmentId(findByEmail.getDepartmentId());
-			empDto.setDepartmentName(findByEmail.getDepartmentName());
+			empDto.setDepartmentName(department.get().getDepName());
 			empDto.setDesignation(findByEmail.getDesignation());
 			empDto.setEmp_status_id(findByEmail.getEmp_status_id());
 			empDto.setEmployeeName(findByEmail.getEmployeeName());
@@ -121,7 +146,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			empDto.setOther_modeofentry(findByEmail.getOther_modeofentry());
 			empDto.setPosition_id(findByEmail.getPosition_id());
 			empDto.setReferer_name(findByEmail.getReferer_name());
-			empDto.setReportingManager(findByEmail.getReportingManager());
+			empDto.setReportingManager(empRole.get().getRoleName());
 			empDto.setReportingManagerId(findByEmail.getReportingManagerId());
 			empDto.setSelecteddate(findByEmail.getSelecteddate());
 			empDto.setSelectedDocumentsIds(findByEmail.getSelectedDocumentsIds());
@@ -164,7 +189,70 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		emplDetails.setPassword(employeeDetails.get().getPassword());
 
 		EmployeeDetails update = empRepo.save(emplDetails);
+		EmployeeDetails findByEmail = empRepo.findByEmail(employeeDetails.get().getEmail());
 		if (update != null) {
+			EmployeeDto empDto = new EmployeeDto();
+
+			Optional<Businessunit> businessUnit = businessUnitRepository.findById(findByEmail.getBusinessunitId());
+			
+			Optional<Department> department = departmentRepo.findById(findByEmail.getDepartmentId());
+			
+			Optional<EmpRole> empRole = empRoleRepo.findById(findByEmail.getEmpRoleId());
+			
+			empDto.setId(findByEmail.getId());
+			empDto.setEmpId(findByEmail.getEmpId());
+			empDto.setUserId(findByEmail.getUserId());
+			empDto.setFirstName(findByEmail.getFirstName());
+			empDto.setLastName(findByEmail.getLastName());
+			empDto.setEmployeeName(findByEmail.getEmployeeName());
+			empDto.setEmpRole(findByEmail.getEmpRole());
+			empDto.setEmail(findByEmail.getEmail());
+			empDto.setGender(findByEmail.getGender());
+			empDto.setBackgroundchk_status(findByEmail.getBackgroundchk_status());
+			empDto.setBusinessunitId(findByEmail.getBusinessunitId());
+			empDto.setBusinessunitName(businessUnit.get().getName());
+			empDto.setCandidatereferredby(findByEmail.getCandidatereferredby());
+			empDto.setContactnumber(findByEmail.getContactnumber());
+			empDto.setCreatedby(findByEmail.getCreatedby());
+			empDto.setCreatedby_name(findByEmail.getCreatedby_name());
+			empDto.setCreateddate(findByEmail.getCreateddate());
+			empDto.setDateOfJoining(findByEmail.getDateOfJoining());
+			empDto.setDateOfleaving(findByEmail.getDateOfleaving());
+			empDto.setDepartmentId(findByEmail.getDepartmentId());
+			empDto.setDepartmentName(department.get().getDepName());
+			empDto.setDesignation(findByEmail.getDesignation());
+			empDto.setEmp_status_id(findByEmail.getEmp_status_id());
+			empDto.setEmployeeName(findByEmail.getEmployeeName());
+			empDto.setEmployeeStatus(findByEmail.getEmployeeStatus());
+			empDto.setEmploymentStatus(findByEmail.getEmploymentStatus());
+			empDto.setExtensionNo(findByEmail.getExtensionNo());
+			empDto.setFaxNo(findByEmail.getFaxNo());
+			empDto.setHoliday_group(findByEmail.getHoliday_group());
+			empDto.setHoliday_group_name(findByEmail.getHoliday_group_name());
+			empDto.setHrManagerId(findByEmail.getHrManagerId());
+			empDto.setHrManagerName(findByEmail.getHrManagerName());
+			empDto.setImmManagerId(findByEmail.getImmManagerId());
+			empDto.setImmManagerName(findByEmail.getImmManagerName());
+			empDto.setIsactive(findByEmail.getIsactive());
+			empDto.setJobtitle_id(findByEmail.getJobtitle_id());
+			empDto.setJobTitleName(findByEmail.getJobTitleName());
+			empDto.setModeOfEntry(findByEmail.getModeOfEntry());
+			empDto.setModifiedBy(findByEmail.getModifiedBy());
+			empDto.setModifieddate(findByEmail.getModifieddate());
+			empDto.setNumberType(findByEmail.getNumberType());
+			empDto.setOther_modeofentry(findByEmail.getOther_modeofentry());
+			empDto.setPosition_id(findByEmail.getPosition_id());
+			empDto.setReferer_name(findByEmail.getReferer_name());
+			empDto.setReportingManager(empRole.get().getRoleName());
+			empDto.setReportingManagerId(findByEmail.getReportingManagerId());
+			empDto.setSelecteddate(findByEmail.getSelecteddate());
+			empDto.setSelectedDocumentsIds(findByEmail.getSelectedDocumentsIds());
+			empDto.setSignature(findByEmail.getSignature());
+			empDto.setSsnNumber(findByEmail.getSsnNumber());
+			empDto.setVisaId(findByEmail.getVisaId());
+			empDto.setWorkTelephoneNo(findByEmail.getWorkTelephoneNo());
+			empDto.setYearOfExp(findByEmail.getYearOfExp());
+			ebr.setEmployeeDto(empDto);
 			ebr.setMsg("Employee Details Updated Successfully");
 			ebr.setStatus(true);
 		} else {
