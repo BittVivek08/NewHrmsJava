@@ -26,5 +26,6 @@ public interface EmployeeLeaveDetailsRepository extends JpaRepository<EmployeeLe
 	@Query("UPDATE EmployeeLeaveDetailsEntity m SET m.usedSickLeaves = IFNULL(m.usedSickLeaves, 0) - :days WHERE m.emp_id = :emp_id AND m.year = YEAR(CURDATE())")
 	void updateUsedSickLeaves(@Param("days") float days, @Param("emp_id") String emp_id);
 	
+	public EmployeeLeaveDetailsEntity findByEmp_id(String emp_id);
 	
 }

@@ -1,6 +1,7 @@
 package com.hrms.entity;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -56,19 +57,15 @@ public class EmployeeLeaveRequestSummaryEntity {
 	@Column(name = "leavetype_name")
 	private String leaveTypeName;
 
-	@Column(name = "leaveday")
-	private int leaveDay;
+	//@Column(name = "leaveday")
+	//private int leaveDay;
 
 	@Column(name = "from_date")
-	private Date fromDate;
+	private LocalDate fromDate;
 
 	@Column(name = "to_date")
-	private Date toDate;
+	private LocalDate toDate;
 
-	/*
-	 * @Column(name="") public enum
-	 * leaveStatus{pendingForApproval,Approved,Rejected,Cancel;};
-	 */
 	@Column(name = "rep_mang_id")
 	private int reportingManagerId;
 

@@ -9,13 +9,14 @@ import lombok.Data;
 public class LeaveRequestBean {
 
 	
-	private String emp_id;
+	private String empId;
+//	private int userId;
 	private int leaveTypeId;
 	private String leaveType;
 	private String leaveStatus;
-	private Integer reportingManagerId;
-	private String reportingManager;
-	private Integer hrId;
+//	private Integer reportingManagerId;
+//	private String reportingManager;
+//	private Integer hrId;
 	private int appliedLeavesCount;
 	private float availableLeaves;
 	private String reason;
@@ -25,6 +26,6 @@ public class LeaveRequestBean {
 	private int days;
 	private String avilableCasualLeaves;
 	private String avilableSickLeaves;
-	private String email;
-	private String name;
+//	private String email;
+//	private String name;
 }

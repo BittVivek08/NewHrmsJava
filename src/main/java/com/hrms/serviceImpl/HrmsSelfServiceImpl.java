@@ -16,11 +16,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.EmployeeLeaveRequestSummaryEntity;
 import com.hrms.entity.LeaveRequestEntity;
 import com.hrms.entity.MyLeaveRequestEntity;
 import com.hrms.entity.Privileges;
 import com.hrms.repository.EmployeeLeaveDetailsRepository;
+import com.hrms.repository.EmployeeLeaveRequestSummaryRepository;
 import com.hrms.repository.EmployeeLeaveTypeRepository;
+import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.HolidayCalenderRepository;
 import com.hrms.repository.LeaveRequestRepository;
 import com.hrms.repository.MyLeaveRequestRepository;
@@ -63,12 +67,18 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	@Autowired
 	private LeaveRequestBLogic leaveBlogic;
 	
+	@Autowired
+	private EmployeeRepository employeeRepo;
+	
+	@Autowired
+    private EmployeeLeaveRequestSummaryRepository leaveReqSummery;
+	
 	@Override
 	public CommonResponseBean saveLeaveRequest(LeaveRequestBean reqBean, int roleId, int menuId) {
 		//EmpLeaveResponseBean empLeaveResponse= new EmpLeaveResponseBean();
 		MyLeaveRequestEntity reqEntity = new MyLeaveRequestEntity();
 		CommonResponseBean commonRes= new CommonResponseBean();	
-		
+		EmployeeLeaveRequestSummaryEntity leaveSummery=new EmployeeLeaveRequestSummaryEntity();
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate fromDate = LocalDate.parse(reqBean.getFromDate(), formatter);
@@ -76,9 +86,10 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 		LocalDate toDate = LocalDate.parse(reqBean.getToDate(), formatter);
 		
 		
-		if (myLeaveReqRepo.findLeaveTypeIdByDatesAndUserId(fromDate,toDate ,reqBean.getEmp_id())!=null) {
+		if (myLeaveReqRepo.findLeaveTypeIdByDatesAndUserId(fromDate,toDate ,reqBean.getEmpId())!=null) {
 			
 
+			try {
 			// adding Holidays
 			List<LocalDate> holidays = new ArrayList<>();
 			holidays.addAll(holidayRepo.finDates());
@@ -100,34 +111,72 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 			float days = (float) actualDaysBetween;
 			
 			
-			reqEntity.setEmp_id(reqBean.getEmp_id());
+			
+			EmployeeDetails empDetails = employeeRepo.findByEmpId(reqBean.getEmpId());
+			int id = empDetails.getId();
+			EmployeeDetails empDetails1 = employeeRepo.findById(id).get();
+	
+			reqEntity.setEmp_id(empDetails1.getEmpId());
 			reqEntity.setLeaveTypeId(reqBean.getLeaveTypeId());
+			reqEntity.setLeaveType(reqBean.getLeaveType());
 			reqEntity.setReason(reqBean.getReason());
 			reqEntity.setFromDate(fromDate);
 			reqEntity.setToDate(toDate);
 			reqEntity.setLeaveFor(reqBean.getLeaveFor());
 			reqEntity.setLeaveStatus("Pending for approval");
 			reqEntity.setDays(days);
-			reqEntity.setReportingManagerId(reqBean.getReportingManagerId());;
-			reqEntity.setReportingManager(reqBean.getReportingManager());
-			reqEntity.setHrId(reqBean.getHrId());
-			reqEntity.setAvailableLeaves(leaveTypeRepo.calculateTotalLeaveDays(reqBean.getEmp_id()));
+			reqEntity.setReportingManagerId(empDetails1.getReportingManagerId());;
+			reqEntity.setReportingManager(empDetails1.getReportingManager());
+			reqEntity.setHrId(empDetails1.getHrManagerId());
+			reqEntity.setAvailableLeaves(leaveTypeRepo.getNoOfDays()-leaveReqSummery.getNoOfDaysApproved(reqBean.getEmpId()));
 			reqEntity.setIsactive(1);
 			reqEntity.setModifiedDate(dateTimeUtility.GetUTCdatetimeAsString());
 			reqEntity.setCreatedDdate(dateTimeUtility.GetUTCdatetimeAsString());
-		//	reqEntity.setCreatedBy(reqBean.getEmp_id());
-		//	reqEntity.setModifiedBy(reqBean.getEmp_id());
+			reqEntity.setCreatedBy(empDetails1.getUserId());
+			reqEntity.setModifiedBy(empDetails1.getUserId());
 			reqEntity.setAppliedLeavescount(reqBean.getAppliedLeavesCount());
-			reqEntity.setEmail(reqBean.getEmail());
-			reqEntity.setName(reqBean.getName());
+			reqEntity.setEmail(empDetails1.getEmail());
+			reqEntity.setName(empDetails1.getFirstName());
 			
 			myLeaveReqRepo.save(reqEntity);
 			
-			leaveBlogic.updateEmployeeLeaves(reqEntity.getLeaveType(), reqEntity.getEmp_id(), days, "save", null);
+			leaveSummery.setLeaveRequestId(id);
+			leaveSummery.setEmp_id(empDetails1.getEmpId());
+			leaveSummery.setUserName(empDetails1.getFirstName());
+			leaveSummery.setDepartmentId(empDetails1.getDepartmentId());
+			leaveSummery.setLeaveStatus(reqBean.getLeaveStatus());
+			leaveSummery.setDepartmentName(empDetails1.getDepartmentName());
+			leaveSummery.setAppliedLeavesCount(reqEntity.getAppliedLeavescount());
+			leaveSummery.setBusinessUnitId(empDetails1.getBusinessunitId());
+			leaveSummery.setBusinessUnitName(empDetails1.getBusinessunitName());
+			//leaveSummery.getReason(reqBean.getReason());
+			leaveSummery.setApproverComments("not seen");
+			leaveSummery.setLeaveTypeId(reqBean.getLeaveTypeId());
+			leaveSummery.setLeaveTypeName(reqBean.getLeaveType());
+			leaveSummery.setFromDate(fromDate);
+			leaveSummery.setToDate(toDate);
+			leaveSummery.setReportingManagerId(empDetails1.getReportingManagerId());
+			leaveSummery.setReportingManagerName(empDetails1.getReportingManager());
+			leaveSummery.setHrId(empDetails1.getHrManagerId());
+			leaveSummery.setAppliedLeavesCount(days);
+			leaveSummery.setCreatedBy(empDetails1.getUserId());
+			leaveSummery.setModifiedBy(empDetails1.getUserId());
+		
+			leaveReqSummery.save(leaveSummery);
 			
+			leaveBlogic.updateEmployeeLeaves(reqBean.getLeaveType(), empDetails1.getEmpId(), days, "save", null);
+			
+			
+			}
+			catch (Exception e) {
+				e.printStackTrace();;
+			}
 			
 			// pending for naresh mail
 			
+			
+			commonRes.setMessage("the leave applied successfully wait for approval");
+			commonRes.setStatus(true);
 			
 			
 		}
