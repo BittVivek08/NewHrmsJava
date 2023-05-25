@@ -29,4 +29,6 @@ public interface MyLeaveRequestRepository extends JpaRepository<MyLeaveRequestEn
 	 @Query("SELECT lr.leaveTypeId FROM MyLeaveRequestEntity lr WHERE lr.fromDate >= :fromDate AND lr.toDate <= :toDate AND lr.emp_id = :emp_id")
 	    List<Long> findLeaveTypeIdByDatesAndUserId(@Param("fromDate") LocalDate date, @Param("toDate") LocalDate date2, @Param("emp_id") String emp_id);
 	
+	 
+	 
 }

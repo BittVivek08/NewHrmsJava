@@ -26,6 +26,8 @@ public class LeaveRequestEntity {
 
 	private String  emp_id;
 	
+	private int user_id;
+	
 	@Column(name = "user_name")
 	private String userName;
 
