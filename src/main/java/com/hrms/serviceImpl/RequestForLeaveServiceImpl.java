@@ -334,6 +334,7 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 			MyLeaveRequestEntity save = this.myleaveReqRepo.save(leaveEntity);
 			////EmailDetails mailData=new EmailDetails();
 			mailData.setRecipient(mailIdofEmp);
+			//mailData.setRecipient(mailIdofEmp);
 			mailData.setSubject("Applied leave Status");
 			mailData.setMsgBody("Hi Mr/Ms "+leaveEntity.getName()+"   your's applied leave request has been  approved");
 			String mailMessage = this.emailService.sendSimpleMail(mailData);

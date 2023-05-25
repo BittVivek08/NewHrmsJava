@@ -79,4 +79,7 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
             "AND (e.departmentId = :departmentId OR e.departmentId = 0)")
     List<EmployeeDetails> fetchReportManagetListBasedOnRoleIdDu(int empRoleId, int departmentId);
 
+    //GetMailOfReportingMangerByid
+    @Query("select email from  EmployeeDetails where reportingManagerId=?1 ")
+    String findEmailByMangerId(int mid);  
 }
