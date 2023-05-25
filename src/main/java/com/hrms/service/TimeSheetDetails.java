@@ -10,6 +10,7 @@ import com.hrms.beans.CurrentWeekDatesResponse;
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.response.bean.CommonTimeSheetbean;
 import com.hrms.response.bean.DateResponseTimeSheet;
+import com.hrms.response.bean.TSResponseObj;
 import com.hrms.response.bean.TimeSheetResponse;
 
 public interface TimeSheetDetails {
@@ -26,6 +27,6 @@ public interface TimeSheetDetails {
 	public DateResponseTimeSheet dateResponse(int year, int calWeek);
 	public CurrentWeekDatesResponse getWeekDates(LocalDate date);
 	public CommonTimeSheetbean getEmployeesWhoDidNotAccessTimeSheet(@QueryParam("year") int year, @QueryParam("month") int month);
-	public TimeSheetResponse getEmplTimeSheetDetailsByReportingManagerId(int repId, String status) ;
+	public TSResponseObj getEmplTimeSheetDetailsByReportingManagerId(int repId, String status) ;
 	
 }

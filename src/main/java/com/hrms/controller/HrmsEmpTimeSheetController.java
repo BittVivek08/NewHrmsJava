@@ -210,7 +210,7 @@ public class HrmsEmpTimeSheetController {
 	
 
 	@GetMapping("/getEmplTimeSheetDetailsByReportingManagerId")
-	public TimeSheetResponse getTimeSheetDetailsByReportingManagerId(@QueryParam("repId") int repId,
+	public TSResponseObj getTimeSheetDetailsByReportingManagerId(@QueryParam("repId") int repId,
 			@QueryParam("status") String status) {
 		log.info("entered into getEmplTimeSheetDetailsByReportingManagerId method of HrmsEmpTimeSheetController class");
 		return impl.getEmplTimeSheetDetailsByReportingManagerId(repId, status);
