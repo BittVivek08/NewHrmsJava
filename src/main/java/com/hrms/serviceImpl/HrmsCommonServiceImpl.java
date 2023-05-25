@@ -630,5 +630,20 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 		return response;
 	}
 
+	@Override
+	public CommonResponseBean fetchReporingListOnEmpRoleIdDu(int empRoleId, int departmentId) {
+		CommonResponseBean response = new CommonResponseBean();
+		List<EmployeeDetails> fetchReportManagetListBasedOnRoleIdDu = empRepo.fetchReportManagetListBasedOnRoleIdDu(empRoleId, departmentId);
+		if(fetchReportManagetListBasedOnRoleIdDu.size() != 0) {
+			response.setMsg("Report Manager With Management Retrived Successfully");
+			response.setStatus(true);
+			response.setList(fetchReportManagetListBasedOnRoleIdDu);
+		}else {
+			response.setMsg("Process of fetching Report Manager With Management Retrived Failed");
+			response.setStatus(false);
+		}
+		return response;
+	}
+
 		
 }

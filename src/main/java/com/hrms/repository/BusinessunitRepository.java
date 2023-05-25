@@ -6,8 +6,6 @@ import com.hrms.entity.Businessunit;
 
 public interface BusinessunitRepository  extends JpaRepository<Businessunit, Integer>{
 	
-	public Businessunit getByBid(int bid);
-
-	
+	public Businessunit getByBid(int bid);	
 
 }
