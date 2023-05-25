@@ -343,21 +343,23 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 				mailresponse.setStatus(true);
 				mailresponse.setMessage("Leave Approved and "+mailMessage);				
 			}	
-		}else {
+		}else if (updateBean.getLeaveStatus().equalsIgnoreCase("Rejected")){
+
+			leaveEntity.setLeaveStatus("Rejected");
+			MyLeaveRequestEntity save = this.myleaveReqRepo.save(leaveEntity);
 
 			mailData.setRecipient(mailIdofEmp);
 			mailData.setSubject("Applied leave Status");
-			mailData.setMsgBody("Hi Mr/Ms "+leaveEntity.getName()+"  your's applied leave request has been Cancelled");
+			mailData.setMsgBody("Hi Mr/Ms "+leaveEntity.getName()+"  your's applied leave request has been rejected");
 			//mailData.setMsgBody("Levae Approval Canceled");
 			//String sendEmail = this.mailcontroller.sendEmail(mailData);
 			String mailMessage = this.emailService.sendSimpleMail(mailData);
-			mailresponse.setMessage("leave not approved and " + mailMessage);
-			//mailresponse.setStatus(false);
+			mailresponse.setMessage("leave approval rejected and " + mailMessage);
+			mailresponse.setStatus(true);
 		}
 
 		return mailresponse;
 	}
-
 
 	public LeavesResponseBean getLeavesBasedOnCondition(LeaveDetailsFiltaring detailsFiltaring) {
 		
