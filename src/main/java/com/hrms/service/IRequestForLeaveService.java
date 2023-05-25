@@ -2,6 +2,7 @@ package com.hrms.service;
 
 
 import com.hrms.beans.MailStatusResponse;
+
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
 import com.hrms.request.bean.LeaveDetailsFiltaring;
@@ -25,10 +26,15 @@ public interface IRequestForLeaveService {
 	//mailLeave
 	public  MailStatusResponse mailsend(UpdateEmployeeLeaveDetails updateBean,String eid );
 
-	public Common getLeavesBasedOnYear(LeaveDetailsFiltaring detailsFiltaring);
+	public LeavesResponseBean getLeavesBasedOnCondition(LeaveDetailsFiltaring detailsFiltaring);
 	
 	
 	//get leaves based on year
 	public Common getLeavesBasedOnYear(int year);
+	
+	//get Leaves based on month
+	public LeavesResponseBean getLeavesByMonth(String view, int id,int month,String leavestatus);
+	
+	
 	
 }

@@ -11,9 +11,9 @@ public class LeaveDetailsFiltaring {
 	
 	private String view;
 	
-	private String year;
+	private int  year;
 	
-	private String month;
+	private int month;
 	
 	
 }

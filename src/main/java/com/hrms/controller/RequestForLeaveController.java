@@ -3,6 +3,7 @@ package com.hrms.controller;
 
 
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.MailStatusResponse;
+
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
+import com.hrms.request.bean.LeaveDetailsFiltaring;
 import com.hrms.request.bean.RequestForLeaveBinding;
 
 import com.hrms.request.bean.UpdateEmployeeLeaveDetails;
@@ -76,12 +79,25 @@ public class RequestForLeaveController {
 
 	}
 
-
-
-	//get leave based on year
 	@GetMapping("/getLeavesBasedOnYear/{year}")
 	public Common getLeavesBasedOnYear(@PathVariable("year") int year) {
 		return reqLeaveService.getLeavesBasedOnYear(year);
+	}
+
+	//get leave details based on condition 
+	@GetMapping("/getLeavesBasedOnConditons")
+	public LeavesResponseBean getLeavesBasedOnConditions(@RequestBody LeaveDetailsFiltaring detailsFiltaring) {
+
+		return reqLeaveService.getLeavesBasedOnCondition(detailsFiltaring);
+
+	}
+
+	//get leaves based on month
+	@GetMapping("/getLeaveDetailsByMonth/{id}/{view}/{month}/{leaveStatus}")
+	public LeavesResponseBean getLeaveDetailsByMonth(@PathVariable(value = "id") int id, @PathVariable(value = "view") String view,
+			@PathVariable(value = "month") int month,@PathVariable(value = "leaveStatus") String leavestatus) {
+		logger.info("entered into leaveDetails method of service class...");
+		return reqLeaveService.getLeavesByMonth(view, id, month,leavestatus);
 	}
 
 }

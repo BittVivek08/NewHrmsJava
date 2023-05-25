@@ -2,11 +2,13 @@ package com.hrms.repository;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.hrms.entity.LeaveRequestEntity;
+import com.hrms.request.bean.LeaveDetailsFiltaring;
 import com.hrms.response.bean.CommonResponseBean;
 import com.hrms.response.bean.EmployeeLeaveResponse;
 import com.hrms.response.bean.LeavesResponseBean;
@@ -49,6 +51,21 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequestEntity
 	public List<LeaveRequestEntity> totalLeaveTaken(int id);
 	
 	
+	//get leave datails based on conditons
+	@Query("from LeaveRequestEntity where isActive=1 and id=:id")
+     public List<LeaveDetailsFiltaring> findById(int id);
+	
+	@Query("from LeaveRequestEntity where isActive=1 and leavestatus=:leaveStatus")
+	public List<LeaveDetailsFiltaring> findByLeaveStatusCondition(String leaveStatus);
+	
+	
+	//get leave based on month
+	@Query("from LeaveRequestEntity where isActive=1 and user_id=:id and month(fromDate)=:month")
+	public List<LeaveRequestEntity> getLeaveByMonth(int id,int month);
+	
+	@Query("from LeaveRequestEntity where isActive=1 and user_id=:id and month(fromDate)=:month and leaveStatus=:leavestatus")
+	public List<LeaveRequestEntity> getLeaveByMonthAndStatus(int id,int month,String leavestatus);
+    
 }
 
 

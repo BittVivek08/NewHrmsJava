@@ -1,5 +1,6 @@
 package com.hrms.serviceImpl;
 
+import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -13,6 +14,7 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.hrms.beans.EmailDetails;
@@ -40,10 +42,12 @@ import com.hrms.request.bean.RequestForLeaveBinding;
 import com.hrms.request.bean.UpdateEmployeeLeaveDetails;
 import com.hrms.response.bean.Common;
 import com.hrms.response.bean.EntityResponse;
+import com.hrms.response.bean.LeaveDetailResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
 import com.hrms.response.bean.LeavesResponseBean;
 import com.hrms.service.IRequestForLeaveService;
 import com.hrms.util.HrmsGetDateAndTime;
+
 
 
 @Service
@@ -354,12 +358,28 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		return mailresponse;
 	}
 
-	@Override
-	public Common getLeavesBasedOnYear(LeaveDetailsFiltaring detailsFiltaring) {
 
-		LeaveRequestEntity leaveRequestEntity=new LeaveRequestEntity();		
-
-		return null;
+	public LeavesResponseBean getLeavesBasedOnCondition(LeaveDetailsFiltaring detailsFiltaring) {
+		
+		LeaveRequestEntity leaveRequestEntity=new LeaveRequestEntity();	
+		LeavesResponseBean leavesResponseBean=new LeavesResponseBean();
+		
+        if(null!=detailsFiltaring.getLeaveStatus()&& !"".equals(detailsFiltaring.getLeaveStatus())) {
+        	
+        	List<LeaveDetailsFiltaring> findByLeaveStatusCondition = leaveRequestRepo.findByLeaveStatusCondition(detailsFiltaring.getLeaveStatus());
+        	//leavesResponseBean.setLeaveStatu(detailsFiltaring.getLeaveStatus());
+        	System.out.println("inside if condition");
+        	leaveRequestEntity.setLeaveStatus(detailsFiltaring.getLeaveStatus());
+        	
+        }
+        else {
+			
+        	List<LeaveRequestEntity> findAll = leaveRequestRepo.findAll();
+    		leavesResponseBean.setList(findAll);
+    		
+		}		
+		//return leaveRequestRepo.findAll(Example.of(leavesResponseBean));
+        return null;
 	}
 
 
@@ -380,5 +400,91 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 			common.setStatus(false);
 		}		
 		return common;
+	}
+
+	@Override
+	public LeavesResponseBean getLeavesByMonth(String view,int id, int month,String leavestatus) {
+		logger.info("entered into getLeavesDetails of RequestForLeaveServiceImpl");
+		int countAll = 0, countPending = 0, countApproved = 0, countRejected = 0, countCancel = 0, countabailLeave = 0;
+		List<LeaveDetailResponse> list = new ArrayList<>();
+		LeavesResponseBean leavesResponseBean = new LeavesResponseBean();
+		List<LeaveRequestEntity> leaveByMonth = leaveRequestRepo.getLeaveByMonth(id, month);
+		
+		if (view.equalsIgnoreCase("Employee")) {
+		
+		if (leaveByMonth != null && leaveByMonth.size() != 0) {
+			for (LeaveRequestEntity ob : leaveByMonth) {
+				LeaveDetailResponse response = new LeaveDetailResponse();
+				response.setAbailLeave(ob.getAppliedLeavesCount());
+				response.setLeaveType(ob.getLeaveType());
+				response.setReason(ob.getReason());
+				response.setFromDate(ob.getFromDate());
+				response.setToDate(ob.getToDate());
+				response.setDays(ob.getDays());
+				response.setStatus(ob.getLeaveStatus());
+				list.add(response);
+				
+				
+			}
+		}
+          else if (view.equalsIgnoreCase("Employee") && leavestatus != null) {
+			
+			List<LeaveRequestEntity> leaveByMonthAndStatus = leaveRequestRepo.getLeaveByMonthAndStatus(id, month, leavestatus);
+			
+			if (leaveByMonthAndStatus != null && leaveByMonthAndStatus.size() != 0) {
+				for (LeaveRequestEntity ob : leaveByMonthAndStatus) {
+					LeaveDetailResponse response = new LeaveDetailResponse();
+					response.setAbailLeave(ob.getAppliedLeavesCount());
+					response.setLeaveType(ob.getLeaveType());
+					response.setReason(ob.getReason());
+					response.setFromDate(ob.getFromDate());
+					response.setToDate(ob.getToDate());
+					response.setDays(ob.getDays());
+					response.setStatus(ob.getLeaveStatus());
+					list.add(response);					
+				}				
+			}			
+	}
+		//////
+			if (!list.isEmpty()) {
+				leavesResponseBean.setMessage("Retrival of Leave Details Successfull.");
+				leavesResponseBean.setStatus(true);		
+				
+				if (id != 0 && "Employee".equalsIgnoreCase(view) && leavestatus != null) {
+					
+					for (LeaveRequestEntity leave : leaveByMonth) {
+						
+						countAll++;
+						if ("Pending for approval".equalsIgnoreCase(leave.getLeaveStatus()))
+							countPending++;
+						else if ("Approved".equalsIgnoreCase(leave.getLeaveStatus()))
+							countApproved++;
+						else if ("Rejected".equalsIgnoreCase(leave.getLeaveStatus()))
+							countRejected++;
+						else if ("Cancel".equalsIgnoreCase(leave.getLeaveStatus()))
+							countCancel++;
+						// else if ("abailLeave".equals(leave.getAbailLeave()))
+						// countabailLeave++;
+						else
+							logger.info("Nothing to count.");
+					}
+					leavesResponseBean.setCountAll(countAll);
+					leavesResponseBean.setCountPending(countPending);
+					leavesResponseBean.setCountApproved(countApproved);
+					leavesResponseBean.setCountRejected(countRejected);
+					leavesResponseBean.setCountCancel(countCancel);
+					// response.setAblLeave(countabailLeave);
+						
+					}
+				leavesResponseBean.setList(leaveByMonth);
+				}
+			else {
+				leavesResponseBean.setMessage("No Leave Details are available.");
+				leavesResponseBean.setStatus(false);
+				leavesResponseBean.setList(leaveByMonth);
+			}			
+			
+			}
+		return leavesResponseBean;			
 	}
 }
