@@ -57,9 +57,12 @@ public class HrmsSelfServiceController {
 		@PostMapping("/ApplyLeaveRequest/{roleId}/{menuId}")
 		public CommonResponseBean  saveLeaveRequest(@RequestBody LeaveRequestBean leaverequestBean, @PathVariable(value = "roleId") int roleId,
 				@PathVariable(value = "menuId") int menuId) {
+				
+			
 			logger.info("Entered into getMyLeaveRequest() ");
 			logger.error("Existed from getMyLeaveRequest() ");
 			return hrmsSelfService.saveLeaveRequest(leaverequestBean, roleId, menuId);
+			
 		}
 
 }

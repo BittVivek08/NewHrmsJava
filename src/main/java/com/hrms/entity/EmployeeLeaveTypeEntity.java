@@ -25,7 +25,7 @@ public class EmployeeLeaveTypeEntity {
 	private String leaveType;
 
 	@Column(name = "numberofdays")
-	private int noOfDays;
+	private float noOfDays;
 
 	@Column(name = "year")
 	private int year;

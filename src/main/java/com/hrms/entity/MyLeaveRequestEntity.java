@@ -2,8 +2,6 @@ package com.hrms.entity;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -58,12 +56,9 @@ public class MyLeaveRequestEntity {
 	@Column(name = "hr_id")
 	private Integer hrId;
 
-	@Column(name = "availableLeaves")/* ,nullable=false,insertable=true,updatable=true */
-	private Double availableLeaves;
+	@Column(name = "availableLeaves")
+	private float availableLeaves;
 
-	/*
-	 * @Column(name = "isactive") private byte isActive;
-	 */
 
 	@Column(name = "isactive")
 	private int isactive;
@@ -75,10 +70,10 @@ public class MyLeaveRequestEntity {
 	private Timestamp createdDdate;
 
 	@Column(name = "modifiedby")
-	private String modifiedBy;
+	private Integer modifiedBy;
 
 	@Column(name = "createdby")
-	private String createdBy;
+	private Integer createdBy;
 
 	@Column(name = "appliedleavescount")
 	private Integer appliedLeavescount;

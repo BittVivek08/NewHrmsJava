@@ -23,7 +23,7 @@ public class EmployeeLeaveDetailsEntity {
 	private int id;
 
 	@Column(name = "emp_leave_limit")
-	private int noOfDays;
+	private float noOfDays;
 
 	@Column(name = "alloted_year")
 	private int year;
@@ -37,9 +37,9 @@ public class EmployeeLeaveDetailsEntity {
 	private Timestamp modifiedDate;
 
 	@Column(name = "used_casual_leaves")
-	private int usedCasualLeaves;
+	private float usedCasualLeaves;
 
 	@Column(name = "used_sick_leaves")
-	private int usedSickLeaves;
+	private float usedSickLeaves;
 
 }
