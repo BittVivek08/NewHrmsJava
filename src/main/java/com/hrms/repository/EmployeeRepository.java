@@ -9,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.hrms.entity.EmpRole;
 import com.hrms.entity.EmployeeDetails;
 
 public interface EmployeeRepository extends JpaRepository<EmployeeDetails, String>{
@@ -71,5 +72,9 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
             "AND e.businessunitId = :businessunitId " +
             "AND e.departmentId = :departmentId")
     List<EmployeeDetails> reportingManagerListAddEmployee2(int empRoleId, int businessunitId,int departmentId);
+    
+    @Query("SELECT e FROM EmployeeDetails e WHERE e.empRoleId = :empRoleId " +
+            "AND (e.departmentId = :departmentId OR e.departmentId = 0)")
+    List<EmployeeDetails> fetchReportManagetListBasedOnRoleIdDu(int empRoleId, int departmentId);
 
 }

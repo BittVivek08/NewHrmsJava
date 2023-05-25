@@ -91,6 +91,8 @@ public interface HrmsCommonService {
 	
 	public ListOfPositionsResponseBean listOfPositions(int jobTitleId);
 	
+	public CommonResponseBean fetchReporingListOnEmpRoleIdDu(int empRoleId, int departmentId);
+	
 	
 	// Language Service
 	public CommonResponseBean saveLanguageDetails(personalLanguageBean bean);

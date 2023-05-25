@@ -13,5 +13,9 @@ public class CommonResponseBean {
 	private boolean status;
 	
 	private Object list;
+	
+	private Object privillegesList;
+	
+	
 
 }
