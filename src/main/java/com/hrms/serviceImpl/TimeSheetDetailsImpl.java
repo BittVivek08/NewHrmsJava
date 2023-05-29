@@ -1,6 +1,5 @@
 package com.hrms.serviceImpl;
 
-import java.awt.geom.Area;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,28 +11,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hrms.beans.CurrentWeekDatesResponse;
 import com.hrms.beans.DateResponseInTimeSheet;
 import com.hrms.beans.EntityBeanResponse;
-
 import com.hrms.entity.ClientDetailsEntity;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.ProjectDetailsEntity;
-//import com.hrms.entity.EmployeeWorkStatusEntity;
+
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.entity.TaskDetailsEntity;
 import com.hrms.repository.ClientDetailsRepository;
-//import com.hrms.entity.ProjectTaskEntity;
-//import com.hrms.entity.SavingTimeSheet;
-//import com.hrms.entity.Task;
+
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.HolidayCalenderRepository;
 import com.hrms.repository.IRequestForLeaveRepository;
 import com.hrms.repository.ProjectDetailsRepository;
-//import com.hrms.repository.EmployeeWorkStatusRepo;
+
 import com.hrms.repository.SaveTimeSheetRepo;
 import com.hrms.repository.TaskDeatailsRepository;
 import com.hrms.response.bean.CommonTimeSheetbean;
@@ -104,16 +101,16 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 					TaskDetailsEntity task = this.taskDetailsRepository.findById(savetimesheet.getTask().getTaskid())
 							.get();
 					int taskN = task.getTaskid();
-					int clientN=client.getId();
+					int clientN = client.getId();
 					String taskName = this.taskDetailsRepository.findByTaskName(taskN);
-				    String clientName=this.clientDetailsRepository.findByClientName(clientN);
+					String clientName = this.clientDetailsRepository.findByClientName(clientN);
 					savetimesheet.setTask(task);
 					savetimesheet.setProj(proj);
 					savetimesheet.setClient(client);
 					savetimesheet.setEmp(emp1);
 					savetimesheet.setCreatedBy(1);
 					savetimesheet.setTaskName(taskName);
-					savetimesheet.setCustomer(clientName);			
+					savetimesheet.setCustomer(clientName);
 					savetimesheet.setCreated_Date(LocalDateTime.now());
 					SaveTimeSheet result = this.saveTimeSheetRepo.save(savetimesheet);
 					timeSheetResponse.setMsg("successfully added data ");
@@ -214,8 +211,6 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	public List<SaveTimeSheet> getTimeSheetDetails(int month, int year, int calweek, int id) {
 
 		return this.saveTimeSheetRepo.GetAllDetails(month, year, calweek, id);
-
-		// return k;
 	}
 
 	public List<Object[]> getTimeSheetDetailsByMonth(int month, String empid, int year) {
@@ -268,7 +263,6 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		CommonTimeSheetbean response = new CommonTimeSheetbean();
 		List<TimeSheetsMonthlyBean> beanList = new ArrayList<>();
 		Set<String> objList = new HashSet<>();
-		// List<String> empIdList = new ArrayList<>();
 		Set<String> empTSet = new HashSet<>();
 		try {
 			List<String> empTimeList = saveTimeSheetRepo.getSaveTimeSheetempid(year, month);
@@ -347,25 +341,25 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		List<TSResponseEmployeeName> listOfDetails = new ArrayList<>();
 		TSResponseObj tsResp = new TSResponseObj();
 		TSResponseEmployeeName tsEmp = null;
-		 if (empUserList != null && empUserList.size() != 0) {
-		 for (EmployeeDetails empEntity : empUserList) {
-		 ArrayList<SaveTimeSheet> listofMonthlyTSDetails = saveTimeSheetRepo
-				 .getLeaveStatusByUserId1(empEntity.getUserId(), status);
-		 String employeeName = null;
-		 if (listofMonthlyTSDetails != null && listofMonthlyTSDetails.size() != 0) {
-		 tsEmp = new TSResponseEmployeeName();
-		 employeeName = empEntity.getEmployeeName();
-		 tsEmp.setEmployeeName(employeeName);
-		 tsEmp.setStartDate(listofMonthlyTSDetails.get(0).getMon_date());
-		 tsEmp.setEndDate(listofMonthlyTSDetails.get(0).getSun_Date());
-		 tsEmp.setTotalHours(listofMonthlyTSDetails.get(0).getTotalWeekHours());
-		 tsEmp.setWeekNo(listofMonthlyTSDetails.get(0).getWeekNo());
-		 tsEmp.setStatus(status);
-		 tsEmp.setTimeSheetListForEmployee(listofMonthlyTSDetails);
-		 listOfDetails.add(tsEmp);
-		 }
-		 }
-		 }
+		if (empUserList != null && empUserList.size() != 0) {
+			for (EmployeeDetails empEntity : empUserList) {
+				ArrayList<SaveTimeSheet> listofMonthlyTSDetails = saveTimeSheetRepo
+						.getLeaveStatusByUserId1(empEntity.getUserId(), status);
+				String employeeName = null;
+				if (listofMonthlyTSDetails != null && listofMonthlyTSDetails.size() != 0) {
+					tsEmp = new TSResponseEmployeeName();
+					employeeName = empEntity.getEmployeeName();
+					tsEmp.setEmployeeName(employeeName);
+					tsEmp.setStartDate(listofMonthlyTSDetails.get(0).getMon_date());
+					tsEmp.setEndDate(listofMonthlyTSDetails.get(0).getSun_Date());
+					tsEmp.setTotalHours(listofMonthlyTSDetails.get(0).getTotalWeekHours());
+					tsEmp.setWeekNo(listofMonthlyTSDetails.get(0).getWeekNo());
+					tsEmp.setStatus(status);
+					tsEmp.setTimeSheetListForEmployee(listofMonthlyTSDetails);
+					listOfDetails.add(tsEmp);
+				}
+			}
+		}
 		if (listOfDetails != null && listOfDetails.size() != 0) {
 			tsResp.setMessage("TimeSheet Details are retrieved successfully");
 			tsResp.setStatus(true);
@@ -374,9 +368,6 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 			tsResp.setMessage("TimeSheet Details are not found");
 			tsResp.setStatus(false);
 		}
-		// return Response.ok().entity(tsResp).build();
-		// }
-
 		return tsResp;
 	}
 
@@ -429,63 +420,169 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		TSResponseObj tsResp = new TSResponseObj();
 		TSResponseEmployeeName tsEmp = null;
 		String queryForMonthName = null;
-	    Date startDate;
-	    Date endDate;
+		Date startDate;
+		Date endDate;
 		if (empUserList != null && empUserList.size() != 0) {
 			for (EmployeeDetails empEntity : empUserList) {
-				ArrayList<SaveTimeSheet>  listofMonthlyTSDetails = saveTimeSheetRepo
+				ArrayList<SaveTimeSheet> listofMonthlyTSDetails = saveTimeSheetRepo
 						.getLeaveStatusByUserId(empEntity.getUserId(), calWeek);
 				String employeeName = null;
 				String employeeId = null;
 				if (listofMonthlyTSDetails != null && listofMonthlyTSDetails.size() != 0) {
 					employeeName = empEntity.getEmployeeName();
 					employeeId = empEntity.getEmpId();
-					Integer userId=(empEntity.getUserId());
+					Integer userId = (empEntity.getUserId());
 					tsEmp = new TSResponseEmployeeName();
-					Double queryForMonTotalHours =saveTimeSheetRepo.queryForMonTotalHours(employeeId, calWeek);
-				 	Double queryForTueTotalHours =saveTimeSheetRepo.queryForTueTotalHours(employeeId, calWeek);
-				 	Double	queryForWedTotalHours =saveTimeSheetRepo.queryForWedTotalHours(employeeId, calWeek); 		
-				 	Double	queryForThrTotalHours =saveTimeSheetRepo.queryForThrTotalHours (employeeId, calWeek);
-				 	Double       queryForFriTotalHours =saveTimeSheetRepo.queryForFriTotalHours(employeeId, calWeek); 
-				 	Double	    queryForSatTotalHours =saveTimeSheetRepo.queryForSatTotalHours(employeeId, calWeek); 
-				 	Double		queryForSunTotalHours =saveTimeSheetRepo.queryForSunTotalHours(employeeId, calWeek); 
-					Double totalHours = queryForMonTotalHours+ queryForTueTotalHours + queryForWedTotalHours + queryForThrTotalHours + queryForFriTotalHours
-							+ queryForSatTotalHours + queryForSunTotalHours;
-					startDate=saveTimeSheetRepo.startDate(employeeId, calWeek);
-					endDate=saveTimeSheetRepo.endDate(employeeId, calWeek);
-					tsEmp.setUserId(userId);
+					Double queryForMonTotalHours = saveTimeSheetRepo.queryForMonTotalHours(employeeId, calWeek);
+					Double queryForTueTotalHours = saveTimeSheetRepo.queryForTueTotalHours(employeeId, calWeek);
+					Double queryForWedTotalHours = saveTimeSheetRepo.queryForWedTotalHours(employeeId, calWeek);
+					Double queryForThrTotalHours = saveTimeSheetRepo.queryForThrTotalHours(employeeId, calWeek);
+					Double queryForFriTotalHours = saveTimeSheetRepo.queryForFriTotalHours(employeeId, calWeek);
+					Double queryForSatTotalHours = saveTimeSheetRepo.queryForSatTotalHours(employeeId, calWeek);
+					Double queryForSunTotalHours = saveTimeSheetRepo.queryForSunTotalHours(employeeId, calWeek);
+					Double totalHours = queryForMonTotalHours + queryForTueTotalHours + queryForWedTotalHours
+							+ queryForThrTotalHours + queryForFriTotalHours + queryForSatTotalHours
+							+ queryForSunTotalHours;
+					startDate = saveTimeSheetRepo.startDate(employeeId, calWeek);
+					endDate = saveTimeSheetRepo.endDate(employeeId, calWeek);
+					for (SaveTimeSheet empEntity1 : listofMonthlyTSDetails) {
+						tsEmp.setUserId(userId);
+						tsEmp.setEmployeeName(employeeName);
+						tsEmp.setStartDate(startDate);
+						tsEmp.setEndDate(endDate);
+						tsEmp.setRepManId(repId);
+						tsEmp.setWeekNo(empEntity1.getWeekNo());
+						tsEmp.setCalWeek(empEntity1.getCalweek());
+						tsEmp.setMonDate(empEntity1.getMon_date());
+						tsEmp.setMonTotalHours(queryForMonTotalHours);
+						tsEmp.setMonday(empEntity1.getMon_date().getDate());
+						tsEmp.setTueDate(empEntity1.getTue_date());
+						tsEmp.setTueTotalHours(queryForTueTotalHours);
+						tsEmp.setTuesday(empEntity1.getTue_date().getDate());
+						tsEmp.setWedDate(empEntity1.getWed_Date());
+						tsEmp.setWedTotalHours(queryForWedTotalHours);
+						tsEmp.setWednesday(empEntity1.getWed_Date().getDate());
+						tsEmp.setThursDate(empEntity1.getThurs_Date());
+						tsEmp.setThursTotalHours(queryForThrTotalHours);
+						tsEmp.setThrusday(empEntity1.getThurs_Date().getDate());
+						tsEmp.setFriDate(empEntity1.getFri_Date());
+						tsEmp.setFriTotalHours(queryForFriTotalHours);
+						tsEmp.setFriday(empEntity1.getFri_Date().getDate());
+						tsEmp.setSatDate(empEntity1.getSat_Date());
+						tsEmp.setSatTotalHours(queryForSatTotalHours);
+						tsEmp.setSaturday(empEntity1.getSat_Date().getDate());
+						tsEmp.setSunDate(empEntity1.getSun_Date());
+						tsEmp.setSunTotalHours(queryForSunTotalHours);
+						tsEmp.setSunday(empEntity1.getSun_Date().getDate());
+						tsEmp.setStatus(empEntity1.getStatus());
+						tsEmp.setTotalHour(totalHours);
+						tsEmp.setYear(empEntity1.getYear());
+						tsEmp.setMonthName("june");
+						tsEmp.setMonth(empEntity1.getMonth());
+						tsEmp.setTimeSheetListForEmployee(listofMonthlyTSDetails);
+						listOfDetails.add(tsEmp);
+					}
+				}
+			}
+		}
+		if (listOfDetails != null && listOfDetails.size() != 0) {
+			tsResp.setMessage("TimeSheet Details are retrieved successfully");
+			tsResp.setStatus(true);
+			tsResp.setTimeSheetListForRM(listOfDetails);
+		} else {
+			tsResp.setMessage("TimeSheet Details are not found");
+			tsResp.setStatus(false);
+		}
+		return tsResp;
+	}
+
+	public TSResponseObj getTSDetailsByUserId(int userId, String status) {
+		log.info("entered into getTSDetailsByUserId method of TimeSheetDetailsServiceImpl  class");
+		List<TSResponseEmployeeName> listOfDetails = new ArrayList<>();
+		TSResponseObj tsResp = new TSResponseObj();
+		TSResponseEmployeeName tsEmp = null;
+		ArrayList<SaveTimeSheet> listofMonthlyTSDetails = saveTimeSheetRepo.getLeaveStatusByUserId1(userId, status);
+		String employeeName = null;
+		if (listofMonthlyTSDetails != null && listofMonthlyTSDetails.size() != 0) {
+			tsEmp = new TSResponseEmployeeName();
+			employeeName = listofMonthlyTSDetails.get(0).getEmp().getEmployeeName();
+			tsEmp.setEmployeeName(employeeName);
+			tsEmp.setStartDate(listofMonthlyTSDetails.get(0).getMon_date());
+			tsEmp.setEndDate(listofMonthlyTSDetails.get(0).getSun_Date());
+			tsEmp.setTotalHours(listofMonthlyTSDetails.get(0).getTotalWeekHours());
+			tsEmp.setWeekNo(listofMonthlyTSDetails.get(0).getWeekNo());
+			tsEmp.setStatus(status);
+			tsEmp.setTimeSheetListForEmployee(listofMonthlyTSDetails);
+			listOfDetails.add(tsEmp);
+		}
+		if (listOfDetails != null && listOfDetails.size() != 0) {
+			tsResp.setMessage("TimeSheet Details are retrieved successfully");
+			tsResp.setStatus(true);
+			tsResp.setTimeSheetListForRM(listOfDetails);
+		} else {
+			tsResp.setMessage("TimeSheet Details are not found");
+			tsResp.setStatus(false);
+		}
+		return tsResp;
+	}
+
+	public TSResponseObj getEmployeeWorkingReportsByUserIdStatusCalweekYear(int repId, String status, int calWeek,
+			int year) {
+		log.info("entered into getEmplTimeSheetDetailsByReportingManagerId method of TimeSheetDetails class");
+		List<EmployeeDetails> empUserList = employeeRepository.getEmpUserListByReportingManagerId(repId);
+		List<TSResponseEmployeeName> listOfDetails = new ArrayList<>();
+		TSResponseObj tsResp = new TSResponseObj();
+		TSResponseEmployeeName tsEmp = null;
+		if (empUserList != null && empUserList.size() != 0) {
+			for (EmployeeDetails empEntity : empUserList) {
+				ArrayList<SaveTimeSheet> listofMonthlyTSDetails = saveTimeSheetRepo
+						.getEmployeeWorkingReportsByUserIdStatusCalweekYear(empEntity.getUserId(), status, calWeek,
+								year);
+				String employeeName = null;
+				String employeeId = null;
+				if (listofMonthlyTSDetails != null && listofMonthlyTSDetails.size() != 0) {
+					employeeName = empEntity.getEmployeeName();
+					employeeId = empEntity.getEmpId();
+					tsEmp = new TSResponseEmployeeName();
+					Double queryForMonTotalHours = saveTimeSheetRepo.queryForMonTotalHours(employeeId, calWeek, year,
+							status);
+					Double queryForTueTotalHours = saveTimeSheetRepo.queryForTueTotalHours(employeeId, calWeek, year,
+							status);
+					Double queryForWedTotalHours = saveTimeSheetRepo.queryForWedTotalHours(employeeId, calWeek, year,
+							status);
+					Double queryForThrTotalHours = saveTimeSheetRepo.queryForThrTotalHours(employeeId, calWeek, year,
+							status);
+					Double queryForFriTotalHours = saveTimeSheetRepo.queryForFriTotalHours(employeeId, calWeek, year,
+							status);
+					Double queryForSatTotalHours = saveTimeSheetRepo.queryForSatTotalHours(employeeId, calWeek, year,
+							status);
+					Double queryForSunTotalHours = saveTimeSheetRepo.queryForSunTotalHours(employeeId, calWeek, year,
+							status);
+					Double totalHours = queryForMonTotalHours + queryForTueTotalHours + queryForWedTotalHours
+							+ queryForThrTotalHours + queryForFriTotalHours + queryForSatTotalHours
+							+ queryForSunTotalHours;
+					Date startDate = saveTimeSheetRepo.startDate(employeeId, calWeek, year, status);
+					Date endDate = saveTimeSheetRepo.endDate(employeeId, calWeek, year, status);
+					tsEmp.setUserId(empEntity.getUserId());
 					tsEmp.setEmployeeName(employeeName);
-					tsEmp.setStartDate(startDate);
-					tsEmp.setEndDate(endDate);
-					tsEmp.setRepManId(repId);
-					tsEmp.setWeekNo(listofMonthlyTSDetails.get(0).getWeekNo());
+					tsEmp.setWeekNo(listofMonthlyTSDetails.iterator().next().getWeekNo());
 					tsEmp.setCalWeek(listofMonthlyTSDetails.get(0).getCalweek());
 					tsEmp.setMonDate(listofMonthlyTSDetails.get(0).getMon_date());
 					tsEmp.setMonTotalHours(queryForMonTotalHours);
-					tsEmp.setMonday(listofMonthlyTSDetails.get(0).getMon_date().getDate());
 					tsEmp.setTueDate(listofMonthlyTSDetails.get(0).getTue_date());
 					tsEmp.setTueTotalHours(queryForTueTotalHours);
-					tsEmp.setTuesday(listofMonthlyTSDetails.get(0).getTue_date().getDate());
 					tsEmp.setWedDate(listofMonthlyTSDetails.get(0).getWed_Date());
 					tsEmp.setWedTotalHours(queryForWedTotalHours);
-					tsEmp.setWednesday(listofMonthlyTSDetails.get(0).getWed_Date().getDate());
 					tsEmp.setThursDate(listofMonthlyTSDetails.get(0).getThurs_Date());
 					tsEmp.setThursTotalHours(queryForThrTotalHours);
-					tsEmp.setThrusday(listofMonthlyTSDetails.get(0).getThurs_Date().getDate());
 					tsEmp.setFriDate(listofMonthlyTSDetails.get(0).getFri_Date());
 					tsEmp.setFriTotalHours(queryForFriTotalHours);
-					tsEmp.setFriday(listofMonthlyTSDetails.get(0).getFri_Date().getDate());
 					tsEmp.setSatDate(listofMonthlyTSDetails.get(0).getSat_Date());
 					tsEmp.setSatTotalHours(queryForSatTotalHours);
-					tsEmp.setSaturday(listofMonthlyTSDetails.get(0).getSat_Date().getDate());
 					tsEmp.setSunDate(listofMonthlyTSDetails.get(0).getSun_Date());
 					tsEmp.setSunTotalHours(queryForSunTotalHours);
-					tsEmp.setSunday(listofMonthlyTSDetails.get(0).getSun_Date().getDate());
 					tsEmp.setStatus(listofMonthlyTSDetails.get(0).getStatus());
 					tsEmp.setTotalHour(totalHours);
-					tsEmp.setYear(listofMonthlyTSDetails.get(0).getYear());
-					tsEmp.setMonthName("june");
-					tsEmp.setMonth(listofMonthlyTSDetails.get(0).getMonth());
 					tsEmp.setTimeSheetListForEmployee(listofMonthlyTSDetails);
 					listOfDetails.add(tsEmp);
 				}
@@ -499,8 +596,6 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 			tsResp.setMessage("TimeSheet Details are not found");
 			tsResp.setStatus(false);
 		}
-//		return Response.ok().entity(tsResp).build();
-	
 
 		return tsResp;
 	}
