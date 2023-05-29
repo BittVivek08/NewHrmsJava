@@ -46,17 +46,21 @@ public class AA_TestController {
 	private PasswordEncoder passwordEncoder;
 
 	@PostMapping("/authenticate")
-	public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authRequest) throws Exception {
+	public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authRequest) {
+		EntityBeanResponse response = new EntityBeanResponse();
 		try {
 			String encodedPassword = this.passwordEncoder.encode(authRequest.getPassword());		
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUserName(), encodedPassword));
 		}
 		catch(Exception e) {
-			throw new Exception ("Incorrect Username/Password");
+			response.setEmployeeDto(null);
+			response.setMsg("Login Failed !");
+			response.setStatus(false);
+			response.setJwtToken(null);
+			return ResponseEntity.ok(response);
 		}
 		final UserDetails user = userDetailsService.loadUserByUsername(authRequest.getUserName());
 		EmployeeDto emp = empService.loginViaJWT(authRequest.getUserName());
-		EntityBeanResponse response = new EntityBeanResponse();
 		response.setEmployeeDto(emp);
 		response.setMsg("Login Success");
 		response.setStatus(true);
