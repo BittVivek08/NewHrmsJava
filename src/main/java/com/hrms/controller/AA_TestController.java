@@ -50,7 +50,7 @@ public class AA_TestController {
 		EntityBeanResponse response = new EntityBeanResponse();
 		try {
 			String encodedPassword = this.passwordEncoder.encode(authRequest.getPassword());		
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUserName(), encodedPassword));
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), encodedPassword));
 		}
 		catch(Exception e) {
 			response.setEmployeeDto(null);
@@ -59,8 +59,8 @@ public class AA_TestController {
 			response.setJwtToken(null);
 			return ResponseEntity.ok(response);
 		}
-		final UserDetails user = userDetailsService.loadUserByUsername(authRequest.getUserName());
-		EmployeeDto emp = empService.loginViaJWT(authRequest.getUserName());
+		final UserDetails user = userDetailsService.loadUserByUsername(authRequest.getEmail());
+		EmployeeDto emp = empService.loginViaJWT(authRequest.getEmail());
 		response.setEmployeeDto(emp);
 		response.setMsg("Login Success");
 		response.setStatus(true);
