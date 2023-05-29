@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hrms.beans.EmployeeDto;
+import com.hrms.beans.EntityBeanResponse;
 import com.hrms.entity.Businessunit;
 import com.hrms.request.bean.AuthenticationRequest;
 import com.hrms.response.bean.AuthenticationResponse;
+import com.hrms.service.EmployeeDetailsService;
 import com.hrms.util.JwtUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,18 +37,31 @@ public class AA_TestController {
 	UserDetailsService userDetailsService;
 
 	@Autowired
+	private EmployeeDetailsService empService;
+
+	@Autowired
 	JwtUtil jwtUtil;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	@PostMapping("/authenticate")
-	public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+	public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authRequest) throws Exception {
 		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUserName(), authenticationRequest.getPassword()));
+			String encodedPassword = this.passwordEncoder.encode(authRequest.getPassword());		
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUserName(), encodedPassword));
 		}
 		catch(Exception e) {
-			throw new Exception ("Incorrect username",e);
+			throw new Exception ("Incorrect Username/Password");
 		}
-		final UserDetails user = userDetailsService.loadUserByUsername(authenticationRequest.getUserName());
-		return ResponseEntity.ok(new AuthenticationResponse(jwtUtil.generateToken(user)));
+		final UserDetails user = userDetailsService.loadUserByUsername(authRequest.getUserName());
+		EmployeeDto emp = empService.loginViaJWT(authRequest.getUserName());
+		EntityBeanResponse response = new EntityBeanResponse();
+		response.setEmployeeDto(emp);
+		response.setMsg("Login Success");
+		response.setStatus(true);
+		response.setJwtToken(jwtUtil.generateToken(user));
+		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/test")
