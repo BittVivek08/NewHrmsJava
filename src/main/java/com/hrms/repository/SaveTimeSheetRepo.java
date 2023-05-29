@@ -39,22 +39,12 @@ public interface SaveTimeSheetRepo extends JpaRepository<SaveTimeSheet, Integer>
 	@Query("select modifiedBy from SaveTimeSheet where emp_id=?1 and id=?2")
 	public int findmodiBy(String empId, int id);
 
-//	@Query("select empId from EmployeeDetails where empId=?1") //			+ "and id not in(1,2)")
 	@Query("select distinct emp.empId from SaveTimeSheet  where year=?1 and month=?2")
 	public List<String> getSaveTimeSheetempid(int year, int month);
 
-//	public SaveTimeSheetfindByEmpId(String empid);
 	@Query("select emp.empId from SaveTimeSheet where year=?1 and month=?2 and emp_id=?3")
 	public String getTimeSheetempid(int year, int month, List<String> emp);
 
-//    @Query("select cal_week,month_name from timeSheet_add_calWeek_month where month_id=?1")
-//	public List<SaveTimeSheet> getWeekMonthNameByMonthId(int month);
-	
-
-    
-//    @Query("select proj.projectId,proj.projectName from SaveTimeSheet ")
-//	public List<ProjectResponse> getProjectAndId();
-    
 	@Query("from SaveTimeSheet where emp.userId=?1 and calweek=?2 order by  calweek desc")
 	public ArrayList<SaveTimeSheet> getLeaveStatusByUserId(Integer userId, int calWeek);
 
@@ -84,10 +74,42 @@ public interface SaveTimeSheetRepo extends JpaRepository<SaveTimeSheet, Integer>
 
 	@Query("select max(sun_Date) From SaveTimeSheet where emp_id=?1 and  calweek=?2 ")
 	public Date endDate(String employeeId, int calWeek);
-	
+
 	@Query("From SaveTimeSheet where status=?2 and emp.userId=?1")
 	public ArrayList<SaveTimeSheet> getLeaveStatusByUserId1(Integer userId, String status);
 
-//    @Query("from SaveTimeSheet where emp.useId=?1 and status=?2")
-//	public ArrayList<SaveTimeSheet>getLeaveStatusByUserId1(Integer userId, String status);
+	@Query("select emp.employeeName from SaveTimeSheet where emp.userId=?1")
+	public String getEmployeeNameById(int userId);
+
+	@Query("From SaveTimeSheet where status=?2 and emp.userId=?1  and status=?2 and calweek=?3 and  year=?4")
+	public ArrayList<SaveTimeSheet> getEmployeeWorkingReportsByUserIdStatusCalweekYear(Integer userId, String status,
+			int calWeek, int year);
+
+	@Query("select sum(mon_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and year=?3 and status=?4")
+	public Double queryForMonTotalHours(String employeeId, int calWeek, int year, String status);
+
+	@Query("select sum(tue_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and year=?3 and status=?4")
+	public Double queryForTueTotalHours(String employeeId, int calWeek, int year, String status);
+
+	@Query("select sum(wed_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and year=?3 and status=?4")
+	public Double queryForWedTotalHours(String employeeId, int calWeek, int year, String status);
+
+	@Query("select sum(thurs_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and year=?3 and status=?4")
+	public Double queryForThrTotalHours(String employeeId, int calWeek, int year, String status);
+
+	@Query("select sum(fri_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and year=?3 and status=?4")
+	public Double queryForFriTotalHours(String employeeId, int calWeek, int year, String status);
+
+	@Query("select sum(sat_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and year=?3 and status=?4")
+	public Double queryForSatTotalHours(String employeeId, int calWeek, int year, String status);
+
+	@Query("select sum(sun_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and year=?3 and status=?4")
+	public Double queryForSunTotalHours(String employeeId, int calWeek, int year, String status);
+
+	@Query("select max(mon_date) From SaveTimeSheet where emp_id=?1 and  calweek=?2 and year=?3 and status=?4")
+	public Date startDate(String employeeId, int calWeek, int year, String status);
+
+	@Query("select max(sun_Date) From SaveTimeSheet where emp_id=?1 and  calweek=?2 and year=?3 and status=?4")
+	public Date endDate(String employeeId, int calWeek, int year, String status);
+
 }
