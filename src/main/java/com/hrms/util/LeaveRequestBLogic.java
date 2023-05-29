@@ -24,7 +24,7 @@ public class LeaveRequestBLogic {
 		try {
 			if (operation.equalsIgnoreCase("save")) {
 				if (leaveType.equalsIgnoreCase("Casual")) {
-					if(leaveDetailsRepo.findByEmp_id(empId)==null) {
+					if(leaveDetailsRepo.findByEmpId(empId)==null) {
 						leaveDetailsEntity.setNoOfDays(leaveTypeRepo.getNoOfDays());
 						leaveDetailsEntity.setYear(0);
 						leaveDetailsEntity.setEmp_id(empId);

@@ -56,9 +56,6 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	private  HolidayCalenderRepository holidayRepo;
 	
 	@Autowired
-	private  EmployeeLeaveDetailsRepository leaveDetailsRepo;
-	
-	@Autowired
 	private   EmployeeLeaveTypeRepository leaveTypeRepo;
 	
 	@Autowired
