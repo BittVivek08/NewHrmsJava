@@ -5,6 +5,7 @@ import java.util.List;
 import com.hrms.beans.CommonResponseBean;
 import com.hrms.beans.ContactBean;
 import com.hrms.beans.EmpBirthResponse;
+import com.hrms.beans.EmployeeDto;
 import com.hrms.beans.EmployeeEducationDetailsBean;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
@@ -69,6 +70,8 @@ public interface EmployeeDetailsService {
 
 
 	EmployeeEducationDetailsBean updateEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails);
+
+	EmployeeDto loginViaJWT(String email);
 			
 
 }

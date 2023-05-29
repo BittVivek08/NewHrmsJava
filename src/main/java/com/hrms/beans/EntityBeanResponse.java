@@ -14,5 +14,5 @@ public class EntityBeanResponse {
 	
 	private EmployeeDto employeeDto;
 
-
+	private String jwtToken;
 }
