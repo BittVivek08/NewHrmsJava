@@ -1,17 +1,15 @@
 package com.hrms.repository;
 
-import java.sql.Date;
+
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.hrms.entity.LeaveRequestEntity;
 import com.hrms.request.bean.LeaveDetailsFiltaring;
-import com.hrms.response.bean.CommonResponseBean;
-import com.hrms.response.bean.EmployeeLeaveResponse;
-import com.hrms.response.bean.LeavesResponseBean;
 
 public interface LeaveRequestRepository extends JpaRepository<LeaveRequestEntity, Integer> {
 
@@ -39,9 +37,16 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequestEntity
 	public List<LeaveRequestEntity> fetchAppliedLeaveRequest(String emp_id);
 	
 	
+	
+//	   @Query("from ")
+//	   public  List<LeaveRequestEntity> getLeaveDataByRepIdDate(int repId, Date date);
+   
 	// Get Employee Details Whose On The Particulars Date leave
-//	@Query("SELECT l.userName, l.emp_id, l.fromDate, l.toDate, l.reason, l.reportingManagerId  FROM LeaveRequestEntity l  WHERE l.repMangId = :repId  AND l.fromDate = :date  AND l.leaveStatus = 'Approved'")
-//   public  List<LeaveRequestEntity> getLeaveDataByRepIdDate(int repId, Date date);
+	@Query("FROM LeaveRequestEntity where isActive=1 and leaveStatus = 'Approved'")
+    List<LeaveRequestEntity> getLeaveDataByRepIdDate( String date);
+	
+	@Query("SELECT m.userName, m.user_id, m.fromDate, m.toDate, m.reason, m.reportingManagerId FROM LeaveRequestEntity m WHERE m.reportingManagerId = :reqId AND m.fromDate = :date AND m.leaveStatus = 'Approved'")
+	List<LeaveRequestEntity> findApprovedLeaveRequests(int reqId, String date);
 	
 	
 	@Query("from LeaveRequestEntity where isActive=1 and year=:year")
@@ -66,6 +71,16 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequestEntity
 	@Query("from LeaveRequestEntity where isActive=1 and user_id=:id and month(fromDate)=:month and leaveStatus=:leavestatus")
 	public List<LeaveRequestEntity> getLeaveByMonthAndStatus(int id,int month,String leavestatus);
     
+	
+	//get leave details by manager id
+	//@Query("from LeaveRequestEntity where isActive=1 and reportingManagerId=:managerId and leaveStatus=:leavestatus")
+	//public List<LeaveRequestEntity> getLeaveDetailsByManagerId(int managerId,String leavestatus);
+
+       public List<LeaveRequestEntity> findByReportingManagerIdAndLeaveStatus(int managerId, String leaveStatus);
+       
+       @Query("from LeaveRequestEntity where reportingManagerId=:mid and leave_status=:leavestatus")
+       public List<LeaveRequestEntity> findByRepManId(int mid,String leavestatus);
+
 }
 
 

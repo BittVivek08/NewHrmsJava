@@ -4,6 +4,9 @@ package com.hrms.controller;
 
 
 
+
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +28,10 @@ import com.hrms.request.bean.LeaveDetailsFiltaring;
 import com.hrms.request.bean.RequestForLeaveBinding;
 
 import com.hrms.request.bean.UpdateEmployeeLeaveDetails;
+import com.hrms.request.bean.UpdateLeaveRequest;
 import com.hrms.response.bean.Common;
+import com.hrms.response.bean.EmpLeaveResponseBean;
+import com.hrms.response.bean.EmployeeLeaveResponse;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
 import com.hrms.response.bean.LeavesResponseBean;
@@ -67,10 +73,18 @@ public class RequestForLeaveController {
 		logger.info("entered into leaveManagementOptions method of service class...");
 		return reqLeaveService.leaveManagementOptions();
 	}
+	
+	
+	
+	// 1. update Employee leave Summary details.
+		@PutMapping("/UpdateEmployeeLeave")
+		public EmpLeaveResponseBean updateEmployeeLeaveSummaryDetails(UpdateLeaveRequest updateBean) {
+			return reqLeaveService.updateAllLeaveSummary(updateBean);
+		}
 
 
 	//Update Apply Leave Requeste
-	@PutMapping("/updateEmpLeaveStatMail/{eid}")	
+	@PutMapping("/updateEmpLeaveStatMail/{eid}")
 	public MailStatusResponse updateLeaveReqOfEmp(@RequestBody UpdateEmployeeLeaveDetails bean,@PathVariable("eid") String eid) {
 
 		MailStatusResponse mailsend = this.reqLeaveService.mailsend(bean, eid);
@@ -78,12 +92,12 @@ public class RequestForLeaveController {
 		return mailsend;
 
 	}
-
+	
 	@GetMapping("/getLeavesBasedOnYear/{year}")
 	public Common getLeavesBasedOnYear(@PathVariable("year") int year) {
 		return reqLeaveService.getLeavesBasedOnYear(year);
 	}
-
+	
 	//get leave details based on condition 
 	@GetMapping("/getLeavesBasedOnConditons")
 	public LeavesResponseBean getLeavesBasedOnConditions(@RequestBody LeaveDetailsFiltaring detailsFiltaring) {
@@ -98,6 +112,24 @@ public class RequestForLeaveController {
 			@PathVariable(value = "month") int month,@PathVariable(value = "leaveStatus") String leavestatus) {
 		logger.info("entered into leaveDetails method of service class...");
 		return reqLeaveService.getLeavesByMonth(view, id, month,leavestatus);
-	}
-
+	}   
+	
+	   // Get Employee Details Whose On The Particulars Date leave
+		@GetMapping("/getLeaveDataByReqIdDate/{leaveReqId}/{date}")
+		public List<EmployeeLeaveResponse> getLeaveDataByReqIdDate(@PathVariable("leaveReqId") int leaveReqId, @PathVariable("date") String date) {
+			logger.info("entered into getEmployeeLeavedDetails method of service class...");
+			return reqLeaveService.getLeaveDataByReqIdDate(leaveReqId, date);
+		}
+		
+	//get leave details based on manager id and status
+		@GetMapping("/getLeaveDetailsBasedOnManagerId/{reportingManagerId}/{leaveStatus}")
+		public LeavesResponseBean getLeaveDetailsBasedOnManagerId(@PathVariable(value = "reportingManagerId") int managerId,
+				@PathVariable(value = "leaveStatus") String leavestatus ) {
+			
+			logger.info("entered into getLeaveDetailsBasedOnManagerId method of service class...");
+			return reqLeaveService.getLeaveDetailsForManager( managerId, leavestatus);
+			
+			
+		}
+			
 }

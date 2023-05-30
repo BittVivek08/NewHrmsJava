@@ -1,7 +1,6 @@
 package com.hrms.request.bean;
 
-import java.sql.Date;
-import java.time.LocalDate;
+
 
 import lombok.Data;
 
@@ -26,6 +25,8 @@ public class LeaveRequestBean {
 	private int days;
 	private String avilableCasualLeaves;
 	private String avilableSickLeaves;
-//	private String email;
-//	private String name;
+
+	private String email;
+	private String name;
+	
 }
