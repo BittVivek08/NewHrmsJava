@@ -22,13 +22,9 @@ public class EmployeeLeaveRequestSummaryEntity {
 	@Column(name = "id")
 	private int id;
 
-	@Column(name = "leave_req_id")
-	private int leaveRequestId;
-
 	private String  emp_id;
-
-	@Column(name = "user_name")
-	private String userName;
+	
+	private int user_id;
 
 	@Column(name = "department_id")
 	private int departmentId;
@@ -51,14 +47,9 @@ public class EmployeeLeaveRequestSummaryEntity {
 	@Column(name = "approver_comments")
 	private String approverComments;
 
-	@Column(name = "leavetypeid")
-	private int leaveTypeId;
 
 	@Column(name = "leavetype_name")
-	private String leaveTypeName;
-
-	//@Column(name = "leaveday")
-	//private int leaveDay;
+	private String leaveType;
 
 	@Column(name = "from_date")
 	private LocalDate fromDate;
@@ -80,12 +71,6 @@ public class EmployeeLeaveRequestSummaryEntity {
 
 	@Column(name = "no_of_days")
 	private float noOfDays;
-
-	@Column(name = "appliedleavescount")
-	private float appliedLeavesCount;
-
-	@Column(name = "is_sat_holiday")
-	private int isSatHoliday;
 	
 	private Timestamp createddate; 
 

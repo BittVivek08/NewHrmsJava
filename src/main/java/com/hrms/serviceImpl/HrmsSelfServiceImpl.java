@@ -15,6 +15,8 @@ import javax.ws.rs.core.Response;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeLeaveRequestSummaryEntity;
@@ -71,7 +73,9 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
     private EmployeeLeaveRequestSummaryRepository leaveReqSummery;
 	
 	@Override
-	public CommonResponseBean saveLeaveRequest(LeaveRequestBean reqBean, int roleId, int menuId) {
+	public CommonResponseBean  saveLeaveRequest(LeaveRequestBean reqBean ,
+			String emp_id ,String leaveType) {
+			 
 		//EmpLeaveResponseBean empLeaveResponse= new EmpLeaveResponseBean();
 		MyLeaveRequestEntity reqEntity = new MyLeaveRequestEntity();
 		CommonResponseBean commonRes= new CommonResponseBean();	
@@ -83,8 +87,8 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 		LocalDate toDate = LocalDate.parse(reqBean.getToDate(), formatter);
 		
 		
-		if (myLeaveReqRepo.findLeaveTypeIdByDatesAndUserId(fromDate,toDate ,reqBean.getEmpId())!=null) {
-			
+		
+			if(myLeaveReqRepo.checkMatchingDates(emp_id, toDate, fromDate)==false) {
 
 			try {
 			// adding Holidays
@@ -108,79 +112,71 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 			float days = (float) actualDaysBetween;
 			
 			
+			EmployeeDetails empDetails = employeeRepo.findByEmpId(emp_id);
 			
-			EmployeeDetails empDetails = employeeRepo.findByEmpId(reqBean.getEmpId());
-			int id = empDetails.getId();
-			EmployeeDetails empDetails1 = employeeRepo.findById(id).get();
-	
-			reqEntity.setEmp_id(empDetails1.getEmpId());
-			reqEntity.setLeaveTypeId(reqBean.getLeaveTypeId());
-			reqEntity.setLeaveType(reqBean.getLeaveType());
+			
+		reqEntity.setAvailabelDays(leaveTypeRepo.getNoOfDays(leaveType)-leaveReqSummery.getNoOfDaysApproved(emp_id,leaveType));
+			
+			
+			reqEntity.setEmp_id(empDetails.getEmpId());
+			reqEntity.setLeaveType(leaveType);
 			reqEntity.setReason(reqBean.getReason());
 			reqEntity.setFromDate(fromDate);
 			reqEntity.setToDate(toDate);
-			reqEntity.setLeaveFor(reqBean.getLeaveFor());
 			reqEntity.setLeaveStatus("Pending for approval");
 			reqEntity.setDays(days);
-			reqEntity.setReportingManagerId(empDetails1.getReportingManagerId());;
-			reqEntity.setReportingManager(empDetails1.getReportingManager());
-			reqEntity.setHrId(empDetails1.getHrManagerId());
-			reqEntity.setAvailableLeaves(leaveTypeRepo.getNoOfDays()-leaveReqSummery.getNoOfDaysApproved(reqBean.getEmpId()));
+			reqEntity.setReportingManagerId(empDetails.getReportingManagerId());;
+			reqEntity.setReportingManager(empDetails.getReportingManager());
+			reqEntity.setHrId(empDetails.getHrManagerId());
 			reqEntity.setIsactive(1);
 			reqEntity.setModifiedDate(dateTimeUtility.GetUTCdatetimeAsString());
 			reqEntity.setCreatedDdate(dateTimeUtility.GetUTCdatetimeAsString());
-			reqEntity.setCreatedBy(empDetails1.getUserId());
-			reqEntity.setModifiedBy(empDetails1.getUserId());
-			reqEntity.setAppliedLeavescount(reqBean.getAppliedLeavesCount());
-			reqEntity.setEmail(empDetails1.getEmail());
-			reqEntity.setName(empDetails1.getFirstName());
-			
+			reqEntity.setCreatedBy(empDetails.getUserId());
+			reqEntity.setModifiedBy(empDetails.getUserId());
+			reqEntity.setEmail(empDetails.getEmail());
+			reqEntity.setName(empDetails.getFirstName());
 			myLeaveReqRepo.save(reqEntity);
 			
-			leaveSummery.setLeaveRequestId(id);
-			leaveSummery.setEmp_id(empDetails1.getEmpId());
-			leaveSummery.setUserName(empDetails1.getFirstName());
-			leaveSummery.setDepartmentId(empDetails1.getDepartmentId());
-			leaveSummery.setLeaveStatus(reqBean.getLeaveStatus());
-			leaveSummery.setDepartmentName(empDetails1.getDepartmentName());
-			leaveSummery.setAppliedLeavesCount(reqEntity.getAppliedLeavescount());
-			leaveSummery.setBusinessUnitId(empDetails1.getBusinessunitId());
-			leaveSummery.setBusinessUnitName(empDetails1.getBusinessunitName());
-			//leaveSummery.getReason(reqBean.getReason());
+			
+			leaveSummery.setEmp_id(empDetails.getEmpId());
+			
+			leaveSummery.setUser_id(empDetails.getUserId());
+			leaveSummery.setDepartmentId(empDetails.getDepartmentId());
+			leaveSummery.setLeaveStatus("pending");
+			leaveSummery.setDepartmentName(empDetails.getDepartmentName());
+			leaveSummery.setBusinessUnitId(empDetails.getBusinessunitId());
+			leaveSummery.setBusinessUnitName(empDetails.getBusinessunitName());
+			leaveSummery.setReason(reqBean.getReason());
 			leaveSummery.setApproverComments("not seen");
-			leaveSummery.setLeaveTypeId(reqBean.getLeaveTypeId());
-			leaveSummery.setLeaveTypeName(reqBean.getLeaveType());
+			leaveSummery.setLeaveType(leaveType);
 			leaveSummery.setFromDate(fromDate);
 			leaveSummery.setToDate(toDate);
-			leaveSummery.setReportingManagerId(empDetails1.getReportingManagerId());
-			leaveSummery.setReportingManagerName(empDetails1.getReportingManager());
-			leaveSummery.setHrId(empDetails1.getHrManagerId());
-			leaveSummery.setAppliedLeavesCount(days);
-			leaveSummery.setCreatedBy(empDetails1.getUserId());
-			leaveSummery.setModifiedBy(empDetails1.getUserId());
-		
+			leaveSummery.setReportingManagerId(empDetails.getReportingManagerId());
+			leaveSummery.setReportingManagerName(empDetails.getReportingManager());
+			leaveSummery.setHrId(empDetails.getHrManagerId());
+			leaveSummery.setCreatedBy(33);
+			leaveSummery.setModifiedBy(32);	
+			leaveSummery.setUser_id(empDetails.getUserId());
 			leaveReqSummery.save(leaveSummery);
-			
-			leaveBlogic.updateEmployeeLeaves(reqBean.getLeaveType(), empDetails1.getEmpId(), days, "save", null);
+						
+			leaveBlogic.updateEmployeeLeaves(leaveType ,emp_id, days, "save", null);
 			
 			
 			}
 			catch (Exception e) {
-				e.printStackTrace();;
+			  e.printStackTrace();
 			}
 			
 			// pending for naresh mail
 			
-			
 			commonRes.setMessage("the leave applied successfully wait for approval");
 			commonRes.setStatus(true);
+			}
+			else {
+				commonRes.setMessage("the leave is already applied on that date");
+				commonRes.setStatus(false);			}
 			
-			
-		}
-		else {
-			commonRes.setMessage("the leave is already applied on that date");
-			commonRes.setStatus(false);
-		}
+		
 		
 		
 		

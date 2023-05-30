@@ -23,9 +23,6 @@ public class MyLeaveRequestEntity {
 	
 	private String emp_id;
 
-	@Column(name = "leavetypeid")
-	private Integer leaveTypeId;
-
 	@Column(name = "leaveType")
 	private String leaveType;
 
@@ -37,9 +34,6 @@ public class MyLeaveRequestEntity {
 
 	@Column(name = "to_date")
 	private LocalDate toDate;
-
-	@Column(name = "leaveday")
-	private String leaveFor;
 
 	@Column(name = "no_of_days")
 	private float days;
@@ -55,10 +49,6 @@ public class MyLeaveRequestEntity {
 
 	@Column(name = "hr_id")
 	private Integer hrId;
-
-	@Column(name = "availableLeaves")
-	private float availableLeaves;
-
 
 	@Column(name = "isactive")
 	private int isactive;
@@ -83,6 +73,8 @@ public class MyLeaveRequestEntity {
 
 	@Column(name = "name")
 	private String name;
+	
+	private float availabelDays;
 }
 
 

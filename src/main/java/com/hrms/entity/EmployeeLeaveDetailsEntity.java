@@ -27,8 +27,9 @@ public class EmployeeLeaveDetailsEntity {
 
 	@Column(name = "alloted_year")
 	private int year;
-
-	private String  emp_id;
+     
+	@Column(name="emp_id")
+	private String  empId;
 	
 	@Column(name = "createddate")
 	private Timestamp createdDate;
