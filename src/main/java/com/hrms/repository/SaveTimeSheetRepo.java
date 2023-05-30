@@ -17,12 +17,13 @@ import com.hrms.entity.ClientDetailsEntity;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.entity.TaskDetailsEntity;
+
 import com.hrms.response.bean.ProjectResponse;
 
 @Repository
 public interface SaveTimeSheetRepo extends JpaRepository<SaveTimeSheet, Integer> {
 	@Query("FROM SaveTimeSheet where  month=?1 and year=?2  and calweek=?3 and emp.userId=?4")
-	public List<SaveTimeSheet> GetAllDetails(int month, int year, int calweek, int Id);
+	public List<SaveTimeSheet> GetAllDetails(int month, int year, int calweek, int userId);
 
 	@Query("select calweek, mon_hours,tue_hours,wed_hours,thurs_hours,fri_hours,sat_hours,sun_hours From SaveTimeSheet where month=?1 and emp_id=?2 and year=?3")
 	public List<Object[]> getDetailsByMon(int month, String empId, int year);
@@ -111,5 +112,32 @@ public interface SaveTimeSheetRepo extends JpaRepository<SaveTimeSheet, Integer>
 
 	@Query("select max(sun_Date) From SaveTimeSheet where emp_id=?1 and  calweek=?2 and year=?3 and status=?4")
 	public Date endDate(String employeeId, int calWeek, int year, String status);
+	
+	
+	
+	@Query("From SaveTimeSheet where  emp_id=?1  and year=?2 and month=?3 and  calweek=?4 and status=?5")
+	public ArrayList<SaveTimeSheet> getEmployeeDetailBasedOnRepIdEmpIdYearMonthCalStatus(String emp_id, int year,
+			int month, int calWeek, String status);
+	@Query("select sum(mon_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and month=?3 and year=?4")
+	public Double queryForMonTotalHours(String employeeId, int calWeek, int month, int year);
+	@Query("select sum(tue_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and month=?3 and year=?4")
+	public Double queryForTueTotalHours(String employeeId,  int calWeek, int month, int year);
+	@Query("select sum(wed_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and month=?3 and year=?4")
+	public Double queryForWedTotalHours(String employeeId, int calWeek, int month, int year);
+	@Query("select sum(thurs_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and month=?3 and year=?4")
+	public Double queryForThrTotalHours(String employeeId, int calWeek, int month, int year);
+
+	@Query("select sum(fri_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and month=?3 and year=?4")
+	public Double queryForFriTotalHours(String employeeId, int calWeek, int month, int year);
+	@Query("select sum(sat_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and month=?3 and year=?4")
+	public Double queryForSatTotalHours(String employeeId, int calWeek, int month, int year);
+	@Query("select sum(sun_hours) From SaveTimeSheet where emp_id=?1 and  calweek=?2  and month=?3 and year=?4")
+	public Double queryForSunTotalHours(String employeeId, int calWeek, int month, int year);
+	@Query("select max(mon_date) From SaveTimeSheet where emp_id=?1 and  calweek=?2 and month=?3 and year=?4")
+	public Date startDate(String employeeId, int calWeek, int year, int month);
+	@Query("select max(sun_Date) From SaveTimeSheet where emp_id=?1 and  calweek=?2 and month=?3 and year=?4")
+	public Date endDate(String employeeId, int calWeek, int year, int month);
+
+//	public boolean timeSheetApproval(TimeSheetApprovalStatus timeSheetApprovalEntity);
 
 }
