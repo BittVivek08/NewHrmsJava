@@ -9,10 +9,6 @@ import lombok.Data;
 public class EntityBeanResponse {
 	
 	private String msg;
-	
 	private boolean status;
-	
 	private EmployeeDto employeeDto;
-
-	private String jwtToken;
 }
