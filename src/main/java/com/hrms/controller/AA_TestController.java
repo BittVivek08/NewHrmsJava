@@ -1,6 +1,7 @@
 package com.hrms.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,18 +54,14 @@ public class AA_TestController {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), encodedPassword));
 		}
 		catch(Exception e) {
-			response.setEmployeeDto(null);
-			response.setMsg("Login Failed !");
-			response.setStatus(false);
-			response.setJwtToken(null);
-			return ResponseEntity.ok(response);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
 		}
 		final UserDetails user = userDetailsService.loadUserByUsername(authRequest.getEmail());
 		EmployeeDto emp = empService.loginViaJWT(authRequest.getEmail());
+		emp.setJwtToken(jwtUtil.generateToken(user));
 		response.setEmployeeDto(emp);
 		response.setMsg("Login Success");
 		response.setStatus(true);
-		response.setJwtToken(jwtUtil.generateToken(user));
 		return ResponseEntity.ok(response);
 	}
 
