@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/business")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200")
 public class BusinessunitController {
 
 	@Autowired
