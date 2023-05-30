@@ -76,8 +76,6 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	@Autowired
 	private IRequestForLeaveRepository iRequestForLeaveRepository;
 	@Autowired
-	private CurrentWeekDatesResponse currentWeekDatesResponse;
-	@Autowired
 	private TSResponseObj tsResp;
 	
 
@@ -230,6 +228,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	}
 
 	public CurrentWeekDatesResponse getWeekDates(LocalDate date) {
+		 CurrentWeekDatesResponse currentWeekDatesResponse=new CurrentWeekDatesResponse();
 		try {
 		HashMap<?, ?> DateHM = new CurrentWeekDates().getDateDetails(date);
 		currentWeekDatesResponse.setCurrentWeek(DateHM.get("currentWeek").toString());
