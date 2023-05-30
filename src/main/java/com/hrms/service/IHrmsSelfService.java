@@ -9,7 +9,7 @@ import com.hrms.response.bean.LeaveResponseBean;
 
 public interface IHrmsSelfService {
 
-	public CommonResponseBean saveLeaveRequest(LeaveRequestBean leaverequestBean, int roleId, int menuId);
+	public CommonResponseBean saveLeaveRequest(LeaveRequestBean leaverequestBean,String empId,String leaveType);
 	
 	
 	public LeaveResponseBean deleteMyLeave(int id);
@@ -23,7 +23,8 @@ public interface IHrmsSelfService {
 	
 	//get total leaves taken 
 	public CommonResponseBean totalLeaveTaken(int id);
-	
+
+
 //	public Response saveLeaveRequest(LeaveRequestBean leaverequestBean, int roleId, int menuId);
 
 }

@@ -1,7 +1,5 @@
 package com.hrms.controller;
 
-
-
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.request.bean.LeaveRequestBean;
@@ -54,15 +53,13 @@ public class HrmsSelfServiceController {
 			return hrmsSelfService.totalLeaveTaken(id);
 		}
 
-		@PostMapping("/ApplyLeaveRequest/{roleId}/{menuId}")
-		public CommonResponseBean  saveLeaveRequest(@RequestBody LeaveRequestBean leaverequestBean, @PathVariable(value = "roleId") int roleId,
-				@PathVariable(value = "menuId") int menuId) {
-				
-			
+		@PostMapping("/ApplyLeaveRequest")
+		public CommonResponseBean  saveLeaveRequest(@RequestBody LeaveRequestBean leaverequestBean ,
+				@RequestParam(value ="emp_id") String emp_id ,@RequestParam(value="leaveType")String leaveType) {
 			logger.info("Entered into getMyLeaveRequest() ");
 			logger.error("Existed from getMyLeaveRequest() ");
-			return hrmsSelfService.saveLeaveRequest(leaverequestBean, roleId, menuId);
-			
+						
+			return hrmsSelfService.saveLeaveRequest(leaverequestBean,emp_id,leaveType);
 		}
 
 }

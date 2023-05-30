@@ -21,8 +21,8 @@ public interface EmployeeLeaveTypeRepository extends JpaRepository<EmployeeLeave
 	@Query("from EmployeeLeaveTypeEntity where year=:year")
 	public List<EmployeeLeaveTypeEntity> getLeavesBasedOnYear(int year);
 
-	 @Query ("SELECT SUM(e.noOfDays) FROM EmployeeLeaveTypeEntity e WHERE e.year = YEAR(CURRENT_DATE())")
-	 public float getNoOfDays();
+	 @Query ("SELECT e.noOfDays FROM EmployeeLeaveTypeEntity e WHERE e.year = YEAR(CURRENT_DATE()) AND leaveType=:leaveType")
+	 public float getNoOfDays(@Param(value="leaveType")  String leaveType);
 	
 	///@Query ("SELECT COALESCE(SUM(l.noOfDays) FROM ")
 	

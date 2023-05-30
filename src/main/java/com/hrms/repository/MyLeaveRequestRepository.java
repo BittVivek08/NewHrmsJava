@@ -26,9 +26,24 @@ public interface MyLeaveRequestRepository extends JpaRepository<MyLeaveRequestEn
 	//@Query( "select leavetypeid from main_leaverequest where from_date>='" + fromDate + "' and to_date<='"
 		//		+ toDate + "' and user_id=" + userId + "")
 	
-	 @Query("SELECT lr.leaveTypeId FROM MyLeaveRequestEntity lr WHERE lr.fromDate >= :fromDate AND lr.toDate <= :toDate AND lr.emp_id = :emp_id")
-	    List<Long> findLeaveTypeIdByDatesAndUserId(@Param("fromDate") LocalDate date, @Param("toDate") LocalDate date2, @Param("emp_id") String emp_id);
+	// @Query("SELECT lr.leaveType FROM MyLeaveRequestEntity lr WHERE lr.fromDate >= :fromDate AND lr.toDate <= :toDate AND lr.emp_id = :emp_id")
+	//    List<MyLeaveRequestEntity> findLeaveTypeIdByDatesAndUserId(@Param("fromDate") LocalDate date, @Param("toDate") LocalDate date2, @Param("emp_id") String emp_id);
 	
 	 
+	
+	 @Query("SELECT CASE WHEN COUNT(l) > 0 THEN TRUE ELSE FALSE END " +
+	           "FROM MyLeaveRequestEntity l " +
+	           "WHERE l.emp_id = :emp_id " +
+	           "AND l.toDate <= :fromDate " +
+	           "AND l.fromDate >= :toDate ")
+	    boolean checkMatchingDates(@Param("emp_id")String emp_id,@Param("toDate") LocalDate startDate,@Param("fromDate") LocalDate endDate);
 	 
 }
+
+
+
+
+
+
+
+

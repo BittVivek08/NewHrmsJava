@@ -10,6 +10,7 @@ public interface EmployeeLeaveRequestSummaryRepository extends JpaRepository<Emp
 
 	
 @Query("SELECT COALESCE(SUM(l.noOfDays), 0) FROM EmployeeLeaveRequestSummaryEntity l WHERE l.emp_id = :emp_id AND " +
-           "l.leaveStatus = 'Approved' AND YEAR(l.createddate) = YEAR(CURRENT_DATE())")
-public float getNoOfDaysApproved (@Param("emp_id") String emp_id);
+           "l.leaveStatus = 'Approved' AND YEAR(l.createddate) = YEAR(CURRENT_DATE()) AND leaveType=:leaveType")
+public float getNoOfDaysApproved (@Param("emp_id") String emp_id,@Param(value="leaveType") String leaveType);
+
 }
