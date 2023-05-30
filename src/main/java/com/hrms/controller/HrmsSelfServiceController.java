@@ -31,7 +31,7 @@ public class HrmsSelfServiceController {
 	
 	
 	    // delete my leave details.
-		@DeleteMapping("/DeleteMyLeave")
+		@DeleteMapping("/DeleteMyLeave/{id}")
 		public LeaveResponseBean deleteMyLeave(@PathVariable(value = "id") int id) {
 			logger.info("Entered into HrmsSelfServiceController in deleteMyLeave() ");
 			logger.error("Existed from HrmsSelfServiceController deleteMyLeave() ");

@@ -70,7 +70,7 @@ public class MyLeaveRequestEntity {
 	private Timestamp createdDdate;
 
 	@Column(name = "modifiedby")
-	private Integer modifiedBy;
+	private int modifiedBy;
 
 	@Column(name = "createdby")
 	private Integer createdBy;

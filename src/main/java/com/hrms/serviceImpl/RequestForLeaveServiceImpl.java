@@ -1,4 +1,4 @@
-package com.hrms.serviceImpl;
+	package com.hrms.serviceImpl;
 
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -37,10 +39,14 @@ import com.hrms.repository.MyLeaveRequestRepository;
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
 import com.hrms.request.bean.LeaveDetailsFiltaring;
+import com.hrms.request.bean.LeaveRequestBean;
 import com.hrms.request.bean.RequestForLeaveBinding;
 
 import com.hrms.request.bean.UpdateEmployeeLeaveDetails;
+import com.hrms.request.bean.UpdateLeaveRequest;
 import com.hrms.response.bean.Common;
+import com.hrms.response.bean.EmpLeaveResponseBean;
+import com.hrms.response.bean.EmployeeLeaveResponse;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.response.bean.LeaveDetailResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
@@ -384,14 +390,14 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		//return leaveRequestRepo.findAll(Example.of(leavesResponseBean));
         return null;
 	}
-
+	
 
 
 	//Get Leaves based on year like old hrms
 	@Override
 	public Common getLeavesBasedOnYear(int year) {
 
-		Common common=new Common();
+	Common common=new Common();
 		List<EmployeeLeaveTypeEntity> leavesBasedOnYear = leaveTypeRepo.getLeavesBasedOnYear(year);
 
 		if (leavesBasedOnYear.size() > 0 && leavesBasedOnYear != null) {
@@ -490,4 +496,91 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 			}
 		return leavesResponseBean;			
 	}
+
+	@Override
+	public List<EmployeeLeaveResponse> getLeaveDataByReqIdDate(int reqId, String date) {
+		
+		List<EmployeeLeaveResponse> listOfLeavedEmployees = new ArrayList<EmployeeLeaveResponse>();
+		EmployeeLeaveResponse employeeLeaveResp = new EmployeeLeaveResponse();
+		if (reqId == 0 && date != null) {
+			List<LeaveRequestEntity> leaveDataByRepIdDate = leaveRequestRepo.getLeaveDataByRepIdDate(date);
+			if (leaveDataByRepIdDate != null && leaveDataByRepIdDate.size() != 0) {
+				System.out.println("sadfas");
+				for (LeaveRequestEntity ob : leaveDataByRepIdDate) {				
+					
+					employeeLeaveResp.setEmployeeName(ob.getUserName());
+					employeeLeaveResp.setLeaveFromDate(ob.getFromDate());
+					employeeLeaveResp.setLeaveToDate(ob.getToDate());
+					employeeLeaveResp.setUserId(ob.getUser_id());	                
+					listOfLeavedEmployees.add(employeeLeaveResp);
+					
+				}
+			}
+			
+		}
+		else if (reqId != 0 && date != null) {
+			List<LeaveRequestEntity> findApprovedLeaveRequests = leaveRequestRepo.findApprovedLeaveRequests(reqId, date);
+			
+			if (findApprovedLeaveRequests != null && findApprovedLeaveRequests.size() != 0) {
+				
+				for (LeaveRequestEntity ob : findApprovedLeaveRequests) {
+					employeeLeaveResp.setEmployeeName(ob.getUserName());
+					employeeLeaveResp.setLeaveFromDate(ob.getFromDate());
+					employeeLeaveResp.setLeaveToDate(ob.getToDate());
+					employeeLeaveResp.setUserId(ob.getUser_id());	                
+					listOfLeavedEmployees.add(employeeLeaveResp);
+					
+				}				
+			}			
+		}
+		
+		return listOfLeavedEmployees;
+		
+		
+	}
+
+	@Override
+	public EmpLeaveResponseBean updateAllLeaveSummary(UpdateLeaveRequest updateBean) {
+		MyLeaveRequestEntity entityBean = new MyLeaveRequestEntity();
+		EmpLeaveResponseBean updateResponseBean = new EmpLeaveResponseBean();
+		
+		List<LeaveRequestBean> leaveBean = updateBean.getLeaveBean();
+		 Date date = new Date();
+		 Timestamp timestamp2 = new Timestamp(date.getTime());
+		entityBean.setModifiedDate(timestamp2);
+		entityBean.setModifiedBy(updateBean.getModifiedBy());
+		
+		for (LeaveRequestBean value : leaveBean) {
+			BeanUtils.copyProperties(entityBean, value);
+			
+			
+		}
+		
+		return updateResponseBean;
+	}
+
+	@Override
+	public LeavesResponseBean getLeaveDetailsForManager( int managerid, String leavestatus) {
+		
+		List<LeaveRequestEntity>listOfLeaves=new ArrayList<>();	
+		LeavesResponseBean response = new LeavesResponseBean();	
+		
+		//listOfLeaves.addAll( leaveRequestRepo.findByReportingManagerIdAndLeaveStatus(managerid, leavestatus));
+		listOfLeaves.addAll(leaveRequestRepo.findByRepManId(managerid, leavestatus));
+		
+		if(!listOfLeaves.isEmpty()) {
+			response.setMessage("Retrival of Leave Details Successfull.");
+			response.setStatus(true);
+			response.setList(listOfLeaves);
+		}
+		else {
+			response.setMessage("No Leave Details are available.");
+			response.setStatus(false);
+			response.setList(listOfLeaves);			
+		}		
+		
+		return response;
+	}
+	
+	
 }
