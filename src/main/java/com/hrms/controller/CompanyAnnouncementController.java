@@ -24,7 +24,7 @@ import com.hrms.serviceImpl.CompanyAnnouncementServiceImpl;
 
 @RestController
 @RequestMapping("/announcement")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200")
 public class CompanyAnnouncementController {
 
 	@Autowired
