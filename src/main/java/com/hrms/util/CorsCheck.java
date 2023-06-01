@@ -8,20 +8,25 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Component
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebFilter("/*")
 public class CorsCheck implements Filter {
-	@Override
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-		HttpServletRequest request = (HttpServletRequest) servletRequest;
-		HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-		// Allow requests from any origin
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		// Allow specific HTTP methods (e.g., GET, POST)
-		response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-		// Allow specific headers (e.g., Content-Type, Authorization)
-		response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletResponse response = (HttpServletResponse) res;
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        chain.doFilter(req, res);
+    }
 
-		filterChain.doFilter(request, response);
-	}
+    // Other methods from the Filter interface (init, destroy) can be left empty.
+
 }
