@@ -23,7 +23,7 @@ import com.hrms.util.IPAddress;
 
 @RestController
 @RequestMapping("/attendance")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200")
 public class EmployeeAttendanceController {
 
 	@Autowired
