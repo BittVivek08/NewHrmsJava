@@ -122,12 +122,12 @@ public class RequestForLeaveController {
 		}
 		
 	//get leave details based on manager id and status
-		@GetMapping("/getLeaveDetailsBasedOnManagerId/{reportingManagerId}/{leaveStatus}")
+		@GetMapping("/getLeaveDetailsBasedOnManagerId/{reportingManagerId}/{leaveStatus}/{emp_id}")
 		public LeavesResponseBean getLeaveDetailsBasedOnManagerId(@PathVariable(value = "reportingManagerId") int managerId,
-				@PathVariable(value = "leaveStatus") String leavestatus ) {
+				@PathVariable(value = "leaveStatus") String leavestatus,@PathVariable(value = "emp_id") String emp_id ) {
 			
 			logger.info("entered into getLeaveDetailsBasedOnManagerId method of service class...");
-			return reqLeaveService.getLeaveDetailsForManager( managerId, leavestatus);
+			return reqLeaveService.getLeaveDetailsForManager( managerId, leavestatus, emp_id);
 			
 			
 		}
