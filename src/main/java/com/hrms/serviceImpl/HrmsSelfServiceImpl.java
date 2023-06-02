@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.hrms.beans.EmailDetails;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeLeaveRequestSummaryEntity;
 import com.hrms.entity.LeaveRequestEntity;
@@ -72,6 +73,10 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	@Autowired
     private EmployeeLeaveRequestSummaryRepository leaveReqSummery;
 	
+	@Autowired
+	private EmailServiceImpl mailservice;
+	
+	
 	@Override
 	public CommonResponseBean  saveLeaveRequest(LeaveRequestBean reqBean ,
 			String emp_id ,String leaveType) {
@@ -113,6 +118,14 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 			
 			
 			EmployeeDetails empDetails = employeeRepo.findByEmpId(emp_id);
+			
+			//Mail-Sending
+			String employeeMail = empDetails.getEmail();
+			Integer reportingManagerId = empDetails.getReportingManagerId();
+			String managerMail = this.employeeRepo.findEmailByMangerId(reportingManagerId);
+
+
+
 			
 			
 		reqEntity.setAvailabelDays(leaveTypeRepo.getNoOfDays(leaveType)-leaveReqSummery.getNoOfDaysApproved(emp_id,leaveType));
@@ -157,6 +170,16 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 			leaveSummery.setCreatedBy(33);
 			leaveSummery.setModifiedBy(32);	
 			leaveSummery.setUser_id(empDetails.getUserId());
+			
+			//mail-sending
+			EmailDetails mailData=new EmailDetails();
+			mailData.setRecipient(employeeMail);
+			mailData.setSubject("Leave Approval Of Employee");
+			mailData.setMsgBody("Hi this is "+ empDetails.getFirstName()+"  ,Applying leave can you please approve ");
+		    	
+			String sendSimpleMail = this.mailservice.sendSimpleMail(mailData);
+			
+			
 			leaveReqSummery.save(leaveSummery);
 						
 			leaveBlogic.updateEmployeeLeaves(leaveType ,emp_id, days, "save", null);
