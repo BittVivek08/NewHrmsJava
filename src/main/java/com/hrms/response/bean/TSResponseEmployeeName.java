@@ -13,7 +13,7 @@ import lombok.Data;
 public class TSResponseEmployeeName 
 {  private Integer userId;
 	private String employeeName;
-	private Integer repManId;
+	private String repManId;
 	private Integer weekNo;
 	private Date startDate;
 	private Date endDate;

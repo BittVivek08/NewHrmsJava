@@ -37,6 +37,8 @@ public interface MyLeaveRequestRepository extends JpaRepository<MyLeaveRequestEn
 	           "AND l.toDate <= :fromDate " +
 	           "AND l.fromDate >= :toDate ")
 	    boolean checkMatchingDates(@Param("emp_id")String emp_id,@Param("toDate") LocalDate startDate,@Param("fromDate") LocalDate endDate);
+    @Query("From MyLeaveRequestEntity where emp_id=?1")
+	public List<MyLeaveRequestEntity> findleaveStatus(String empId);
 	 
 }
 

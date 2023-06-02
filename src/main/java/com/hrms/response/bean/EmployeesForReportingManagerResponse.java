@@ -11,6 +11,6 @@ public class EmployeesForReportingManagerResponse
 {
 	boolean status;
 	String message;	
-	int reportingMangerId;
+	String reportingMangerId;
 	List<EmployeeDetails> empDetailsList;
 }
