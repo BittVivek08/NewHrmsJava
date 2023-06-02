@@ -17,8 +17,11 @@ import com.hrms.beans.EntityBeanResponseCommon;
 import com.hrms.entity.ClientDetailsEntity;
 import com.hrms.service.ClientDetailsService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/Client")
+@Slf4j
 public class CilentDeatilsController {
 	
 	@Autowired
@@ -28,8 +31,10 @@ public class CilentDeatilsController {
 	//SaveClient
 	@PostMapping("/saveClient")
 	public EntityBeanResponseCommon saveClientDetails(@RequestBody ClientDetailsEntity entity) {
+		this.log.info("Entered save client details method in controlller");
 		
 		EntityBeanResponseCommon saveClientDetails = this.ClientService.saveClientDetails(entity);
+		this.log.info("successfully savee client details method in controlller");
 		
 		return saveClientDetails;
 		
@@ -39,9 +44,14 @@ public class CilentDeatilsController {
 	//GetAllClients
 	@GetMapping("/GetAllClients")
 	public ResponseEntity<ClientsResponseBean> getallClients(){
+		this.log.info("Entered fetch all  client details method in controlller");
 		
 		ClientsResponseBean allClients = this.ClientService.getAllClients();
+		
+		this.log.info("successfully fetch all  client details method in controlller");
 		return new ResponseEntity<ClientsResponseBean>(allClients,HttpStatus.OK);
+		
+		
 		
 	}
 	
@@ -50,10 +60,11 @@ public class CilentDeatilsController {
 	
 	@GetMapping("/GetSingleClientByClientId/{clientId}")
 	public ResponseEntity<ClientDetailsEntity> getSingleClientByClientId(@PathVariable("clientId") int clientId) {
+		this.log.info("Entered fetch single   client details method in controlller");
 		
 		ClientDetailsEntity clientByClientId = this.ClientService.getClientByClientId(clientId);
 		
-		
+		this.log.info("successfully fetch single  client details method in controlller");
 		return new ResponseEntity<ClientDetailsEntity>(clientByClientId,HttpStatus.OK);
 			
 	}
@@ -65,137 +76,32 @@ public class CilentDeatilsController {
 	@DeleteMapping("/deleteClient/{clientid}")
 	public EntityBeanResponseCommon deleteClient(@PathVariable("clientid") int id) {
 		
+		this.log.info("Entered delete single client method in controlller");
+		
 		EntityBeanResponseCommon deletedClient = this.ClientService.deletedClient(id);
+		
+		this.log.info("successfully  delete single client method in controlller");
+		
+		
 		return deletedClient;
 		
 		
 	}
-	
-	
-	
 	
 	 //oldHrms
 	//updateById
 	@PutMapping("/putClient/{cid}")
 	public ClientDetailsEntity updateCliDetails(@PathVariable("cid") int id,@RequestBody ClientDetailsEntity entity) {
 		
+		this.log.info("Entered update client method in controlller");
+		
 		ClientDetailsEntity updateClientById = this.ClientService.updateClientById(id, entity);
+		
+		this.log.info("successfully  update client method in controlller");
 		
 		
 		return updateClientById;
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	 * @PutMapping("/update/{id}") public ResponseEntity<ClientDetailsEntity>
-	 * UpdateClient(@PathVariable("id") int id,@RequestBody ClientDetailsEntity
-	 * entity){
-	 * 
-	 * ClientDetailsEntity updateClientDetails =
-	 * this.ClientService.updateClientDetails(id, entity);
-	 * 
-	 * return new
-	 * ResponseEntity<ClientDetailsEntity>(updateClientDetails,HttpStatus.OK);
-	 * 
-	 * }
-	 */
-	
-	
-	
-	
-	/*
-	 * //update
-	 * 
-	 * @PutMapping("/update") public EntityBeanResponse update(@RequestBody
-	 * ClientDetailsEntity entity) { EntityBeanResponse updateClientDetails =
-	 * this.ClientService.updateClientDetails(entity); return updateClientDetails;
-	 * 
-	 * }
-	 */
-
-	
-	/*
-	 * //updateClientDetrails
-	 * 
-	 * @PutMapping("/update/{Clientid}") public ResponseEntity<ClientDetailsEntity>
-	 * updateClient(@PathVariable("Clientid") int id,ClientDetailsEntity entity){
-	 * 
-	 * ClientDetailsEntity updateClientDetrails =
-	 * this.ClientService.updateClientDetrails(id, entity); return new
-	 * ResponseEntity<ClientDetailsEntity>(updateClientDetrails,HttpStatus.OK);
-	 * 
-	 * }
-	 */
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	 * //UpdateClientDetails
-	 * 
-	 * @PutMapping("/updateClient") public EntityBeanResponse
-	 * updateClient(@RequestBody ClientDetailsEntity updateEntity) {
-	 * 
-	 * EntityBeanResponse updateClient =
-	 * this.ClientService.updateClient(updateEntity); return updateClient;
-	 * 
-	 * }
-	 */
-	
-	
-	
-	
-
-	//GetSingleClient
-	
-	//@GetMapping("/GetSingleClient/{id}")
-	//public ResponseEntity<ClientDetailsEntity> getSingleClientByid(@PathVariable("id") int id){
-		
-	//	ClientDetailsEntity singleClientrByid = this.ClientService.getSingleClientrByid(id);
-		
-		
-	//	return new ResponseEntity<ClientDetailsEntity>(singleClientrByid,HttpStatus.OK);
-	
-	//}
-	
-	
-	
-	
-//.........................................Old-Code................................
-	
-	 //oldHrms
-		//SaveClient
-//		@PostMapping("/saveClient")
-//		public EntityBeanResponseCommon saveClientDetails(@RequestBody ClientDetailsEntity entity) {
-//			
-//			EntityBeanResponseCommon saveClientDetails = this.ClientService.saveClientDetails(entity);
-//			
-//			return saveClientDetails;
-//			
-//		}
 	
 }

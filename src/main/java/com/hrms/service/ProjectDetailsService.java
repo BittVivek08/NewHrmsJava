@@ -12,19 +12,16 @@ public interface ProjectDetailsService {
 	 //oldHrms
 	public EntityBeanResponseCommon saveProjectDetails(ProjectDetailsEntity porjentity);
 	
-    // public ProjectRespoonseBean getListOfProjectDetailsByid(int client);
-	
-	 //oldHrms
-	//public List<ProjectDetailsEntity> getProjectListByClienyId(int cid);
-	
 	 //oldHrms
 	public EntityBeanResponseCommon updateProjectDetails(int pid,ProjectDetailsEntity entity);
 	
 	 //oldHrms
 	public List<ProjectResponseBean> getAllProjects(int id);
 	
+	 // public ProjectRespoonseBean getListOfProjectDetailsByid(int client);
 	
-	
+	 //oldHrms
+	//public List<ProjectDetailsEntity> getProjectListByClienyId(int cid);
 	
   // public EntityBeanResponse postProjectDetails(ProjectDetailsEntity entity);
 }

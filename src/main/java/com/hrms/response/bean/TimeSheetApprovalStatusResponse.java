@@ -1,17 +1,17 @@
-package com.hrms.entity;
+package com.hrms.response.bean;
 
 import lombok.Data;
 
 @Data
 public class TimeSheetApprovalStatusResponse 
 {   
-	private int userId;
+	private String empId;
 	private String status;	
 	private String reason;
-	private int approverRoleId;
+	private Integer approverRoleId;
 	private String approverRole;
-	private short calWeek;
-	private int year;
-	private short month;
+	private Integer calWeek;
+	private Integer year;
+	private Integer month;
 	private Double totalHrs;
 }

@@ -24,6 +24,7 @@ import com.hrms.response.bean.CommonTimeSheetbean;
 import com.hrms.response.bean.DateResponseTimeSheet;
 import com.hrms.response.bean.ProjectListResponse;
 import com.hrms.response.bean.TSResponseObj;
+import com.hrms.response.bean.TimeSheetApprovalStatusResponse;
 import com.hrms.response.bean.TimeSheetResponse;
 import com.hrms.response.bean.TimeSheetResponseForMonth;
 import com.hrms.response.bean.TimeSheetResponseForMonthYearWeek;
@@ -118,7 +119,7 @@ public class HrmsEmpTimeSheetController {
 	}
 
 //New Api
-	@GetMapping("/getTimeSheetDetails")
+	@GetMapping("getTimeSheetDetailsbyUserIdMonYearCalWeekEmpId")
 	public ResponseEntity<TimeSheetResponseForMonthYearWeek> getEmployeeDetails(@QueryParam("month") Integer month,
 			@QueryParam("empId") String empId, @QueryParam("year") Integer year, @QueryParam("calweek") Integer calweek,
 			@QueryParam("userId") Integer userId) {
@@ -169,7 +170,7 @@ public class HrmsEmpTimeSheetController {
 	}
 
 	@GetMapping("/getEmployeesByReportingManagerId")
-	public ResponseEntity<List<EmployeeDetails>> getEmpByRepID(@QueryParam("repId") Integer repId) {
+	public ResponseEntity<List<EmployeeDetails>> getEmpByRepID(@QueryParam("repId")String repId) {
 		try {
 		List<EmployeeDetails> ob = impl.getEmpByReportingId(repId);
 		return new ResponseEntity<List<EmployeeDetails>>(ob, HttpStatus.OK);
@@ -204,7 +205,7 @@ public class HrmsEmpTimeSheetController {
 	}
 
 	@GetMapping("/getEmplTimeSheetDetailsByReportingManagerId")
-	public TSResponseObj getTimeSheetDetailsByReportingManagerId(@QueryParam("repId") int repId,
+	public TSResponseObj getTimeSheetDetailsByReportingManagerId(@QueryParam("repId")String repId,
 			@QueryParam("status") String status) {
 		log.info("entered into getEmplTimeSheetDetailsByReportingManagerId method of HrmsEmpTimeSheetController class");
 		return impl.getEmplTimeSheetDetailsByReportingManagerId(repId, status);
@@ -217,7 +218,7 @@ public class HrmsEmpTimeSheetController {
 	}
 
 	@GetMapping("/getEmplDetailsByReportingManagerId")
-	public TSResponseObj getEmpDetailsByReportingManagerId(@QueryParam("repId") int repId,
+	public TSResponseObj getEmpDetailsByReportingManagerId(@QueryParam("repId") String repId,
 			@QueryParam("calWeek") int calWeek) {
 		log.info("entered into getEmpDetailsByReportingManagerId method of HrmsEmpTimeSheetController class");
 		return impl.getEmplDetailsByReportingManagerId(repId, calWeek);
@@ -230,17 +231,17 @@ public class HrmsEmpTimeSheetController {
 	}
 
 	@GetMapping("/getEmployeeWorkingReportsByUserIdStatusCalweekYear")
-	public TSResponseObj getEmployeeWorkingReportsByUserIdStatusCalweekYear(@QueryParam("repId") int repId,
+	public TSResponseObj getEmployeeWorkingReportsByUserIdStatusCalweekYear(@QueryParam("repId") String repId,
 			@QueryParam("status") String status, @QueryParam("calWeek") int calWeek, @QueryParam("year") int year) {
 		log.info(
 				"entered into getEmployeeWorkingReportsByUserIdStatusCalweekYear method of HrmsEmpTimeSheetController class");
 		return impl.getEmployeeWorkingReportsByUserIdStatusCalweekYear(repId, status, calWeek, year);
 	}
 
-	@GetMapping("getEmployeeByMangerUsingCalWeekRepIdYearStatusUserId")
-	public TSResponseObj getEmployeeByMangerUsingCalWeeikRepIdYearStatusUserId(@QueryParam("repId") Integer repId,
+	@GetMapping("getEmployeeByMangerUsingCalWeekRepIdYearStatusUserIdMon")
+	public TSResponseObj getEmployeeByMangerUsingCalWeeikRepIdYearStatusUserId(@QueryParam("repId") String repId,
 			@QueryParam("status") String status, @QueryParam("calWeek") Integer calWeek,
-			@QueryParam("year") Integer year, @QueryParam("userId") Integer userId) {
+			@QueryParam("year") Integer year, @QueryParam("userId") Integer userId,@QueryParam("empId") String empId,@QueryParam("month") Integer month) {
 		  if (userId != null && status != null) {
 			return impl.getTSDetailsByUserId(userId, status);
 		} else if (repId != null && calWeek!= null) {
@@ -251,10 +252,13 @@ public class HrmsEmpTimeSheetController {
 		  else if (repId != null && status != null && calWeek != null && year != null) {
 				return impl.getEmployeeWorkingReportsByUserIdStatusCalweekYear(repId, status, calWeek, year);
 			}
+		  else if(repId != null && status != null && calWeek != null && year != null && month!=null && empId!=null) {
+			  return impl.getEmployeeDetailBasedOnRepIdEmpIdYearMonthCalStatus(repId, calWeek, status,  empId,year, month);  
+		  }
 		return null;
 	}
 	@GetMapping("/getEmployeeDetailBasedOnRepIdEmpIdYearMonthCalStatus")
-	public TSResponseObj getEmployeeDetailBasedOnRepIdEmpIdYearMonthCalStatus(@QueryParam("repId") Integer repId,
+	public TSResponseObj getEmployeeDetailBasedOnRepIdEmpIdYearMonthCalStatus(@QueryParam("repId") String repId,
 			@QueryParam("calWeek") Integer calWeek, @QueryParam("status") String status, @QueryParam("empId") String empId,
 			@QueryParam("year")Integer year, @QueryParam("month") Integer month) {
 		log.info(
@@ -264,12 +268,12 @@ public class HrmsEmpTimeSheetController {
 	
 	
 //	 @PostMapping("/timeSheetApproval")
-//	 public ResponseEntity<TimeSheetApprovalStatusResponse>
-//	 timeSheetApproval(@QueryParam("empId") int empid){
-//	 TimeSheetApprovalStatusResponse timesheet=impl.timeSheetApproval(@RequestBody TimeSheetApprovalStatusResponse timeSheetApprovalEntity);
+//	 public ResponseEntity<TimeSheetResponse>
+//	 timeSheetApproval(@QueryParam("empId") int empid ,@RequestBody TimeSheetApprovalStatusResponse timeSheetApprovalEntity){
+//		 TimeSheetResponse timesheet=impl.timeSheetApproval(empid,timeSheetApprovalEntity);
 //	 if(timesheet!=null) {
 //	 return new
-//	 ResponseEntity<TimeSheetApprovalStatusResponse>(timesheet,HttpStatus.ACCEPTED) ;
+//	 ResponseEntity<TimeSheetResponse>(timesheet,HttpStatus.ACCEPTED) ;
 //	 }else {
 //	 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 //	 } 

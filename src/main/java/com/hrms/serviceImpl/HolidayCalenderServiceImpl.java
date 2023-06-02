@@ -96,19 +96,6 @@ public class HolidayCalenderServiceImpl implements HolidayCalenderService {
 		return holiRepo.save(holidayDB);
 	}
 
-	// GetbyDate
-
-	/*
-	 * @Override public HolidayCalenderEntity getHolidayBydate(LocalDate date) {
-	 * 
-	 * this.logging.info("Entered Get Holiday By Date method in Service ");
-	 * 
-	 * HolidayCalenderEntity findByDate =
-	 * this.holiRepo.finHolidayCalenderEntity(date);
-	 * 
-	 * this.logging.info("Successfully get holiday by date in service"); return
-	 * findByDate; }
-	 */
 	// GetById
 	@Override
 	public HolidayCalenderEntity getHolidayById(int id) {
@@ -146,6 +133,8 @@ public class HolidayCalenderServiceImpl implements HolidayCalenderService {
 	// updateBybean
 	@Override
 	public EntityBeanResponseCommon updateHolidayById(int id, HolidayCalenderEntity update) {
+		
+		this.logging.info("Entered update Holiday method in service ");
 
 		Optional<HolidayCalenderEntity> holiday = holiRepo.findById(id);
 		HolidayCalenderEntity holidayDB = null;
@@ -163,12 +152,14 @@ public class HolidayCalenderServiceImpl implements HolidayCalenderService {
 			holidayDB.setModifieddate(LocalDateTime.now());
 
 			HolidayCalenderEntity save = this.holiRepo.save(holidayDB);
+			this.logging.info("successfully updated holiday in sevice");
 			if (save != null) {
 				this.bean.setMsg("Successfully updated Holiday id " + id);
 				this.bean.setStatus(true);
 			} else {
 				this.bean.setMsg("Failed to update ");
 				this.bean.setStatus(false);
+				this.logging.info("failed to update holiday in service ");
 			}
 
 		}
@@ -182,91 +173,5 @@ public class HolidayCalenderServiceImpl implements HolidayCalenderService {
 		return null;
 	}
 
-	/*
-	 * @Override public HolidayCalenderEntity getHolidayBydate(LocalDate
-	 * holidayDate) { HolidayCalenderEntity finHolidayCalenderEntity =
-	 * this.holiRepo.findByDate(holidayDate); return finHolidayCalenderEntity; }
-	 */
-
-	/*
-	 * @Override public HolidayCalenderEntity updateHoliday(int id,
-	 * HolidayCalenderEntity updateHoliday) { // TODO Auto-generated method stub
-	 * return null; }
-	 */
-
-	/*
-	 * @Override public List<Date> getAllDates() {
-	 * 
-	 * List<Date> findAllDate = this.holiRepo.findAllDate();
-	 * 
-	 * return findAllDate; }
-	 */
-
-	/*
-	 * @Override public HolidayCalenderEntity UpdateHoliday(HolidayCalenderEntity
-	 * updateHoliday) {
-	 * 
-	 * 
-	 * HolidayCalenderEntity update = this.holiRepo.save(updateHoliday);
-	 * 
-	 * return update;
-	 * 
-	 * 
-	 * //HolidayCalenderEntity updateHolidaDate = holiRepo.save(updateHoliday);
-	 * 
-	 * //return updateHolidaDate; }
-	 */
-
-	// getHloidayByname
-
-//	@Override
-//	public EntityBeanResponseCommon saveHoliday(HolidayCalenderEntity holiday) {
-//
-//		logging.info("Entered SaveholidayMethod in service class impl");
-//
-//		// holiday.setGroupid(1);
-//		HolidayCalenderEntity holidaySave = holiRepo.save(holiday);
-//		if (holidaySave != null) {
-//			bean.setMsg("successfully Holiday Saved");
-//			bean.setStatus(true);
-//			logging.info("successfully Holiday saved in service ");
-//		} else {
-//			bean.setMsg("Holday successfully not saved");
-//			bean.setStatus(false);
-//			logging.warn("Exception occured in service");
-//		}
-//		return bean;
-//	}
-
-//	@Override
-//	public HolidayCalenderEntity updateHoliday(int id, HolidayCalenderEntity updateHoliday) {
-//
-//		this.logging.info("Entered update holiday by id method in service ");
-//
-//		this.logging.info("updateHoliday.getDate()" + updateHoliday.getDate());
-//		this.logging.info("updateHoliday.getHolidayDescription()" + updateHoliday.getHolidaydescription());
-//		this.logging.info("updateHoliday.getHolidayName()" + updateHoliday.getHolidayname());
-//
-//		Optional<HolidayCalenderEntity> holiday = holiRepo.findById(id);
-//		HolidayCalenderEntity holidayDB = null;
-//		if (holiday.isPresent()) { //
-//			List<HolidayCalenderEntity> list = holiday.stream().collect(Collectors.toList());
-//			holidayDB = holiday.get();
-//			holidayDB.setDate(updateHoliday.getDate());
-//			holidayDB.setCreatedby(updateHoliday.getCreatedby());
-//			holidayDB.setGroupid(0);
-//			holidayDB.setCreateddate(updateHoliday.getCreateddate());
-//			holidayDB.setHolidaydescription(updateHoliday.getHolidaydescription());
-//			holidayDB.setHolidayname(updateHoliday.getHolidayname());
-//			holidayDB.setHolidayyear(updateHoliday.getHolidayyear());
-//			holidayDB.setIsactive(updateHoliday.getIsactive());
-//			holidayDB.setModifiedby(updateHoliday.getModifiedby());
-//			holidayDB.setModifieddate(updateHoliday.getModifieddate());
-//			
-//			
-//			//holidayDB.setHolidayName(updateHoliday.getHolidayname());
-//			//holidayDB.setHolidayDescription(updateHoliday.getHolidaydescription());
-//		}
-//	
 
 }

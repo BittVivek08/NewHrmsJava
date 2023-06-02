@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 
 import com.hrms.beans.EmailDetails;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class EmailServiceImpl {
 
@@ -27,6 +30,9 @@ public class EmailServiceImpl {
    
 	
 	public String sendSimpleMail(EmailDetails details) {
+		
+		this.log.info("Entered mail send method in service");
+		
 		try {
 			SimpleMailMessage mailMessage = new SimpleMailMessage();
 
@@ -37,9 +43,11 @@ public class EmailServiceImpl {
 			mailMessage.setSubject(details.getSubject());
 
 			javaMailSender.send(mailMessage);
+			this.log.info("Successfully  mail send method in service");
 			return "Mail Sent Successfully...";
 		} catch (Exception e) {
 			e.printStackTrace();
+			this.log.info("failed to send  mail method in service");
 			return "Error while Sending Mail";
 		}
 	}
@@ -73,42 +81,5 @@ public class EmailServiceImpl {
 
 
 }
-	//withMvc
-	
-//	@Override
-//	public String mailsend(EmailDetails details) {
-//		try {
-//			SimpleMailMessage mailMessage = new SimpleMailMessage();
-//
-//			mailMessage.setFrom(sender);
-//			mailMessage.setTo(details.getRecipient());
-//			mailMessage.setText(details.getMsgBody());
-//			mailMessage.setSubject(details.getSubject());
-//
-//			javaMailSender.send(mailMessage);
-//			return "Mail Sent Successfully...";
-//		} catch (Exception e) {
-//			return "Error while Sending Mail";
-//		}
-//	}
-	
-	
-//MadhuAnnaCode	
-//public String sendSimpleMail(EmailDetails details) {
-//	try {
-//		SimpleMailMessage mailMessage = new SimpleMailMessage();
-//
-//		mailMessage.setFrom(sender);
-//		mailMessage.setTo(details.getRecipient());
-//		mailMessage.setText(details.getMsgBody());
-//		mailMessage.setSubject(details.getSubject());
-//
-//		javaMailSender.send(mailMessage);
-//		return "Mail Sent Successfully...";
-//	} catch (Exception e) {
-//		e.printStackTrace();
-//		return "Error while Sending Mail";
-//	}
-//}
 	
 

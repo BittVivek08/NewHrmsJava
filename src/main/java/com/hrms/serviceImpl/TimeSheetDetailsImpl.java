@@ -11,29 +11,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.catalina.connector.Response;
-import org.apache.naming.factory.SendMailFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hrms.beans.CurrentWeekDatesResponse;
 import com.hrms.beans.DateResponseInTimeSheet;
-import com.hrms.beans.EmailDetails;
-import com.hrms.beans.EntityBeanResponse;
 import com.hrms.entity.ClientDetailsEntity;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.ProjectDetailsEntity;
-
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.entity.TaskDetailsEntity;
-
 import com.hrms.repository.ClientDetailsRepository;
-
+import com.hrms.repository.EmpRoleRepo;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.HolidayCalenderRepository;
 import com.hrms.repository.IRequestForLeaveRepository;
+import com.hrms.repository.MyLeaveRequestRepository;
 import com.hrms.repository.ProjectDetailsRepository;
-
 import com.hrms.repository.SaveTimeSheetRepo;
 import com.hrms.repository.TaskDeatailsRepository;
 import com.hrms.response.bean.CommonTimeSheetbean;
@@ -43,7 +37,6 @@ import com.hrms.response.bean.ProjectListResponse;
 import com.hrms.response.bean.ProjectResponse;
 import com.hrms.response.bean.TSResponseEmployeeName;
 import com.hrms.response.bean.TSResponseObj;
-
 import com.hrms.response.bean.TimeSheetResponse;
 import com.hrms.response.bean.TimeSheetsMonthlyBean;
 import com.hrms.service.TimeSheetDetails;
@@ -56,8 +49,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class TimeSheetDetailsImpl implements TimeSheetDetails {
 
-	@Autowired
-	private EntityBeanResponse entityBeanResponse;
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	@Autowired
@@ -77,7 +68,10 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	private IRequestForLeaveRepository iRequestForLeaveRepository;
 	@Autowired
 	private TSResponseObj tsResp;
-	
+	@Autowired
+	private MyLeaveRequestRepository myLeaveRequestRepository;
+	@Autowired
+	private EmpRoleRepo empRoleRepo1;
 
 	public TimeSheetResponse saveTimeSheett(List<SaveTimeSheet> savetimesheetList) {
 		log.info("entered into saveTimeSheett  method of HrmsEmpTimeSheetService class");
@@ -106,17 +100,14 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 							.findByProjectId(savetimesheet.getProj().getProjectId());
 					TaskDetailsEntity task = this.taskDetailsRepository.findById(savetimesheet.getTask().getTaskid())
 							.get();
-					int taskN = task.getTaskid();
-					int clientN = client.getId();
-					String taskName = this.taskDetailsRepository.findByTaskName(taskN);
-					String clientName = this.clientDetailsRepository.findByClientName(clientN);
 					savetimesheet.setTask(task);
 					savetimesheet.setProj(proj);
 					savetimesheet.setClient(client);
 					savetimesheet.setEmp(emp1);
-					savetimesheet.setCreatedBy(1);
-					savetimesheet.setTaskName(taskName);
-					savetimesheet.setCustomer(clientName);
+					savetimesheet.setProject(proj.getProjectName());
+					savetimesheet.setCreatedBy(emp1.getUserId());
+					savetimesheet.setTaskName(task.getTasknmae());
+					savetimesheet.setCustomer(client.getClientName());
 					savetimesheet.setCreated_Date(LocalDateTime.now());
 					SaveTimeSheet result = this.saveTimeSheetRepo.save(savetimesheet);
 					timeSheetResponse.setMsg("successfully added data ");
@@ -153,7 +144,10 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 							savetimesheet.setProj(proj);
 							savetimesheet.setClient(client);
 							savetimesheet.setEmp(emp1);
-							savetimesheet.setCreatedBy(1);
+							savetimesheet.setProject(proj.getProjectName());
+							savetimesheet.setCreatedBy(emp1.getUserId());
+							savetimesheet.setTaskName(task.getTasknmae());
+							savetimesheet.setCustomer(client.getClientName());
 							savetimesheet.setCreated_Date(LocalDateTime.now());
 							this.saveTimeSheetRepo.save(savetimesheet);
 							timeSheetResponse.setMsg("successfully added data in data base");
@@ -190,29 +184,30 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	{
 		log.info("entered into updateTimeSheet  method of HrmsEmpTimeSheetService class");
 		try {
-		int cal = Integer.parseInt(savetimesheet.getFri_hours()) + Integer.parseInt(savetimesheet.getMon_hours())
-				+ Integer.parseInt(savetimesheet.getSat_hours()) + Integer.parseInt(savetimesheet.getThurs_hours())
-				+ Integer.parseInt(savetimesheet.getSun_hours()) + Integer.parseInt(savetimesheet.getTue_hours())
-				+ Integer.parseInt(savetimesheet.getWed_hours());
-		savetimesheet.setTotalWeekHours(String.valueOf(cal));
-		savetimesheet.setStatus("pending");
-		EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
-		ClientDetailsEntity client = this.clientDetailsRepository.findById(savetimesheet.getClient().getId()).get();
-		ProjectDetailsEntity proj = this.pojectDetailsRepository
-				.findByProjectId(savetimesheet.getProj().getProjectId());
-		TaskDetailsEntity task = this.taskDetailsRepository.findById(savetimesheet.getTask().getTaskid()).get();
-		savetimesheet.setTask(task);
-		savetimesheet.setProj(proj);
-		savetimesheet.setClient(client);
-		savetimesheet.setEmp(emp1);
-		savetimesheet.setCreatedBy(1);
-		savetimesheet.setModifiedDate(LocalDateTime.now());
-		savetimesheet.setId(id);
-
-		this.saveTimeSheetRepo.save(savetimesheet);
-		}catch(Exception e)
-		{
-			e.printStackTrace();	
+			int cal = Integer.parseInt(savetimesheet.getFri_hours()) + Integer.parseInt(savetimesheet.getMon_hours())
+					+ Integer.parseInt(savetimesheet.getSat_hours()) + Integer.parseInt(savetimesheet.getThurs_hours())
+					+ Integer.parseInt(savetimesheet.getSun_hours()) + Integer.parseInt(savetimesheet.getTue_hours())
+					+ Integer.parseInt(savetimesheet.getWed_hours());
+			savetimesheet.setTotalWeekHours(String.valueOf(cal));
+			savetimesheet.setStatus("pending");
+			EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
+			ClientDetailsEntity client = this.clientDetailsRepository.findById(savetimesheet.getClient().getId()).get();
+			ProjectDetailsEntity proj = this.pojectDetailsRepository
+					.findByProjectId(savetimesheet.getProj().getProjectId());
+			TaskDetailsEntity task = this.taskDetailsRepository.findById(savetimesheet.getTask().getTaskid()).get();
+			savetimesheet.setTask(task);
+			savetimesheet.setProj(proj);
+			savetimesheet.setClient(client);
+			savetimesheet.setEmp(emp1);
+			savetimesheet.setProject(proj.getProjectName());
+			savetimesheet.setModifiedBy(emp1.getUserId());
+			savetimesheet.setTaskName(task.getTasknmae());
+			savetimesheet.setCustomer(client.getClientName());
+			savetimesheet.setModifiedDate(LocalDateTime.now());
+			savetimesheet.setId(id);
+			this.saveTimeSheetRepo.save(savetimesheet);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -228,30 +223,30 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	}
 
 	public CurrentWeekDatesResponse getWeekDates(LocalDate date) {
-		 CurrentWeekDatesResponse currentWeekDatesResponse=new CurrentWeekDatesResponse();
+		CurrentWeekDatesResponse currentWeekDatesResponse = new CurrentWeekDatesResponse();
 		try {
-		HashMap<?, ?> DateHM = new CurrentWeekDates().getDateDetails(date);
-		currentWeekDatesResponse.setCurrentWeek(DateHM.get("currentWeek").toString());
-		currentWeekDatesResponse.setNextWeek(DateHM.get("nextWeek").toString());
-		currentWeekDatesResponse.setPreviousWeek(DateHM.get("previousWeek").toString());
-		currentWeekDatesResponse.setMonDate((String) DateHM.get("monday"));
-		currentWeekDatesResponse.setTueDate((String) DateHM.get("tuesday"));
-		currentWeekDatesResponse.setWedDate((String) DateHM.get("wednesday"));
-		currentWeekDatesResponse.setThuDate((String) DateHM.get("thursday"));
-		currentWeekDatesResponse.setFriDate((String) DateHM.get("friday"));
-		currentWeekDatesResponse.setSatDate((String) DateHM.get("saturday"));
-		currentWeekDatesResponse.setSunDate((String) DateHM.get("sunday"));
-		Calendar calendar = new GregorianCalendar();
-		Date date1 = new Date();
-		calendar.setTime(date1);
-		currentWeekDatesResponse.setCalweek(calendar.get(Calendar.WEEK_OF_YEAR));
-		currentWeekDatesResponse.setYear(Integer.parseInt((String) DateHM.get("year")));
-		currentWeekDatesResponse.setMonth(Integer.parseInt((String) DateHM.get("month")));
-		currentWeekDatesResponse.setMonth(Integer.parseInt((String) DateHM.get("month")));
-		currentWeekDatesResponse.setMonthlyWeek(calendar.get(Calendar.WEEK_OF_MONTH));
-		return currentWeekDatesResponse;
-		}catch(Exception e) {
-		    e.printStackTrace();	
+			HashMap<?, ?> DateHM = new CurrentWeekDates().getDateDetails(date);
+			currentWeekDatesResponse.setCurrentWeek(DateHM.get("currentWeek").toString());
+			currentWeekDatesResponse.setNextWeek(DateHM.get("nextWeek").toString());
+			currentWeekDatesResponse.setPreviousWeek(DateHM.get("previousWeek").toString());
+			currentWeekDatesResponse.setMonDate((String) DateHM.get("monday"));
+			currentWeekDatesResponse.setTueDate((String) DateHM.get("tuesday"));
+			currentWeekDatesResponse.setWedDate((String) DateHM.get("wednesday"));
+			currentWeekDatesResponse.setThuDate((String) DateHM.get("thursday"));
+			currentWeekDatesResponse.setFriDate((String) DateHM.get("friday"));
+			currentWeekDatesResponse.setSatDate((String) DateHM.get("saturday"));
+			currentWeekDatesResponse.setSunDate((String) DateHM.get("sunday"));
+			Calendar calendar = new GregorianCalendar();
+			Date date1 = new Date();
+			calendar.setTime(date1);
+			currentWeekDatesResponse.setCalweek(calendar.get(Calendar.WEEK_OF_YEAR));
+			currentWeekDatesResponse.setYear(Integer.parseInt((String) DateHM.get("year")));
+			currentWeekDatesResponse.setMonth(Integer.parseInt((String) DateHM.get("month")));
+			currentWeekDatesResponse.setMonth(Integer.parseInt((String) DateHM.get("month")));
+			currentWeekDatesResponse.setMonthlyWeek(calendar.get(Calendar.WEEK_OF_MONTH));
+			return currentWeekDatesResponse;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return currentWeekDatesResponse;
 	}
@@ -320,7 +315,6 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 					timeSheet.setSunTotalHours(0);
 					timeSheet.setMonth(month);
 					timeSheet.setYear(year);
-
 					Integer repManId = employeeRepository.getByRepId(i);
 					timeSheet.setReportingManagerName(employeeRepository.empName(repManId, i));
 					beanList.add(timeSheet);
@@ -343,47 +337,46 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		return response;
 	}
 
-	public List<EmployeeDetails> getEmpByReportingId(Integer repId) {
+	public List<EmployeeDetails> getEmpByReportingId(String repId) {
 
 		return this.employeeRepository.getDetailByRepId(repId);
 	}
 
-	public TSResponseObj getEmplTimeSheetDetailsByReportingManagerId(int repId, String status) {
+	public TSResponseObj getEmplTimeSheetDetailsByReportingManagerId(String repId, String status) {
 		log.info("entered into getEmplTimeSheetDetailsByReportingManagerId method of TimeSheetDetails class");
 		try {
-		List<EmployeeDetails> empUserList = employeeRepository.getDetailByRepId(repId);
-		List<TSResponseEmployeeName> listOfDetails = new ArrayList<>();
+			List<EmployeeDetails> empUserList = employeeRepository.getDetailByRepId(repId);
+			List<TSResponseEmployeeName> listOfDetails = new ArrayList<>();
 //		TSResponseObj tsResp = new TSResponseObj();
-		TSResponseEmployeeName tsEmp = null;
-		if (empUserList != null && empUserList.size() != 0) {
-			for (EmployeeDetails empEntity : empUserList) {
-				ArrayList<SaveTimeSheet> listofMonthlyTSDetails = saveTimeSheetRepo
-						.getLeaveStatusByUserId1(empEntity.getUserId(), status);
-				String employeeName = null;
-				if (listofMonthlyTSDetails != null && listofMonthlyTSDetails.size() != 0) {
-					tsEmp = new TSResponseEmployeeName();
-					employeeName = empEntity.getEmployeeName();
-					tsEmp.setEmployeeName(employeeName);
-					tsEmp.setStartDate(listofMonthlyTSDetails.get(0).getMon_date());
-					tsEmp.setEndDate(listofMonthlyTSDetails.get(0).getSun_Date());
-					tsEmp.setTotalHours(listofMonthlyTSDetails.get(0).getTotalWeekHours());
-					tsEmp.setWeekNo(listofMonthlyTSDetails.get(0).getWeekNo());
-					tsEmp.setStatus(status);
-					tsEmp.setTimeSheetListForEmployee(listofMonthlyTSDetails);
-					listOfDetails.add(tsEmp);
+			TSResponseEmployeeName tsEmp = null;
+			if (empUserList != null && empUserList.size() != 0) {
+				for (EmployeeDetails empEntity : empUserList) {
+					ArrayList<SaveTimeSheet> listofMonthlyTSDetails = saveTimeSheetRepo
+							.getLeaveStatusByUserId1(empEntity.getUserId(), status);
+					String employeeName = null;
+					if (listofMonthlyTSDetails != null && listofMonthlyTSDetails.size() != 0) {
+						tsEmp = new TSResponseEmployeeName();
+						employeeName = empEntity.getEmployeeName();
+						tsEmp.setEmployeeName(employeeName);
+						tsEmp.setStartDate(listofMonthlyTSDetails.get(0).getMon_date());
+						tsEmp.setEndDate(listofMonthlyTSDetails.get(0).getSun_Date());
+						tsEmp.setTotalHours(listofMonthlyTSDetails.get(0).getTotalWeekHours());
+						tsEmp.setWeekNo(listofMonthlyTSDetails.get(0).getWeekNo());
+						tsEmp.setStatus(status);
+						tsEmp.setTimeSheetListForEmployee(listofMonthlyTSDetails);
+						listOfDetails.add(tsEmp);
+					}
 				}
 			}
-		}
-		if (listOfDetails != null && listOfDetails.size() != 0) {
-			tsResp.setMessage("TimeSheet Details are retrieved successfully");
-			tsResp.setStatus(true);
-			tsResp.setTimeSheetListForRM(listOfDetails);
-		} else {
-			tsResp.setMessage("TimeSheet Details are not found");
-			tsResp.setStatus(false);
-		}
-		}catch(Exception e)
-		{
+			if (listOfDetails != null && listOfDetails.size() != 0) {
+				tsResp.setMessage("TimeSheet Details are retrieved successfully");
+				tsResp.setStatus(true);
+				tsResp.setTimeSheetListForRM(listOfDetails);
+			} else {
+				tsResp.setMessage("TimeSheet Details are not found");
+				tsResp.setStatus(false);
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return tsResp;
@@ -392,33 +385,33 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	public ProjectListResponse getProjectList() {
 		ProjectListResponse response = new ProjectListResponse();
 		try {
-		ProjectResponse projectResponse = null;
-		List<ProjectResponse> listOfProjectResponse = new ArrayList<>();
-		List<ProjectDetailsEntity> ListProject = pojectDetailsRepository.findAll();
+			ProjectResponse projectResponse = null;
+			List<ProjectResponse> listOfProjectResponse = new ArrayList<>();
+			List<ProjectDetailsEntity> ListProject = pojectDetailsRepository.findAll();
 
-		for (ProjectDetailsEntity emp : ListProject) {
-			projectResponse = new ProjectResponse();
-			projectResponse.setProjectId(emp.getProjectId());
-			projectResponse.setProjectName(emp.getProjectName());
-			listOfProjectResponse.add(projectResponse);
-		}
-		if (listOfProjectResponse != null && listOfProjectResponse.size() > 0) {
-			response.setListOfProjectResponse(listOfProjectResponse);
-			response.setStatus(true);
-			response.setMessage("Project Retrived Successful");
-			return response;
-		} else {
-			response.setStatus(false);
-			response.setMessage("Project Retrived UnSuccessful");
-			return response;
-		}
-		}catch(Exception e) {
+			for (ProjectDetailsEntity emp : ListProject) {
+				projectResponse = new ProjectResponse();
+				projectResponse.setProjectId(emp.getProjectId());
+				projectResponse.setProjectName(emp.getProjectName());
+				listOfProjectResponse.add(projectResponse);
+			}
+			if (listOfProjectResponse != null && listOfProjectResponse.size() > 0) {
+				response.setListOfProjectResponse(listOfProjectResponse);
+				response.setStatus(true);
+				response.setMessage("Project Retrived Successful");
+				return response;
+			} else {
+				response.setStatus(false);
+				response.setMessage("Project Retrived UnSuccessful");
+				return response;
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return response;
 	}
 
-	public EmployeesForReportingManagerResponse getEmpUserListByReportingManagerId(int repId) {
+	public EmployeesForReportingManagerResponse getEmpUserListByReportingManagerId(String repId) {
 		log.info("entered into getReportingManagerNameById Method of TimeSheetDetails Service class..");
 		List<EmployeeDetails> empDetailsList = employeeRepository.getEmpUserListByReportingManagerId(repId);
 		EmployeesForReportingManagerResponse empListResponse = new EmployeesForReportingManagerResponse();
@@ -436,7 +429,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		return empListResponse;
 	}
 
-	public TSResponseObj getEmplDetailsByReportingManagerId(int repId, int calWeek) {
+	public TSResponseObj getEmplDetailsByReportingManagerId(String repId, int calWeek) {
 		List<EmployeeDetails> empUserList = employeeRepository.getEmpUserListByReportingManagerId(repId);
 		List<TSResponseEmployeeName> listOfDetails = new ArrayList<>();
 		TSResponseObj tsResp = new TSResponseObj();
@@ -468,6 +461,8 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 					startDate = saveTimeSheetRepo.startDate(employeeId, calWeek);
 					endDate = saveTimeSheetRepo.endDate(employeeId, calWeek);
 					for (SaveTimeSheet empEntity1 : listofMonthlyTSDetails) {
+						tsEmp.setStartDate(startDate);
+						tsEmp.setEndDate(endDate);
 						tsEmp.setUserId(userId);
 						tsEmp.setEmployeeName(employeeName);
 						tsEmp.setStartDate(startDate);
@@ -499,7 +494,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 						tsEmp.setStatus(empEntity1.getStatus());
 						tsEmp.setTotalHour(totalHours);
 						tsEmp.setYear(empEntity1.getYear());
-						tsEmp.setMonthName("june");
+						tsEmp.setMonthName("");
 						tsEmp.setMonth(empEntity1.getMonth());
 						tsEmp.setTimeSheetListForEmployee(listofMonthlyTSDetails);
 						listOfDetails.add(tsEmp);
@@ -548,12 +543,12 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		return tsResp;
 	}
 
-	public TSResponseObj getEmployeeWorkingReportsByUserIdStatusCalweekYear(int repId, String status, int calWeek,
+	public TSResponseObj getEmployeeWorkingReportsByUserIdStatusCalweekYear(String repId, String status, int calWeek,
 			int year) {
 		log.info("entered into getEmplTimeSheetDetailsByReportingManagerId method of TimeSheetDetails class");
 		List<EmployeeDetails> empUserList = employeeRepository.getEmpUserListByReportingManagerId(repId);
 		List<TSResponseEmployeeName> listOfDetails = new ArrayList<>();
-		TSResponseObj tsResp = new TSResponseObj();
+//		TSResponseObj tsResp = new TSResponseObj();
 		TSResponseEmployeeName tsEmp = null;
 		if (empUserList != null && empUserList.size() != 0) {
 			for (EmployeeDetails empEntity : empUserList) {
@@ -585,6 +580,8 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 							+ queryForSunTotalHours;
 					Date startDate = saveTimeSheetRepo.startDate(employeeId, calWeek, year, status);
 					Date endDate = saveTimeSheetRepo.endDate(employeeId, calWeek, year, status);
+					tsEmp.setStartDate(startDate);
+					tsEmp.setEndDate(endDate);
 					tsEmp.setUserId(empEntity.getUserId());
 					tsEmp.setEmployeeName(employeeName);
 					tsEmp.setWeekNo(listofMonthlyTSDetails.iterator().next().getWeekNo());
@@ -622,11 +619,12 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		return tsResp;
 	}
 
-	public TSResponseObj getEmployeeDetailBasedOnRepIdEmpIdYearMonthCalStatus(int repId,int calWeek,String status,String  empId, int year,int month) {
+	public TSResponseObj getEmployeeDetailBasedOnRepIdEmpIdYearMonthCalStatus(String repId, int calWeek, String status,
+			String empId, int year, int month) {
 		log.info("entered into getEmployeeDetailBasedOnRepIdEmpIdYearMonthCalStatus method of TimeSheetDetails class");
 		List<EmployeeDetails> empUserList = employeeRepository.getEmpUserListByReportingManagerId(repId);
 		List<TSResponseEmployeeName> listOfDetails = new ArrayList<>();
-		TSResponseObj tsResp = new TSResponseObj();
+//		TSResponseObj tsResp = new TSResponseObj();
 		TSResponseEmployeeName tsEmp = null;
 
 		if (empUserList != null && empUserList.size() != 0) {
@@ -667,6 +665,8 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 
 						Date startDate = saveTimeSheetRepo.startDate(employeeId, calWeek, year, month);
 						Date endDate = saveTimeSheetRepo.endDate(employeeId, calWeek, year, month);
+						tsEmp.setStartDate(startDate);
+						tsEmp.setEndDate(endDate);
 						tsEmp.setUserId(empEntity.getUserId());
 						tsEmp.setEmployeeName(employeeName);
 						tsEmp.setRepManId(repId);
@@ -705,10 +705,48 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		return tsResp;
 	}
 
-//	public TimeSheetApprovalStatusResponse timeSheetApproval(TimeSheetApprovalStatusResponse timeSheetApprovalEntity) {
-//		log.info("entered into timeSheetApproval Method of TimeSheetDetails BusinessClass..");
-//
-//		return null;
+//	public TimeSheetResponse timeSheetApproval(int empid, TimeSheetApprovalStatusResponse timeSheetApprovalEntity) {
+//		log.info("entered into timeSheetApproval Method of STimeSheetDetails BusinessClass..");
+//		TimeSheetResponse   res=new TimeSheetResponse();
+//		TimeSheetApprovalStatusEntity approvalEntity = new TimeSheetApprovalStatusEntity();
+//		List<SaveTimeSheet> listObject = saveTimeSheetRepo.FindTimeSheetStatus(timeSheetApprovalEntity.getEmpId(),
+//				timeSheetApprovalEntity.getCalWeek(), timeSheetApprovalEntity.getYear(),
+//				timeSheetApprovalEntity.getMonth(), timeSheetApprovalEntity.getStatus());
+//		List<EmployeeWorkStatus> listObject1 = null;
+//		List<SaveTimeSheet> listObject2 = saveTimeSheetRepo.findRejectedstatus(timeSheetApprovalEntity.getEmpId(),
+//				timeSheetApprovalEntity.getCalWeek(), timeSheetApprovalEntity.getYear(),
+//				timeSheetApprovalEntity.getMonth(), timeSheetApprovalEntity.getStatus());
+//		List<EmployeeWorkStatus> listObject3 = null;
+//		List<SaveTimeSheet> listObject4 = saveTimeSheetRepo.findApprovalStatus(timeSheetApprovalEntity.getEmpId(),
+//				timeSheetApprovalEntity.getCalWeek(), timeSheetApprovalEntity.getYear(),
+//				timeSheetApprovalEntity.getMonth(), timeSheetApprovalEntity.getStatus());
+//		List<EmployeeWorkStatus> listObject5 = null;
+//		List<MyLeaveRequestEntity> listObject6 =myLeaveRequestRepository.findleaveStatus(timeSheetApprovalEntity.getEmpId());
+//		String upStatus = timeSheetApprovalEntity.getStatus();
+//		int upCalWeek = timeSheetApprovalEntity.getCalWeek();
+//		int upYear = timeSheetApprovalEntity.getYear();
+//		int upMonth = timeSheetApprovalEntity.getMonth();
+//	String approverName = null;
+//		for (SaveTimeSheet savingTimeSheet : listObject) {
+//			if (savingTimeSheet != null) {
+//				if (timeSheetApprovalEntity.getApproverRole().equalsIgnoreCase("SuperAdmin")) {
+//					approverName =empRoleRepo1.findSuperAdminName(timeSheetApprovalEntity.getApproverRoleId());
+//				} else if (timeSheetApprovalEntity.getApproverRole().equalsIgnoreCase("ReportingManager")) {
+//					approverName =empRoleRepo1.getReportingManagerNameByRMId(timeSheetApprovalEntity.getApproverRoleId());
+//				}
+//				approvalEntity.setTimeSheetId(savingTimeSheet.getId());
+//				approvalEntity.setApproverName(approverName);
+//				approvalEntity.setApproverRole(timeSheetApprovalEntity.getApproverRole());
+//				approvalEntity.setRejectReason(timeSheetApprovalEntity.getReason());
+//				String status=saveTimeSheetRepo.updateStatus(
+//						timeSheetApprovalEntity.getCalWeek(), timeSheetApprovalEntity.getYear(),
+//						timeSheetApprovalEntity.getMonth(), timeSheetApprovalEntity.getStatus());
+//				if(status!=null) {
+//					res.setMsg("approved success fully");
+//					res.setStatus(true);
+//				}
+//		return res;
 //	}
 
-}
+	}
+	

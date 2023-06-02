@@ -24,6 +24,9 @@ import com.hrms.repository.ProjectDetailsRepository;
 import com.hrms.repository.TaskDeatailsRepository;
 import com.hrms.service.TaskDetailsService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class TaskDetailsServiceImpl implements TaskDetailsService {
 
@@ -54,6 +57,8 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 //	@Override
 	public EntityBeanResponseCommon saveTaskDeatils(TaskDetailsEntity entity) {
 
+		this.log.info("Entered save task details in service");
+		
 		// ClientDetailsEntity Client =
 		// this.clientRepo.findByClientid(entity.getProject().getClient().getClientid());
 		ProjectDetailsEntity Project = this.projrepo.findByProjectId(entity.getProject().getProjectId());
@@ -68,6 +73,7 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 		entity.setModifieddate(LocalDateTime.now());
 		
 		TaskDetailsEntity save = this.taskRepo.save(entity);
+		this.log.info("successsfully save task details in service");
 		if (save != null) {
 			beanResponse.setMsg("successfully saved Task details");
 			beanResponse.setStatus(true);
@@ -75,6 +81,7 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 		} else {
 			beanResponse.setMsg("Failed to save task details");
 			beanResponse.setStatus(false);
+			this.log.info("failed to  save task details in service");
 
 		}
 
@@ -87,6 +94,8 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 	// fetchTasksByProjectId
 	@Override
 	public List<TasksDetailsResponseBean> getTaskByProjectId(int id) {
+		
+		this.log.info("Entered fetch list  task details in service");
 
 		TasksDetailsResponseBean bean = null;
 
@@ -105,6 +114,7 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 			list.add(bean);
 		}
 
+		this.log.info("successfully fetch list  task details in service");
 		return list;
 	}
 
@@ -112,14 +122,18 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 	//delete
 	@Override
 	public EntityBeanResponseCommon deleteTaskById(int id) {
+		this.log.info("Entered delete task details in service");
+		
 		Optional<TaskDetailsEntity> task = this.taskRepo.findById(id);
 		if (id == task.get().getTaskid()) {
 			this.taskRepo.deleteById(id);
 			this.beanResponse.setMsg("Successfully deleted task  id is :" + id);
 			this.beanResponse.setStatus(true);
+			this.log.info("successfully delete task details in service");
 		} else {
 			this.beanResponse.setMsg("Enter Valid Id Of Task");
 			this.beanResponse.setStatus(false);
+			this.log.info("failed to delete task details in service");
 		}
 
 		return beanResponse;
@@ -129,6 +143,7 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 	//update
 	@Override
 	public EntityBeanResponseCommon updateTaskByTaskId(int id, TaskDetailsEntity task) {
+		this.log.info("Entered update  task details in service");
 
 		//ProjectDetailsEntity project = this.projrepo.findById(id).orElse(null);
 		TaskDetailsEntity entity = this.taskRepo.findById(id).orElse(null);
@@ -152,11 +167,13 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 			entity.setIs_default(true);
 			
 			this.taskRepo.save(entity);
+			this.log.info("succcessfully updated  task details in service");
 			beanResponse.setMsg("successfully updated Task details of task id : "+id );
 			beanResponse.setStatus(true);
 		} else {
 			beanResponse.setMsg("Failed to update Task Detils please enter valid data");
 			beanResponse.setStatus(false);
+			this.log.info("failed to  updated  task details in service");
 		}
 
 		return beanResponse;

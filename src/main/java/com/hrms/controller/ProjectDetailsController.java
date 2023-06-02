@@ -17,6 +17,9 @@ import com.hrms.beans.ProjectResponseBean;
 import com.hrms.entity.ProjectDetailsEntity;
 import com.hrms.service.ProjectDetailsService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/projectdetails")
 public class ProjectDetailsController {
@@ -28,8 +31,11 @@ public class ProjectDetailsController {
 	//saveProject
 	@PostMapping("/saveProjectDetails")
 	public EntityBeanResponseCommon saveProjectDetails(@RequestBody ProjectDetailsEntity entity) {
+		this.log.info("Entered save project details in controller ");
 		
 		EntityBeanResponseCommon saveProjectDetails = this.service.saveProjectDetails(entity);
+		
+		this.log.info("successfully  saved project details in controller ");
 		
 		return saveProjectDetails;
 		
@@ -39,8 +45,12 @@ public class ProjectDetailsController {
 	//getProjectDeatilsByClientId
 	@GetMapping("/getProjectsByClientId/{id}")
 	public List<ProjectResponseBean> getProjectsBYClientId(@PathVariable("id")  int id){
+		this.log.info("Entered fetch list of  project details by client id  in controller ");
 		
 		List<ProjectResponseBean> projectListByClienyId = this.service.getAllProjects(id);
+		
+		this.log.info("successfully  fetched list of  project details by client id  in controller ");
+		
 	
 		return projectListByClienyId;
 		
@@ -51,55 +61,13 @@ public class ProjectDetailsController {
 	//updateProjectDetailsByProjectId
 	@PutMapping("/updateProjectById/{id}")
 	public EntityBeanResponseCommon updateProject(@PathVariable("id") int id,@RequestBody ProjectDetailsEntity entity) {
+		this.log.info("Entered update project details  in controller ");
 		
 		EntityBeanResponseCommon updateProjectDetails = this.service.updateProjectDetails(id, entity);
 		
-
+		this.log.info("successfully  update project details  in controller ");
 		return updateProjectDetails;
 		
 	}
-	
-	
-	
-	
-	
-
-	/*
-	 * //postIndiffWay
-	 * 
-	 * @PostMapping("/postProject") public EntityBeanResponse
-	 * postProjectDetails(@RequestBody ProjectDetailsEntity entity) {
-	 * 
-	 * EntityBeanResponse postProjectDetails =
-	 * this.service.postProjectDetails(entity);
-	 * 
-	 * 
-	 * return postProjectDetails;
-	 * 
-	 * }
-	 */
-	
-	
-	
-	
-	
-	/*
-	 * //getProject
-	 * 
-	 * @GetMapping("/getprojects/{id}") public ProjectRespoonseBean
-	 * getProjectDetails(@PathVariable("id") int id) {
-	 * 
-	 * 
-	 * ProjectRespoonseBean listOfProjectDetailsByid =
-	 * this.service.getListOfProjectDetailsByid(id);
-	 * 
-	 * return listOfProjectDetailsByid;
-	 * 
-	 * }
-	 */
-	
-	
-	
-	
 	
 }

@@ -14,10 +14,7 @@ import com.hrms.response.bean.TSResponseObj;
 import com.hrms.response.bean.TimeSheetResponse;
 
 public interface TimeSheetDetails {
-//	public void saveTimeSheet(SaveTimesheetRequestBean saveBean);
-//	public void getMonthlyDataInTimeSheet(int userid, String monthStartDate, String monthEndDate);
-//	public SavingTimeSheet getTimeSheet(Integer id);
-//	public void deleteUser(int id);
+
 	public TimeSheetResponse saveTimeSheett(List<SaveTimeSheet>  hrmss);
 	public SaveTimeSheet getTimeSheetDetail(int id);
 	public void deleteTimeSheet(int id);
@@ -27,6 +24,6 @@ public interface TimeSheetDetails {
 	public DateResponseTimeSheet dateResponse(int year, int calWeek);
 	public CurrentWeekDatesResponse getWeekDates(LocalDate date);
 	public CommonTimeSheetbean getEmployeesWhoDidNotAccessTimeSheet(@QueryParam("year") int year, @QueryParam("month") int month);
-	public TSResponseObj getEmplTimeSheetDetailsByReportingManagerId(int repId, String status) ;
+	public TSResponseObj getEmplTimeSheetDetailsByReportingManagerId(String repId, String status) ;
 	
 }

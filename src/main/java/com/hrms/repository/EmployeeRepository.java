@@ -28,7 +28,7 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
 	EmployeeDetails findByFirstName(String firstName);
     
 	@Query(" from EmployeeDetails where reportingManagerId=?1")
-	List<EmployeeDetails> getDetailByRepId(Integer repId);
+	List<EmployeeDetails> getDetailByRepId(String repId);
 
 	@Query("select reportingManagerId from EmployeeDetails where userId=?1")
     public  Integer  getByRepId(Integer repId);
@@ -57,7 +57,7 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
 
     
     @Query("From EmployeeDetails where reportingManagerId=?1 ")
-	List<EmployeeDetails> getEmpUserListByReportingManagerId(int repId);
+	List<EmployeeDetails> getEmpUserListByReportingManagerId(String repId);
     
     @Query("from EmployeeDetails where empRoleId in(1,2) or empRoleId=4 and businessunitId=:businessunitId")
     List<EmployeeDetails> getHrManager(int businessunitId);
