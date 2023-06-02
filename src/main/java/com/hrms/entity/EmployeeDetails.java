@@ -35,7 +35,6 @@ public class EmployeeDetails implements Serializable{
 	private String empId;
 
 	@Column(name = "user_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userId;
 	
     @Temporal(TemporalType.DATE)
@@ -50,7 +49,7 @@ public class EmployeeDetails implements Serializable{
     private Date dateOfleaving;
 
     @Column(name = "reporting_manager")
-    private Integer reportingManagerId;
+    private String reportingManagerId;
 
     @Column(name = "reporting_manager_name")
     private String reportingManager;
@@ -179,10 +178,10 @@ public class EmployeeDetails implements Serializable{
     private Integer businessunitId;
     
     @Column(name = "imm_manager_id")
-    private int immManagerId;
+    private String immManagerId;
 
     @Column(name = "hr_manager_id")
-	private int hrManagerId;
+	private String hrManagerId;
     
     @Column(name = "imm_manager_name")
     private String immManagerName;

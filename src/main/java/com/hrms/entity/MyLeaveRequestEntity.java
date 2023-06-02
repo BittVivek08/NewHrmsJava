@@ -42,13 +42,13 @@ public class MyLeaveRequestEntity {
 	private String leaveStatus;
 
 	@Column(name = "rep_mang_id")
-	private Integer reportingManagerId;
+	private String reportingManagerId;
 
 	@Column(name = "reportingManager")
 	private String reportingManager;
 
 	@Column(name = "hr_id")
-	private Integer hrId;
+	private String hrId;
 
 	@Column(name = "isactive")
 	private int isactive;

@@ -16,7 +16,7 @@ public class EmployeeDto {
     private Integer userId;
     private Date dateOfJoining;
     private Date dateOfleaving;
-    private Integer reportingManagerId;
+    private String reportingManagerId;
     private String reportingManager;
     private String emp_status_id;
     private String employmentStatus;
@@ -61,8 +61,8 @@ public class EmployeeDto {
     private Date createddate;
     private int isactive;
     private Integer businessunitId;
-    private int immManagerId;
-	private int hrManagerId;
+    private String immManagerId;
+	private String hrManagerId;
     private String immManagerName;
 	private String hrManagerName;
     private String employeeStatus;
