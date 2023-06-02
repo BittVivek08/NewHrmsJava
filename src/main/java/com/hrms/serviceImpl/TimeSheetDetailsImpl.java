@@ -26,7 +26,7 @@ import com.hrms.entity.ProjectDetailsEntity;
 
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.entity.TaskDetailsEntity;
-import com.hrms.entity.TimeSheetApprovalStatusResponse;
+
 import com.hrms.repository.ClientDetailsRepository;
 
 import com.hrms.repository.EmployeeRepository;
@@ -43,7 +43,7 @@ import com.hrms.response.bean.ProjectListResponse;
 import com.hrms.response.bean.ProjectResponse;
 import com.hrms.response.bean.TSResponseEmployeeName;
 import com.hrms.response.bean.TSResponseObj;
-import com.hrms.response.bean.TimeSheetApprovalResponse;
+
 import com.hrms.response.bean.TimeSheetResponse;
 import com.hrms.response.bean.TimeSheetsMonthlyBean;
 import com.hrms.service.TimeSheetDetails;

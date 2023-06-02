@@ -560,13 +560,24 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	}
 
 	@Override
-	public LeavesResponseBean getLeaveDetailsForManager( int managerid, String leavestatus) {
+	public LeavesResponseBean getLeaveDetailsForManager( int managerid, String leavestatus,String emp_id) {
 		
 		List<LeaveRequestEntity>listOfLeaves=new ArrayList<>();	
 		LeavesResponseBean response = new LeavesResponseBean();	
 		
 		//listOfLeaves.addAll( leaveRequestRepo.findByReportingManagerIdAndLeaveStatus(managerid, leavestatus));
-		listOfLeaves.addAll(leaveRequestRepo.findByRepManId(managerid, leavestatus));
+	//	listOfLeaves.addAll(leaveRequestRepo.findByRepManId(managerid, leavestatus));
+		
+		if(null!=emp_id && !"".equals(emp_id)) {
+		System.out.println("inside method");
+			
+		  listOfLeaves.addAll(leaveRequestRepo.findByEmpId(emp_id));
+		}
+		if(leavestatus!=null && !"".equals(leavestatus)) {
+			listOfLeaves.addAll(leaveRequestRepo.findByLeaveStatus(leavestatus));
+			
+		}
+	//listOfLeaves.addAll(leaveRequestRepo.findAll());
 		
 		if(!listOfLeaves.isEmpty()) {
 			response.setMessage("Retrival of Leave Details Successfull.");
@@ -580,7 +591,6 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		}		
 		
 		return response;
-	}
-	
-	
+		
+	}	
 }

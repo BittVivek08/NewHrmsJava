@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.hrms.entity.LeaveRequestEntity;
 import com.hrms.request.bean.LeaveDetailsFiltaring;
@@ -78,8 +79,14 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequestEntity
 
        public List<LeaveRequestEntity> findByReportingManagerIdAndLeaveStatus(int managerId, String leaveStatus);
        
-       @Query("from LeaveRequestEntity where reportingManagerId=:mid and leave_status=:leavestatus")
+       @Query("from LeaveRequestEntity  where reportingManagerId=:mid and leave_status=:leavestatus")
        public List<LeaveRequestEntity> findByRepManId(int mid,String leavestatus);
+       
+       @Query("from LeaveRequestEntity where emp_id=emp_id")
+       public List<LeaveRequestEntity> findByEmpId(@Param(value ="emp_id")String emp_id);
+       
+       @Query("from LeaveRequestEntity where leave_status=leavestatus")
+       public List<LeaveRequestEntity> findByLeaveStatus(String leavestatus);
 
 }
 

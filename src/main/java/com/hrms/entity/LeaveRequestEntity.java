@@ -42,7 +42,7 @@ public class LeaveRequestEntity {
 
 	@Column(name = "leavetype_name")
 	private String leaveType;
-
+ 
 	@Column(name = "from_date")
 	private String fromDate;
 

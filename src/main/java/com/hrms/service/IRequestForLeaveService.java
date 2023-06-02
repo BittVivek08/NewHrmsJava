@@ -47,6 +47,6 @@ public interface IRequestForLeaveService {
 	public EmpLeaveResponseBean updateAllLeaveSummary(UpdateLeaveRequest updateBean);
 	
 	
-    public LeavesResponseBean getLeaveDetailsForManager(int managerid,String leavestatus);
+    public LeavesResponseBean getLeaveDetailsForManager(int managerid,String leavestatus,String emp_id);
 	
 }
