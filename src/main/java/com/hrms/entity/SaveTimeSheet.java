@@ -38,74 +38,27 @@ public class SaveTimeSheet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "emp_id" ,referencedColumnName = "emp_id" )
+	private EmployeeDetails emp;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	private ClientDetailsEntity client;
+	
+	@Column(name = "work_duration")
+	private String workHours;
+
+	@ManyToOne
+	@JoinColumn(name = "project_id")
+	private ProjectDetailsEntity proj;
+
+	@ManyToOne
+	@JoinColumn(name = "project_task_id")
+	private TaskDetailsEntity task;
 
 	@Column(name = "status")
 	private String status;
-	@Column(name = "cal_week")
-	private Integer calweek;
-
-	@Column(name = "ts_year")
-	private Integer year;
-	@Column(name = "ts_month")
-	private Integer month;
-	private String customer;
-	private String project;
-	@Transient
-	private String clientName;
-	private String taskName;
-	@Column(name = "ts_week")
-	private Integer weekNo;
-	@Column(name = "mon_duration")
-	private String mon_hours;
-
-	@Column(name = "mon_date")
-	@Temporal(TemporalType.DATE)
-	private Date mon_date;
-
-	@Column(name = "tue_duration")
-	private String tue_hours;
-
-	@Column(name = "tue_date")
-	@Temporal(TemporalType.DATE)
-	private Date tue_date;
-
-	@Column(name = "wed_duration")
-	private String wed_hours;
-
-	@Column(name = "wed_date")
-	@Temporal(TemporalType.DATE)
-	private Date wed_Date;
-
-	@Column(name = "thu_duration")
-	private String thurs_hours;
-
-	@Column(name = "thu_date")
-	@Temporal(TemporalType.DATE)
-	private Date thurs_Date;
-
-	@Column(name = "fri_duration")
-	private String fri_hours;
-
-	@Column(name = "fri_date")
-	@Temporal(TemporalType.DATE)
-	private Date fri_Date;
-
-	@Column(name = "sat_duration")
-	private String sat_hours;
-
-	@Column(name = "sat_date")
-	@Temporal(TemporalType.DATE)
-	private Date sat_Date;
-
-	@Column(name = "sun_duration")
-	private String sun_hours;
-
-	@Column(name = "sun_date")
-	@Temporal(TemporalType.DATE)
-	private Date sun_Date;
-
-	@Column(name = "week_duration")
-	private String TotalWeekHours;
 
 	@Column(name = "created_by", updatable = false)
 	private int createdBy;
@@ -119,27 +72,7 @@ public class SaveTimeSheet {
 	@Column(name = "modified")
 	private LocalDateTime modifiedDate;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "emp_id" ,referencedColumnName = "emp_id" )
-	private EmployeeDetails emp;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "client_id",referencedColumnName = "client_id")
-	private ClientDetailsEntity client;
-
-	@ManyToOne
-	@JoinColumn(name = "project_id")
-	private ProjectDetailsEntity proj;
-
-	@ManyToOne
-	@JoinColumn(name = "project_task_id")
-	private TaskDetailsEntity task;
-
-	@Column(name = "is_active")
-	private Boolean isActive;
 	@Transient
 	private String request;
-
-	
 
 }
