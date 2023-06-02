@@ -3,13 +3,9 @@ package com.hrms.repository;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.hrms.entity.EmpRole;
 import com.hrms.entity.EmployeeDetails;
 
 public interface EmployeeRepository extends JpaRepository<EmployeeDetails, String>{
@@ -52,8 +48,16 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
     String findByFirstNameEmp(int userId);
 	
     @Query("select employeeName from EmployeeDetails  where reportingManagerId=?1")
-	String empName(int repManId);
+	String empName(String repManId);
 
+    @Query("select distinct employeeName from EmployeeDetails  where empId=?1")
+	List<String> getReportingManagerByEmpId(String repManId);
+    
+    @Query("select distinct employeeName from EmployeeDetails where empId=?1")
+    List<String> getHrManagerByEmpId(String hrId);
+    
+    @Query("select distinct employeeName from EmployeeDetails where empId=?1")
+    List<String> getImmManagerByEmpId(String immId);
 
     
     @Query("From EmployeeDetails where reportingManagerId=?1 ")
@@ -82,4 +86,8 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
     //GetMailOfReportingMangerByid
     @Query("select email from  EmployeeDetails where reportingManagerId=?1 ")
     String findEmailByMangerId(int mid);  
+    
+    @Query("SELECT max(userId) FROM EmployeeDetails ")
+	Integer getMaxUserId();
+
 }
