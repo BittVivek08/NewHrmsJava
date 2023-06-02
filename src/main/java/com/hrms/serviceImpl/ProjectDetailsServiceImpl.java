@@ -19,6 +19,9 @@ import com.hrms.repository.ProjectDetailsRepository;
 import com.hrms.repository.SalaryCurrencyRepo;
 import com.hrms.service.ProjectDetailsService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 
@@ -47,6 +50,8 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 	// oldhrms
 	@Override
 	public EntityBeanResponseCommon saveProjectDetails(ProjectDetailsEntity projentity) {
+		
+		this.log.info("Entered save project Details in service ");
 
 		//ClientDetailsEntity client = clientRepo.findByClientid(projentity.getClient().getClientid());
 		//Optional<ClientDetailsEntity> client = this.clientRepo.findById(projentity.getClient().getId());
@@ -65,6 +70,7 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			projentity.setCurrency(currency.get());
 			
 			ProjectDetailsEntity save = this.projectRepo.save(projentity);
+			this.log.info("successfully  saved project Details in service ");
 
 			if (save != null) {
 				beanResponse.setMsg("Successfully Project Details Saved");
@@ -72,6 +78,8 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			} else {
 				beanResponse.setMsg("ProjectDeatails not saved");
 				beanResponse.setStatus(false);
+				this.log.info("failed to   save project Details in service ");
+
 			}
 		} else {
 			beanResponse.setMsg("No Clients : and Currency:  details not found  " + projentity.getClient().getId()+projentity.getCurrency().getId());
@@ -80,17 +88,11 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 		return beanResponse;
 	}
 
-	// oldHrms
-	// FindProjectDetailsByClienId
-//	@Override
-//	public List<ProjectDetailsEntity> getProjectListByClienyId(int cid) {
-//		List<ProjectDetailsEntity> listProjects = this.projectRepo.findByClient(cid);
-//		return listProjects;
-//	}
 
 	// oldhrms
 	// @Override
 	public EntityBeanResponseCommon updateProjectDetails(int pid, ProjectDetailsEntity entity) {
+		this.log.info("Entered update project Details in service ");
 
 		Optional<ProjectDetailsEntity> updateEntity = this.projectRepo.findById(pid);
 		ProjectDetailsEntity entityDB = updateEntity.get();
@@ -113,12 +115,14 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			entityDB.setProject_type(entity.getProject_type());
 
 			this.projectRepo.save(entityDB);
+			this.log.info("successfully  updated project Details in service ");
 
 			beanResponse.setMsg("Successfully Updated Project Details of Project Id :" + pid);
 			beanResponse.setStatus(true);
 		} else {
 			beanResponse.setMsg("ProjectDetails Not Updated");
 			beanResponse.setStatus(false);
+			this.log.info("failed to  updated project Details in service ");
 		}
 
 		return beanResponse;
@@ -128,6 +132,8 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 	// specificFiledsOfprojectsByProjectId
 	@Override
 	public List<ProjectResponseBean> getAllProjects(int id) {
+		this.log.info("Entered fetch  project Details by client id in service ");
+		
 		//ClientDetailsEntity clientInfo = clientRepo.findByClientid(id);
 		Optional<ClientDetailsEntity> clientInfo = this.clientRepo.findById(id);
 		
@@ -157,119 +163,12 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			res.setStatus(proj.getProjectstatus());
 		
 			list.add(res);
+			
+			this.log.info("successfully fteched  project Details in service ");
 		}
 
 		return  list;
 
 	}
-
-	/*
-	 * //postNaotherway
-	 * 
-	 * @Override public EntityBeanResponse postProjectDetails(ProjectDetailsEntity
-	 * entity) {
-	 * 
-	 * ProjectDetailsEntity p=new ProjectDetailsEntity();
-	 * p.setClient(entity.getClient()); ProjectDetailsEntity save =
-	 * this.projectRepo.save(p); if(save!=null) { beanResponse.setMsg("success");
-	 * beanResponse.setStatus(true); }
-	 * 
-	 * 
-	 * 
-	 * return beanResponse;
-	 * 
-	 * }
-	 */
-
-	// findProjectsByClientId
-
-	/*
-	 * @Override public List<ProjectDetailsEntity> getProjectListByClienyId(int cid)
-	 * { ClientDetailsEntity findByClientid = clientRepo.findByClientid(cid);
-	 * 
-	 * 
-	 * 
-	 * List<ProjectDetailsEntity> findByClient = this.projectRepo.findByClient(cid);
-	 * 
-	 * return findByClient; }
-	 */
-
-	/*
-	 * //getprojectDetailsForClientId
-	 * 
-	 * @Override public ProjectRespoonseBean getListOfProjectDetailsByid(int client)
-	 * {
-	 * 
-	 * Optional<ProjectDetailsEntity> findById = this.projectRepo.findById(client);
-	 * 
-	 * if(!findById.isEmpty()) {
-	 * projectbean.setMesaagae("Successfully Project Details Details fetched");
-	 * projectbean.setStatus(true); projectbean.setProjectlist(findById);
-	 * 
-	 * 
-	 * } else { projectbean.setMesaagae("Failed to fetch projectDetails");
-	 * projectbean.setStatus(false); }
-	 * 
-	 * 
-	 * return projectbean; }
-	 */
-
-	// FindProjectDetailsByClienId
-
-//	@Override
-//	public List<ProjectDetailsEntity> getProjectListByClienyId(int cid) {
-//		ClientDetailsEntity clientInfo = clientRepo.findByClientid(cid);
-//		ProjectResponse res;
-//		List<ProjectResponse> list;
-//		List<ProjectDetailsEntity> projectList = this.projectRepo.findByClient(clientInfo.getClientid());
-//		for (ProjectDetailsEntity proj : projectList) {
-//			res.setProjectId(proj.getProjectid());
-//
-//			list.add(res);
-//		}
-//
-//		return projectList;
-//	}
-	
-	
-//...................................OldHrms............................................................	
-	
-	// save
-		// oldhrms
-//		@Override
-//		public EntityBeanResponseCommon saveProjectDetails(ProjectDetailsEntity projentity) {
-//
-//			ClientDetailsEntity client = clientRepo.findByClientid(projentity.getClient().getClientid());
-//			if (client != null) {
-//				projentity.setClient(client);
-//				ProjectDetailsEntity save = this.projectRepo.save(projentity);
-//
-//				if (save != null) {
-//					beanResponse.setMsg("Successfully Project Details Saved");
-//					beanResponse.setStatus(true);
-//				} else {
-//					beanResponse.setMsg("ProjectDeatails not saved");
-//					beanResponse.setStatus(false);
-//				}
-//			} else {
-//				beanResponse.setMsg("No Clients found with clientId " + projentity.getClient().getClientid());
-//				beanResponse.setStatus(false);
-//			}
-//			return beanResponse;
-//		}
-//	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

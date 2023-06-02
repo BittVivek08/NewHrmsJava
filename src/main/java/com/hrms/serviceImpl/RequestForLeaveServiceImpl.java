@@ -326,6 +326,7 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	//updateEmpLeaveReaquest
 	@Override
 	public MailStatusResponse mailsend(UpdateEmployeeLeaveDetails updateBean, String eid) {
+		this.logger.info("Entered update leave status and mail send in service");
 
 		String mailIdofEmp = this.myleaveReqRepo.mailIdofEmp(eid);
 
@@ -348,10 +349,12 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 
 			if(save!=null) {
 				mailresponse.setStatus(true);
-				mailresponse.setMessage("Leave Approved and "+mailMessage);				
+				mailresponse.setMessage("Leave Approved and "+mailMessage);	
+				this.logger.info("successfully update leave status and sent aprroval mail in service");
+
 			}	
 		}else if (updateBean.getLeaveStatus().equalsIgnoreCase("Rejected")){
-
+       
 			leaveEntity.setLeaveStatus("Rejected");
 			MyLeaveRequestEntity save = this.myleaveReqRepo.save(leaveEntity);
 
@@ -363,6 +366,8 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 			String mailMessage = this.emailService.sendSimpleMail(mailData);
 			mailresponse.setMessage("leave approval rejected and " + mailMessage);
 			mailresponse.setStatus(true);
+			
+			this.logger.info("successfully update leave status and sent rejection mail in service");
 		}
 
 		return mailresponse;

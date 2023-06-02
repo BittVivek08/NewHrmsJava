@@ -28,8 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HolidayCalenderController {
 
-//	Logger log = LoggerFactory.getLogger(HolidayCalenderController.class);
-
 	@Autowired
 	private HolidayCalenderService service;
     
@@ -134,8 +132,11 @@ public class HolidayCalenderController {
 	//localdatesHolidays
 	@GetMapping("/alldates")
 	public List<LocalDate> getalldatesBylocal(){
+		this.log.info("Entered Fetched Holidays dates in controller");
 		
 		List<LocalDate> getalllocaldates = this.service.getalllocaldates();
+		
+		this.log.info("successfully Fetched Holidays dates in controller");
 		return getalllocaldates;
 		
 	}
@@ -144,57 +145,14 @@ public class HolidayCalenderController {
 	//updateThroughBean
 	@PutMapping("updateholidayById/{id}")
 	public EntityBeanResponseCommon update(@PathVariable("id") int id,@RequestBody HolidayCalenderEntity entity) {
+		this.log.info("Entered update Holiday in controller");
 		
 		EntityBeanResponseCommon updateHoliday = this.service.updateHolidayById(id, entity);
+		
+		this.log.info("successfully update Holiday in controller");
 		
 		return updateHoliday;
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	//getHolidayDates
-	
-		/*
-		 * @GetMapping("/getalldates") public List<Date> getallDates(){ List<Date>
-		 * allDates = this.service.getAllDates(); return allDates;
-		 * 
-		 * }
-		 */
-	
-	
-	
-	/*
-	 * //GetSingleHolidayByName
-	 * 
-	 * @GetMapping("/GetSingleHolidayByDate/{HolidayDate}") public
-	 * ResponseEntity<HolidayCalenderEntity>
-	 * getHolidayByDate(@PathVariable("HolidayDate") Date HolidayDate){
-	 * 
-	 * log.info("Entered Get Holiday By Date method in Controller");
-	 * 
-	 * HolidayCalenderEntity holidayByName =
-	 * this.service.getHolidayBydate(HolidayDate);
-	 * 
-	 * log.info("Successfully fetched Holiday By Date in contoller");
-	 * 
-	 * return new ResponseEntity<>(holidayByName,HttpStatus.OK);
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
-	
-	
-	
-	
-	
-	
-	
-	
+		
 }

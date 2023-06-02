@@ -15,11 +15,6 @@ public interface HolidayCalenderService {
 	
 	public List<HolidayCalenderEntity> getAllHolidays();
 	
-	/*
-	 * public HolidayCalenderEntity UpdateHoliday(HolidayCalenderEntity
-	 * updateHoliday);
-	 */
-	
 	public HolidayCalenderEntity updateHoliday(int id,HolidayCalenderEntity updateHoliday);
 	
 	public HolidayCalenderEntity getHolidayBydate(LocalDate holidayDate);
@@ -30,11 +25,7 @@ public interface HolidayCalenderService {
     
     
     public EntityBeanResponseCommon updateHolidayById(int id,HolidayCalenderEntity update);
-    
-	/*
-	 * //findAllDates public List<Date> getAllDates();
-	 */
-    
+   
     //FindlocaldatesOfHolidays
      public List<LocalDate> getalllocaldates();
     

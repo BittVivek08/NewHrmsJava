@@ -86,8 +86,13 @@ public class RequestForLeaveController {
 	//Update Apply Leave Requeste
 	@PutMapping("/updateEmpLeaveStatMail/{eid}")
 	public MailStatusResponse updateLeaveReqOfEmp(@RequestBody UpdateEmployeeLeaveDetails bean,@PathVariable("eid") String eid) {
+		
+		this.logger.info("Entered mail send and update leava status in controller");
 
 		MailStatusResponse mailsend = this.reqLeaveService.mailsend(bean, eid);
+		
+
+		this.logger.info("successfully  mail sent and updated leava status in controller");
 
 		return mailsend;
 

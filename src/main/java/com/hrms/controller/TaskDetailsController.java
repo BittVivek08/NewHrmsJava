@@ -20,6 +20,9 @@ import com.hrms.beans.TasksDetailsResponseBean;
 import com.hrms.entity.TaskDetailsEntity;
 import com.hrms.service.TaskDetailsService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/task")
 public class TaskDetailsController {
@@ -31,8 +34,11 @@ public class TaskDetailsController {
 	//OldHrms
 	@PostMapping("/savetask")
 	public EntityBeanResponseCommon saveTask(@RequestBody TaskDetailsEntity entity) {
+		this.log.info("Entered save task details in controller ");
 		
 		EntityBeanResponseCommon saveTaskDeatils = this.service.saveTaskDeatils(entity);
+		
+		this.log.info("successfully  saved task details in controller ");
 		
 		return saveTaskDeatils;
 	}
@@ -41,8 +47,10 @@ public class TaskDetailsController {
 	//OldHrms
 	@GetMapping("/gettasks/{id}")
 	public List<TasksDetailsResponseBean> getAllTasks(@PathVariable("id") int id){
+		this.log.info("Entered fetch listn of  task details in controller ");
 		
 		List<TasksDetailsResponseBean> taskByProjectId = this.service.getTaskByProjectId(id);
+		this.log.info("successfully  fetched listn of  task details in controller ");
 		return taskByProjectId;	
 	}
 	
@@ -50,126 +58,24 @@ public class TaskDetailsController {
 	//OldHrms
 	@DeleteMapping("/deletetaskById/{id}")
 	public EntityBeanResponseCommon deleteTaskById(@PathVariable("id") int id) {
+		this.log.info("Entered delete task details in controller ");
 		
 		EntityBeanResponseCommon deleteTaskById = this.service.deleteTaskById(id);
+		
+		this.log.info("successfully  delete task details in controller ");
 		return deleteTaskById;	
 	}
 	
 	//OldHrms
 	@PutMapping("/updateTask/{id}")
 	public EntityBeanResponseCommon updateTaskById(@PathVariable("id") int id,@RequestBody TaskDetailsEntity entity) {
+		this.log.info("Entered update task details in controller ");
 		
 		
 		EntityBeanResponseCommon updateTask = this.service.updateTaskByTaskId(id, entity);
-		
+		this.log.info("successsfully update task details in controller ");
 		return updateTask;
 		
 	}
-	
-	
-	
-	
-	
-	//TaskEmployee
-	//OldHrms
-//	@PostMapping("/saveListTaskToEmp")
-//	public EntityBeanResponseCommon saveTaskToEmp(@PathVariable String empid) {
-//		
-//		EntityBeanResponseCommon addListOfTaskToEmp = this.service.addListOfTaskToEmp(task);
-//		return addListOfTaskToEmp;
-//		
-//	}
-	
-	
-	//OldHrms
-//	@GetMapping("getListTaskSOfEmp/{sid}")
-//	public List<TaskDetailsEntity> listOfTasksOfEmp(@PathVariable("sid") String id){
-//		List<TaskDetailsEntity> listTasksByEmpid = this.service.getListTasksByEmpid(id);
-//		return listTasksByEmpid;
-//		
-//	}
-	
-	
-	//OldHrms
-//	@GetMapping("getTaskOfEmpByEmpId/{empid}")
-//	public List<EmployeeTaskDetailsBean> getListOfTaskOfEmpByEmpid(@PathVariable("empid") String eid){
-//		
-//		List<EmployeeTaskDetailsBean> empListOfTasksByEmpId = this.service.getEmpListOfTasksByEmpId(eid);
-//		
-//		
-//		return empListOfTasksByEmpId;
-//		
-//	}
-	
-	
-	
-	
-	
-	
-	//getTasksByProjectId
-
-	/*
-	 * @GetMapping("/gettasks/{id}") public List<TaskDetailsEntity>
-	 * getAllTasks(@PathVariable("id") int id){
-	 * 
-	 * List<TaskDetailsEntity> taskByProjectId =
-	 * this.service.getTaskByProjectId(id); return taskByProjectId; }
-	 */
-	
-	
-
-	
-	//@PostMapping("/saveTask")
-	//public EntityBeanResponse saveTaskdetails(@RequestBody TaskDetailsEntity entity) {
-
-		//EntityBeanResponse saveTaskDetails = this.service.saveTaskDetails(entity);
-
-		//return saveTaskDetails;
-
-	//}
-
-	//@PutMapping("/updateTask/{id}")
-	//public EntityBeanResponse updateTaskDetails(@PathVariable("id") int id,@RequestBody TaskDetailsEntity entity) {
-
-		//EntityBeanResponse updateTaskDetails = this.service.updateTask(id, entity);
-
-		//return updateTaskDetails;
-
-	//}
-
-	//@DeleteMapping("/delete/{id}")
-	//public EntityBeanResponse deleteTaskByid(@PathVariable("id") int id) {
-	//	EntityBeanResponse deleteTakById = this.service.deleteTakById(id);
-		//return deleteTakById;
-
-	//}
-
-
-	//@GetMapping("/getalltasks")
-	//public TasksDetailsResponseBean GetAllTasks() {
-
-		//TasksDetailsResponseBean allTasks = this.service.getAllTasks();
-
-		//return allTasks;
-
-//	}
-	
-	
-	/////............................OldHrms...................................
-	
-	
-//	@PostMapping("/saveListTaskToEmp")
-//	public EntityBeanResponseCommon saveTaskToEmp(@RequestBody TaskDetailsEntity task) {
-//		
-//		EntityBeanResponseCommon addListOfTaskToEmp = this.service.addListOfTaskToEmp(task);
-//		return addListOfTaskToEmp;
-//		
-//	}
-	
-	
-	
-	
-	
-	
 	
 }
