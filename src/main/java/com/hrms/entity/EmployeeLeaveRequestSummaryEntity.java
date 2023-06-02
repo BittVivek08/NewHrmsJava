@@ -58,13 +58,13 @@ public class EmployeeLeaveRequestSummaryEntity {
 	private LocalDate toDate;
 
 	@Column(name = "rep_mang_id")
-	private int reportingManagerId;
+	private String reportingManagerId;
 
 	@Column(name = "rep_manager_name")
 	private String reportingManagerName;
 
 	@Column(name = "hr_id")
-	private int hrId;
+	private String hrId;
 
 	@Column(name = "hr_name")
 	private String hrName;

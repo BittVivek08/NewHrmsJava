@@ -85,7 +85,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	public EntityBeanResponse saveEmpDetails(EmployeeDetails employeeDetails) {
 		String encode = this.passwordEncoder.encode(employeeDetails.getPassword());
 		employeeDetails.setPassword(encode);
-
+		
 		EmployeeDetails saved = empRepo.save(employeeDetails);
 		EmployeeDetails findByEmail = empRepo.findByEmail(employeeDetails.getEmail());
 
@@ -93,18 +93,16 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		if (saved != null) {
 			EmployeeDto empDto = new EmployeeDto();
 
-			Optional<Businessunit> businessUnit = businessUnitRepository.findById(findByEmail.getBusinessunitId());
-
-			Optional<Department> department = departmentRepo.findById(findByEmail.getDepartmentId());
-
-			Optional<EmpRole> empRole = empRoleRepo.findById(findByEmail.getEmpRoleId());
-
-
-
-
+			
+			  Optional<Businessunit> businessUnit = businessUnitRepository.findById(findByEmail.getBusinessunitId());
+			  
+			  Optional<Department> department = departmentRepo.findById(findByEmail.getDepartmentId());
+			  
+		//	  Optional<EmpRole> empRole = empRoleRepo.findById(findByEmail.getEmpRoleId());
+			   
 			empDto.setId(findByEmail.getId());
 			empDto.setEmpId(findByEmail.getEmpId());
-			empDto.setUserId(findByEmail.getUserId());
+			empDto.setUserId(findByEmail.getId());
 			empDto.setFirstName(findByEmail.getFirstName());
 			empDto.setLastName(findByEmail.getLastName());
 			empDto.setEmployeeName(findByEmail.getEmployeeName());
@@ -114,6 +112,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			empDto.setBackgroundchk_status(findByEmail.getBackgroundchk_status());
 			empDto.setBusinessunitId(findByEmail.getBusinessunitId());
 			empDto.setBusinessunitName(businessUnit.get().getName());
+	//		empDto.setBusinessunitName(findByEmail.getBusinessunitName());
 			empDto.setCandidatereferredby(findByEmail.getCandidatereferredby());
 			empDto.setContactnumber(findByEmail.getContactnumber());
 			empDto.setCreatedby(findByEmail.getCreatedby());
@@ -123,18 +122,18 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			empDto.setDateOfleaving(findByEmail.getDateOfleaving());
 			empDto.setDepartmentId(findByEmail.getDepartmentId());
 			empDto.setDepartmentName(department.get().getDepName());
+		//	empDto.setDepartmentName(findByEmail.getDepartmentName());
 			empDto.setDesignation(findByEmail.getDesignation());
 			empDto.setEmp_status_id(findByEmail.getEmp_status_id());
-			empDto.setEmployeeName(findByEmail.getEmployeeName());
 			empDto.setEmployeeStatus(findByEmail.getEmployeeStatus());
 			empDto.setEmploymentStatus(findByEmail.getEmploymentStatus());
 			empDto.setExtensionNo(findByEmail.getExtensionNo());
 			empDto.setFaxNo(findByEmail.getFaxNo());
 			empDto.setHoliday_group(findByEmail.getHoliday_group());
 			empDto.setHoliday_group_name(findByEmail.getHoliday_group_name());
-			empDto.setHrManagerId(findByEmail.getHrManagerId());
+			empDto.setHrManagerId(findByEmail.getEmpId());
 			empDto.setHrManagerName(findByEmail.getHrManagerName());
-			empDto.setImmManagerId(findByEmail.getImmManagerId());
+			empDto.setImmManagerId(findByEmail.getEmpId());
 			empDto.setImmManagerName(findByEmail.getImmManagerName());
 			empDto.setIsactive(findByEmail.getIsactive());
 			empDto.setJobtitle_id(findByEmail.getJobtitle_id());
@@ -146,8 +145,9 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			empDto.setOther_modeofentry(findByEmail.getOther_modeofentry());
 			empDto.setPosition_id(findByEmail.getPosition_id());
 			empDto.setReferer_name(findByEmail.getReferer_name());
-			empDto.setReportingManager(empRole.get().getRoleName());
-			empDto.setReportingManagerId(findByEmail.getReportingManagerId());
+		//	empDto.setReportingManager(empRole.get().getRoleName());
+			empDto.setReportingManager(findByEmail.getReportingManager());
+			empDto.setReportingManagerId(findByEmail.getEmpId());
 			empDto.setSelecteddate(findByEmail.getSelecteddate());
 			empDto.setSelectedDocumentsIds(findByEmail.getSelectedDocumentsIds());
 			empDto.setSignature(findByEmail.getSignature());
