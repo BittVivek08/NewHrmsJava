@@ -27,10 +27,10 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
 	List<EmployeeDetails> getDetailByRepId(String repId);
 
 	@Query("select reportingManagerId from EmployeeDetails where userId=?1")
-    public  Integer  getByRepId(Integer repId);
+    public  String  getByRepId(Integer userId);
 	
     @Query("select reportingManager from EmployeeDetails  where reportingManagerId=?1 and userId=?2")
-	String empName(Integer repId,Integer userId);
+	String empName(String repId,Integer userId);
     
     @Query("select empId from EmployeeDetails where empId=?1")
     public List<EmployeeDetails> findEmpId(List<EmployeeDetails> emp);
