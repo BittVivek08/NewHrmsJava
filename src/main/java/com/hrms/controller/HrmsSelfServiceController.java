@@ -61,5 +61,10 @@ public class HrmsSelfServiceController {
 						
 			return hrmsSelfService.saveLeaveRequest(leaverequestBean,emp_id,leaveType);
 		}
+		
+		@GetMapping ("/getAvailableDays")
+		public float getAvailableDays(@RequestParam(value = "emp_id") String empid,@RequestParam(value = "leaveType") String leaveType) {
+			return hrmsSelfService.getAvailableDays(empid, leaveType);
+		}
 
 }
