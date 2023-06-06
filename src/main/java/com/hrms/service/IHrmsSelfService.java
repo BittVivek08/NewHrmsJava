@@ -23,6 +23,8 @@ public interface IHrmsSelfService {
 	
 	//get total leaves taken 
 	public CommonResponseBean totalLeaveTaken(int id);
+	
+	public float getAvailableDays(String emp_id, String leaveType);
 
 
 //	public Response saveLeaveRequest(LeaveRequestBean leaverequestBean, int roleId, int menuId);

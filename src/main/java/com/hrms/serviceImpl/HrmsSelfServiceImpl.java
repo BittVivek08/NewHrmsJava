@@ -204,13 +204,19 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 		else {
 			commonRes.setMessage("the leave is already applied on that date");
 			commonRes.setStatus(false);			}
-
-
-
-
+		
 
 
 		return commonRes;
+	}
+	
+	
+	  //getting available leave days
+	public float getAvailableDays(String emp_id, String leaveType) {
+		
+	float availableDays = leaveTypeRepo.getNoOfDays(leaveType)-leaveReqSummery.getNoOfDaysApproved(emp_id,leaveType);
+	
+	return availableDays;
 	}
 
 	// selfService->Leaves->MyLeaves->Delete
