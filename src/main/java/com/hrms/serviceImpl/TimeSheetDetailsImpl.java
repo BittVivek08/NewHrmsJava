@@ -1,5 +1,7 @@
 package com.hrms.serviceImpl;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,6 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	private TaskDeatailsRepository taskDetailsRepository;
 	@Autowired
 	private HolidayCalenderRepository holidayCalenderRepository;
-
 	@Autowired
 	private TimeSheetResponse timeSheetResponse;
 	@Autowired
@@ -54,9 +55,9 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	private EmpRoleRepo empRoleRepo1;
 
 	public TimeSheetResponse saveTimeSheett(List<SaveTimeSheet> savetimesheetList) {
-		log.info("entered into saveTimeSheett  method of HrmsEmpTimeSheetService class");
+		log.info("Entered into saveTimeSheet  method of HrmsEmpTimeSheetService class");
 		for (SaveTimeSheet savetimesheet : savetimesheetList) {
-
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 			EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
 			ClientDetailsEntity client = this.clientDetailsRepository
 					.findById(savetimesheet.getClient().getId()).get();
@@ -69,8 +70,13 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 			savetimesheet.setClient(client);
 			savetimesheet.setEmp(emp1);
 			savetimesheet.setStatus("pending");	
-
+			savetimesheet.setWorkHours(savetimesheet.getWorkHours());
+			savetimesheet.setCreatedDate(new Date());
+			savetimesheet.setWorkDate(savetimesheet.getWorkDate().formatted(format));
+			this.saveTimeSheetRepo.save(savetimesheet);
+			timeSheetResponse.setMsg("timesheet detail save successfully");
+			timeSheetResponse.setStatus(true);
 		}
-		return null;
+	return timeSheetResponse ;
 	}
 }
