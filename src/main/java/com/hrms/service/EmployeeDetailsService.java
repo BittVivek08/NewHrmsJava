@@ -25,8 +25,10 @@ public interface EmployeeDetailsService {
 	public List<EmployeeDetails> getAllEmpDetails();
 
 	public EmployeeDetails getEmpById(Integer id);
+	
+	public EmployeeDetails getEmpByEmpId(String empId);
 
-	public EntityBeanResponse updateEmpDetails(EmployeeDetails employeeDetails);
+	public EntityBeanResponse updateEmpDetails(EmployeeDetails employeeDetails, String empId);
 
 	public List<EmpBirthResponse> findBirthdayDetails();
 
@@ -41,15 +43,19 @@ public interface EmployeeDetailsService {
 	
 	public EmployeeInformation getEmpInfoById(Integer id);
 	
+	public EmployeeInformation getEmpInfoByEmpId(String empId);
+	
 	//Employee Contact Details
 
 	public ContactBean saveContactdata(String empId,ContactDetails details);
 
 	public List<ContactDetails> getContactdata();
 
-	public ContactDetails updateContact(ContactDetails entity);
+	public ContactDetails updateContact(ContactDetails entity,String empId);
 
 	public ContactDetails getcontactDetails(int id);
+	
+	public ContactDetails getcontactDetails(String empId);
 	
 	//Employee Education
 	
@@ -57,6 +63,8 @@ public interface EmployeeDetailsService {
 
 
 	public EmployeeEducationDetails getEmpeducationdetalsById(Integer id);
+	
+	public EmployeeEducationDetails getEmpeducationdetalsByEmpId(String empId);
 
 	public List<EmployeeEducationDetails> getAllEmpeducationdetails();
 	
@@ -64,12 +72,14 @@ public interface EmployeeDetailsService {
 	
 	public CommonResponseBean saveSalaryDetails (String empId, EmployeeSalaryRequestBean empSalReqBean);
 	
-	public CommonResponseBean updateSalaryDetails(EmployeeSalaryDetails empSalDetails);
+	public CommonResponseBean updateSalaryDetails(EmployeeSalaryDetails empSalDetails,String empId);
 	
 	public EmployeeSalaryDetails getEmpSalaryById(Integer id);
+	
+	public EmployeeSalaryDetails getEmpSalaryByEmpId(String empId);
 
 
-	EmployeeEducationDetailsBean updateEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails);
+	EmployeeEducationDetailsBean updateEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails, String empId);
 
 	EmployeeDto loginViaJWT(String email);
 			

@@ -30,9 +30,9 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 	@Autowired
 	private SuccessResponseBean response;
 
-	public SuccessResponseBean uploadDocuments( MultipartFile file, EmployeeDocumentsEntity docsEntity,String eid) throws IOException {
+	public SuccessResponseBean uploadDocuments( MultipartFile file, EmployeeDocumentsEntity docsEntity,String empId) throws IOException {
 
-		EmployeeDetails employee = this.employeeRepository.findByEmpId(eid);
+		EmployeeDetails employee = this.employeeRepository.findByEmpId(empId);
 		List<EmployeeDetails> employeeDetails = this.employeeRepository.findByUserId(docsEntity.getUserId());
 
 		if(employee != null && employeeDetails != null && employeeDetails.size() > 0) {

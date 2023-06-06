@@ -198,8 +198,8 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	}
 
 	@Override
-	public EntityBeanResponse updateEmpDetails(EmployeeDetails emplDetails) {
-		Optional<EmployeeDetails> employeeDetails = empRepo.findById(emplDetails.getId());
+	public EntityBeanResponse updateEmpDetails(EmployeeDetails emplDetails, String empId) {
+		Optional<EmployeeDetails> employeeDetails = empRepo.findById(empId);
 		emplDetails.setPassword(employeeDetails.get().getPassword());
 
 		EmployeeDetails update = empRepo.save(emplDetails);
@@ -531,9 +531,9 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	}
 
 	@Override
-	public ContactDetails updateContact(ContactDetails entity) {
+	public ContactDetails updateContact(ContactDetails entity,String empId) {
 
-		EmployeeDetails emp = empRepo.findByEmpId(entity.getEmployeedetails().getEmpId());
+		EmployeeDetails emp = empRepo.findByEmpId(empId);
 		entity.setEmployeedetails(emp);
 
 		return contactrepo.save(entity);
@@ -576,9 +576,9 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	}
 
 	@Override
-	public EmployeeEducationDetailsBean updateEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails) {
+	public EmployeeEducationDetailsBean updateEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails,String empId) {
 
-		EmployeeDetails employeeDetails = empRepo.findByEmpId(empeducationdetails.getEmployeeDetails().getEmpId());
+		EmployeeDetails employeeDetails = empRepo.findByEmpId(empId);
 		// EmployeeDetails employeeDetails=empRepo.findByEmpId(empId);
 		empeducationdetails.setEmployeeDetails(employeeDetails);
 
@@ -645,11 +645,11 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	}
 
 	@Override
-	public CommonResponseBean updateSalaryDetails(EmployeeSalaryDetails empSalDetails) {
+	public CommonResponseBean updateSalaryDetails(EmployeeSalaryDetails empSalDetails,String empId) {
 
-		Optional<EmployeeSalaryDetails> empSalOpt = empSalRepo.findById(empSalDetails.getId());
+//		Optional<EmployeeSalaryDetails> empSalOpt = empSalRepo.findById(empSalDetails.getId());
 
-		EmployeeDetails findByEmpId = empRepo.findByEmpId(empSalOpt.get().getEmployeeDetails().getEmpId());
+		EmployeeDetails findByEmpId = empRepo.findByEmpId(empId);
 		empSalDetails.setEmployeeDetails(findByEmpId);
 
 		EmployeeSalaryDetails updated = empSalRepo.save(empSalDetails);
@@ -675,6 +675,62 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		if (findById.isPresent()) {
 			return findById.get();
 		}
+		return null;
+	}
+
+	@Override
+	public EmployeeDetails getEmpByEmpId(String empId) {
+		
+		EmployeeDetails findById = empRepo.findByEmpId(empId);
+
+		if (findById != null) {
+			return findById;
+		}
+		return null;
+
+	}
+
+	@Override
+	public EmployeeInformation getEmpInfoByEmpId(String empId) {
+		
+		Optional<EmployeeInformation> findById = empInfRepo.findByEmpId(empId);
+		if (findById.isPresent()) {
+			return findById.get();
+		}
+		return null;
+	}
+
+	@Override
+	public ContactDetails getcontactDetails(String empId) {
+		
+		Optional<ContactDetails> contact = contactrepo.findByEmpId(empId);
+		if (contact.isPresent()) {
+			return contact.get();
+
+		}
+		return null;
+
+	}
+
+	@Override
+	public EmployeeEducationDetails getEmpeducationdetalsByEmpId(String empId) {
+		
+		Optional<EmployeeEducationDetails> empeducation = empeducationrepo.findByEmpId(empId);
+		if (empeducation.isPresent()) {
+			return empeducation.get();
+		}
+		return null;
+	}
+
+	@Override
+	public EmployeeSalaryDetails getEmpSalaryByEmpId(String empId) {
+		
+		List<EmployeeSalaryDetails> findById = empSalRepo.findByEmpId(empId);
+ for(EmployeeSalaryDetails id:findById) {
+		if (id!=null) {
+			return findById.get(0);
+		}
+	}
 		return null;
 	}
 }
