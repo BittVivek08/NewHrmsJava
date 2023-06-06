@@ -1,5 +1,6 @@
 package com.hrms.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
@@ -48,6 +49,9 @@ public class SaveTimeSheet {
 	
 	@Column(name = "work_duration")
 	private String workHours;
+	
+	@Column(name = "work_date")
+	private String workDate;
 
 	@ManyToOne
 	@JoinColumn(name = "project_id")
@@ -66,11 +70,11 @@ public class SaveTimeSheet {
 	@Column(name = "modified_by")
 	private int modifiedBy;
 
-	@Column(name = "created", updatable = false)
-	private LocalDateTime created_Date;
+	@Column(name = "created_date", updatable = false)
+	private Date createdDate;
 
 	@Column(name = "modified")
-	private LocalDateTime modifiedDate;
+	private Date modifiedDate;
 
 	@Transient
 	private String request;
