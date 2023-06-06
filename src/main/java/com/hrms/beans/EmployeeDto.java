@@ -69,4 +69,5 @@ public class EmployeeDto {
 	private String ssnNumber;
 	private String numberType;
 	private String jwtToken;
+	private String refreshToken;
 }
