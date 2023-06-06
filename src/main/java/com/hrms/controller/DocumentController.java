@@ -26,8 +26,8 @@ public class DocumentController {
 	@Autowired
 	private EmployeeDocumentServiceImpl empDocServ;
 	
-	@PostMapping("/uploadDocuments/{eid}")
-	public SuccessResponseBean uploadDocuments(@RequestParam("file") MultipartFile file,@RequestBody EmployeeDocumentsEntity entity,@PathVariable("eid") String empId) throws IOException {
+	@PostMapping("/uploadDocuments/{empId}")
+	public SuccessResponseBean uploadDocuments(@RequestParam("file") MultipartFile file,@RequestBody EmployeeDocumentsEntity entity,@PathVariable("empId") String empId) throws IOException {
 		
 		return empDocServ.uploadDocuments(file,entity,empId);
 	}
