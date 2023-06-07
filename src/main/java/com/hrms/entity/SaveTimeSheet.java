@@ -51,7 +51,7 @@ public class SaveTimeSheet {
 	private String workHours;
 	
 	@Column(name = "work_date")
-	private String workDate;
+	private Date workDate;
 
 	@ManyToOne
 	@JoinColumn(name = "project_id")

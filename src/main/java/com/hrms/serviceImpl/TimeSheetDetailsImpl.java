@@ -72,7 +72,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 			savetimesheet.setStatus("pending");	
 			savetimesheet.setWorkHours(savetimesheet.getWorkHours());
 			savetimesheet.setCreatedDate(new Date());
-			savetimesheet.setWorkDate(savetimesheet.getWorkDate().formatted(format));
+			savetimesheet.setWorkDate(savetimesheet.getWorkDate());
 			this.saveTimeSheetRepo.save(savetimesheet);
 			timeSheetResponse.setMsg("timesheet detail save successfully");
 			timeSheetResponse.setStatus(true);
