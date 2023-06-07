@@ -20,5 +20,5 @@ public class LeavesResponseBean {
 //	private Object listOfLeaves;
 	private int ablLeave;
 	private List<LeaveRequestEntity> list;
-	private List<String> leaveStatu;
+	
 }
