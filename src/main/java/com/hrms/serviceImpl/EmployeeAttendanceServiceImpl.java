@@ -23,6 +23,9 @@ import com.hrms.repository.HolidayCalenderRepository;
 import com.hrms.repository.IRequestForLeaveRepository;
 import com.hrms.service.EmployeeAttendanceService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService {
 
@@ -40,7 +43,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Override
 	public boolean checkIfCheckedInToday(String empId) {
-
+		log.info("attendance check for today bussiness logic method");
 		List<EmployeeAttendance> employeeAttendance = attendanceRepo.findByEmpId(empId);
 
 		if (employeeAttendance.size() <= 0) {
@@ -57,7 +60,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Override
 	public EmployeeAttendancebean saveCheckInTime(String empId, String ipAddress, String workFrom) {
-
+		log.info("attendance checkin businesslogic method");
 		EmployeeAttendancebean attendancebean = new EmployeeAttendancebean();
 
 		if (findHolidayDetails()) {
@@ -101,7 +104,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Override
 	public void saveCheckOutTime(String empId) {
-
+		log.info("attendance checkout business logic method");
 		List<EmployeeAttendance> employeeAttendanceList = attendanceRepo.findByEmpId(empId);
 
 		if (!employeeAttendanceList.isEmpty()) {
@@ -130,7 +133,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Override
 	public List<EmployeeAttendance> getEmployeeWeeklyAttendance(String empId, String startDate, String endDate) {
-
+		log.info("get the attendance details weekly business logic method");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
@@ -145,7 +148,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Override
 	public boolean findHolidayDetails() {
-
+		log.info("attendance check today holiday or not business logic method");
 		List<HolidayCalenderEntity> holidayList = holidayRepo.findAll();
 		LocalDate today = LocalDate.now();
 		try {
@@ -168,6 +171,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Override
 	public boolean findWeekends() {
+		log.info("attendance check days is weekdays or not business logic method");
 		LocalDate today = LocalDate.now();
 		DayOfWeek dayOfWeek = today.getDayOfWeek();
 		if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
@@ -183,7 +187,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Override
 	public List<HolidayCalenderEntity> findHolidaysByDateRange(String startDate, String endDate) {
-
+		log.info("get holidays in a week checkout business logic method");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
@@ -201,6 +205,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Override
 	public List<String> getWeekendsBetweenDates(String startDateRequest, String endDateRequest) {
+		log.info("get weekdays business logic method");
 		List<String> weekends = new ArrayList<>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate startDate = LocalDate.parse(startDateRequest, formatter);
@@ -217,7 +222,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Override
 	public List<RequestForLeave> getLeaveRecords(String startDateRequest, String endDateRequest) {
-
+		log.info("employee leaves getting by weekly business logic method");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate startDate = LocalDate.parse(startDateRequest, formatter);
 		LocalDate endDate = LocalDate.parse(endDateRequest, formatter);
@@ -226,7 +231,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Override
 	public boolean getEmployeeOnLeaveToday(String empid) {
-
+		log.info("employee is on leave no attendance business logic method");
 		Optional<RequestForLeave> employee = leaveRepository.findByEmpid(empid);
 		if (employee.isPresent()) {
 			LocalDate today = LocalDate.now();
@@ -245,7 +250,7 @@ public class EmployeeAttendanceServiceImpl implements EmployeeAttendanceService 
 
 	@Override
 	public EmployeeAttendancebean saveCheckInTimeForcely(String empId, String ipAddress, String workFrom) {
-
+		log.info("attendance checkin forcely business logic method");
 		EmployeeAttendancebean attendancebean = new EmployeeAttendancebean();
 		if (!checkIfCheckedInToday(empId)) {
 			EmployeeAttendance employeeAttendance = new EmployeeAttendance();

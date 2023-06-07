@@ -10,6 +10,9 @@ import com.hrms.entity.EmployeeJobHistory;
 import com.hrms.repository.EmployeeJobHistoryRepository;
 import com.hrms.service.EmployeeJobHistoryService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class EmployeeJobHistoryServiceImpl implements EmployeeJobHistoryService {
 
@@ -24,7 +27,7 @@ public class EmployeeJobHistoryServiceImpl implements EmployeeJobHistoryService 
 	@Override
 	public JobHistoryResponse saveJobHistory(EmployeeJobHistory employeeJobHistory) {
 //		logger.info("Entered into saveJobHistory()");
-
+		log.info("save job history business logic method");
 		EmployeeJobHistory ss = employeePersonalInfoRepository.save(employeeJobHistory);
 		if (ss != null) {
 			historyResponse.setMessage("Employee Job history add successfully");
@@ -39,20 +42,20 @@ public class EmployeeJobHistoryServiceImpl implements EmployeeJobHistoryService 
 
 	@Override
 	public EmployeeJobHistory getByPositionId(int positionId) {
-
+		log.info("get by positionId job history business logic method");
 		EmployeeJobHistory joblist = employeePersonalInfoRepository.getByPositionId(positionId);
 		return joblist;
 	}
 
 	@Override
 	public List<EmployeeJobHistory> getAllJobHistory() {
-
+		log.info("get all job history business logic method");
 		return employeePersonalInfoRepository.findAll();
 	}
 
 	@Override
 	public JobHistoryResponse deletePositionId(int positionId) {
-		
+		log.info("delete by positionId job history business logic method");
 //		EmployeeJobHistory employee = this.employeePersonalInfoRepository.findByPositionId(positionId);
 		EmployeeJobHistory employee = employeePersonalInfoRepository.getByPositionId(positionId);
 		if(employee!=null) {
@@ -68,7 +71,7 @@ public class EmployeeJobHistoryServiceImpl implements EmployeeJobHistoryService 
 
 	@Override
 	public EmployeeJobHistory updateJobHistory(int positionId, EmployeeJobHistory employeeJobHistory) {
-
+		log.info("update by PositionId job history business logic method");
 		EmployeeJobHistory empjh = employeePersonalInfoRepository.getByPositionId(positionId);
 		try {
 			if (empjh != null) {
