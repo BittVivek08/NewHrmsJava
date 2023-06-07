@@ -1,10 +1,5 @@
 package com.hrms.controller;
 
-
-
-
-
-
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -103,13 +98,7 @@ public class RequestForLeaveController {
 		return reqLeaveService.getLeavesBasedOnYear(year);
 	}
 	
-	//get leave details based on condition 
-	@GetMapping("/getLeavesBasedOnConditons")
-	public LeavesResponseBean getLeavesBasedOnConditions(@RequestBody LeaveDetailsFiltaring detailsFiltaring) {
-
-		return reqLeaveService.getLeavesBasedOnCondition(detailsFiltaring);
-
-	}
+	
 
 	//get leaves based on month
 	@GetMapping("/getLeaveDetailsByMonth/{id}/{view}/{month}/{leaveStatus}")
@@ -136,5 +125,13 @@ public class RequestForLeaveController {
 			
 			
 		}
+		
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++		
+		
+		
+		
+		
+		
+		
 			
 }

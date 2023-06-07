@@ -4,7 +4,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,17 +29,17 @@ public class HrmsSelfServiceController {
 	
 	
 	    // delete my leave details.
-		@DeleteMapping("/DeleteMyLeave/{id}")
-		public LeaveResponseBean deleteMyLeave(@PathVariable(value = "id") int id) {
+		@DeleteMapping("/LeaveService")
+		public LeaveResponseBean deleteMyLeave(@RequestParam int id) {
 			logger.info("Entered into HrmsSelfServiceController in deleteMyLeave() ");
 			logger.error("Existed from HrmsSelfServiceController deleteMyLeave() ");
 			return hrmsSelfService.deleteMyLeave(id);
 		}
 		
 		// Applied Leave History Data.
-		@GetMapping("/appliedLeavesHistory/{emp_id}/{roleId}/{menuId}")
-		public  CommonResponseBean fetchAppliedLeaveData(@PathVariable(value = "emp_id") String emp_id, @PathVariable("roleId") int roleId,
-				@PathVariable("menuId") int menuId) {
+		@GetMapping("/LeaveService")
+		public  CommonResponseBean fetchAppliedLeaveData(@RequestParam String emp_id ,@RequestParam int roleId,
+				@RequestParam int menuId) {
 			logger.info("Entered into fetchAppliedLeaveData() ");
 			logger.error("Existed from fetchAppliedLeaveData() ");
 			return hrmsSelfService.getHistoryOfAppliedLeaveDetails(emp_id, roleId, menuId);
@@ -48,12 +47,12 @@ public class HrmsSelfServiceController {
 
 		
 		//get total leave by id
-		@GetMapping("/employeetotalleave/{id}")		
-		public CommonResponseBean employeetotalleave(@PathVariable("id") int id) {
+		@GetMapping("/LeaveService")		
+		public CommonResponseBean employeetotalleave(@RequestParam int id) {
 			return hrmsSelfService.totalLeaveTaken(id);
 		}
-
-		@PostMapping("/ApplyLeaveRequest")
+ 
+		@PostMapping("/LeaveService")
 		public CommonResponseBean  saveLeaveRequest(@RequestBody LeaveRequestBean leaverequestBean ,
 				@RequestParam(value ="emp_id") String emp_id ,@RequestParam(value="leaveType")String leaveType) {
 			logger.info("Entered into getMyLeaveRequest() ");
