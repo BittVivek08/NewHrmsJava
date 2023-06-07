@@ -21,7 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class EmployeeDocumentsEntity {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private int id;
 

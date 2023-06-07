@@ -31,7 +31,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 	private SuccessResponseBean response;
 
 	public SuccessResponseBean uploadDocuments( MultipartFile file, EmployeeDocumentsEntity docsEntity,String empId) throws IOException {
-
+		log.info("upload document bussiness logic method");
 		EmployeeDetails employee = this.employeeRepository.findByEmpId(empId);
 		List<EmployeeDetails> employeeDetails = this.employeeRepository.findByUserId(docsEntity.getUserId());
 
@@ -73,12 +73,14 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 	}
 
 	public byte[] downloadFile(String fileName) {
+		log.info("get the document bussiness logic method");
 		Optional<EmployeeDocumentsEntity> dbData = empDocRepo.findByDocumentName(fileName);
 		byte[] images = FileUtils.decompressImage(dbData.get().getData());
 		return images;
 	}
 
 	public MediaType getMediaTypeForFileName(String fileName) {
+		log.info("get the mediaType checking bussiness logic method");
 		String[] arr = fileName.split("\\.");
 		String fileExtension = arr[arr.length - 1];
 		switch (fileExtension.toLowerCase()) {

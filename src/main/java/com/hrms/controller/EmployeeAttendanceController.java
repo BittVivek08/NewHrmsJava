@@ -21,6 +21,9 @@ import com.hrms.entity.RequestForLeave;
 import com.hrms.service.EmployeeAttendanceService;
 import com.hrms.util.IPAddress;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/attendance")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -32,7 +35,7 @@ public class EmployeeAttendanceController {
 	@PostMapping("/check-in/{empId}")
 	public ResponseEntity<EmployeeAttendancebean> checkIn(@PathVariable String empId,
 			@RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
-
+		log.info("attendance checkin api");
 		EmployeeAttendancebean attendancebean = attendanceService.saveCheckInTime(empId, IPAddress.getCurrentIp(),
 				employeeAttendanceRequest.getWorkFrom());
 		return ResponseEntity.ok(attendancebean);
@@ -40,7 +43,8 @@ public class EmployeeAttendanceController {
 
 	@PostMapping("/check-out/{empId}")
 	public ResponseEntity<EmployeeAttendancebean> checkOut(@PathVariable String empId) {
-
+		
+		log.info("attendance checkout api");
 		EmployeeAttendancebean attendancebean = new EmployeeAttendancebean();
 		attendanceService.saveCheckOutTime(empId);
 		attendancebean.setMsg("Employee checked out successfully");
@@ -51,7 +55,7 @@ public class EmployeeAttendanceController {
 	@GetMapping("/employee/weekly/{empId}")
 	public ResponseEntity<List<Object>> getEmployeeWeeklyAttendance(@PathVariable String empId,
 			@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) throws ParseException {
-
+		log.info("get attendance details api");
 //		   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		List<EmployeeAttendance> attendanceList = attendanceService.getEmployeeWeeklyAttendance(empId, startDate,endDate);
 		List<HolidayCalenderEntity> holidaylist = attendanceService.findHolidaysByDateRange(startDate, endDate);
@@ -72,7 +76,7 @@ public class EmployeeAttendanceController {
 	@PostMapping("/check-in-forcely/{empId}")
 	public ResponseEntity<EmployeeAttendancebean> checkInForcely(@PathVariable String empId,
 			@RequestBody EmployeeAttendanceRequest employeeAttendanceRequest) {
-
+		log.info("attendance checkin forcely api");
 		EmployeeAttendancebean attendancebean = attendanceService.saveCheckInTimeForcely(empId, IPAddress.getCurrentIp(),
 				employeeAttendanceRequest.getWorkFrom());
 		return ResponseEntity.ok(attendancebean);

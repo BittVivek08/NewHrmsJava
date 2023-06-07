@@ -17,8 +17,9 @@ import com.hrms.entity.EmployeeDocumentsEntity;
 import com.hrms.response.bean.SuccessResponseBean;
 import com.hrms.serviceImpl.EmployeeDocumentServiceImpl;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/file")
 public class DocumentController {
@@ -28,12 +29,13 @@ public class DocumentController {
 	
 	@PostMapping("/uploadDocuments/{empId}")
 	public SuccessResponseBean uploadDocuments(@RequestParam("file") MultipartFile file,@RequestBody EmployeeDocumentsEntity entity,@PathVariable("empId") String empId) throws IOException {
-		
+		log.info("upload documents api");
 		return empDocServ.uploadDocuments(file,entity,empId);
 	}
 	
 	@GetMapping("/{fileName}")
 	public ResponseEntity<?> downloadImage(@PathVariable String fileName){
+		log.info("get the document api");
 		byte[] fileData=empDocServ.downloadFile(fileName);
 		
         // Determine the media type based on the file extension
