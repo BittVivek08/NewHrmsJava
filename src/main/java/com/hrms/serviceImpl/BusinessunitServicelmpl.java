@@ -1,6 +1,9 @@
 package com.hrms.serviceImpl;
 
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -8,11 +11,10 @@ import com.hrms.beans.Businessbean;
 import com.hrms.entity.Businessunit;
 import com.hrms.repository.BusinessunitRepository;
 import com.hrms.service.BusinessunitService;
-
 @Service
 @Component
 public class BusinessunitServicelmpl implements BusinessunitService {
-
+	Logger logging = LoggerFactory.getLogger(BusinessunitServicelmpl.class);
 	@Autowired
 	private BusinessunitRepository businessunitrepository;
 
@@ -21,33 +23,44 @@ public class BusinessunitServicelmpl implements BusinessunitService {
 
 	@Override
 	public Businessbean saveBusinessDetails(Businessunit businessunit) {
+		logging.info("Entered Savebusinessdetails in service class impl");
 
 		Businessunit save = businessunitrepository.save(businessunit);
 		if (save != null) {
 			businessbean.setMessage("Bussiness data save successfully");
 			businessbean.setStatus(true);
+			logging.info("successfully Businessdetails saved in service ");
+			
 		} else {
 			businessbean.setMessage("data not saved");
 			businessbean.setStatus(false);
+			logging.warn("Exception occured in service");
 		}
 		return businessbean;
 	}
 	@Override
 	public Businessunit getByBid(int bid) {
+		logging.info("Entered Get businessdetails By bid in service ");
+
 		
 		Businessunit bean=this.businessunitrepository.getByBid(bid);
+		logging.info("Successfully get businessdetails by bid in service");
+
 		
 		return bean;
 	}
 
 	@Override
 	public List<Businessunit> getAllbusinessdetails() {
+		logging.info("Entered get all businessdetails method in servcie ");
 
 		return businessunitrepository.findAll();
 	}
 
 @Override
 public Businessunit updatebusinessdetails(int bid, Businessunit entity) {
+	logging.info("Entered update businessdetails by bid method in service ");
+
 
 	Businessunit bean = businessunitrepository.getByBid(bid);
 	
@@ -79,15 +92,19 @@ public Businessunit updatebusinessdetails(int bid, Businessunit entity) {
 
 @Override
 public Businessbean deleteByBid(int bid) {
+	logging.info("Entered Delete busniessdetails By bid in service");
 	
 	Businessunit bean = this.businessunitrepository.getByBid( bid);
 		if(bean!=null) {
 			this.businessunitrepository.delete(bean);
 			businessbean.setMessage("buinessdetails deleted successfully");
-			businessbean.setStatus(true);
+	        businessbean.setStatus(true);
+	        logging.info("Successfully Deleted busniessdetails By bid");
+
 		} else {
 			businessbean.setMessage("Failed to Delete details ");
 			businessbean.setStatus(false);
+			logging.info("failed to delte the busniessdetails");
 		}
 		return businessbean;
 		

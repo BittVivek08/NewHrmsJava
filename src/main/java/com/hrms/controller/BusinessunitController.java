@@ -29,18 +29,21 @@ public class BusinessunitController {
 	
 	@PostMapping("/savebusinessdetails")
 	public Businessbean saveBusinessDetails(@RequestBody Businessunit businessunit) {
-		log.info("BusinessunitController , savebusinessdetails");
+		log.info("BusinessunitController , savebusinessdetails method");
 		return BusinessunitService.saveBusinessDetails(businessunit);
 	}
 
 	@GetMapping("/getbusinessdetails/{bid}")
 	public Businessunit getByBId(@PathVariable("bid") int bid) {
+		log.info("entered into getbusinessdetails based on bid method in controller");
 		return BusinessunitService.getByBid(bid);
 	}
 
 	@GetMapping("/getbusinessdetails")
 	public ResponseEntity<List<Businessunit>> getbusinessDetails() {
+		log.info("entered into getbusinessdetails method in controller");
 		List<Businessunit> details = BusinessunitService.getAllbusinessdetails();
+		log.info("successfully fetched businessdetails in controlller");
 		return new ResponseEntity<>(details, HttpStatus.OK);
 
 	}
@@ -48,8 +51,10 @@ public class BusinessunitController {
 	@PutMapping("/Updatebusinessdetails/{bid}")
 	public ResponseEntity<Businessunit> updatebusinessdetails(@PathVariable("bid") int bid,
 			@RequestBody Businessunit entity) {
+		log.info("entered into updatebusinessdetails based on bid method in controller");
 
 		Businessunit updatedetails = BusinessunitService.updatebusinessdetails(bid, entity);
+		log.info("Successfully updated busniessdetails in controller");
 
 		return ResponseEntity.ok(updatedetails);
 
@@ -57,6 +62,7 @@ public class BusinessunitController {
 
 	@DeleteMapping("/delete/{bid}")
 	public Businessbean deleteById(@PathVariable("bid") int bid) {
+		log.info("entered into delete details based on bid method in controller");
 		return BusinessunitService.deleteByBid(bid);
 	}
 }
