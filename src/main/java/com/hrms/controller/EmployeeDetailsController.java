@@ -174,12 +174,13 @@ public class EmployeeDetailsController {
 
 	@PostMapping("/saveContactDetails/{empId}") 
 	public ContactBean saveContactDetails(@PathVariable String empId,  @RequestBody ContactDetails details) {
-
+        log.info("entered saveContactDetails method of contoller class");
 		return empService.saveContactdata(empId,details);
 	} 
 
 	@GetMapping("/getAllContactDetails")
 	public ResponseEntity<List<ContactDetails>> getAllontactDetails() {
+		log.info("entered into getAllcontactDetails method for fetching data in controller class");
 		List<ContactDetails> datails = empService.getContactdata();
 		if (datails.isEmpty()) {
 			return ResponseEntity.notFound().build();
@@ -189,26 +190,25 @@ public class EmployeeDetailsController {
 
 	@PutMapping("/updateContactDetails/{empId}")
 	public ResponseEntity<ContactDetails> updateContactDetails(@RequestBody ContactDetails entity,@PathVariable("empId") String empId) {
+		log.info("entered into updatecontactdetails method in controller class");
 		ContactDetails updatedetails = empService.updateContact(entity,empId);
 		return ResponseEntity.ok(updatedetails);
 	}
 	@GetMapping("/getContactDetails/{id}")
 	public ContactDetails getContactDataById(@PathVariable int id) {
-
+        log.info("entered into getcontactdatabyid method in controller class");
 		ContactDetails details=empService.getcontactDetails(id);
 		return details;
 	}
-	
 	@GetMapping("/getContactempId/{empId}")
 	public ContactDetails getContactDataByEmpId(@PathVariable String empId) {
-
+       log.info("entered into getcontactDataByEmpId method in controller class ");
 		ContactDetails details=empService.getcontactDetails(empId);
 		return details;
 	}
 
 	@PostMapping("/saveEmpeducationdetails/{empId}")
 	public EmployeeEducationDetailsBean saveEmployeeeducationdetails(@RequestBody EmployeeEducationDetails empeducationdetails,@PathVariable String empId) {
-
 		return empService.saveEmployeeeducationdetails(empeducationdetails,empId);
 	}   
 

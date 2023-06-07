@@ -3,27 +3,25 @@ package com.hrms.serviceImpl;
 import java.util.List;
 import java.util.Optional;
 
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.hrms.beans.Departmentbean;
-
 import com.hrms.entity.Department;
 import com.hrms.repository.DepartmentRepo;
 import com.hrms.service.DepartmentService;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
+	Logger logging = LoggerFactory.getLogger(DepartmentServiceImpl.class);
 	@Autowired
 	private DepartmentRepo departmentrepo;
-
 	@Autowired
 	private Departmentbean departmentbean;
-
 	@Override
 	public Departmentbean departmentDetails(Department department) {
-
+		logging.info("entered departmentDetails method  of service implentation class");
 		Department insert = departmentrepo.save(department);
 		if (insert != null) {
 			departmentbean.setMessage("data insert successfully");
@@ -38,14 +36,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Override
 	public List<Department> getAllDepartmentDetails() {
-
+		logging.info("entered getAllDepartmentDetails method  of service implentation class");
 		return departmentrepo.findAll();
 	}
 	
-
 	@Override
 	public Department updateDepartment(int id, Department departmentDetails) {
-		
+		logging.info("entered updateDepartment method of service implentation class");
 		Optional<Department> departmentOptional = departmentrepo.findById(id);
 		try {
 	    if (departmentOptional.isPresent()) {
@@ -66,20 +63,17 @@ public class DepartmentServiceImpl implements DepartmentService {
 		}
 	    catch(Exception e) {
 	    	e.printStackTrace();
-	  
-		
 	}
 		return null;
 	}
 	
 	@Override
 	public Departmentbean deleteById(int id) {
-		
+		logging.info("entered deleteById method  of service implentation class");
 		departmentrepo.deleteById(id);;
 		departmentbean.setMessage("department deatails  delete successfully");
 		departmentbean.setStatus(true);
 		return departmentbean;
-	}
-	
+	}	
 	
 }

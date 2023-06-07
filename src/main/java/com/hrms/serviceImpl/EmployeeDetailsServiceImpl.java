@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,7 +41,7 @@ import com.hrms.service.EmployeeDetailsService;
 
 @Service
 public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
-
+	Logger logging = LoggerFactory.getLogger(EmployeeDetailsServiceImpl.class);
 	@Autowired
 	private EmployeeRepository empRepo;
 
@@ -507,11 +509,9 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Override
 	public ContactBean saveContactdata(String empId, ContactDetails details) {
-
+		logging.info("entered into savecontactdata method of service imlementation class");
 		EmployeeDetails employeedetails = empRepo.findByEmpId(empId);
-
 		details.setEmployeedetails(employeedetails);
-
 		ContactDetails contactdetails = contactrepo.save(details);
 
 		if (contactdetails != null) {
@@ -526,13 +526,13 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Override
 	public List<ContactDetails> getContactdata() {
-
+		logging.info("entered into getcontactdata method of service imlementation class");
 		return contactrepo.findAll();
 	}
 
 	@Override
 	public ContactDetails updateContact(ContactDetails entity,String empId) {
-
+		logging.info("entered into updatecontact method of service imlementation class");
 		EmployeeDetails emp = empRepo.findByEmpId(empId);
 		entity.setEmployeedetails(emp);
 
@@ -541,7 +541,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	}
 
 	public ContactDetails getcontactDetails(int id) {
-
+		logging.info("entered into getcontactDetails method of service imlementation class");
 		Optional<ContactDetails> contact = contactrepo.findById(id);
 		if (contact.isPresent()) {
 			return contact.get();

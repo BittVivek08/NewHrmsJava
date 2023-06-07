@@ -1,26 +1,24 @@
 package com.hrms.service;
 
-import java.util.List;
-
-import com.hrms.beans.JobHistoryResponse;
-import com.hrms.entity.EmployeeJobHistory;
+import com.hrms.beans.EmployeeEducationBean;
+import com.hrms.beans.ExperianceDetails;
+import com.hrms.entity.EmpEducationDetailsEntity;
+import com.hrms.entity.ExperinceEntity;
 
 public interface EmployeePersonalInfoService {
-
-	// save employee job history details 
- public JobHistoryResponse saveJobHistory(EmployeeJobHistory employeeJobHistory);
- 
- 	//get the job history details by use positionId
-  public EmployeeJobHistory getByPositionId(int positionId);
-  
-  // get the all employee history details
-  public List<EmployeeJobHistory> getAllJobHistory();
 	
-  // delete the job history details by use positionId
-  public JobHistoryResponse deletePositionId(int positionId);
-  
-  // update the job history details by use positionId
-  public EmployeeJobHistory updateJobHistory(int positionId,EmployeeJobHistory employeeJobHistory);
+	public ExperianceDetails saveEmployeeExperianceData(String empId,ExperinceEntity experianceentity);
+	
+	public ExperinceEntity getExperiancedetails(int id);
 
-  
+	public ExperianceDetails updateExperiancedetails(ExperinceEntity entity);
+	
+	//employee education details
+
+	public EmployeeEducationBean saveEmployeeEducation(String empId, EmpEducationDetailsEntity employeeeducation);
+
+	EmpEducationDetailsEntity getEducationdetails(int id);
+
+	EmployeeEducationBean updateEmpEducationdetails(EmpEducationDetailsEntity educatonentity);
+
 }

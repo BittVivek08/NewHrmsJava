@@ -1,15 +1,17 @@
 package com.hrms.serviceImpl;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.hrms.beans.JobHistoryResponse;
 import com.hrms.entity.EmployeeJobHistory;
 import com.hrms.repository.EmployeeJobHistoryRepository;
-import com.hrms.service.EmployeePersonalInfoService;
+import com.hrms.service.EmployeeJobHistoryService;
 
 @Service
-public class EmployeeJobHistoryServiceImpl implements EmployeePersonalInfoService {
+public class EmployeeJobHistoryServiceImpl implements EmployeeJobHistoryService {
 
 //	private static Logger logger = Logger.class;
 
