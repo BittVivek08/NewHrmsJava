@@ -18,8 +18,10 @@ import com.hrms.beans.Tbl_CountriesEntityBean;
 import com.hrms.entity.Tbl_CountriesEntity;
 import com.hrms.service.Tbl_CountriesEntityService;
 
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
 @RequestMapping("/countries")
 @RestController
 public class Tbl_CountriesEntityController {
@@ -29,6 +31,7 @@ public class Tbl_CountriesEntityController {
 	@PostMapping("/savecountries")
 	public Tbl_CountriesEntityBean savecountriesdetails(@RequestBody Tbl_CountriesEntity countriesentity)
 	{
+		log.info("entered into savecountriesdetails  method in controller");
 		return countriesenitityservice.savecountriesdetails(countriesentity);
 	}
 
@@ -36,20 +39,26 @@ public class Tbl_CountriesEntityController {
 	
 	@GetMapping("/getcountriesdetails/{id}")
 	public Tbl_CountriesEntity getById(@PathVariable("id") int id) {
+		log.info("entered into getcountriesdetails  based on id in controller");
 		return countriesenitityservice.getById(id);
 	}
 
 	@GetMapping("/getcountriesdetails")
 	public ResponseEntity<List<Tbl_CountriesEntity>> getcountriesDetails() {
+		log.info("entered into getcountriesdetails  method in controller");
 		List<Tbl_CountriesEntity> details = countriesenitityservice.getcountriesDetails();
+		log.info("successfully fetched countriesdetails in controlller");
+		
 		return new ResponseEntity<>(details, HttpStatus.OK);
 
 	}  
 
 	@PutMapping("/Updatecountries/{id}")
 	public Tbl_CountriesEntity updatecountriesdetails(@PathVariable("id") int id,@RequestBody Tbl_CountriesEntity entity) {
+		log.info("entered into updatecountriesdetails  method in controller");
 
 		Tbl_CountriesEntity updatedetails = countriesenitityservice.updatecountriedetails(id, entity);
+		log.info("Successfully updatecountriesdetails  method in controller");
 		return updatedetails;
 
 		
@@ -57,6 +66,7 @@ public class Tbl_CountriesEntityController {
 
 	@DeleteMapping("/delete/{id}")
 	public Tbl_CountriesEntityBean deleteById(@PathVariable("id") int id) {
+		log.info("entered into deletecountriesdetails based on id  method in controller");
 		return countriesenitityservice.deleteById(id);
 	}
 }

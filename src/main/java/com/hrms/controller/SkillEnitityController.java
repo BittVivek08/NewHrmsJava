@@ -1,4 +1,4 @@
-package com.hrms.controller;
+ package com.hrms.controller;
 
 import java.util.List;
 
@@ -33,20 +33,25 @@ public class SkillEnitityController {
 	@PostMapping("/addSkills/{empId}")
 	public SkillEnitityBean saveskills(@PathVariable String empId,@RequestBody SkillEnitity entity)
 	{
+		log.info("entered into saveskills method in controller");
 		return skillenitityservice.saveskills(empId,entity) ;
 		
 	}
 	@GetMapping("/getskilldetails")
 	public ResponseEntity<List<SkillEnitity>> getskillDetails() {
+		log.info("entered into getskills method in controller");
 		List<SkillEnitity> details = skillenitityservice.getskillDetails();
+		log.info("Successfully getskills method in controller");
 		return new ResponseEntity<>(details, HttpStatus.OK);
 
 	}
 	
 	@PutMapping("/Updateskilldetails/{id}")
 	public SkillEnitityBean updateskilldetails(@PathVariable int id, @RequestBody SkillEnitity entity) {
+		log.info("entered into updateskill details method in controller");
 
 		SkillEnitityBean updatedetails = skillenitityservice.updateskilldetails(id, entity);
+		log.info("Successfully updated skill details in controller");
 		return updatedetails;
 
 		
