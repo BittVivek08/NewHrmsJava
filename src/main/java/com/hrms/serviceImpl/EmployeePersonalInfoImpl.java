@@ -4,24 +4,23 @@ package com.hrms.serviceImpl;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.hrms.beans.EmployeeEducationBean;
-import com.hrms.beans.EmployeeEducationDetailsBean;
 import com.hrms.beans.ExperianceDetails;
 import com.hrms.entity.EmpEducationDetailsEntity;
 import com.hrms.entity.EmployeeDetails;
-import com.hrms.entity.EmployeeEducationDetails;
 import com.hrms.entity.ExperinceEntity;
 import com.hrms.repository.EmployeeEducationRepo;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.ExperianceRepo;
-import com.hrms.service.EmployeePersonalInfoService2;
+import com.hrms.service.EmployeePersonalInfoService;
 
 @Service
-public class EmployeePersonalInfoImpl2  implements EmployeePersonalInfoService2{
-	
+public class EmployeePersonalInfoImpl  implements EmployeePersonalInfoService{
+	Logger logging = LoggerFactory.getLogger(EmployeePersonalInfoImpl.class);
 	@Autowired
 	private EmployeeRepository employeerepo;
 	
@@ -39,7 +38,7 @@ public class EmployeePersonalInfoImpl2  implements EmployeePersonalInfoService2{
 	
 	@Override
 	public ExperianceDetails saveEmployeeExperianceData(String empId,ExperinceEntity experianceentity) {
-		
+		logging.info("entered into saveEmployeeExperianceData method of service implementation class");
 		EmployeeDetails employeedetails =employeerepo.findByEmpId(empId);
 		
 		experianceentity.setEmployeedetails(employeedetails);
@@ -63,7 +62,7 @@ public class EmployeePersonalInfoImpl2  implements EmployeePersonalInfoService2{
 
 	@Override
 	public ExperinceEntity getExperiancedetails(int id) {
-		
+		logging.info("entered into getExperiancedetails method of service implementation class");
 		Optional<ExperinceEntity> entity=experiancerepo.findById(id);
 		if(entity.isPresent()) {
 			return entity.get();
@@ -73,7 +72,7 @@ public class EmployeePersonalInfoImpl2  implements EmployeePersonalInfoService2{
 
 	@Override
 	public ExperianceDetails updateExperiancedetails(ExperinceEntity entity) {
-
+		logging.info("entered into updateExperiancedetails method of service implementation class");
 		EmployeeDetails employeeDetails=employeerepo.findByEmpId(entity.getEmployeedetails().getEmpId());
 		
 		entity.setEmployeedetails(employeeDetails);
@@ -95,7 +94,7 @@ public class EmployeePersonalInfoImpl2  implements EmployeePersonalInfoService2{
 	//employee education details
 @Override
 public EmployeeEducationBean saveEmployeeEducation(String empId,EmpEducationDetailsEntity employeeeducation) {
-		
+	   logging.info("entered into saveEmployeeEduction method of service implementation class ");
 		EmployeeDetails employeedetails =employeerepo.findByEmpId(empId);
 		
 		employeeeducation.setEmployeedetails(employeedetails);
@@ -112,13 +111,11 @@ public EmployeeEducationBean saveEmployeeEducation(String empId,EmpEducationDeta
 			
 		}
 		
-		return educationbean;
-	
-	
+		return educationbean;	
 }
 @Override
 public EmpEducationDetailsEntity getEducationdetails(int id) {
-	
+	logging.info("entered into getEduction method of service class ");
 	Optional<EmpEducationDetailsEntity> entity=employeeeducationrepo.findById(id);
 	if(entity.isPresent()) {
 		return entity.get();
@@ -129,7 +126,7 @@ public EmpEducationDetailsEntity getEducationdetails(int id) {
 
 @Override
 public EmployeeEducationBean updateEmpEducationdetails(EmpEducationDetailsEntity educatonentity) {
-
+	logging.info("entered into updateEmpEducationdetails of service clsaa implementation");
 	EmployeeDetails employeeDetails=employeerepo.findByEmpId(educatonentity.getEmployeedetails().getEmpId());
 	
 	educatonentity.setEmployeedetails(employeeDetails);

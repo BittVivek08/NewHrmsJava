@@ -13,22 +13,22 @@ import com.hrms.beans.EmployeeEducationBean;
 import com.hrms.beans.ExperianceDetails;
 import com.hrms.entity.EmpEducationDetailsEntity;
 import com.hrms.entity.ExperinceEntity;
-import com.hrms.service.EmployeePersonalInfoService2;
+import com.hrms.service.EmployeePersonalInfoService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequestMapping("/personal")
-public class EmployeePersonalInfoController2 {
+public class EmployeePersonalInfoController {
 	
 	@Autowired
-	private EmployeePersonalInfoService2 employeepersonal;
+	private EmployeePersonalInfoService employeepersonal;
 	
 	
 	@PostMapping("/saveExperiance/{empId}")
 	public ExperianceDetails saveEmpExperiance(@PathVariable String empId, @RequestBody ExperinceEntity experianceentity) {
-		
+		log.info("entered into saveEmpExperiance method in controller");
 		ExperianceDetails expe=employeepersonal.saveEmployeeExperianceData(empId,experianceentity);
 		
 		return expe;
@@ -36,6 +36,7 @@ public class EmployeePersonalInfoController2 {
 	}
 	@GetMapping("/getEmpdetails/{id}")
 	public ExperinceEntity getEmpExperiance(@PathVariable int id) {
+		log.info("entered into getEmpExperaince method in controller class");
 		ExperinceEntity  experiance =employeepersonal.getExperiancedetails(id);
 		return experiance;
 		
@@ -43,7 +44,7 @@ public class EmployeePersonalInfoController2 {
 	
 	@PutMapping("/updateExperiance")
 	public ExperianceDetails updateEmpExpiriance(@RequestBody ExperinceEntity experiance) {
-		
+		log.info("entered into updateEmpExperiance method in controller class");
 		ExperianceDetails exp =employeepersonal.updateExperiancedetails(experiance);
 		return exp;
 		
@@ -54,7 +55,7 @@ public class EmployeePersonalInfoController2 {
 	
 	@PostMapping("/employeeEducation/{empId}")
 	public EmployeeEducationBean saveEmpEducationData(@PathVariable String empId, @RequestBody EmpEducationDetailsEntity data) {
-		
+		log.info("entered into saveEmpEductionData in controller class");
 		EmployeeEducationBean bean=employeepersonal.saveEmployeeEducation(empId, data);
 		return bean;
 		
@@ -65,6 +66,7 @@ public class EmployeePersonalInfoController2 {
 	
 	@GetMapping("/getEmpEducationData/{id}")
 	public EmpEducationDetailsEntity getEmpEducation(@PathVariable int id) {
+		log.info("entered into getEmpEducation method in controller class");
 		EmpEducationDetailsEntity  data =employeepersonal.getEducationdetails(id);
 		return data;
 		
@@ -72,7 +74,7 @@ public class EmployeePersonalInfoController2 {
 	
 	@PutMapping("/updateaempaeducation")
 	public EmployeeEducationBean updateEmpEdu(@RequestBody EmpEducationDetailsEntity emp) {
-		
+		log.info("entered into updateEmpEdu method in controller class");
 		EmployeeEducationBean  educationbean  =employeepersonal.updateEmpEducationdetails(emp);
 		
 		return educationbean;
