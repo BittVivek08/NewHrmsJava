@@ -80,10 +80,10 @@ public class EmployeeEducationDetails implements Serializable {
 	private String course;
 
 	@Column(name = "from_date")
-	private java.sql.Date fromDate;
+	private Date fromDate;
 
 	@Column(name = "to_date")
-	private java.sql.Date toDate;
+	private Date toDate;
 
 	@Column(name = "percentage")
 	private double percentage;
@@ -109,10 +109,5 @@ public class EmployeeEducationDetails implements Serializable {
 	
 	@Column(name = "createdby")
 	private int createdBy;
-
-
-	
-	
-
 
 }

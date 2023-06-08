@@ -2,6 +2,8 @@ package com.hrms.controller;
 
 import java.util.List;
 
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hrms.beans.LocationResponseBean;
 import com.hrms.beans.Tbl_StatesEntityBean;
 import com.hrms.entity.Tbl_StatesEntity;
 import com.hrms.service.Tbl_StatesEntityService;
@@ -25,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/states")
 @RestController
 public class Tbl_StatesEntityController {
+	
 	@Autowired
 	private Tbl_StatesEntityService statesentityservice;
 	
@@ -47,7 +51,7 @@ public class Tbl_StatesEntityController {
 		return statesentityservice.getById(id);
 		
 	}
-	@GetMapping("getallstatesdetails")
+	@GetMapping("/getallstatesdetails")
 	public ResponseEntity<List<Tbl_StatesEntity>> getallstatesdetails()
 	 {
 		log.info("entered into getstatesdetails method in controller");
@@ -74,7 +78,13 @@ public class Tbl_StatesEntityController {
 		log.info("entered into delete states based on id method in controller");
 		return statesentityservice.deleteById(id);
 	}
-	
+	 
+	@GetMapping("/getStateList")
+	public LocationResponseBean getStateBasedOnCountry(@QueryParam(value = "countryId") int countryId) {
+		log.info("Entered into fetching State Based on CountryId");
+		
+		return statesentityservice.getStateBasedOnCountry(countryId);
+	}
 	
 	
 		
