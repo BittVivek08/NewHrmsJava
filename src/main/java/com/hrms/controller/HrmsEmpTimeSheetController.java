@@ -1,8 +1,14 @@
 package com.hrms.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hrms.beans.CurrentWeekRequest;
 import com.hrms.entity.SaveTimeSheet;
+import com.hrms.response.bean.TimeSheetRequestBeanDate;
 import com.hrms.response.bean.TimeSheetResponse;
 import com.hrms.serviceImpl.TimeSheetDetailsImpl;
 
@@ -37,26 +45,41 @@ public class HrmsEmpTimeSheetController {
 		}
 	}
 	@GetMapping("/timeSheetDetails")
-	public ResponseEntity<TimeSheetResponse> getTimeSheetDetails(@RequestBody List<SaveTimeSheet> timesheet) {
+	public List<SaveTimeSheet> getTimeSheetDetails(@QueryParam("empId")String empId) {
 		log.info("entered into getTimeSheetDetails method of HrmsEmpTimeSheetController class");
-		try {
-			TimeSheetResponse saveTimeSheett1 = this.impl.saveTimeSheett(timesheet);
-			return new ResponseEntity<>(saveTimeSheett1, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+	
+			List<SaveTimeSheet> saveTimeSheett1 = this.impl.getTimeSheett(empId);
+			
+			return saveTimeSheett1;
+		
 	}
 	@PutMapping("/timeSheetDetails")
-	public ResponseEntity<TimeSheetResponse> updateTimeSheetDetails(@RequestBody List<SaveTimeSheet> timesheet) {
+	public ResponseEntity<TimeSheetResponse> updateTimeSheetDetails(@RequestBody SaveTimeSheet timesheet,@QueryParam("id")int id) {
 		log.info("entered into updateTimeSheetDetails method of HrmsEmpTimeSheetController class");
 		try {
-			TimeSheetResponse saveTimeSheett1 = this.impl.saveTimeSheett(timesheet);
+			TimeSheetResponse saveTimeSheett1 = this.impl.UpdateTimeSheett(timesheet,id);
 			return new ResponseEntity<>(saveTimeSheett1, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PostMapping("/timeSheetDetailsByDate")
+	public  List<SaveTimeSheet> getTimeSheetDetailsByDate(@RequestBody CurrentWeekRequest date) {
+		log.info("entered into getTimeSheetDetailsByDate method of HrmsEmpTimeSheetController class");
+		List<SaveTimeSheet> saveTimeSheett1 = this.impl.getTimeSheetByDate(date);
+		return saveTimeSheett1;	
+	}
+	
+	@PostMapping("/timesheetDetailsStartDateEndDate")
+	public List<SaveTimeSheet> getTimeSheetDetailsByStartDateEndDate(@RequestBody TimeSheetRequestBeanDate date ){
+		log.info("entered into getTimeSheetDetailsByStartDateEndDate method of HrmsEmpTimeSheetController class");
+		List<SaveTimeSheet> savetimesheet=this.impl.getTimeSheetByStartDateEndDate(date);
+		return savetimesheet;
+		
+	}
+	
+	
 
 }

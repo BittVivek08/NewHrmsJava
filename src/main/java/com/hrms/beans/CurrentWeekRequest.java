@@ -9,5 +9,5 @@ import lombok.Data;
 @Data
 public class CurrentWeekRequest {
 
-	private LocalDate tdate;
+	private String tdate;
 }
