@@ -28,6 +28,7 @@ import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeEducationDetails;
 import com.hrms.entity.EmployeeInformation;
 import com.hrms.entity.EmployeeSalaryDetails;
+import com.hrms.entity.JobTitlesEntity;
 import com.hrms.repository.BusinessunitRepository;
 import com.hrms.repository.ContactRepo;
 import com.hrms.repository.DepartmentRepo;
@@ -36,6 +37,7 @@ import com.hrms.repository.EmployeeEducationDetailsRepository;
 import com.hrms.repository.EmployeeInformationRepository;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.EmployeeSalaryDetailsRepo;
+import com.hrms.repository.JobTitleRepository;
 import com.hrms.request.bean.EmployeeSalaryRequestBean;
 import com.hrms.service.EmployeeDetailsService;
 
@@ -80,6 +82,9 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Autowired
 	private EmployeeEducationDetailsRepository empeducationrepo;
+	
+	@Autowired
+	private JobTitleRepository jobTitleRepo;
 
 	@Override
 	public EntityBeanResponse saveEmpDetails(EmployeeDetails employeeDetails) {
@@ -102,19 +107,30 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		
 		Integer userId = empRepo.getMaxUserId()+1;
 		employeeDetails.setUserId(userId);
+				
+		Optional<Businessunit> businessUnit = businessUnitRepository.findById(employeeDetails.getBusinessunitId());
+
+		employeeDetails.setBusinessunitName(businessUnit.get().getName());
+		 
+		Optional<Department> department = departmentRepo.findById(employeeDetails.getDepartmentId());
+		
+		employeeDetails.setDepartmentName(department.get().getDepName());
+		
+		 Optional<EmpRole> empRole = empRoleRepo.findById(employeeDetails.getEmpRoleId());
+		 
+		 employeeDetails.setEmpRole(empRole.get().getRoleName());
+		 
+		 Optional<JobTitlesEntity> jobTitle = jobTitleRepo.findById(employeeDetails.getJobtitle_id());
+		 
+		 employeeDetails.setJobTitleName(jobTitle.get().getJobTitleName());
 
 		EmployeeDetails saved = empRepo.save(employeeDetails);
 		EmployeeDetails findByEmail = empRepo.findByEmail(employeeDetails.getEmail());
+
 		
 		if (saved != null) {
 
 			EmployeeDto empDto = new EmployeeDto();
-
-			Optional<Businessunit> businessUnit = businessUnitRepository.findById(findByEmail.getBusinessunitId());
-
-			Optional<Department> department = departmentRepo.findById(findByEmail.getDepartmentId());
-
-			// Optional<EmpRole> empRole = empRoleRepo.findById(findByEmail.getEmpRoleId());
 
 			empDto.setId(findByEmail.getId());
 			empDto.setEmpId(findByEmail.getEmpId());
@@ -122,7 +138,8 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			empDto.setFirstName(findByEmail.getFirstName());
 			empDto.setLastName(findByEmail.getLastName());
 			empDto.setEmployeeName(findByEmail.getEmployeeName());
-			empDto.setEmpRole(findByEmail.getEmpRole());
+			empDto.setEmpRoleId(findByEmail.getEmpRoleId());
+			empDto.setEmpRole(empRole.get().getRoleName());
 			empDto.setEmail(findByEmail.getEmail());
 			empDto.setGender(findByEmail.getGender());
 			empDto.setBackgroundchk_status(findByEmail.getBackgroundchk_status());
@@ -204,8 +221,9 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		Optional<EmployeeDetails> employeeDetails = empRepo.findById(empId);
 		emplDetails.setPassword(employeeDetails.get().getPassword());
 
-		EmployeeDetails update = empRepo.save(emplDetails);
+		
 		EmployeeDetails findByEmail = empRepo.findByEmail(employeeDetails.get().getEmail());
+		EmployeeDetails update = empRepo.save(emplDetails);
 		if (update != null) {
 			EmployeeDto empDto = new EmployeeDto();
 
