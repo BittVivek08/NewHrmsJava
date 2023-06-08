@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.EmployeeEducationBean;
 import com.hrms.beans.ExperianceDetails;
-import com.hrms.entity.EmpEducationDetailsEntity;
+import com.hrms.entity.EmployeeEducationDetails;
 import com.hrms.entity.ExperinceEntity;
 import com.hrms.service.EmployeePersonalInfoService;
 
@@ -54,7 +54,7 @@ public class EmployeePersonalInfoController {
 	// employee education details
 	
 	@PostMapping("/employeeEducation/{empId}")
-	public EmployeeEducationBean saveEmpEducationData(@PathVariable String empId, @RequestBody EmpEducationDetailsEntity data) {
+	public EmployeeEducationBean saveEmpEducationData(@PathVariable String empId, @RequestBody EmployeeEducationDetails data) {
 		log.info("entered into saveEmpEductionData in controller class");
 		EmployeeEducationBean bean=employeepersonal.saveEmployeeEducation(empId, data);
 		return bean;
@@ -65,15 +65,15 @@ public class EmployeePersonalInfoController {
 	
 	
 	@GetMapping("/getEmpEducationData/{id}")
-	public EmpEducationDetailsEntity getEmpEducation(@PathVariable int id) {
+	public EmployeeEducationDetails getEmpEducation(@PathVariable int id) {
 		log.info("entered into getEmpEducation method in controller class");
-		EmpEducationDetailsEntity  data =employeepersonal.getEducationdetails(id);
+		EmployeeEducationDetails  data =employeepersonal.getEducationdetails(id);
 		return data;
 		
 	}
 	
 	@PutMapping("/updateaempaeducation")
-	public EmployeeEducationBean updateEmpEdu(@RequestBody EmpEducationDetailsEntity emp) {
+	public EmployeeEducationBean updateEmpEdu(@RequestBody EmployeeEducationDetails emp) {
 		log.info("entered into updateEmpEdu method in controller class");
 		EmployeeEducationBean  educationbean  =employeepersonal.updateEmpEducationdetails(emp);
 		

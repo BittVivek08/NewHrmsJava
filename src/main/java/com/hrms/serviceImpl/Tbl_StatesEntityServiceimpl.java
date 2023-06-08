@@ -8,15 +8,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hrms.beans.LocationResponseBean;
 import com.hrms.beans.Tbl_StatesEntityBean;
 import com.hrms.entity.Tbl_StatesEntity;
 import com.hrms.repository.Tbl_StatesEntityRepository;
 import com.hrms.service.Tbl_StatesEntityService;
 @Service
 public class Tbl_StatesEntityServiceimpl implements Tbl_StatesEntityService {
+	
 	Logger logging = LoggerFactory.getLogger(Tbl_StatesEntityServiceimpl.class);
+	
 	@Autowired
-
 	private Tbl_StatesEntityBean statesentitybean;
 	
 	@Autowired
@@ -108,10 +110,26 @@ public class Tbl_StatesEntityServiceimpl implements Tbl_StatesEntityService {
 		}
 		return statesentitybean;
 		}
+
+	@Override
+	public LocationResponseBean getStateBasedOnCountry(int countryId) {
 		
+		LocationResponseBean response = new LocationResponseBean();
+		 
+		List<Tbl_StatesEntity> nameOfStates = statesentityrepo.nameOfStates(countryId);
 		
-		
+		if(nameOfStates.size() != 0) {
+			response.setMessage("Retrival of State Based On Country Retrieve Successfully");
+			response.setStatus(true);
+			response.setList(nameOfStates);
+		}else {
+			response.setMessage("Retrival of State Based On Country Retrieve Failes !!!");
+			response.setStatus(false);
+		}
+		return response;
 	}
+
+}
 	
 	
 

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hrms.beans.EmployeeEducationBean;
 import com.hrms.beans.ExperianceDetails;
-import com.hrms.entity.EmpEducationDetailsEntity;
+import com.hrms.entity.EmployeeEducationDetails;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.ExperinceEntity;
 import com.hrms.repository.EmployeeEducationRepo;
@@ -93,13 +93,13 @@ public class EmployeePersonalInfoImpl  implements EmployeePersonalInfoService{
 
 	//employee education details
 @Override
-public EmployeeEducationBean saveEmployeeEducation(String empId,EmpEducationDetailsEntity employeeeducation) {
+public EmployeeEducationBean saveEmployeeEducation(String empId,EmployeeEducationDetails employeeeducation) {
 	   logging.info("entered into saveEmployeeEduction method of service implementation class ");
 		EmployeeDetails employeedetails =employeerepo.findByEmpId(empId);
 		
-		employeeeducation.setEmployeedetails(employeedetails);
+		employeeeducation.setEmployeeDetails(employeedetails);
 		
-		EmpEducationDetailsEntity empedu=employeeeducationrepo.save(employeeeducation);
+		EmployeeEducationDetails empedu=employeeeducationrepo.save(employeeeducation);
 		
 		if(empedu!=null) {
 			educationbean.setMessage("employee education details saved successfully");
@@ -114,9 +114,9 @@ public EmployeeEducationBean saveEmployeeEducation(String empId,EmpEducationDeta
 		return educationbean;	
 }
 @Override
-public EmpEducationDetailsEntity getEducationdetails(int id) {
+public EmployeeEducationDetails getEducationdetails(int id) {
 	logging.info("entered into getEduction method of service class ");
-	Optional<EmpEducationDetailsEntity> entity=employeeeducationrepo.findById(id);
+	Optional<EmployeeEducationDetails> entity=employeeeducationrepo.findById(id);
 	if(entity.isPresent()) {
 		return entity.get();
 	}
@@ -125,13 +125,13 @@ public EmpEducationDetailsEntity getEducationdetails(int id) {
 }
 
 @Override
-public EmployeeEducationBean updateEmpEducationdetails(EmpEducationDetailsEntity educatonentity) {
+public EmployeeEducationBean updateEmpEducationdetails(EmployeeEducationDetails educatonentity) {
 	logging.info("entered into updateEmpEducationdetails of service clsaa implementation");
-	EmployeeDetails employeeDetails=employeerepo.findByEmpId(educatonentity.getEmployeedetails().getEmpId());
+	EmployeeDetails employeeDetails=employeerepo.findByEmpId(educatonentity.getEmployeeDetails().getEmpId());
 	
-	educatonentity.setEmployeedetails(employeeDetails);
+	educatonentity.setEmployeeDetails(employeeDetails);
 
-	EmpEducationDetailsEntity edu = employeeeducationrepo.save(educatonentity);
+	EmployeeEducationDetails edu = employeeeducationrepo.save(educatonentity);
 
 	if (edu != null) {
 		educationbean.setMessage("employee education details updated successfully");

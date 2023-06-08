@@ -218,20 +218,37 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Override
 	public EntityBeanResponse updateEmpDetails(EmployeeDetails emplDetails, String empId) {
-		Optional<EmployeeDetails> employeeDetails = empRepo.findById(empId);
-		emplDetails.setPassword(employeeDetails.get().getPassword());
+	//	Optional<EmployeeDetails> employeeDetails = empRepo.findById(empId);
+		emplDetails.setPassword(emplDetails.getPassword());
+		
+		List<String> reportingManagerList = empRepo
+				.getReportingManagerByEmpId(emplDetails.getReportingManagerId());
+
+		emplDetails.setReportingManager(reportingManagerList.get(0));
+
+		List<String> hrManagerByHrManagerIdList = empRepo.getHrManagerByEmpId(emplDetails.getHrManagerId());
+
+		emplDetails.setHrManagerName(hrManagerByHrManagerIdList.get(0));
+
+		List<String> immManagerByImmManagerIdList = empRepo.getImmManagerByEmpId(emplDetails.getImmManagerId());
+
+		emplDetails.setImmManagerName(immManagerByImmManagerIdList.get(0));
+		
 
 		
-		EmployeeDetails findByEmail = empRepo.findByEmail(employeeDetails.get().getEmail());
+		Optional<Businessunit> businessUnit = businessUnitRepository.findById(emplDetails.getBusinessunitId());
+
+		Optional<Department> department = departmentRepo.findById(emplDetails.getDepartmentId());
+
+		Optional<EmpRole> empRole = empRoleRepo.findById(emplDetails.getEmpRoleId());
+		
+	
 		EmployeeDetails update = empRepo.save(emplDetails);
+		EmployeeDetails findByEmail = empRepo.findByEmail(emplDetails.getEmail());
+		
 		if (update != null) {
+			
 			EmployeeDto empDto = new EmployeeDto();
-
-			Optional<Businessunit> businessUnit = businessUnitRepository.findById(findByEmail.getBusinessunitId());
-
-			Optional<Department> department = departmentRepo.findById(findByEmail.getDepartmentId());
-
-			Optional<EmpRole> empRole = empRoleRepo.findById(findByEmail.getEmpRoleId());
 
 			empDto.setId(findByEmail.getId());
 			empDto.setEmpId(findByEmail.getEmpId());

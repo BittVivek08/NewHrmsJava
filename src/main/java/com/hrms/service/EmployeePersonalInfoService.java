@@ -2,7 +2,8 @@ package com.hrms.service;
 
 import com.hrms.beans.EmployeeEducationBean;
 import com.hrms.beans.ExperianceDetails;
-import com.hrms.entity.EmpEducationDetailsEntity;
+import com.hrms.entity.EmployeeEducationDetails;
+import com.hrms.entity.EmployeeEducationDetails;
 import com.hrms.entity.ExperinceEntity;
 
 public interface EmployeePersonalInfoService {
@@ -15,10 +16,10 @@ public interface EmployeePersonalInfoService {
 	
 	//employee education details
 
-	public EmployeeEducationBean saveEmployeeEducation(String empId, EmpEducationDetailsEntity employeeeducation);
+	public EmployeeEducationBean saveEmployeeEducation(String empId, EmployeeEducationDetails employeeeducation);
 
-	EmpEducationDetailsEntity getEducationdetails(int id);
+	EmployeeEducationDetails getEducationdetails(int id);
 
-	EmployeeEducationBean updateEmpEducationdetails(EmpEducationDetailsEntity educatonentity);
+	EmployeeEducationBean updateEmpEducationdetails(EmployeeEducationDetails educatonentity);
 
 }
