@@ -1,4 +1,4 @@
-package com.hrms.entity;
+ package com.hrms.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -80,10 +80,10 @@ public class EmployeeEducationDetails implements Serializable {
 	private String course;
 
 	@Column(name = "from_date")
-	private Date fromDate;
+	private java.sql.Date fromDate;
 
 	@Column(name = "to_date")
-	private Date toDate;
+	private java.sql.Date toDate;
 
 	@Column(name = "percentage")
 	private double percentage;
@@ -109,5 +109,10 @@ public class EmployeeEducationDetails implements Serializable {
 	
 	@Column(name = "createdby")
 	private int createdBy;
+
+
+	
+	
+
 
 }
