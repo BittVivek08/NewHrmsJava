@@ -67,6 +67,9 @@ public class EmployeeEducationDetails implements Serializable {
 	@Column(name = "otherDegreeName")
 	private String otherDegreeInstituteName;
 	
+	@Column(name = "user_id")
+	private Integer userId;
+	
 	@Column(name = "educationlevel")
 	private int educationLevel;
 
