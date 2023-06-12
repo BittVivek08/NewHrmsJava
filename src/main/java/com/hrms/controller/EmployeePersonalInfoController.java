@@ -42,10 +42,10 @@ public class EmployeePersonalInfoController {
 		
 	}
 	
-	@PutMapping("/updateExperiance")
-	public ExperianceDetails updateEmpExpiriance(@RequestBody ExperinceEntity experiance) {
+	@PutMapping("/updateExperiance/{empId}")
+	public ExperianceDetails updateEmpExpiriance(@RequestBody ExperinceEntity experiance,@PathVariable("empId") String empId) {
 		log.info("entered into updateEmpExperiance method in controller class");
-		ExperianceDetails exp =employeepersonal.updateExperiancedetails(experiance);
+		ExperianceDetails exp =employeepersonal.updateExperiancedetails(experiance,empId);
 		return exp;
 		
 		

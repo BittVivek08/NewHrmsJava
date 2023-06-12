@@ -12,7 +12,7 @@ public interface EmployeePersonalInfoService {
 	
 	public ExperinceEntity getExperiancedetails(int id);
 
-	public ExperianceDetails updateExperiancedetails(ExperinceEntity entity);
+	public ExperianceDetails updateExperiancedetails(ExperinceEntity entity,String empId);
 	
 	//employee education details
 

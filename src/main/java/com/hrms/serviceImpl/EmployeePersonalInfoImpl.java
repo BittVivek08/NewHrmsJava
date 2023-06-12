@@ -15,7 +15,7 @@ import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.ExperinceEntity;
 import com.hrms.repository.EmployeeEducationRepo;
 import com.hrms.repository.EmployeeRepository;
-import com.hrms.repository.ExperianceRepo;
+import com.hrms.repository.ExperienceRepo;
 import com.hrms.service.EmployeePersonalInfoService;
 
 @Service
@@ -25,7 +25,7 @@ public class EmployeePersonalInfoImpl  implements EmployeePersonalInfoService{
 	private EmployeeRepository employeerepo;
 	
 	@Autowired
-	private ExperianceRepo experiancerepo;
+	private ExperienceRepo experiancerepo;
 	
 	@Autowired
 	private ExperianceDetails experiancedetails;
@@ -71,13 +71,34 @@ public class EmployeePersonalInfoImpl  implements EmployeePersonalInfoService{
 	}
 
 	@Override
-	public ExperianceDetails updateExperiancedetails(ExperinceEntity entity) {
+	public ExperianceDetails updateExperiancedetails(ExperinceEntity entity,String empId) {
 		logging.info("entered into updateExperiancedetails method of service implementation class");
-		EmployeeDetails employeeDetails=employeerepo.findByEmpId(entity.getEmployeedetails().getEmpId());
+		//EmployeeDetails employeeDetails=employeerepo.findByEmpId(entity.getEmployeedetails().getEmpId());
+		EmployeeDetails empdetails= employeerepo.findByEmpId(empId);
+		 Optional<ExperinceEntity> expentity= experiancerepo.findByEmpId(empId);
+		 String empId2=expentity.get().getEmployeedetails().getEmpId();
+		 if(empdetails.getEmpId().equals(empId2))
+		 {
+			 expentity.get().setCompanyName(entity.getCompanyName());
+			 expentity.get().setCompanyWebsite(entity.getCompanyWebsite());
+			 expentity.get().setCreatedBy(entity.getCreatedBy());
+			 expentity.get().setCreatedDate(entity.getCreatedDate());
+			 expentity.get().setDesignation(entity.getDesignation());
+			 expentity.get().setFromDate(entity.getFromDate());
+			 expentity.get().setIsActive(entity.getIsActive());
+			 expentity.get().setModifiedBy(entity.getModifiedBy());
+			 expentity.get().setModifiedDate(entity.getModifiedDate());
+			 expentity.get().setReasonForLeaving(entity.getReasonForLeaving());
+			 expentity.get().setReferrerContact(entity.getReferrerContact());
+			 expentity.get().setReferrerEmail(entity.getReferrerEmail());
+			 expentity.get().setReferrerName(entity.getReferrerName());
+			 expentity.get().setToDate(entity.getToDate());
+			 
+		 
 		
-		entity.setEmployeedetails(employeeDetails);
+		
 
-		ExperinceEntity exp = experiancerepo.save(entity);
+		ExperinceEntity exp = experiancerepo.save(expentity.get());
 
 		if (exp != null) {
 			experiancedetails.setMessage("Experiance  details updated successfully");
@@ -87,9 +108,10 @@ public class EmployeePersonalInfoImpl  implements EmployeePersonalInfoService{
 			experiancedetails.setStatus(false);
 		}
 
-		return experiancedetails ;
+		
+		return experiancedetails;
 	}
-
+		return null;}
 
 	//employee education details
 @Override

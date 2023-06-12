@@ -615,9 +615,44 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 		EmployeeDetails employeeDetails = empRepo.findByEmpId(empId);
 		// EmployeeDetails employeeDetails=empRepo.findByEmpId(empId);
-		empeducationdetails.setEmployeeDetails(employeeDetails);
+		Optional<EmployeeEducationDetails>empdetails= empeducationrepo.findByEmpId(empId);
+		String empId2=empdetails.get().getEmployeeDetails().getEmpId();
+		if(employeeDetails.getEmpId().equals(empId2))
+			empdetails.get().setBachlorsDegree(empeducationdetails.getBachlorsDegree());
+		empdetails.get().setBachlorsDegreeInstituteName(empeducationdetails.getBachlorsDegreeInstituteName());
+		empdetails.get().setCourse(empeducationdetails.getCourse());
+		empdetails.get().setCreatedBy(empeducationdetails.getCreatedBy());
+		empdetails.get().setCreatedDate(empeducationdetails.getCreatedDate());
+		empdetails.get().setDiploma_HsscDegree(empeducationdetails.getDiploma_HsscDegree());
+		empdetails.get().setDiploma_HsscDegreeInstituteName(empeducationdetails.getDiploma_HsscDegreeInstituteName());
+		empdetails.get().setEducationLevel(empeducationdetails.getEducationLevel());
+		empdetails.get().setEducationLevelName(empeducationdetails.getEducationLevelName());
+		empdetails.get().setFromDate(empeducationdetails.getFromDate());
+		empdetails.get().setToDate(empeducationdetails.getToDate());
+		empdetails.get().setInstitutionName(empeducationdetails.getInstitutionName());
+		empdetails.get().setIsactive(empeducationdetails.getIsactive());
+		empdetails.get().setMasterDegree(empeducationdetails.getMasterDegree());
+		empdetails.get().setMasterDegreeInstituteName(empeducationdetails.getMasterDegreeInstituteName());
+		empdetails.get().setModifiedBy(empeducationdetails.getModifiedBy());
+		empdetails.get().setModifiedDate(empeducationdetails.getModifiedDate());
+		empdetails.get().setOther(empeducationdetails.getOther());
+		empdetails.get().setOtherDegreeInstituteName(empeducationdetails.getOtherDegreeInstituteName());
+		empdetails.get().setPercentage(empeducationdetails.getPercentage());
+		empdetails.get().setPercentageofbachlorsDegree(empeducationdetails.getPercentageofbachlorsDegree());
+		empdetails.get().setPercentageofdiploma_HsscDegree(empeducationdetails.getPercentageofdiploma_HsscDegree());
+		empdetails.get().setPercentageofmasterDegree(empeducationdetails.getPercentageofmasterDegree());
+		empdetails.get().setPercentageofother(empeducationdetails.getPercentageofother());
+		empdetails.get().setPercentageofsscDegree(empeducationdetails.getPercentageofsscDegree());
+		empdetails.get().setUserId(empeducationdetails.getUserId());
+		empdetails.get().setSscDegree(empeducationdetails.getSscDegree());
+		empdetails.get().setSscDegreeInstituteName(empeducationdetails.getSscDegreeInstituteName());
+		
+			
+		//empeducationdetails.setEmployeeDetails(employeeDetails);
+		
+		
 
-		EmployeeEducationDetails empeducation = empeducationrepo.save(empeducationdetails);
+		EmployeeEducationDetails empeducation = empeducationrepo.save(empdetails.get());
 
 		if (empeducation != null) {
 			empeducationbean.setMessage("EmployeeEducation details updated successfully");
