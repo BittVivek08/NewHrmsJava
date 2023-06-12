@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.hrms.beans.EmailDetails;
@@ -49,6 +51,7 @@ import com.hrms.response.bean.EmpLeaveResponseBean;
 import com.hrms.response.bean.EmployeeLeaveResponse;
 import com.hrms.response.bean.EntityResponse;
 import com.hrms.response.bean.LeaveDetailResponse;
+import com.hrms.response.bean.LeaveFilterResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
 import com.hrms.response.bean.LeavesResponseBean;
 import com.hrms.service.IRequestForLeaveService;
@@ -373,30 +376,7 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		return mailresponse;
 	}
 
-	public LeavesResponseBean getLeavesBasedOnCondition(LeaveDetailsFiltaring detailsFiltaring) {
-		
-		LeaveRequestEntity leaveRequestEntity=new LeaveRequestEntity();	
-		LeavesResponseBean leavesResponseBean=new LeavesResponseBean();
-		
-        if(null!=detailsFiltaring.getLeaveStatus()&& !"".equals(detailsFiltaring.getLeaveStatus())) {
-        	
-        	List<LeaveDetailsFiltaring> findByLeaveStatusCondition = leaveRequestRepo.findByLeaveStatusCondition(detailsFiltaring.getLeaveStatus());
-        	//leavesResponseBean.setLeaveStatu(detailsFiltaring.getLeaveStatus());
-        	System.out.println("inside if condition");
-        	leaveRequestEntity.setLeaveStatus(detailsFiltaring.getLeaveStatus());
-        	
-        }
-        else {
-			
-        	List<LeaveRequestEntity> findAll = leaveRequestRepo.findAll();
-    		leavesResponseBean.setList(findAll);
-    		
-		}		
-		//return leaveRequestRepo.findAll(Example.of(leavesResponseBean));
-        return null;
-	}
 	
-
 
 	//Get Leaves based on year like old hrms
 	@Override
@@ -597,5 +577,29 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		
 		return response;
 		
+	}
+
+	@Override
+	public List<MyLeaveRequestEntity> getLeaveHistoryByConditions(int year,int month,String status) {
+		
+		MyLeaveRequestEntity entity=new MyLeaveRequestEntity();
+		LeaveFilterResponse filterResponse=new LeaveFilterResponse();
+		List<MyLeaveRequestEntity> list=new ArrayList<>();
+		
+		if(year!=0 && !"".equals(year)) {
+			List<MyLeaveRequestEntity> leavaesByYear = myleaveReqRepo.getLeavaesByYear(year);		
+			filterResponse.setYear(year);			
+		 //	return leavaesByYear;
+		}
+		if(month!=0 && !"".equals(month)) {			
+			List<MyLeaveRequestEntity> leavesByMonth = myleaveReqRepo.getLeavesByMonth(month);
+			//return leavesByMonth;			
+		}
+		if(status!=null && !"".equals(status)) {
+			List<MyLeaveRequestEntity> leavesByStatus = myleaveReqRepo.getLeavesByStatus(status);
+		//	return leavesByStatus;			
+		}		
+		//return myleaveReqRepo.findAll();
+		return null;
 	}	
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hrms.request.bean.LeaveRequestBean;
 import com.hrms.request.bean.LeaveTypeRequest;
 import com.hrms.response.bean.CommonResponseBean;
+import com.hrms.response.bean.LeaveFilterResponse;
 import com.hrms.response.bean.LeaveResponseBean;
 import com.hrms.serviceImpl.HrmsSelfServiceImpl;
 
@@ -46,7 +47,7 @@ public class HrmsSelfServiceController {
 		return hrmsSelfService.getHistoryOfAppliedLeaveDetails(emp_id, roleId, menuId);
 	}		
 
-
+	
 	//get total leave by id
 	@GetMapping("/leaveServiceById")		
 	public CommonResponseBean employeetotalleave(@RequestParam int id) {
@@ -63,7 +64,7 @@ public class HrmsSelfServiceController {
 		return hrmsSelfService.saveLeaveRequest(leaverequestBean,emp_id,leaveType);
 	}
 	
-	@GetMapping ("/leaveServiceByLeaveType")
+	@GetMapping ("/getAvailableDays")
 	public float getAvailableDays(@RequestBody LeaveTypeRequest leaveTypeRequest) {
 		logger.info("Entered into HrmsSelfServiceController in getAvailableDays() ");
 		return hrmsSelfService.getAvailableDays(leaveTypeRequest.getEmpId(), leaveTypeRequest.getLeaveType());
@@ -75,5 +76,8 @@ public class HrmsSelfServiceController {
 	//			logger.info("Entered into HrmsSelfServiceController in getAvailableDays() ");
 	//			return hrmsSelfService.getAvailableDays(empid, leaveType);
 	//		}
+	
+	
+	
 
 }

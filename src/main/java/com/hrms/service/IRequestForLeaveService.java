@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.hrms.beans.MailStatusResponse;
-
+import com.hrms.entity.MyLeaveRequestEntity;
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
 import com.hrms.request.bean.LeaveDetailsFiltaring;
@@ -16,6 +16,7 @@ import com.hrms.response.bean.Common;
 import com.hrms.response.bean.EmpLeaveResponseBean;
 import com.hrms.response.bean.EmployeeLeaveResponse;
 import com.hrms.response.bean.EntityResponse;
+import com.hrms.response.bean.LeaveFilterResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
 import com.hrms.response.bean.LeavesResponseBean;
 
@@ -32,7 +33,6 @@ public interface IRequestForLeaveService {
 	//mailLeave
 	public  MailStatusResponse mailsend(UpdateEmployeeLeaveDetails updateBean,String eid );
 
-	public LeavesResponseBean getLeavesBasedOnCondition(LeaveDetailsFiltaring detailsFiltaring);
 	
 	
 	//get leaves based on year
@@ -48,5 +48,8 @@ public interface IRequestForLeaveService {
 	
 	
     public LeavesResponseBean getLeaveDetailsForManager(int managerid,String leavestatus,String emp_id);
+    
+    public List<MyLeaveRequestEntity> getLeaveHistoryByConditions(int year,int month,String status);
 	
+    
 }
