@@ -39,13 +39,17 @@ public interface MyLeaveRequestRepository extends JpaRepository<MyLeaveRequestEn
 	    boolean checkMatchingDates(@Param("emp_id")String emp_id,@Param("toDate") LocalDate startDate,@Param("fromDate") LocalDate endDate);
     @Query("From MyLeaveRequestEntity where emp_id=?1")
 	public List<MyLeaveRequestEntity> findleaveStatus(String empId);
+    
+    
+    //get leaves details by year
+    @Query("from MyLeaveRequestEntity where YEAR(fromDate)=:year")
+    public List<MyLeaveRequestEntity> getLeavaesByYear(int year); 
+    
+    @Query("from MyLeaveRequestEntity where MONTH(fromDate)=:month")
+    public List<MyLeaveRequestEntity> getLeavesByMonth(int month);
 	 
-}
-
-
-
-
-
-
+    @Query("from MyLeaveRequestEntity where leaveStatus=:status")
+    public List<MyLeaveRequestEntity> getLeavesByStatus(String status);
+} 
 
 

@@ -9,7 +9,6 @@ import lombok.Data;
 
 @Data
 @Component
-
 public class LeaveRequestBean {
 	private String reason;
 	private String fromDate;

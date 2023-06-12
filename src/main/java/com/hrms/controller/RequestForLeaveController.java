@@ -2,6 +2,8 @@ package com.hrms.controller;
 
 import java.util.List;
 
+import javax.ws.rs.QueryParam;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.MailStatusResponse;
-
+import com.hrms.entity.MyLeaveRequestEntity;
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
 import com.hrms.request.bean.LeaveDetailsFiltaring;
@@ -28,6 +31,7 @@ import com.hrms.response.bean.Common;
 import com.hrms.response.bean.EmpLeaveResponseBean;
 import com.hrms.response.bean.EmployeeLeaveResponse;
 import com.hrms.response.bean.EntityResponse;
+import com.hrms.response.bean.LeaveFilterResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
 import com.hrms.response.bean.LeavesResponseBean;
 import com.hrms.service.IRequestForLeaveService;
@@ -43,11 +47,11 @@ public class RequestForLeaveController {
 
 
 	// My Leaves , Employee Leaves		
-	@GetMapping("/getLeaveDetails/{user_id}/{leavestatus}/{view}")
-	public LeavesResponseBean leaveDetails(@PathVariable(value = "user_id") String user_id,
-			@PathVariable(value = "leavestatus") String leavestatus, @PathVariable(value = "view") String view) {
+	@GetMapping("/leaveDetails")
+	public LeavesResponseBean leaveDetails(@QueryParam (value = "emp_id") String emp_id,
+			@RequestParam String leavestatus, @RequestParam String view) {
 		logger.info("entered into leaveDetails method of service class...");	
-		return reqLeaveService.getLeavesDetails(user_id, leavestatus, view);
+		return reqLeaveService.getLeavesDetails(emp_id, leavestatus, view);
 	}
 
 	@PostMapping("/save")
@@ -55,7 +59,7 @@ public class RequestForLeaveController {
 		return new ResponseEntity<EntityResponse>(reqLeaveService.saveRequestForLeave(details), HttpStatus.OK);
 	}
 
-	@PostMapping("/addNoOFDaysForEachUserID")
+	@PostMapping("/addLeaveDays")
 	public EmployeeLeaveTypeResponseBean saveEmployeeLeave(@RequestBody EmployeeLeaveTypeBean bean) {
 		// return crud.saveEmployeeLeaveData(bean);
 		return reqLeaveService.saveEmployeeLeaveData(bean);
@@ -63,7 +67,7 @@ public class RequestForLeaveController {
 	}
 
 	// Leave Management Option
-	@GetMapping("/getLeaveManagementOptions")
+	@GetMapping("/LeaveService")
 	public LeaveManagementOptionsResponseBean leaveManagementOptions() {
 		logger.info("entered into leaveManagementOptions method of service class...");
 		return reqLeaveService.leaveManagementOptions();
@@ -79,8 +83,8 @@ public class RequestForLeaveController {
 
 
 	//Update Apply Leave Requeste
-	@PutMapping("/updateEmpLeaveStatMail/{eid}")
-	public MailStatusResponse updateLeaveReqOfEmp(@RequestBody UpdateEmployeeLeaveDetails bean,@PathVariable("eid") String eid) {
+	@PutMapping("/LeaveService")
+	public MailStatusResponse updateLeaveReqOfEmp(@RequestBody UpdateEmployeeLeaveDetails bean,@RequestParam String eid) {
 		
 		this.logger.info("Entered mail send and update leava status in controller");
 
@@ -97,7 +101,6 @@ public class RequestForLeaveController {
 	public Common getLeavesBasedOnYear(@PathVariable("year") int year) {
 		return reqLeaveService.getLeavesBasedOnYear(year);
 	}
-	
 	
 
 	//get leaves based on month
@@ -122,16 +125,16 @@ public class RequestForLeaveController {
 			
 			logger.info("entered into getLeaveDetailsBasedOnManagerId method of service class...");
 			return reqLeaveService.getLeaveDetailsForManager( managerId, leavestatus, emp_id);
-			
-			
+					
 		}
 		
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++		
 		
-		
-		
-		
-		
-		
+		@GetMapping("/leaveServiceHistory")
+		public List<MyLeaveRequestEntity> getLeaveHistoryByConditions(@QueryParam(value = "formDate") int year,@QueryParam(value = "formDate") int month,@QueryParam(value = "leaveStatus") String status) {			
+			 List<MyLeaveRequestEntity> leaveHistoryByConditions = reqLeaveService.getLeaveHistoryByConditions(year, month, status);			
+			return  (List<MyLeaveRequestEntity>) leaveHistoryByConditions;			
+			
+		}		
 			
 }
