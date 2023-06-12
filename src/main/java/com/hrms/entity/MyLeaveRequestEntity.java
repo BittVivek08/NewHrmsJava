@@ -1,6 +1,7 @@
 package com.hrms.entity;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,10 +55,10 @@ public class MyLeaveRequestEntity {
 	private int isactive;
 
 	@Column(name = "modifieddate")
-	private Timestamp modifiedDate;
+	private Instant modifiedDate;
 
 	@Column(name = "createddate")
-	private Timestamp createdDdate;
+	private Instant createdDdate;
 
 	@Column(name = "modifiedby")
 	private int modifiedBy;
