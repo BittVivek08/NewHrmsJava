@@ -1,6 +1,7 @@
 package com.hrms.serviceImpl;
 
 import java.time.DayOfWeek;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -109,16 +110,16 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				int totaldays = (int) daysBetween + 1;
 				System.out.println("Days between = " + totaldays);
 
-
 				List<LocalDate> workDays = Stream.iterate(fromDate, date -> date.plusDays(1)).limit(totaldays)
 						.filter(isHoliday.or(isWeekend).negate()).collect(Collectors.toList());
 
 				long actualDaysBetween = workDays.size();
 				float days = (float) actualDaysBetween;
 
-
 				EmployeeDetails empDetails = employeeRepo.findByEmpId(emp_id);
-
+   
+				 Instant timestamp = Instant.now();
+				 
 				//Mail-Sending
 				List<String> emailList = new ArrayList<>();
 				String employeeMail = empDetails.getEmail();
@@ -145,12 +146,12 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				reqEntity.setToDate(toDate);
 				reqEntity.setLeaveStatus("Pending for approval");
 				reqEntity.setDays(days);
-				reqEntity.setReportingManagerId(empDetails.getReportingManagerId());;
+				reqEntity.setReportingManagerId(empDetails.getReportingManagerId());
 				reqEntity.setReportingManager(empDetails.getReportingManager());
 				reqEntity.setHrId(empDetails.getHrManagerId());
 				reqEntity.setIsactive(1);
-				reqEntity.setModifiedDate(dateTimeUtility.GetUTCdatetimeAsString());
-				reqEntity.setCreatedDdate(dateTimeUtility.GetUTCdatetimeAsString());
+				reqEntity.setModifiedDate(timestamp);
+				reqEntity.setCreatedDdate(timestamp);
 				reqEntity.setCreatedBy(empDetails.getUserId());
 				reqEntity.setModifiedBy(empDetails.getUserId());
 				reqEntity.setEmail(empDetails.getEmail());
@@ -159,6 +160,8 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 
 
 				leaveSummery.setEmp_id(empDetails.getEmpId());
+				
+		
 
 				leaveSummery.setUser_id(empDetails.getUserId());
 				leaveSummery.setDepartmentId(empDetails.getDepartmentId());
@@ -177,7 +180,8 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				leaveSummery.setCreatedBy(33);
 				leaveSummery.setModifiedBy(32);	
 				leaveSummery.setUser_id(empDetails.getUserId());
-
+				leaveSummery.setNoOfDays(days);
+				leaveSummery.setCreateddate(timestamp);
 				//mail-sending
 				EmailDetails mailData=new EmailDetails();
 				mailData.setRecipient(employeeMail);
@@ -214,7 +218,11 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	  //getting available leave days
 	public float getAvailableDays(String emp_id, String leaveType) {
 		
+		float f1=leaveTypeRepo.getNoOfDays(leaveType);
+		float f2=leaveReqSummery.getNoOfDaysApproved(emp_id,leaveType);
+		
 	float availableDays = leaveTypeRepo.getNoOfDays(leaveType)-leaveReqSummery.getNoOfDaysApproved(emp_id,leaveType);
+	
 	
 	return availableDays;
 	}

@@ -2,6 +2,7 @@
 
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -288,6 +289,7 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 
 	public EmployeeLeaveTypeResponseBean saveEmployeeLeaveData(EmployeeLeaveTypeBean leaveBean) {
 		EmployeeLeaveTypeEntity employeeLeaveEntity = new EmployeeLeaveTypeEntity();
+		 Instant timestamp = Instant.now();
 
 		if(leaveTypeRepo.getId(leaveBean.getLeaveType(), leaveBean.getYear())==null) {
 
@@ -528,12 +530,12 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	public EmpLeaveResponseBean updateAllLeaveSummary(UpdateLeaveRequest updateBean) {
 		MyLeaveRequestEntity entityBean = new MyLeaveRequestEntity();
 		EmpLeaveResponseBean updateResponseBean = new EmpLeaveResponseBean();
+		 Instant timestamp = Instant.now();
 		
 		List<LeaveRequestBean> leaveBean = updateBean.getLeaveBean();
 		 Date date = new Date();
-		 Timestamp timestamp2 = new Timestamp(date.getTime());
-		entityBean.setModifiedDate(timestamp2);
-		entityBean.setModifiedBy(updateBean.getModifiedBy());
+		entityBean.setModifiedDate(timestamp);
+		entityBean.setModifiedDate(timestamp);
 		
 		for (LeaveRequestBean value : leaveBean) {
 			BeanUtils.copyProperties(entityBean, value);

@@ -1,9 +1,8 @@
 package com.hrms.entity;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.Date;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -72,10 +71,10 @@ public class EmployeeLeaveRequestSummaryEntity {
 	@Column(name = "no_of_days")
 	private float noOfDays;
 	
-	private Timestamp createddate; 
+	private Instant createddate; 
 
 	@Column(name = "modifieddate")
-	private Timestamp modifieddate;
+	private Instant modifieddate;
 
 	@Column(name = "modifiedby")
 	private Integer modifiedBy;
