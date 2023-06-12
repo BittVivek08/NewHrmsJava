@@ -189,9 +189,9 @@ public class EmployeeDetailsController {
 	}
 
 	@PutMapping("/updateContactDetails/{empId}")
-	public ResponseEntity<ContactDetails> updateContactDetails(@RequestBody ContactDetails entity,@PathVariable("empId") String empId) {
+	public ResponseEntity<ContactBean> updateContactDetails(@RequestBody ContactDetails entity,@PathVariable("empId") String empId) {
 		log.info("entered into updatecontactdetails method in controller class");
-		ContactDetails updatedetails = empService.updateContact(entity,empId);
+		ContactBean updatedetails = empService.updateContact(entity,empId);
 		return ResponseEntity.ok(updatedetails);
 	}
 	@GetMapping("/getContactDetails/{id}")
