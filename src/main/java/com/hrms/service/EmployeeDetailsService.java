@@ -51,7 +51,7 @@ public interface EmployeeDetailsService {
 
 	public List<ContactDetails> getContactdata();
 
-	public ContactDetails updateContact(ContactDetails entity,String empId);
+	public ContactBean updateContact(ContactDetails entity,String empId);
 
 	public ContactDetails getcontactDetails(int id);
 	

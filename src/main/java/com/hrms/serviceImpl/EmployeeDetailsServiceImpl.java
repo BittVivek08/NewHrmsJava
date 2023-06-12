@@ -566,12 +566,40 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	}
 
 	@Override
-	public ContactDetails updateContact(ContactDetails entity,String empId) {
+	public ContactBean updateContact(ContactDetails entity,String empId) {
 		logging.info("entered into updatecontact method of service imlementation class");
 		EmployeeDetails emp = empRepo.findByEmpId(empId);
-		entity.setEmployeedetails(emp);
+		//entity.setEmployeedetails(emp);
+		Optional<ContactDetails> con=contactrepo.findByEmpId(empId);
+		String empId2 = con.get().getEmployeedetails().getEmpId();
+		if(emp.getEmpId().equals(empId2)) {
+			//con.setCity1(entity.getCity1())
+			con.get().setCity1(entity.getCity1());
+			con.get().setCity2(entity.getCity2());
+			con.get().setCountry1(entity.getCountry1());
+			con.get().setCountry2(entity.getCountry2());
+			con.get().setEffectiveDate1(entity.getEffectiveDate1());
+			con.get().setEffectiveDate2(entity.getEffectiveDate2());
+			con.get().setPincode1(entity.getPincode1());
+			con.get().setPincode2(entity.getPincode2());
+			con.get().setState1(entity.getState1());
+			con.get().setState2(entity.getState2());
+			con.get().setStatus1(entity.getState1());
+			con.get().setStatus2(entity.getStatus2());
+			ContactDetails save = this.contactrepo.save(con.get());
+			if(save!=null) {
+				contactbean.setMessage("contact details updated successfully");
+				contactbean.setStatus(true);
+			}else {
+				contactbean.setMessage("contact details failed to update");
+				contactbean.setStatus(false);
+			}
+			
+			
+		}
 
-		return contactrepo.save(entity);
+		return contactbean;
+		
 
 	}
 
