@@ -19,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.CurrentWeekRequest;
+import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.SaveTimeSheet;
+import com.hrms.response.bean.ProjectListResponse;
 import com.hrms.response.bean.TimeSheetRequestBeanDate;
 import com.hrms.response.bean.TimeSheetResponse;
+import com.hrms.response.bean.TimeSheetResponseRepDate;
 import com.hrms.serviceImpl.TimeSheetDetailsImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -66,20 +69,53 @@ public class HrmsEmpTimeSheetController {
 	}
 	
 	@PostMapping("/timeSheetDetailsByDate")
-	public  List<SaveTimeSheet> getTimeSheetDetailsByDate(@RequestBody CurrentWeekRequest date) {
+	public  List<SaveTimeSheet> getTimeSheetDetailsByDate(@RequestBody TimeSheetResponseRepDate  date) {
 		log.info("entered into getTimeSheetDetailsByDate method of HrmsEmpTimeSheetController class");
 		List<SaveTimeSheet> saveTimeSheett1 = this.impl.getTimeSheetByDate(date);
 		return saveTimeSheett1;	
 	}
 	
 	@PostMapping("/timesheetDetailsStartDateEndDate")
-	public List<SaveTimeSheet> getTimeSheetDetailsByStartDateEndDate(@RequestBody TimeSheetRequestBeanDate date ){
-		log.info("entered into getTimeSheetDetailsByStartDateEndDate method of HrmsEmpTimeSheetController class");
+	public List<SaveTimeSheet> getTimeSheetDetailsByStartDateEndDate(@RequestBody TimeSheetResponseRepDate  date ){
+		log.info("Entered into getTimeSheetDetailsByStartDateEndDate method of HrmsEmpTimeSheetController class");
 		List<SaveTimeSheet> savetimesheet=this.impl.getTimeSheetByStartDateEndDate(date);
 		return savetimesheet;
 		
 	}
 	
+	@GetMapping("timesheetDetailsRpid")
+   public List<EmployeeDetails>getTimeSheetDetailsUsingRid(@QueryParam("repId") String repId){
+		log.info("Entered into getTimeSheetDetailsUsingRpid method of controller class");
+		List<EmployeeDetails> savetimesheet=this.impl.getTimeSheetByRpId(repId);
+	return savetimesheet;		
+	}
 	
+	@GetMapping("/timesheetDetailsProjectList")
+	public ProjectListResponse getProjectIdList() {
+		log.info("Entered into getProjectIdList method of HrmsEmpTimeSheetController class");
+		return impl.getProjectList();
+	}
 
+	@GetMapping("timesheetDetailsRepIdEmpId")
+	   public List<SaveTimeSheet>getTimeSheetDetailsUsingRepidEmpId(@QueryParam("repId") String repId,@QueryParam("empId") String empId){
+			log.info("Entered into getTimeSheetDetailsUsingRepidEmpId method of controller class");
+			List<SaveTimeSheet> savetimesheet=this.impl.getTimeSheetByRpIdEmpId(repId,empId);
+		return savetimesheet;		
+		}
+
+
+	@PostMapping("timesheetDetailsRepIdDate")
+	   public List<SaveTimeSheet>getTimeSheetDetailsUsingRepidDate(@RequestBody TimeSheetResponseRepDate timesheet ){
+			log.info("Entered into getTimeSheetDetailsUsingRepidEmpId method of controller class");
+			List<SaveTimeSheet> savetimesheet=this.impl.getTimeSheetByRpIdDate(timesheet);
+		return savetimesheet;				
+	}	
+	
+	@PostMapping("timeSheetDetailsRepIdStartEndDateEmpId")
+	   public List<SaveTimeSheet>getTimeSheetDetailsUsingMan(@RequestBody TimeSheetResponseRepDate timesheet ){
+			log.info("Entered into getTimeSheetDetailsUsingRepidEmpId method of controller class");
+			List<SaveTimeSheet> savetimesheet=this.impl.getTimeSheetByMan(timesheet);
+		return savetimesheet;				
+	}	
+	
 }
