@@ -3,6 +3,7 @@ package com.hrms.serviceImpl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,9 +25,12 @@ import com.hrms.repository.MyLeaveRequestRepository;
 import com.hrms.repository.ProjectDetailsRepository;
 import com.hrms.repository.SaveTimeSheetRepo;
 import com.hrms.repository.TaskDeatailsRepository;
+import com.hrms.response.bean.ProjectListResponse;
+import com.hrms.response.bean.ProjectResponse;
 import com.hrms.response.bean.TSResponseObj;
 import com.hrms.response.bean.TimeSheetRequestBeanDate;
 import com.hrms.response.bean.TimeSheetResponse;
+import com.hrms.response.bean.TimeSheetResponseRepDate;
 import com.hrms.service.TimeSheetDetails;
 
 import lombok.extern.slf4j.Slf4j;
@@ -105,7 +109,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		savetimesheet.setStatus("pending");	
 		savetimesheet.setCreatedBy(savetimesheet.getCreatedBy());
 		savetimesheet.setWorkHours(savetimesheet.getWorkHours());
-		savetimesheet.setCreatedDate(new Date());
+		savetimesheet.setModifiedDate(new Date());
 		savetimesheet.setWorkDate(savetimesheet.getWorkDate());
 		savetimesheet.setId(id);
 		this.saveTimeSheetRepo.save(savetimesheet);
@@ -118,18 +122,19 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 
 	}
 
-	public  List<SaveTimeSheet> getTimeSheetByDate(CurrentWeekRequest date) {
+	public  List<SaveTimeSheet> getTimeSheetByDate(TimeSheetResponseRepDate  date) {
 		try {
-			Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date.getTdate());
+			Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date.getDate());
 			List<SaveTimeSheet> timesheet=saveTimeSheetRepo.getByDate(date1);
 			return timesheet;
 		}
 		catch(Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public List<SaveTimeSheet> getTimeSheetByStartDateEndDate(TimeSheetRequestBeanDate date) {
+	public List<SaveTimeSheet> getTimeSheetByStartDateEndDate(TimeSheetResponseRepDate date) {
 		try {
 			Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date.getStartDate());
 			Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(date.getEndDate());	
@@ -139,6 +144,73 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 			
 			e.printStackTrace();
 		}  
+		return null;
+	}
+
+	public List<EmployeeDetails> getTimeSheetByRpId(String repId) {
+		try {
+		return this.employeeRepository.getTimesheetUsingRpId(repId);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+	    }
+		return null;
+	}
+	
+	
+	public ProjectListResponse getProjectList() {
+		ProjectListResponse response = new ProjectListResponse();
+		try {
+			ProjectResponse projectResponse = null;
+			List<ProjectResponse> listOfProjectResponse = new ArrayList<>();
+			List<ProjectDetailsEntity> ListProject = pojectDetailsRepository.findAll();
+
+			for (ProjectDetailsEntity emp : ListProject) {
+				projectResponse = new ProjectResponse();
+				projectResponse.setProjectId(emp.getProjectId());
+				projectResponse.setProjectName(emp.getProjectName());
+				listOfProjectResponse.add(projectResponse);
+			}
+			if (listOfProjectResponse != null && listOfProjectResponse.size() > 0) {
+				response.setListOfProjectResponse(listOfProjectResponse);
+				response.setStatus(true);
+				response.setMessage("Project Retrived Successful");
+				return response;
+			} else {
+				response.setStatus(false);
+				response.setMessage("Project Retrived UnSuccessful");
+				return response;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
+
+	public List<SaveTimeSheet> getTimeSheetByRpIdEmpId(String repId, String empId) {
+
+		return saveTimeSheetRepo.getTimeSheetUsingRepIdEmpId(repId,empId);
+	}
+
+	public List<SaveTimeSheet> getTimeSheetByRpIdDate(TimeSheetResponseRepDate timesheet) {
+		try {
+			Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse (timesheet.getDate());
+			List<SaveTimeSheet> savetimesheet=saveTimeSheetRepo.getDetailsByRepIdDate(timesheet.getRepId(),date1);
+			return savetimesheet;
+		} catch (ParseException e) {
+			
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public List<SaveTimeSheet> getTimeSheetByMan(TimeSheetResponseRepDate timesheet) {
+		try {
+			Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse (timesheet.getStartDate());
+			Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse (timesheet.getEndDate());
+			return saveTimeSheetRepo.getDetails(timesheet.getEmpId(), date1,date2,timesheet.getRepId());
+		}catch(Exception e) {
+			e.printStackTrace();		}
 		return null;
 	}
 
