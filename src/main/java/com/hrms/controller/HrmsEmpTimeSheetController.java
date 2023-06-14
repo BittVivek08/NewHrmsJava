@@ -1,14 +1,10 @@
 package com.hrms.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,13 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hrms.beans.CurrentWeekRequest;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.response.bean.ProjectListResponse;
-import com.hrms.response.bean.TimeSheetRequestBeanDate;
+import com.hrms.response.bean.TimeSheetRequestRepDate;
 import com.hrms.response.bean.TimeSheetResponse;
-import com.hrms.response.bean.TimeSheetResponseRepDate;
 import com.hrms.serviceImpl.TimeSheetDetailsImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -69,14 +63,14 @@ public class HrmsEmpTimeSheetController {
 	}
 	
 	@PostMapping("/timeSheetDetailsByDate")
-	public  List<SaveTimeSheet> getTimeSheetDetailsByDate(@RequestBody TimeSheetResponseRepDate  date) {
+	public  List<SaveTimeSheet> getTimeSheetDetailsByDate(@RequestBody TimeSheetRequestRepDate  date) {
 		log.info("entered into getTimeSheetDetailsByDate method of HrmsEmpTimeSheetController class");
 		List<SaveTimeSheet> saveTimeSheett1 = this.impl.getTimeSheetByDate(date);
 		return saveTimeSheett1;	
 	}
 	
 	@PostMapping("/timesheetDetailsStartDateEndDate")
-	public List<SaveTimeSheet> getTimeSheetDetailsByStartDateEndDate(@RequestBody TimeSheetResponseRepDate  date ){
+	public List<SaveTimeSheet> getTimeSheetDetailsByStartDateEndDate(@RequestBody TimeSheetRequestRepDate  date ){
 		log.info("Entered into getTimeSheetDetailsByStartDateEndDate method of HrmsEmpTimeSheetController class");
 		List<SaveTimeSheet> savetimesheet=this.impl.getTimeSheetByStartDateEndDate(date);
 		return savetimesheet;
@@ -105,14 +99,14 @@ public class HrmsEmpTimeSheetController {
 
 
 	@PostMapping("timesheetDetailsRepIdDate")
-	   public List<SaveTimeSheet>getTimeSheetDetailsUsingRepidDate(@RequestBody TimeSheetResponseRepDate timesheet ){
-			log.info("Entered into getTimeSheetDetailsUsingRepidEmpId method of controller class");
+	   public List<SaveTimeSheet>getTimeSheetDetailsUsingRepidDate(@RequestBody TimeSheetRequestRepDate timesheet ){
+			log.info("Entered into timesheetDetailsRepIdDate method of controller class");
 			List<SaveTimeSheet> savetimesheet=this.impl.getTimeSheetByRpIdDate(timesheet);
 		return savetimesheet;				
 	}	
 	
 	@PostMapping("timeSheetDetailsRepIdStartEndDateEmpId")
-	   public List<SaveTimeSheet>getTimeSheetDetailsUsingMan(@RequestBody TimeSheetResponseRepDate timesheet ){
+	   public List<SaveTimeSheet>getTimeSheetDetailsUsingMan(@RequestBody TimeSheetRequestRepDate timesheet ){
 			log.info("Entered into getTimeSheetDetailsUsingRepidEmpId method of controller class");
 			List<SaveTimeSheet> savetimesheet=this.impl.getTimeSheetByMan(timesheet);
 		return savetimesheet;				
