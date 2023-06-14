@@ -46,6 +46,8 @@ public class EmployeeLeaveRequestSummaryEntity {
 	@Column(name = "approver_comments")
 	private String approverComments;
 
+	@Column(name="isactive")
+	private int isActive;
 
 	@Column(name = "leavetype_name")
 	private String leaveType;
@@ -67,6 +69,9 @@ public class EmployeeLeaveRequestSummaryEntity {
 
 	@Column(name = "hr_name")
 	private String hrName;
+	
+	@Column(name="user_name")
+	private String userName;
 
 	@Column(name = "no_of_days")
 	private float noOfDays;

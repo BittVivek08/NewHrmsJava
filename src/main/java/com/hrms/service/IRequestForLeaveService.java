@@ -36,12 +36,12 @@ public interface IRequestForLeaveService {
 	
 	
 	//get leaves based on year
-	public Common getLeavesBasedOnYear(int year);
+//	public Common getLeavesBasedOnYear(int year);//c0
 	
 	//get Leaves based on month
-	public LeavesResponseBean getLeavesByMonth(String view, int id,int month,String leavestatus);
+	//public LeavesResponseBean getLeavesByMonth(String view, int id,int month,String leavestatus);//
 	
-	public List<EmployeeLeaveResponse> getLeaveDataByReqIdDate(int reqId, String date);
+//	public List<EmployeeLeaveResponse> getLeaveDataByReqIdDate(int reqId, String date);
 	
 	// 1.update for Employee leaveRequest Summary
 	public EmpLeaveResponseBean updateAllLeaveSummary(UpdateLeaveRequest updateBean);

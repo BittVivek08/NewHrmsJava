@@ -2,7 +2,8 @@ package com.hrms.response.bean;
 
 import java.util.List;
 
-import com.hrms.entity.LeaveRequestEntity;
+import com.hrms.entity.EmployeeLeaveRequestSummaryEntity;
+
 import com.hrms.entity.Privileges;
 
 import lombok.Data;
@@ -13,7 +14,7 @@ public class CommonResponseBean {
 	private boolean status;
 //	private Object list;
 //	private Object privilleges;
-	private List<LeaveRequestEntity> list;
+	private List<EmployeeLeaveRequestSummaryEntity> list;
 	private List<Privileges> privilleges;
 	
 }

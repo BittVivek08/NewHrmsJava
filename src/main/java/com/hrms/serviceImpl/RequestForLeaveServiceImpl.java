@@ -1,13 +1,11 @@
 	package com.hrms.serviceImpl;
 
-import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
@@ -18,26 +16,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.hrms.beans.EmailDetails;
 import com.hrms.beans.MailStatusResponse;
 import com.hrms.controller.EmailController;
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.EmployeeLeaveRequestSummaryEntity;
 import com.hrms.entity.EmployeeLeaveTypeEntity;
 import com.hrms.entity.LeaveManagementEntity;
-import com.hrms.entity.LeaveRequestEntity;
 import com.hrms.entity.MyLeaveRequestEntity;
 import com.hrms.entity.RequestForLeave;
+import com.hrms.repository.EmployeeLeaveRequestSummaryRepository;
 import com.hrms.repository.EmployeeLeaveTypeRepository;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.HolidayCalenderRepository;
 import com.hrms.repository.ILeaveDetailsRepository;
 import com.hrms.repository.IRequestForLeaveRepository;
 import com.hrms.repository.LeaveManagementRepository;
-import com.hrms.repository.LeaveRequestRepository;
 import com.hrms.repository.MyLeaveRequestRepository;
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
@@ -84,7 +80,7 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	private EntityResponse response;
 
 	@Autowired
-	private LeaveRequestRepository leaveRequestRepo;
+	private EmployeeLeaveRequestSummaryRepository leaveRequestRepo;
 
 	@Autowired
 	private LeaveManagementRepository leaveManagementRepository;
@@ -214,7 +210,7 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	@Override
 	public LeavesResponseBean getLeavesDetails(String user_id, String leavestatus, String view) {
 		logger.info("entered into getLeavesDetails of businessClass");			
-		List<LeaveRequestEntity>listOfLeaves=new ArrayList<>();		
+		List<EmployeeLeaveRequestSummaryEntity>listOfLeaves=new ArrayList<>();		
 		int countAll = 0, countPending = 0, countApproved = 0, countRejected = 0, countCancel = 0;
 
 		if (view.equalsIgnoreCase("Employee")) {	
@@ -235,7 +231,7 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 			response.setStatus(true);
 
 			if (user_id != null && "Employee".equalsIgnoreCase(view)) {
-				for (LeaveRequestEntity leave : listOfLeaves) {
+				for (EmployeeLeaveRequestSummaryEntity leave : listOfLeaves) {
 					countAll++;
 					if ("Pending for approval".equalsIgnoreCase(leave.getLeaveStatus()))
 						countPending++;
@@ -381,150 +377,150 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	
 
 	//Get Leaves based on year like old hrms
-	@Override
-	public Common getLeavesBasedOnYear(int year) {
+//	@Override
+//	public Common getLeavesBasedOnYear(int year) {
+//
+//	Common common=new Common();
+//		List<EmployeeLeaveTypeEntity> leavesBasedOnYear = leaveTypeRepo.getLeavesBasedOnYear(year);
+//
+//		if (leavesBasedOnYear.size() > 0 && leavesBasedOnYear != null) {
+//			common.setMessage("Leaves Information based on year fetched successfully");
+//			common.setStatus(true);
+//			common.setList(leavesBasedOnYear);
+//		} else {
+//			common.setMessage("Unable to fetch Leaves Information based on year");
+//			common.setStatus(false);
+//		}		
+//		return common;
+//	}
 
-	Common common=new Common();
-		List<EmployeeLeaveTypeEntity> leavesBasedOnYear = leaveTypeRepo.getLeavesBasedOnYear(year);
+//	@Override
+//	public LeavesResponseBean getLeavesByMonth(String view,int id, int month,String leavestatus) {
+//		logger.info("entered into getLeavesDetails of RequestForLeaveServiceImpl");
+//		int countAll = 0, countPending = 0, countApproved = 0, countRejected = 0, countCancel = 0, countabailLeave = 0;
+//		List<LeaveDetailResponse> list = new ArrayList<>();
+//		LeavesResponseBean leavesResponseBean = new LeavesResponseBean();
+//		List<EmployeeLeaveRequestSummaryEntity> leaveByMonth = leaveRequestRepo.getLeaveByMonth(id, month);
+//		
+//		if (view.equalsIgnoreCase("Employee")) {
+//		
+//		if (leaveByMonth != null && leaveByMonth.size() != 0) {
+//			for (EmployeeLeaveRequestSummaryEntity ob : leaveByMonth) {
+//				LeaveDetailResponse response = new LeaveDetailResponse();
+//				response.setAbailLeave(ob.getAppliedLeavesCount());
+//				response.setLeaveType(ob.getLeaveType());
+//				response.setReason(ob.getReason());
+//				response.setFromDate(ob.getFromDate());
+//				response.setToDate(ob.getToDate());
+//				response.setDays(ob.getDays());
+//				response.setStatus(ob.getLeaveStatus());
+//				list.add(response);
+//				
+//				
+//			}
+//		}
+//          else if (view.equalsIgnoreCase("Employee") && leavestatus != null) {
+//			
+//			List<EmployeeLeaveRequestSummaryEntity> leaveByMonthAndStatus = leaveRequestRepo.getLeaveByMonthAndStatus(id, month, leavestatus);
+//			
+//			if (leaveByMonthAndStatus != null && leaveByMonthAndStatus.size() != 0) {
+//				for (EmployeeLeaveRequestSummaryEntity ob : leaveByMonthAndStatus) {
+//					LeaveDetailResponse response = new LeaveDetailResponse();
+//					response.setAbailLeave(ob.getAppliedLeavesCount());
+//					response.setLeaveType(ob.getLeaveType());
+//					response.setReason(ob.getReason());
+//					response.setFromDate(ob.getFromDate());
+//					response.setToDate(ob.getToDate());
+//					response.setDays(ob.getDays());
+//					response.setStatus(ob.getLeaveStatus());
+//					list.add(response);					
+//				}				
+//			}			
+//	}
+//		//////
+//			if (!list.isEmpty()) {
+//				leavesResponseBean.setMessage("Retrival of Leave Details Successfull.");
+//				leavesResponseBean.setStatus(true);		
+//				
+//				if (id != 0 && "Employee".equalsIgnoreCase(view) && leavestatus != null) {
+//					
+//					for (EmployeeLeaveRequestSummaryEntity leave : leaveByMonth) {
+//						
+//						countAll++;
+//						if ("Pending for approval".equalsIgnoreCase(leave.getLeaveStatus()))
+//							countPending++;
+//						else if ("Approved".equalsIgnoreCase(leave.getLeaveStatus()))
+//							countApproved++;
+//						else if ("Rejected".equalsIgnoreCase(leave.getLeaveStatus()))
+//							countRejected++;
+//						else if ("Cancel".equalsIgnoreCase(leave.getLeaveStatus()))
+//							countCancel++;
+//						// else if ("abailLeave".equals(leave.getAbailLeave()))
+//						// countabailLeave++;
+//						else
+//							logger.info("Nothing to count.");
+//					}
+//					leavesResponseBean.setCountAll(countAll);
+//					leavesResponseBean.setCountPending(countPending);
+//					leavesResponseBean.setCountApproved(countApproved);
+//					leavesResponseBean.setCountRejected(countRejected);
+//					leavesResponseBean.setCountCancel(countCancel);
+//					// response.setAblLeave(countabailLeave);
+//						
+//					}
+//				leavesResponseBean.setList(leaveByMonth);
+//				}
+//			else {
+//				leavesResponseBean.setMessage("No Leave Details are available.");
+//				leavesResponseBean.setStatus(false);
+//				leavesResponseBean.setList(leaveByMonth);
+//			}			
+//			
+//			}
+//		return leavesResponseBean;			
+//	}
 
-		if (leavesBasedOnYear.size() > 0 && leavesBasedOnYear != null) {
-			common.setMessage("Leaves Information based on year fetched successfully");
-			common.setStatus(true);
-			common.setList(leavesBasedOnYear);
-		} else {
-			common.setMessage("Unable to fetch Leaves Information based on year");
-			common.setStatus(false);
-		}		
-		return common;
-	}
-
-	@Override
-	public LeavesResponseBean getLeavesByMonth(String view,int id, int month,String leavestatus) {
-		logger.info("entered into getLeavesDetails of RequestForLeaveServiceImpl");
-		int countAll = 0, countPending = 0, countApproved = 0, countRejected = 0, countCancel = 0, countabailLeave = 0;
-		List<LeaveDetailResponse> list = new ArrayList<>();
-		LeavesResponseBean leavesResponseBean = new LeavesResponseBean();
-		List<LeaveRequestEntity> leaveByMonth = leaveRequestRepo.getLeaveByMonth(id, month);
-		
-		if (view.equalsIgnoreCase("Employee")) {
-		
-		if (leaveByMonth != null && leaveByMonth.size() != 0) {
-			for (LeaveRequestEntity ob : leaveByMonth) {
-				LeaveDetailResponse response = new LeaveDetailResponse();
-				response.setAbailLeave(ob.getAppliedLeavesCount());
-				response.setLeaveType(ob.getLeaveType());
-				response.setReason(ob.getReason());
-				response.setFromDate(ob.getFromDate());
-				response.setToDate(ob.getToDate());
-				response.setDays(ob.getDays());
-				response.setStatus(ob.getLeaveStatus());
-				list.add(response);
-				
-				
-			}
-		}
-          else if (view.equalsIgnoreCase("Employee") && leavestatus != null) {
-			
-			List<LeaveRequestEntity> leaveByMonthAndStatus = leaveRequestRepo.getLeaveByMonthAndStatus(id, month, leavestatus);
-			
-			if (leaveByMonthAndStatus != null && leaveByMonthAndStatus.size() != 0) {
-				for (LeaveRequestEntity ob : leaveByMonthAndStatus) {
-					LeaveDetailResponse response = new LeaveDetailResponse();
-					response.setAbailLeave(ob.getAppliedLeavesCount());
-					response.setLeaveType(ob.getLeaveType());
-					response.setReason(ob.getReason());
-					response.setFromDate(ob.getFromDate());
-					response.setToDate(ob.getToDate());
-					response.setDays(ob.getDays());
-					response.setStatus(ob.getLeaveStatus());
-					list.add(response);					
-				}				
-			}			
-	}
-		//////
-			if (!list.isEmpty()) {
-				leavesResponseBean.setMessage("Retrival of Leave Details Successfull.");
-				leavesResponseBean.setStatus(true);		
-				
-				if (id != 0 && "Employee".equalsIgnoreCase(view) && leavestatus != null) {
-					
-					for (LeaveRequestEntity leave : leaveByMonth) {
-						
-						countAll++;
-						if ("Pending for approval".equalsIgnoreCase(leave.getLeaveStatus()))
-							countPending++;
-						else if ("Approved".equalsIgnoreCase(leave.getLeaveStatus()))
-							countApproved++;
-						else if ("Rejected".equalsIgnoreCase(leave.getLeaveStatus()))
-							countRejected++;
-						else if ("Cancel".equalsIgnoreCase(leave.getLeaveStatus()))
-							countCancel++;
-						// else if ("abailLeave".equals(leave.getAbailLeave()))
-						// countabailLeave++;
-						else
-							logger.info("Nothing to count.");
-					}
-					leavesResponseBean.setCountAll(countAll);
-					leavesResponseBean.setCountPending(countPending);
-					leavesResponseBean.setCountApproved(countApproved);
-					leavesResponseBean.setCountRejected(countRejected);
-					leavesResponseBean.setCountCancel(countCancel);
-					// response.setAblLeave(countabailLeave);
-						
-					}
-				leavesResponseBean.setList(leaveByMonth);
-				}
-			else {
-				leavesResponseBean.setMessage("No Leave Details are available.");
-				leavesResponseBean.setStatus(false);
-				leavesResponseBean.setList(leaveByMonth);
-			}			
-			
-			}
-		return leavesResponseBean;			
-	}
-
-	@Override
-	public List<EmployeeLeaveResponse> getLeaveDataByReqIdDate(int reqId, String date) {
-		
-		List<EmployeeLeaveResponse> listOfLeavedEmployees = new ArrayList<EmployeeLeaveResponse>();
-		EmployeeLeaveResponse employeeLeaveResp = new EmployeeLeaveResponse();
-		if (reqId == 0 && date != null) {
-			List<LeaveRequestEntity> leaveDataByRepIdDate = leaveRequestRepo.getLeaveDataByRepIdDate(date);
-			if (leaveDataByRepIdDate != null && leaveDataByRepIdDate.size() != 0) {
-				System.out.println("sadfas");
-				for (LeaveRequestEntity ob : leaveDataByRepIdDate) {				
-					
-					employeeLeaveResp.setEmployeeName(ob.getUserName());
-					employeeLeaveResp.setLeaveFromDate(ob.getFromDate());
-					employeeLeaveResp.setLeaveToDate(ob.getToDate());
-					employeeLeaveResp.setUserId(ob.getUser_id());	                
-					listOfLeavedEmployees.add(employeeLeaveResp);
-					
-				}
-			}
-			
-		}
-		else if (reqId != 0 && date != null) {
-			List<LeaveRequestEntity> findApprovedLeaveRequests = leaveRequestRepo.findApprovedLeaveRequests(reqId, date);
-			
-			if (findApprovedLeaveRequests != null && findApprovedLeaveRequests.size() != 0) {
-				
-				for (LeaveRequestEntity ob : findApprovedLeaveRequests) {
-					employeeLeaveResp.setEmployeeName(ob.getUserName());
-					employeeLeaveResp.setLeaveFromDate(ob.getFromDate());
-					employeeLeaveResp.setLeaveToDate(ob.getToDate());
-					employeeLeaveResp.setUserId(ob.getUser_id());	                
-					listOfLeavedEmployees.add(employeeLeaveResp);
-					
-				}				
-			}			
-		}
-		
-		return listOfLeavedEmployees;
-		
-		
-	}
+//	@Override
+//	public List<EmployeeLeaveResponse> getLeaveDataByReqIdDate(int reqId, String date) {
+//		
+//		List<EmployeeLeaveResponse> listOfLeavedEmployees = new ArrayList<EmployeeLeaveResponse>();
+//		EmployeeLeaveResponse employeeLeaveResp = new EmployeeLeaveResponse();
+//		if (reqId == 0 && date != null) {
+//			List<EmployeeLeaveRequestSummaryEntity> leaveDataByRepIdDate = leaveRequestRepo.getLeaveDataByRepIdDate(date);
+//			if (leaveDataByRepIdDate != null && leaveDataByRepIdDate.size() != 0) {
+//				System.out.println("sadfas");
+//				for (EmployeeLeaveRequestSummaryEntity ob : leaveDataByRepIdDate) {				
+//					
+//					employeeLeaveResp.setEmployeeName(ob.getUserName());
+//					employeeLeaveResp.setLeaveFromDate(ob.getFromDate());
+//					employeeLeaveResp.setLeaveToDate(ob.getToDate());
+//					employeeLeaveResp.setUserId(ob.getUser_id());	                
+//					listOfLeavedEmployees.add(employeeLeaveResp);
+//					
+//				}
+//			}
+//			
+//		}
+//		else if (reqId != 0 && date != null) {
+//			List<EmployeeLeaveRequestSummaryEntity> findApprovedLeaveRequests = leaveRequestRepo.findApprovedLeaveRequests(reqId, date);
+//			
+//			if (findApprovedLeaveRequests != null && findApprovedLeaveRequests.size() != 0) {
+//				
+//				for (EmployeeLeaveRequestSummaryEntity ob : findApprovedLeaveRequests) {
+//					employeeLeaveResp.setEmployeeName(ob.getUserName());
+//					employeeLeaveResp.setLeaveFromDate(ob.getFromDate());
+//					employeeLeaveResp.setLeaveToDate(ob.getToDate());
+//					employeeLeaveResp.setUserId(ob.getUser_id());	                
+//					listOfLeavedEmployees.add(employeeLeaveResp);
+//					
+//				}				
+//			}			
+//		}
+//		
+//		return listOfLeavedEmployees;
+//		
+//		
+//	}
 
 	@Override
 	public EmpLeaveResponseBean updateAllLeaveSummary(UpdateLeaveRequest updateBean) {
@@ -549,7 +545,7 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	@Override
 	public LeavesResponseBean getLeaveDetailsForManager( int managerid, String leavestatus,String emp_id) {
 		
-		List<LeaveRequestEntity>listOfLeaves=new ArrayList<>();	
+		List<EmployeeLeaveRequestSummaryEntity>listOfLeaves=new ArrayList<>();	
 		LeavesResponseBean response = new LeavesResponseBean();	
 		
 		//listOfLeaves.addAll( leaveRequestRepo.findByReportingManagerIdAndLeaveStatus(managerid, leavestatus));

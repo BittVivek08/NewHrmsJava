@@ -5,7 +5,8 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
-import com.hrms.entity.LeaveRequestEntity;
+import com.hrms.entity.EmployeeLeaveRequestSummaryEntity;
+
 
 import lombok.Data;
 
@@ -18,7 +19,7 @@ public class EmployeeLeaveResponse {
 	private String leaveToDate;
 	private String reason;
 	private String reportingManager;
-	private List<LeaveRequestEntity> list;
+	private List<EmployeeLeaveRequestSummaryEntity> list;
 	
 	
 
