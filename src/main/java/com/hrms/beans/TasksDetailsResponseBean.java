@@ -21,8 +21,10 @@ public class TasksDetailsResponseBean {
 	private LocalDateTime createddate;
 	
 	private LocalDateTime modifiedDate;
+
+	private String createdBy;
 	
-	private int projectId;
+	private String modifiedBy;
 	
 	
 

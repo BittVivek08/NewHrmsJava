@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -43,6 +44,11 @@ public class ProjectDetailsEntity {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinColumn(name = "client_id", referencedColumnName = "id")
 	private ClientDetailsEntity client;
+	
+	//@ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+	@JoinColumn(name="Manager_id",referencedColumnName = "emp_id")
+	private EmployeeDetails employee;
 
 	@ManyToOne
 	@JoinColumn(name = "currency_id", referencedColumnName = "id")

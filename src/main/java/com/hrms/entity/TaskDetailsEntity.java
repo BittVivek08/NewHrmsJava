@@ -37,10 +37,10 @@ public class TaskDetailsEntity  {
 	private Boolean is_default;
 	
 	@Column(name = "created_by", updatable = false)
-	private int created_by;
+	private String created_by;
 	
 	@Column(name = "modified_by")
-	private int modified_by;
+	private String modified_by;
 
 	private int is_active;
 
@@ -50,17 +50,4 @@ public class TaskDetailsEntity  {
 	@Column(name = "modified")
 	private LocalDateTime modifieddate;
 	
-	//@ManyToOne(cascade = CascadeType.PERSIST)
-	//@ManyToOne(cascade = CascadeType.ALL)
-	//@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	
-	//oldHrms
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "project_id", referencedColumnName = "id")
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	private ProjectDetailsEntity project; 
-
-	
-	
-
 }

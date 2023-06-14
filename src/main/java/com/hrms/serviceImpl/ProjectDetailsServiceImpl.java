@@ -10,13 +10,19 @@ import org.springframework.stereotype.Service;
 
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.EntityBeanResponseCommon;
-import com.hrms.beans.ProjectResponseBean;
+import com.hrms.beans.ProjechtRequiredFetchDetails;
+//import com.hrms.beans.ProjectResponseBean;
 import com.hrms.entity.ClientDetailsEntity;
+import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.ProjectDetailsEntity;
 import com.hrms.entity.SalaryCurrencyEntity;
 import com.hrms.repository.ClientDetailsRepository;
+import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.ProjectDetailsRepository;
 import com.hrms.repository.SalaryCurrencyRepo;
+import com.hrms.request.bean.ManagerRoleReuestBean;
+import com.hrms.response.bean.ManagerListResonseBean;
+import com.hrms.response.bean.ProjecDetailsResponsebean;
 import com.hrms.service.ProjectDetailsService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +34,6 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 	// //oldHrms
 	@Autowired
 	private ProjectDetailsRepository projectRepo;
-	
-//	@Autowired
-//	private CurrencyRepository currencyRepo;
 	
 	@Autowired
 	private SalaryCurrencyRepo salaCurrencyRepo;
@@ -44,7 +47,16 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 	
 
     @Autowired
-	private ProjectResponseBean projectbean;
+	private ProjechtRequiredFetchDetails projectbean;
+    
+    @Autowired
+    private EmployeeRepository empRepo;
+    
+    @Autowired
+    private ManagerListResonseBean managerBean;
+    
+    @Autowired
+    private ProjecDetailsResponsebean projFetchBean;
 
 	// save
 	// oldhrms
@@ -57,17 +69,28 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 		//Optional<ClientDetailsEntity> client = this.clientRepo.findById(projentity.getClient().getId());
 		Optional<ClientDetailsEntity> client = this.clientRepo.findById(projentity.getClient().getId());
 
-
-		//Optional<Currency> currency = this.currencyRepo.findById(projentity.getCurrency().getCurrencyId());
 		Optional<SalaryCurrencyEntity> currency = this.salaCurrencyRepo.findById(projentity.getCurrency().getId());
-
 		
+		//managerList
+		//List<EmployeeDetails> Managers = this.empRepo.findByEmpRole("Manager");
+		//EmployeeDetails employeeDetails = Managers.get(0);
+		//String empId = employeeDetails.getEmpId();
+		//EmployeeDetails emp= this.empRepo.findByEmpId(empId);
+		
+		//List<EmployeeDetails> maangerIdByRole = this.empRepo.maangerIdByRole("Manager");
+		
+	
+		EmployeeDetails employee = this.empRepo.findByEmpId(projentity.getEmployee().getEmpId());
+		//String empRole = employee.getEmpRole();
+		//String reportingManagerId = employee.getReportingManagerId();
+			
 		if (client != null && currency!=null) {
 			projentity.setCreated_date(LocalDateTime.now());
 			projentity.setModifiedDate(LocalDateTime.now());
 			
 			projentity.setClient(client.get());
 			projentity.setCurrency(currency.get());
+			projentity.setEmployee(employee);
 			
 			ProjectDetailsEntity save = this.projectRepo.save(projentity);
 			this.log.info("successfully  saved project Details in service ");
@@ -84,6 +107,7 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 		} else {
 			beanResponse.setMsg("No Clients : and Currency:  details not found  " + projentity.getClient().getId()+projentity.getCurrency().getId());
 			beanResponse.setStatus(false);
+		
 		}
 		return beanResponse;
 	}
@@ -131,25 +155,27 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 	// oldhrms
 	// specificFiledsOfprojectsByProjectId
 	@Override
-	public List<ProjectResponseBean> getAllProjects(int id) {
+	public ProjecDetailsResponsebean getAllProjectsByClientId(int id) {
 		this.log.info("Entered fetch  project Details by client id in service ");
 		
 		//ClientDetailsEntity clientInfo = clientRepo.findByClientid(id);
 		Optional<ClientDetailsEntity> clientInfo = this.clientRepo.findById(id);
 		
 		
-		ProjectResponseBean res;
-		List<ProjectResponseBean> list = new ArrayList<ProjectResponseBean>();
+		ProjechtRequiredFetchDetails res;
+		List<ProjechtRequiredFetchDetails> list = new ArrayList<ProjechtRequiredFetchDetails>();
 		//List<ProjectDetailsEntity> projectList = this.projectRepo.findByClient(clientInfo.getClientid() );
 		List<ProjectDetailsEntity> projectList= this.projectRepo.findByClient(clientInfo.get().getId());
 		for (ProjectDetailsEntity proj : projectList) {
-			res = new ProjectResponseBean();
+			res = new ProjechtRequiredFetchDetails();
 			res.setProjectId(proj.getProjectId());
 			//res.setClientid(proj.getClient().getClientid());
 			res.setClientid(proj.getClient().getId());
 			res.setDescription(proj.getDescription());
 			//res.setCurrencyName(proj.getCurrencyname());
 			res.setCurrencyid(proj.getCurrency().getId());
+			//res.setEmpId(proj.getEmployee().getEmpId());
+			res.setManagerId(proj.getEmployee().getEmpId());
 			//res.setEndDate(proj.getEnddate());
 			res.setEndDate(proj.getEnddate());
 			res.setEstimatedhours(proj.getEstimatedhours());
@@ -160,15 +186,88 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			res.setProjectType(proj.getProject_type());
 			//res.setStartDate(proj.getStartdate());
 			res.setStartDate(proj.getStartdate());
-			res.setStatus(proj.getProjectstatus());
+			//res.setStatus(proj.getProjectstatus());
+			res.setProjStatus(proj.getProjectstatus());
 		
-			list.add(res);
+			boolean listProjectDeatils = list.add(res);
+			if(listProjectDeatils!=false) {
+            	this.projFetchBean.setMessage("successfully fetch");
+            	this.projFetchBean.setStatus(true);
+            	this.projFetchBean.setListProjectBean(list);
+            }else {
+
+            	this.projFetchBean.setMessage("failed fetch");
+            	this.projFetchBean.setStatus(false);
+            }
 			
 			this.log.info("successfully fteched  project Details in service ");
 		}
 
-		return  list;
+		return  projFetchBean;
 
+	}
+
+
+	@Override
+	public ProjecDetailsResponsebean getAllProjects() {
+		
+		ProjechtRequiredFetchDetails bean;
+		List<ProjechtRequiredFetchDetails> listProj=new ArrayList<>();
+		
+		List<ProjectDetailsEntity> projects = this.projectRepo.findAll();
+		if(projects!=null) {
+			for(ProjectDetailsEntity proj:projects)
+			{			
+				bean=new ProjechtRequiredFetchDetails();
+				bean.setProjectId(proj.getProjectId());
+                bean.setProjectName(proj.getProjectName());
+                bean.setClientid(proj.getClient().getId());
+                bean.setManagerId(proj.getEmployee().getEmpId());
+                bean.setCurrencyid(proj.getCurrency().getId());
+                bean.setEndDate(proj.getEnddate());
+                bean.setEstimatedhours(proj.getEstimatedhours());
+                bean.setIs_active(proj.getIsactive());
+                bean.setLeadAppove(proj.getLeadapprove());
+                bean.setProjectType(proj.getProject_type());
+                bean.setProjStatus(proj.getProjectstatus());
+                bean.setStartDate(proj.getStartdate());
+                bean.setDescription(proj.getDescription());
+                //bean.setEmpId(proj.getEmployee().getEmpId());
+                boolean add = listProj.add(bean);
+                if(add!=false) {
+                	
+                	this.projFetchBean.setMessage("successfully fetch");
+                	this.projFetchBean.setStatus(true);
+                	this.projFetchBean.setListProjectBean(listProj);
+                }else {
+
+                	this.projFetchBean.setMessage("failed fetch");
+                	this.projFetchBean.setStatus(false);
+                }
+			}
+		}
+		return projFetchBean;
+	}
+
+
+	@Override
+	public ManagerListResonseBean getAllManager(ManagerRoleReuestBean reqBean) {
+		
+		EmployeeDetails entity;
+		List<EmployeeDetails> listOfMaangerEntity=new ArrayList<>();
+	
+		List<EmployeeDetails> listOfManager =this.empRepo.maangerIdByRole(reqBean.getManagerRole());
+		
+		if(!listOfManager.isEmpty()) {
+			this.managerBean.setMessage("successfully fetched List of Mangers ");
+			this.managerBean.setStatus(true);
+			this.managerBean.setListOfdetails(listOfManager);
+			
+		}else {
+			this.managerBean.setMessage("failed to retrive the details ");
+			managerBean.setStatus(false); 
+		}
+		return managerBean;
 	}
 
 }

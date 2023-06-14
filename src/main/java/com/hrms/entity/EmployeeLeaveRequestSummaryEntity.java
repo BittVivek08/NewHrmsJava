@@ -31,6 +31,9 @@ public class EmployeeLeaveRequestSummaryEntity {
 	@Column (name = "leave_status")
 	private String leaveStatus;
 	
+	@Column(name = "leave_req_id")
+	private Integer leaveReqId;
+	
 	@Column(name = "department_name")
 	private String departmentName;
 

@@ -18,6 +18,7 @@ import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.EntityBeanResponseCommon;
 import com.hrms.beans.TasksDetailsResponseBean;
 import com.hrms.entity.TaskDetailsEntity;
+import com.hrms.request.bean.TaskListResponseBean;
 import com.hrms.service.TaskDetailsService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -45,13 +46,13 @@ public class TaskDetailsController {
 	
 	
 	//OldHrms
-	@GetMapping("/gettasks/{id}")
-	public List<TasksDetailsResponseBean> getAllTasks(@PathVariable("id") int id){
+	@GetMapping("/getListOftasks")
+	public TaskListResponseBean getAllTasks(){
 		this.log.info("Entered fetch listn of  task details in controller ");
 		
-		List<TasksDetailsResponseBean> taskByProjectId = this.service.getTaskByProjectId(id);
+		TaskListResponseBean listOfTasks = this.service.getTaskByProjectId();
 		this.log.info("successfully  fetched listn of  task details in controller ");
-		return taskByProjectId;	
+		return listOfTasks;	
 	}
 	
 	
