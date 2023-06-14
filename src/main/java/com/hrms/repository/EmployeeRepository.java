@@ -18,7 +18,7 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
 
 	Optional<EmployeeDetails> findById(Integer id);
 
-//	Optional<EmployeeDetails> findByEmpId(String empid);
+	//	Optional<EmployeeDetails> findByEmpId(String empid);
 
 	public EmployeeDetails findByEmpId(String empId);
 
@@ -84,17 +84,23 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
 			+ "AND (e.departmentId = :departmentId OR e.departmentId = 0)")
 	List<EmployeeDetails> fetchReportManagetListBasedOnRoleIdDu(int empRoleId, int departmentId);
 
-	// GetMailOfReportingMangerByid
-	@Query("select email from  EmployeeDetails where reportingManagerId=?1 ")
-	String findEmailByMangerId(int mid);
-
 	@Query("SELECT max(userId) FROM EmployeeDetails ")
 	Integer getMaxUserId();
-    
-    @Query("select e.reportingManagerId from EmployeeDetails e where e.empId = :empid")
-    String getReportingManagerId(@Param(value="empid") String empid);
+
+	@Query("select e.reportingManagerId from EmployeeDetails e where e.empId = :empid")
+	String getReportingManagerId(@Param(value="empid") String empid);
 
 	@Query("From EmployeeDetails where reportingManagerId=?1")
 	List<EmployeeDetails> getTimesheetUsingRpId(String repId);
+
+	//GetMailOfReportingMangerByid
+	@Query("select email from  EmployeeDetails where reportingManagerId=?1 ")
+	String findEmailByMangerId(int mid);  
+
+	List<EmployeeDetails> findByEmpRole(String role);
+
+	@Query("from  EmployeeDetails e where e.empRole = :role")
+	List<EmployeeDetails> maangerIdByRole(String role);
+
 
 }

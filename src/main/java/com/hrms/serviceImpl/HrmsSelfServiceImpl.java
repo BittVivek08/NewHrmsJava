@@ -3,6 +3,7 @@ package com.hrms.serviceImpl;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -15,7 +16,8 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.header.writers.frameoptions.StaticAllowFromStrategy;
+
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,8 +40,10 @@ import com.hrms.repository.PrivilegesRepo;
 import com.hrms.repository.WorkFlowMgntRepository;
 import com.hrms.repository.WorkFlowRepository;
 import com.hrms.request.bean.LeaveRequestBean;
+import com.hrms.request.bean.LeaveRequestUpdateDataBean;
 import com.hrms.response.bean.CommonResponseBean;
 import com.hrms.response.bean.LeaveResponseBean;
+import com.hrms.response.bean.leaveReuestUpdateResponseBean;
 import com.hrms.service.IHrmsSelfService;
 import com.hrms.util.HrmsGetDateAndTime;
 import com.hrms.util.LeaveRequestBLogic;
@@ -49,7 +53,7 @@ import ch.qos.logback.classic.Logger;
 @Service
 public class HrmsSelfServiceImpl implements IHrmsSelfService {
 
-	private static final Logger logger=(Logger) LoggerFactory.getLogger(HrmsSelfServiceImpl.class);
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(HrmsSelfServiceImpl.class);
 
 	@Autowired
 	private MyLeaveRequestRepository myLeaveReqRepo;
@@ -61,10 +65,10 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	private PrivilegesRepo privilegeRepo;
 
 	@Autowired
-	private  HolidayCalenderRepository holidayRepo;
+	private HolidayCalenderRepository holidayRepo;
 
 	@Autowired
-	private   EmployeeLeaveTypeRepository leaveTypeRepo;
+	private EmployeeLeaveTypeRepository leaveTypeRepo;
 
 	@Autowired
 	private HrmsGetDateAndTime dateTimeUtility;
@@ -80,30 +84,30 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 
 	@Autowired
 	private EmailServiceImpl mailservice;
-	
+
 	@Autowired
 	private WorkFlowMgntRepository workFlowMgntRepo;
-	
+
 	@Autowired
 	private WorkFlowRepository workFlowRepo;
-	
-	@Override
-	public CommonResponseBean  saveLeaveRequest(LeaveRequestBean reqBean ,
-			String emp_id ,String leaveType) {
 
-		//EmpLeaveResponseBean empLeaveResponse= new EmpLeaveResponseBean();
+	@Autowired
+	private leaveReuestUpdateResponseBean leaveReqUpdateResBean;
+
+	@Override
+	public CommonResponseBean saveLeaveRequest(LeaveRequestBean reqBean, String emp_id, String leaveType) {
+
+		// EmpLeaveResponseBean empLeaveResponse= new EmpLeaveResponseBean();
 		MyLeaveRequestEntity reqEntity = new MyLeaveRequestEntity();
-		CommonResponseBean commonRes= new CommonResponseBean();	
-		EmployeeLeaveRequestSummaryEntity leaveSummery=new EmployeeLeaveRequestSummaryEntity();
+		CommonResponseBean commonRes = new CommonResponseBean();
+		EmployeeLeaveRequestSummaryEntity leaveSummery = new EmployeeLeaveRequestSummaryEntity();
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate fromDate = LocalDate.parse(reqBean.getFromDate(), formatter);
 
 		LocalDate toDate = LocalDate.parse(reqBean.getToDate(), formatter);
 
-
-
-		if(myLeaveReqRepo.checkMatchingDates(emp_id, toDate, fromDate)==false) {
+		if (myLeaveReqRepo.checkMatchingDates(emp_id, toDate, fromDate) == false) {
 
 			try {
 				// adding Holidays
@@ -126,27 +130,22 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				float days = (float) actualDaysBetween;
 
 				EmployeeDetails empDetails = employeeRepo.findByEmpId(emp_id);
-   
-				 Instant timestamp = Instant.now();
-				 
+
+				Instant timestamp = Instant.now();
+
 				//Mail-Sending
+
 				List<String> emailList = new ArrayList<>();
 				String employeeMail = empDetails.getEmail();
 				emailList.add(employeeMail);
-				//Integer reportingManagerId = empDetails.getReportingManagerId();
-				//String managerMail = this.employeeRepo.findEmailByMangerId(reportingManagerId);
 
-				//	Integer reportingManagerId = empDetails.getReportingManagerId();
-				//	EmployeeDetails manager = employeeRepo.findByEmpId(emp_id);
-				//String managerMail = manager.getEmail();
-				//emailList.add(managerMail);
+				String reportingManagerId = empDetails.getReportingManagerId();
+				EmployeeDetails manager = employeeRepo.findByEmpId(reportingManagerId);
+				String managerMail = manager.getEmail();
+				emailList.add(managerMail);
 
-				//String userEmail="45nareshyadav@gmail.com";
-				//emailList.add(userEmail);
-
-
-				reqEntity.setAvailabelDays(leaveTypeRepo.getNoOfDays(leaveType)-leaveReqSummery.getNoOfDaysApproved(emp_id,leaveType));
-
+				reqEntity.setAvailabelDays(
+						leaveTypeRepo.getNoOfDays(leaveType) - leaveReqSummery.getNoOfDaysApproved(emp_id, leaveType));
 
 				reqEntity.setEmp_id(empDetails.getEmpId());
 				reqEntity.setLeaveType(leaveType);
@@ -167,10 +166,9 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				reqEntity.setName(empDetails.getFirstName());
 				myLeaveReqRepo.save(reqEntity);
 
-
 				leaveSummery.setEmp_id(empDetails.getEmpId());
-				
-		
+
+
 
 				leaveSummery.setUser_id(empDetails.getUserId());
 				leaveSummery.setDepartmentId(empDetails.getDepartmentId());
@@ -187,26 +185,36 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				leaveSummery.setReportingManagerName(empDetails.getReportingManager());
 				leaveSummery.setHrId(empDetails.getHrManagerId());
 				leaveSummery.setCreatedBy(33);
-				leaveSummery.setModifiedBy(32);	
+				leaveSummery.setModifiedBy(32);
 				leaveSummery.setUser_id(empDetails.getUserId());
 				leaveSummery.setNoOfDays(days);
 				leaveSummery.setCreateddate(timestamp);
 				//mail-sending
-//				EmailDetails mailData=new EmailDetails();
-//				mailData.setRecipient(employeeMail);
-//				mailData.setSubject("Leave Approval Of Employee");
-//				mailData.setMsgBody("Hi this is "+ empDetails.getFirstName()+"  ,Applying leave can you please approve ");
+				//				EmailDetails mailData=new EmailDetails();
+				//				mailData.setRecipient(employeeMail);
+				//				mailData.setSubject("Leave Approval Of Employee");
+				//				mailData.setMsgBody("Hi this is "+ empDetails.getFirstName()+"  ,Applying leave can you please approve ");
 
-			//	String sendSimpleMail = this.mailservice.sendSimpleMail(mailData);
+				//	String sendSimpleMail = this.mailservice.sendSimpleMail(mailData);
 
+				// mail-sending
+				for (String email : emailList) {
+					EmailDetails mailData = new EmailDetails();
+					mailData.setRecipient(email);
+					mailData.setSubject("Leave Approval Of Employee");
+					mailData.setMsgBody(
+							"Hi this is " + empDetails.getFirstName() + "  ,Applying leave can you please approve ");
 
+					String sendSimpleMail = this.mailservice.sendSimpleMail(mailData);
+
+				}
 				leaveReqSummery.save(leaveSummery);
 
 				leaveBlogic.updateEmployeeLeaves(leaveType ,emp_id, days, "save", null);
-				
+
 				//Operation for work Flow
 				WorkFlow workFlow=new WorkFlow();
-				
+
 				StringBuffer string=null;
 				if(workFlowMgntRepo.getType().equalsIgnoreCase("Hierarchical")) {
 					workFlow.setReq_id(leaveSummery.getId());
@@ -216,14 +224,14 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 					workFlow.setReportingManagerId(empDetails.getReportingManagerId());
 					workFlow.setCreatedDate(timestamp);
 					workFlow.setCreatedBy(emp_id);
-					
-					
+
+
 				}
 				else {
 					String empidtest = emp_id;
-					
+
 					while(employeeRepo.getReportingManagerId(empidtest)!=null) {
-						
+
 						//workFlow.setReq_id(leaveSummery.getId());
 						workFlow.setEmp_id(emp_id);
 						workFlow.setFeature("leave");
@@ -231,13 +239,13 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 						workFlow.setReportingManagerId(empDetails.getReportingManagerId());
 						workFlow.setCreatedDate(timestamp);
 						workFlow.setCreatedBy(emp_id);
-						
-					empidtest =	employeeRepo.getReportingManagerId(workFlow.getReportingManagerId());
-						
+
+						empidtest =	employeeRepo.getReportingManagerId(workFlow.getReportingManagerId());
+
 					}
-					
+
 				}
-			    
+
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -247,27 +255,26 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 
 			commonRes.setMessage("the leave applied successfully wait for approval");
 			commonRes.setStatus(true);
-		}
-		else {
+		} else {
 			commonRes.setMessage("the leave is already applied on that date");
-			commonRes.setStatus(false);			}
-		
-
+			commonRes.setStatus(false);	
+		}
 
 		return commonRes;
 	}
-	
-	
-	  //getting available leave days
+
+
+
+	//getting available leave days
 	public float getAvailableDays(String emp_id, String leaveType) {
-		
+
 		float f1=leaveTypeRepo.getNoOfDays(leaveType);
 		float f2=leaveReqSummery.getNoOfDaysApproved(emp_id,leaveType);
-		
-	float availableDays = leaveTypeRepo.getNoOfDays(leaveType)-leaveReqSummery.getNoOfDaysApproved(emp_id,leaveType);
-	
-	
-	return availableDays;
+
+		float availableDays = leaveTypeRepo.getNoOfDays(leaveType)-leaveReqSummery.getNoOfDaysApproved(emp_id,leaveType);
+
+
+		return availableDays;
 	}
 
 	// selfService->Leaves->MyLeaves->Delete
@@ -278,16 +285,17 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 			myLeaveReqRepo.deleteById(id);
 			responseBean.setMessage("Deleted Succesfully::");
 			responseBean.setStatus(true);
-			//return Response.status(Response.Status.OK).entity(responseBean).build();
+			// return Response.status(Response.Status.OK).entity(responseBean).build();
 			return responseBean;
 		} catch (Exception e) {
 			logger.info("catch block of deleteMyLeaveDetails of business class::" + e);
 			responseBean.setMessage("something went wrong ::");
 			responseBean.setStatus(false);
-			//	return Response.status(Response.Status.OK).entity(responseBean).build();
+			// return Response.status(Response.Status.OK).entity(responseBean).build();
 			return responseBean;
 		}
 	}
+
 	@Override
 	public Response fetchAppliedLeaveData(int userId, int roleId, int menuId) {
 
@@ -316,8 +324,8 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 			response.setMessage("Failed to Retrieved applied  Leaves History .");
 			response.setStatus(false);
 		}
-		return response;		
-		//return null;
+		return response;
+		// return null;
 	}
 
 	@Override
@@ -334,7 +342,40 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 			commonResponse.setStatus(false);
 		}
 
-
 		return commonResponse;
+	}
+
+	@Override
+	public leaveReuestUpdateResponseBean updateLeavRequest(LeaveRequestUpdateDataBean bean,int id) {
+		try {
+			EmployeeLeaveRequestSummaryEntity LeaveReqSummaryEntity = this.leaveReqSummery.findByLeaveReqId(id);
+			if(LeaveReqSummaryEntity.getLeaveStatus().equalsIgnoreCase("pending")) {
+				LeaveReqSummaryEntity.setLeaveType(bean.getLeaveType());
+				//LocalDate startdate = LocalDate.parse(Databean.getStartdate());
+				LocalDate fromDate = LocalDate.parse(bean.getFromDate());
+				LeaveReqSummaryEntity.setFromDate(fromDate);
+				LocalDate toDate = LocalDate.parse(bean.getToDate());
+				LeaveReqSummaryEntity.setToDate(toDate);
+				LeaveReqSummaryEntity.setReason(bean.getReson());
+				EmployeeLeaveRequestSummaryEntity updatedEntity = this.leaveReqSummery.save(LeaveReqSummaryEntity);
+				if(updatedEntity!=null) {
+					this.leaveReqUpdateResBean.setMessage("successfully updated ");
+					this.leaveReqUpdateResBean.setStatus(true);
+				}else {
+					this.leaveReqUpdateResBean.setMessage("failed to update  updated ");
+					this.leaveReqUpdateResBean.setStatus(true);
+				}	
+			}
+			else {
+				this.leaveReqUpdateResBean.setMessage("Your Leave status approved or rejected can't update leave details");
+				this.leaveReqUpdateResBean.setStatus(false);
+			}
+
+		}catch (Exception e) {
+			e.printStackTrace();
+			this.leaveReqUpdateResBean.setMessage("Deatils not found");
+			this.leaveReqUpdateResBean.setStatus(false);
+		}
+		return leaveReqUpdateResBean;
 	}
 }

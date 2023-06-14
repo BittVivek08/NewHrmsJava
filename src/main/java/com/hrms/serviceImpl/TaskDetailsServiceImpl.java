@@ -22,6 +22,7 @@ import com.hrms.repository.ClientDetailsRepository;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.ProjectDetailsRepository;
 import com.hrms.repository.TaskDeatailsRepository;
+import com.hrms.request.bean.TaskListResponseBean;
 import com.hrms.service.TaskDetailsService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -49,30 +50,29 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 	EmployeeRepository employeeRepo;
 
 	@Autowired
-	ClientDetailsRepository clientRepo;
+	private TaskListResponseBean listOfTaskBean;
 
-	
-	//OldHrms
-	//save
-//	@Override
+	// OldHrms
+	// save
+	@Override
 	public EntityBeanResponseCommon saveTaskDeatils(TaskDetailsEntity entity) {
 
 		this.log.info("Entered save task details in service");
-		
+
 		// ClientDetailsEntity Client =
 		// this.clientRepo.findByClientid(entity.getProject().getClient().getClientid());
-		ProjectDetailsEntity Project = this.projrepo.findByProjectId(entity.getProject().getProjectId());
+		// ProjectDetailsEntity Project =
+		// this.projrepo.findByProjectId(entity.getProject().getProjectId());
 		// Project.setClient(Client);
 
-		entity.setProject(Project);
-		entity.setCreated_by(1);
-		entity.setCreateddate(LocalDateTime.now());
-		entity.setIs_active(1);
-		entity.setIs_default(true);
-		entity.setModified_by(1);
-		entity.setModifieddate(LocalDateTime.now());
-		
-		TaskDetailsEntity save = this.taskRepo.save(entity);
+		TaskDetailsEntity task = new TaskDetailsEntity();
+
+		task.setTasknmae(entity.getTasknmae());
+		task.setCreated_by(entity.getCreated_by());
+		task.setCreateddate(LocalDateTime.now());
+		task.setIs_active(1);
+		task.setIs_default(true);
+		TaskDetailsEntity save = this.taskRepo.save(task);
 		this.log.info("successsfully save task details in service");
 		if (save != null) {
 			beanResponse.setMsg("successfully saved Task details");
@@ -88,44 +88,56 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 		return beanResponse;
 	}
 
-	
-	
-	//OldHrms
+	// OldHrms
 	// fetchTasksByProjectId
 	@Override
-	public List<TasksDetailsResponseBean> getTaskByProjectId(int id) {
-		
+	public TaskListResponseBean getTaskByProjectId() {
+
 		this.log.info("Entered fetch list  task details in service");
 
 		TasksDetailsResponseBean bean = null;
 
 		List<TasksDetailsResponseBean> list = new ArrayList<TasksDetailsResponseBean>();
 
-		List<TaskDetailsEntity> task = this.taskRepo.findByProject(id);
-		for (TaskDetailsEntity entity : task) {
-			bean = new TasksDetailsResponseBean();
-			bean.setTaskid(entity.getTaskid());
-			bean.setProjectId(entity.getProject().getProjectId());
-			bean.setCreateddate(entity.getCreateddate());
-			bean.setModifiedDate(entity.getModifieddate());
-			bean.setIs_active(entity.getIs_active());
-			bean.setTaskname(entity.getTasknmae());
+		List<TaskDetailsEntity> listOfTaskEntity = this.taskRepo.findAll();
 
-			list.add(bean);
+		for (TaskDetailsEntity listof : listOfTaskEntity) {
+
+			bean = new TasksDetailsResponseBean();
+			bean.setTaskid(listof.getTaskid());
+			bean.setTaskname(listof.getTasknmae());
+			bean.setCreateddate(listof.getCreateddate());
+			bean.setCreatedBy(listof.getCreated_by());
+			bean.setModifiedBy(listof.getModified_by());
+			bean.setIs_active(listof.getIs_active());
+			bean.setModifiedDate(listof.getModifieddate());
+
+			boolean add = list.add(bean);
 		}
 
-		this.log.info("successfully fetch list  task details in service");
-		return list;
+		if (!list.isEmpty()) {
+			listOfTaskBean.setMessage("successfully fetched details");
+			listOfTaskBean.setStatus(true);
+			listOfTaskBean.setListOfTasks(list);
+			this.log.info("successfully fetch list  task details in service");
+
+		} else {
+			listOfTaskBean.setMessage("Failed to fetched details");
+			listOfTaskBean.setStatus(false);
+		}
+
+		return listOfTaskBean;
 	}
 
-	//OldHrms
-	//delete
+	// OldHrms
+	// delete
 	@Override
 	public EntityBeanResponseCommon deleteTaskById(int id) {
 		this.log.info("Entered delete task details in service");
-		
+       try {
+       
 		Optional<TaskDetailsEntity> task = this.taskRepo.findById(id);
-		if (id == task.get().getTaskid()) {
+		if (id==task.get().getTaskid()) {
 			this.taskRepo.deleteById(id);
 			this.beanResponse.setMsg("Successfully deleted task  id is :" + id);
 			this.beanResponse.setStatus(true);
@@ -135,48 +147,52 @@ public class TaskDetailsServiceImpl implements TaskDetailsService {
 			this.beanResponse.setStatus(false);
 			this.log.info("failed to delete task details in service");
 		}
-
-		return beanResponse;
-	}
-	
-	//OldHrms
-	//update
-	@Override
-	public EntityBeanResponseCommon updateTaskByTaskId(int id, TaskDetailsEntity task) {
-		this.log.info("Entered update  task details in service");
-
-		//ProjectDetailsEntity project = this.projrepo.findById(id).orElse(null);
-		TaskDetailsEntity entity = this.taskRepo.findById(id).orElse(null);
-		//entity.setProject(project);
-		// BeanUtils.copyProperties(task,
-		//if (entity.getTaskid() == task.getTaskid()) {
-		
-		if(task!=null && entity!=null)
-		{
-			entity.setTasknmae(task.getTasknmae());
-			//entity.setProject(task.getProject());
-			//entity.setTaskid(task.getTaskid());
-			//entity.setCreateddate(task.getCreateddate());
-			entity.setCreateddate(LocalDateTime.now());
-			//entity.setModifieddate(task.getModifieddate());
-			entity.setModifieddate(LocalDateTime.now());
-			entity.setIs_active(1);
-			entity.setIs_default(true);
-			entity.setModified_by(1);
-			entity.setCreated_by(1);
-			entity.setIs_default(true);
-			
-			this.taskRepo.save(entity);
-			this.log.info("succcessfully updated  task details in service");
-			beanResponse.setMsg("successfully updated Task details of task id : "+id );
-			beanResponse.setStatus(true);
-		} else {
-			beanResponse.setMsg("Failed to update Task Detils please enter valid data");
+		}catch (Exception e) {
+			e.printStackTrace();
+			beanResponse.setMsg("please enter valid task id ");
 			beanResponse.setStatus(false);
-			this.log.info("failed to  updated  task details in service");
 		}
 
 		return beanResponse;
 	}
+
+	// OldHrms
+	// update
+@Override
+	public EntityBeanResponseCommon updateTaskByTaskId(int id, TaskDetailsEntity task) {
+		this.log.info("Entered update  task details in service");
+
+	try {
+	
+		TaskDetailsEntity entity = this.taskRepo.findById(id).orElse(null);
+		if(entity!=null)
+		{
+			entity.setTasknmae(task.getTasknmae());
+			entity.setModifieddate(LocalDateTime.now());
+			entity.setIs_active(1);
+			entity.setModified_by(task.getModified_by());
+			entity.setIs_default(true);
+			TaskDetailsEntity save = this.taskRepo.save(entity);
+			if(save!=null) {
+			this.log.info("succcessfully updated  task details in service");
+			beanResponse.setMsg("successfully updated Task details of task id : "+id );
+			beanResponse.setStatus(true);}
+			else {
+				beanResponse.setMsg("failed to  update Task details of task id : "+id );
+				beanResponse.setStatus(true);}
+			}else {
+				beanResponse.setMsg("please enter valid task id/2");
+				beanResponse.setStatus(false);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			beanResponse.setMsg("Deatils not found with given id "+id );
+			beanResponse.setStatus(false);
+			}
+		
+			this.log.info("failed to  updated  task details in service");
+		return beanResponse;
+	}
+	
 
 }

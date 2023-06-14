@@ -9,19 +9,21 @@ import lombok.Data;
 
 @Data
 @Component
-public class ProjectResponseBean {
+public class ProjechtRequiredFetchDetails{
 	
 	private int projectId;
 	
 	private String ProjectName;
-	
-	private String status;
+
+	private String projStatus;
 	
 	private String description;
 	
 	private int clientid;
 	
 	private int  currencyid;
+	
+	private String ManagerId;
 	
 	private String projectType;
 	
@@ -33,11 +35,6 @@ public class ProjectResponseBean {
     
     private LocalDate EndDate;
     
-    private Boolean is_active;
-    
-	
-	
-	
-	
+    private Boolean is_active;	
 
 }

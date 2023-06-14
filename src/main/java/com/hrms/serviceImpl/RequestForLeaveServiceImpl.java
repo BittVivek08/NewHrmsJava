@@ -329,9 +329,22 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 	public MailStatusResponse mailsend(UpdateEmployeeLeaveDetails updateBean, String eid) {
 		this.logger.info("Entered update leave status and mail send in service");
 
-		String mailIdofEmp = this.myleaveReqRepo.mailIdofEmp(eid);
+		//String mailIdofEmp = this.myleaveReqRepo.mailIdofEmp(eid);
+		
 
 		MyLeaveRequestEntity leaveEntity = this.myleaveReqRepo.findByEmpid(eid);
+		
+		List<String> emailList=new ArrayList<>();
+		
+		
+		String EmpEmail = leaveEntity.getEmail();
+		
+		emailList.add(EmpEmail);
+		
+		EmployeeDetails Mangager = this.employeeRepo.findByEmpId(leaveEntity.getReportingManagerId());
+		String Manageremail = Mangager.getEmail();
+		
+		emailList.add(Manageremail);
 
 		EmailDetails mailData=new EmailDetails();
 
@@ -340,12 +353,14 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 			//MyLeaveRequestEntity leaveEntity = this.myleaveReqRepo.findByEmpid(eid);
 			leaveEntity.setLeaveStatus("Approved");
 			MyLeaveRequestEntity save = this.myleaveReqRepo.save(leaveEntity);
-			////EmailDetails mailData=new EmailDetails();
-			mailData.setRecipient(mailIdofEmp);
+			for(String email:emailList) {
+			//EmailDetails mailData=new EmailDetails();
+			mailData.setRecipient(email);
 			//mailData.setRecipient(mailIdofEmp);
 			mailData.setSubject("Applied leave Status");
 			mailData.setMsgBody("Hi Mr/Ms "+leaveEntity.getName()+"   your's applied leave request has been  approved");
 			String mailMessage = this.emailService.sendSimpleMail(mailData);
+			
 			//MyLeaveRequestEntity leaveEntity = this.myleaveReqRepo.findByEmp_id(eid);
 
 			if(save!=null) {
@@ -354,12 +369,13 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 				this.logger.info("successfully update leave status and sent aprroval mail in service");
 
 			}	
+			}
 		}else if (updateBean.getLeaveStatus().equalsIgnoreCase("Rejected")){
        
 			leaveEntity.setLeaveStatus("Rejected");
 			MyLeaveRequestEntity save = this.myleaveReqRepo.save(leaveEntity);
-
-			mailData.setRecipient(mailIdofEmp);
+           for(String email:emailList) {
+			mailData.setRecipient(email);
 			mailData.setSubject("Applied leave Status");
 			mailData.setMsgBody("Hi Mr/Ms "+leaveEntity.getName()+"  your's applied leave request has been rejected");
 			//mailData.setMsgBody("Levae Approval Canceled");
@@ -367,6 +383,7 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 			String mailMessage = this.emailService.sendSimpleMail(mailData);
 			mailresponse.setMessage("leave approval rejected and " + mailMessage);
 			mailresponse.setStatus(true);
+           }
 			
 			this.logger.info("successfully update leave status and sent rejection mail in service");
 		}

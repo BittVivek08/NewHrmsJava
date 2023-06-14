@@ -4,8 +4,10 @@ package com.hrms.service;
 import javax.ws.rs.core.Response;
 
 import com.hrms.request.bean.LeaveRequestBean;
+import com.hrms.request.bean.LeaveRequestUpdateDataBean;
 import com.hrms.response.bean.CommonResponseBean;
 import com.hrms.response.bean.LeaveResponseBean;
+import com.hrms.response.bean.leaveReuestUpdateResponseBean;
 
 public interface IHrmsSelfService {
 
@@ -28,5 +30,7 @@ public interface IHrmsSelfService {
 
 
 //	public Response saveLeaveRequest(LeaveRequestBean leaverequestBean, int roleId, int menuId);
+	
+	public leaveReuestUpdateResponseBean updateLeavRequest(LeaveRequestUpdateDataBean bean,int id);
 
 }

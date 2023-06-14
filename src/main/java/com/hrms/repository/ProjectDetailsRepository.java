@@ -16,4 +16,11 @@ public interface ProjectDetailsRepository extends JpaRepository<ProjectDetailsEn
 	List<ProjectDetailsEntity> findByClient(@Param("clientid") Integer clientid);
 
 	ProjectDetailsEntity findByProjectId(int projectId);
+	
+	
+
+	
+	
+	
+	
 }

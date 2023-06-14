@@ -10,16 +10,15 @@ import com.hrms.beans.EntityBeanResponseCommon;
 import com.hrms.beans.TasksDetailsResponseBean;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.TaskDetailsEntity;
+import com.hrms.request.bean.TaskListResponseBean;
 
 public interface TaskDetailsService {
 	//OldHrms
 	public EntityBeanResponseCommon saveTaskDeatils(TaskDetailsEntity entity);
 	
 	//OldHrms
-	public List<TasksDetailsResponseBean> getTaskByProjectId(int id);
+	public TaskListResponseBean getTaskByProjectId();
 	
-	//duplicate
-	//public List<TaskDetailsEntity> getTaskByProjectId(int id);
 	
 	//OldHrms
 	public EntityBeanResponseCommon deleteTaskById(int id);

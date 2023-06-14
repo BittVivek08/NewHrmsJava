@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.EntityBeanResponseCommon;
-import com.hrms.beans.ProjectResponseBean;
+import com.hrms.beans.ProjechtRequiredFetchDetails;
+//import com.hrms.beans.ProjectResponseBean;
 import com.hrms.entity.ProjectDetailsEntity;
+import com.hrms.request.bean.ManagerRoleReuestBean;
+import com.hrms.response.bean.ManagerListResonseBean;
+import com.hrms.response.bean.ProjecDetailsResponsebean;
 import com.hrms.service.ProjectDetailsService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -44,15 +48,26 @@ public class ProjectDetailsController {
 	 //oldHrms
 	//getProjectDeatilsByClientId
 	@GetMapping("/getProjectsByClientId/{id}")
-	public List<ProjectResponseBean> getProjectsBYClientId(@PathVariable("id")  int id){
+	public ProjecDetailsResponsebean getProjectsBYClientId(@PathVariable("id")  int id){
 		this.log.info("Entered fetch list of  project details by client id  in controller ");
 		
-		List<ProjectResponseBean> projectListByClienyId = this.service.getAllProjects(id);
+		ProjecDetailsResponsebean projectListByClienyId = this.service.getAllProjectsByClientId(id);
 		
 		this.log.info("successfully  fetched list of  project details by client id  in controller ");
 		
 	
 		return projectListByClienyId;
+		
+	}
+	
+	
+	
+	//getAllProjects
+	@GetMapping("/projects")
+	public ProjecDetailsResponsebean fetchAllProjects(){
+		
+		ProjecDetailsResponsebean allProjects = this.service.getAllProjects();
+		return allProjects;
 		
 	}
 	
@@ -69,5 +84,29 @@ public class ProjectDetailsController {
 		return updateProjectDetails;
 		
 	}
+	
+	//fetchListOfManger
+	
+	@GetMapping("/getAllManagers")
+	public ManagerListResonseBean getAllMangers(@RequestBody ManagerRoleReuestBean reqBean){
+		ManagerListResonseBean listOfManagers= this.service.getAllManager(reqBean);
+		
+		return listOfManagers;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
