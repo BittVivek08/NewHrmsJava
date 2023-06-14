@@ -5,8 +5,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeDocumentsEntity;
 
 public interface EmployeeDocumentsRepository extends JpaRepository<EmployeeDocumentsEntity,Integer> {
@@ -14,6 +12,11 @@ public interface EmployeeDocumentsRepository extends JpaRepository<EmployeeDocum
 	Optional<EmployeeDocumentsEntity> findByDocumentName(String fileName);
 	
 	Optional<EmployeeDocumentsEntity> findByDocumentFileName(String fileName);
+	
+	@Query("from EmployeeDocumentsEntity where empdetails.empId = ?1")
+	List<EmployeeDocumentsEntity> findByEmpIds(String empId);
+
+    void deleteByDocumentFileName(String fileName);
 	
 	@Query("SELECT e1 FROM EmployeeDocumentsEntity e1 JOIN EmployeeDetails e2 ON e1.userId = e2.userId")
     public EmployeeDocumentsEntity findByUserIdInEmployeeDetails(Integer userId);
