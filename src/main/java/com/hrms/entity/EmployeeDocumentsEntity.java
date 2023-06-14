@@ -43,9 +43,7 @@ public class EmployeeDocumentsEntity {
 	@JoinColumn(name = "emp_Id", referencedColumnName = "emp_id")
 	private EmployeeDetails empdetails;
 	
-	
-	
-	@Transient
+	@Column(name ="fileName")
 	private String documentFileName;
 
 	@Transient

@@ -1,8 +1,10 @@
 package com.hrms.serviceImpl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.compress.compressors.FileNameUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeDocumentsEntity;
 import com.hrms.repository.EmployeeDocumentsRepository;
 import com.hrms.repository.EmployeeRepository;
+import com.hrms.response.bean.EmployeeDocumentResponse;
 import com.hrms.response.bean.SuccessResponseBean;
 import com.hrms.service.EmployeeDocumentService;
 import com.hrms.util.FileUtils;
@@ -74,15 +77,20 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 
 	public byte[] downloadFile(String fileName) {
 		log.info("get the document bussiness logic method");
-		Optional<EmployeeDocumentsEntity> dbData = empDocRepo.findByDocumentName(fileName);
+		Optional<EmployeeDocumentsEntity> dbData = empDocRepo.findByDocumentFileName(fileName);
 		byte[] images = FileUtils.decompressImage(dbData.get().getData());
 		return images;
 	}
+	
+	public boolean isFileNameMatch(String data, String fileName) {
+        return data.equals(fileName);
+    }
 
 	public MediaType getMediaTypeForFileName(String fileName) {
 		log.info("get the mediaType checking bussiness logic method");
 		String[] arr = fileName.split("\\.");
 		String fileExtension = arr[arr.length - 1];
+		 
 		switch (fileExtension.toLowerCase()) {
 		case "png":
 			return MediaType.IMAGE_PNG;
@@ -93,10 +101,38 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 		case "jpg":
 			return MediaType.IMAGE_JPEG;
 		case "doc":
-			return MediaType.ALL;    
+			return MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+//			return MediaType.APPLICATION_OCTET_STREAM;    
 		default:
 			return MediaType.APPLICATION_OCTET_STREAM;
 		}
+	}
+	
+//	public List<byte[]> getFilesByEmpId(String empId){
+//		List<EmployeeDocumentsEntity> empDoc= empDocRepo.findByEmpId(empId);
+//		List<byte[]> fileDataList = new ArrayList<>();
+//
+//        for (EmployeeDocumentsEntity empDocs : empDoc) {
+//            fileDataList.add(empDocs.getData());
+//        }
+//
+//        return fileDataList;
+//	}
+	
+	public List<EmployeeDocumentResponse> getFileNameByEmpId(String empId){
+		
+		List<Object[]> result = empDocRepo.findByEmpId(empId);
+		List<EmployeeDocumentResponse> response = new ArrayList<>();
+		for(int i=0; i< result.size(); i++) {
+			Object[] obj = result.get(i);
+			EmployeeDocumentResponse docResponse = new EmployeeDocumentResponse();
+			docResponse.setEmpId(obj[1].toString());
+			docResponse.setDocumentName(obj[0].toString());
+			
+			response.add(docResponse);
+		}
+		
+		return response;
 	}
 }
 
