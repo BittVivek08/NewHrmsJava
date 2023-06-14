@@ -2,7 +2,6 @@ package com.hrms.serviceImpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,27 +9,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hrms.beans.CurrentWeekRequest;
 import com.hrms.entity.ClientDetailsEntity;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.ProjectDetailsEntity;
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.entity.TaskDetailsEntity;
 import com.hrms.repository.ClientDetailsRepository;
-import com.hrms.repository.EmpRoleRepo;
 import com.hrms.repository.EmployeeRepository;
-import com.hrms.repository.HolidayCalenderRepository;
-import com.hrms.repository.IRequestForLeaveRepository;
-import com.hrms.repository.MyLeaveRequestRepository;
 import com.hrms.repository.ProjectDetailsRepository;
 import com.hrms.repository.SaveTimeSheetRepo;
 import com.hrms.repository.TaskDeatailsRepository;
 import com.hrms.response.bean.ProjectListResponse;
 import com.hrms.response.bean.ProjectResponse;
-import com.hrms.response.bean.TSResponseObj;
-import com.hrms.response.bean.TimeSheetRequestBeanDate;
+import com.hrms.response.bean.TimeSheetRequestRepDate;
 import com.hrms.response.bean.TimeSheetResponse;
-import com.hrms.response.bean.TimeSheetResponseRepDate;
 import com.hrms.service.TimeSheetDetails;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class TimeSheetDetailsImpl implements TimeSheetDetails {
-
+   final String status="pendding";
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	@Autowired
@@ -49,23 +41,14 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	private ProjectDetailsRepository pojectDetailsRepository;
 	@Autowired
 	private TaskDeatailsRepository taskDetailsRepository;
-	@Autowired
-	private HolidayCalenderRepository holidayCalenderRepository;
+
 	@Autowired
 	private TimeSheetResponse timeSheetResponse;
-	@Autowired
-	private IRequestForLeaveRepository iRequestForLeaveRepository;
-	@Autowired
-	private TSResponseObj tsResp;
-	@Autowired
-	private MyLeaveRequestRepository myLeaveRequestRepository;
-	@Autowired
-	private EmpRoleRepo empRoleRepo1;
+
 
 	public TimeSheetResponse saveTimeSheett(List<SaveTimeSheet> savetimesheetList) {
 		log.info("Entered into saveTimeSheet  method of HrmsEmpTimeSheetService class");
 		for (SaveTimeSheet savetimesheet : savetimesheetList) {
-			DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 			EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
 			ClientDetailsEntity client = this.clientDetailsRepository
 					.findById(savetimesheet.getClient().getId()).get();
@@ -77,7 +60,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 			savetimesheet.setProj(proj);
 			savetimesheet.setClient(client);
 			savetimesheet.setEmp(emp1);
-			savetimesheet.setStatus("pending");	
+			savetimesheet.setStatus(status);	
 			savetimesheet.setCreatedBy(savetimesheet.getCreatedBy());
 			savetimesheet.setWorkHours(savetimesheet.getWorkHours());
 			savetimesheet.setCreatedDate(new Date());
@@ -94,7 +77,8 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		return this.saveTimeSheetRepo.findByEmpId(empId);
 	}
 
-	public TimeSheetResponse UpdateTimeSheett(SaveTimeSheet savetimesheet,int id) {			
+	public TimeSheetResponse UpdateTimeSheett(SaveTimeSheet savetimesheet,int id) {	
+		log.info("Entered into  UpdateTimeSheett  method of HrmsEmpTimeSheetService class");
 		EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
 		ClientDetailsEntity client = this.clientDetailsRepository
 				.findById(savetimesheet.getClient().getId()).get();
@@ -106,7 +90,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		savetimesheet.setProj(proj);
 		savetimesheet.setClient(client);
 		savetimesheet.setEmp(emp1);
-		savetimesheet.setStatus("pending");	
+		savetimesheet.setStatus(status);	
 		savetimesheet.setCreatedBy(savetimesheet.getCreatedBy());
 		savetimesheet.setWorkHours(savetimesheet.getWorkHours());
 		savetimesheet.setModifiedDate(new Date());
@@ -122,7 +106,8 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 
 	}
 
-	public  List<SaveTimeSheet> getTimeSheetByDate(TimeSheetResponseRepDate  date) {
+	public  List<SaveTimeSheet> getTimeSheetByDate(TimeSheetRequestRepDate  date) {
+		log.info("Entered into getTimeSheetByDate  method of HrmsEmpTimeSheetService class");
 		try {
 			Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date.getDate());
 			List<SaveTimeSheet> timesheet=saveTimeSheetRepo.getByDate(date1);
@@ -134,7 +119,8 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		}
 	}
 
-	public List<SaveTimeSheet> getTimeSheetByStartDateEndDate(TimeSheetResponseRepDate date) {
+	public List<SaveTimeSheet> getTimeSheetByStartDateEndDate(TimeSheetRequestRepDate date) {
+		log.info("Entered into getTimeSheetByStartDateEndDate  method of HrmsEmpTimeSheetService class");
 		try {
 			Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date.getStartDate());
 			Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(date.getEndDate());	
@@ -148,6 +134,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	}
 
 	public List<EmployeeDetails> getTimeSheetByRpId(String repId) {
+		log.info("Entered into getTimeSheetByRpId  method of HrmsEmpTimeSheetService class");
 		try {
 		return this.employeeRepository.getTimesheetUsingRpId(repId);
 		}catch(Exception e)
@@ -159,6 +146,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	
 	
 	public ProjectListResponse getProjectList() {
+		log.info("Entered into getProjectList  method of HrmsEmpTimeSheetService class");
 		ProjectListResponse response = new ProjectListResponse();
 		try {
 			ProjectResponse projectResponse = null;
@@ -188,11 +176,11 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	}
 
 	public List<SaveTimeSheet> getTimeSheetByRpIdEmpId(String repId, String empId) {
-
+		log.info("Entered into getTimeSheetByRpIdEmpId  method of HrmsEmpTimeSheetService class");
 		return saveTimeSheetRepo.getTimeSheetUsingRepIdEmpId(repId,empId);
 	}
 
-	public List<SaveTimeSheet> getTimeSheetByRpIdDate(TimeSheetResponseRepDate timesheet) {
+	public List<SaveTimeSheet> getTimeSheetByRpIdDate(TimeSheetRequestRepDate timesheet) {
 		try {
 			Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse (timesheet.getDate());
 			List<SaveTimeSheet> savetimesheet=saveTimeSheetRepo.getDetailsByRepIdDate(timesheet.getRepId(),date1);
@@ -204,7 +192,8 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		return null;
 	}
 
-	public List<SaveTimeSheet> getTimeSheetByMan(TimeSheetResponseRepDate timesheet) {
+	public List<SaveTimeSheet> getTimeSheetByMan(TimeSheetRequestRepDate timesheet) {
+		log.info("Entered into getTimeSheetByMan method of HrmsEmpTimeSheetService class");
 		try {
 			Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse (timesheet.getStartDate());
 			Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse (timesheet.getEndDate());
