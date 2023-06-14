@@ -2,14 +2,21 @@ package com.hrms.serviceImpl;
 
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hrms.beans.CommonResponseBean;
+import com.hrms.beans.OrganizationStructureResponseBean;
+import com.hrms.entity.Businessunit;
 import com.hrms.entity.Department;
+import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.OrganizationInfoEntity;
 import com.hrms.entity.Privileges;
+import com.hrms.repository.BusinessunitRepository;
 import com.hrms.repository.DepartmentRepo;
+import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.OrganizationInfoRepository;
 import com.hrms.repository.PrivilegesRepo;
 import com.hrms.service.OrganizationInfoService;
@@ -28,6 +35,15 @@ public class OrganizationInfoServiceImpl implements OrganizationInfoService{
 	
 	@Autowired
 	private CommonResponseBean response;
+	
+	@Autowired
+	private BusinessunitRepository businessunitrepo;
+	
+	@Autowired
+    private EmployeeRepository employeerepo;
+	
+	@Autowired
+	private OrganizationStructureResponseBean orgresponsebean;
 
 	@Override
 	public CommonResponseBean getOrganizationInfo(int roleId, int menuId) {
@@ -60,5 +76,30 @@ public class OrganizationInfoServiceImpl implements OrganizationInfoService{
 		}
 		return response;
 	}
-
+	@Override
+	public OrganizationStructureResponseBean getOrganizationStructure() {
+		 List<Businessunit> business=businessunitrepo.findAll();
+		 if(business.isEmpty()) {
+			 response.setMsg("something went wrong!!");
+			 response.setStatus(false);
+			 return orgresponsebean;
+			 
+		 }else {
+			 
+			 orgresponsebean.setName("Rainier Softech Solutions");
+			 orgresponsebean.setDesignation("Software Development");
+			 orgresponsebean.setSubordinates(business);
+			 return orgresponsebean;
+			 
+		 }
+		 
+			
+	}
+	@Override
+	public List<EmployeeDetails> getOrganizationHirarchy(){
+		List<EmployeeDetails> emp =employeerepo.findAll();
+		return emp;	
+		
+	}
+	
 }
