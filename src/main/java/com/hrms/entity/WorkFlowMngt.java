@@ -16,6 +16,8 @@ public class WorkFlowMngt {
 	private String feature;
 	private String type;
 	private int managerLevel;
-	private Instant creaDateTime;
-	private Instant modifiedDateTime;
+	private Instant createdDate;
+	private Instant modifiedDate;
+	private String createdby;
+	private String modifiedby;
 }

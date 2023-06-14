@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.SaveTimeSheet;
@@ -89,6 +90,9 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
 
 	@Query("SELECT max(userId) FROM EmployeeDetails ")
 	Integer getMaxUserId();
+    
+    @Query("select e.reportingManagerId from EmployeeDetails e where e.empId = :empid")
+    String getReportingManagerId(@Param(value="empid") String empid);
 
 	@Query("From EmployeeDetails where reportingManagerId=?1")
 	List<EmployeeDetails> getTimesheetUsingRpId(String repId);

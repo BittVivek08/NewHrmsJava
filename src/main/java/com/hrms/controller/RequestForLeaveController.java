@@ -97,26 +97,26 @@ public class RequestForLeaveController {
 
 	}
 	
-	@GetMapping("/getLeavesBasedOnYear/{year}")
-	public Common getLeavesBasedOnYear(@PathVariable("year") int year) {
-		return reqLeaveService.getLeavesBasedOnYear(year);
-	}
-	
+//	@GetMapping("/getLeavesBasedOnYear/{year}")
+//	public Common getLeavesBasedOnYear(@PathVariable("year") int year) {
+//		return reqLeaveService.getLeavesBasedOnYear(year);
+//	}
+//	
 
-	//get leaves based on month
-	@GetMapping("/getLeaveDetailsByMonth/{id}/{view}/{month}/{leaveStatus}")
-	public LeavesResponseBean getLeaveDetailsByMonth(@PathVariable(value = "id") int id, @PathVariable(value = "view") String view,
-			@PathVariable(value = "month") int month,@PathVariable(value = "leaveStatus") String leavestatus) {
-		logger.info("entered into leaveDetails method of service class...");
-		return reqLeaveService.getLeavesByMonth(view, id, month,leavestatus);
-	}   
-	
+//	//get leaves based on month
+//	@GetMapping("/getLeaveDetailsByMonth/{id}/{view}/{month}/{leaveStatus}")
+//	public LeavesResponseBean getLeaveDetailsByMonth(@PathVariable(value = "id") int id, @PathVariable(value = "view") String view,
+//			@PathVariable(value = "month") int month,@PathVariable(value = "leaveStatus") String leavestatus) {
+//		logger.info("entered into leaveDetails method of service class...");
+//		return reqLeaveService.getLeavesByMonth(view, id, month,leavestatus);
+//	}   
+//	
 	   // Get Employee Details Whose On The Particulars Date leave
-		@GetMapping("/getLeaveDataByReqIdDate/{leaveReqId}/{date}")
-		public List<EmployeeLeaveResponse> getLeaveDataByReqIdDate(@PathVariable("leaveReqId") int leaveReqId, @PathVariable("date") String date) {
-			logger.info("entered into getEmployeeLeavedDetails method of service class...");
-			return reqLeaveService.getLeaveDataByReqIdDate(leaveReqId, date);
-		}
+//		@GetMapping("/getLeaveDataByReqIdDate/{leaveReqId}/{date}")
+//		public List<EmployeeLeaveResponse> getLeaveDataByReqIdDate(@PathVariable("leaveReqId") int leaveReqId, @PathVariable("date") String date) {
+//			logger.info("entered into getEmployeeLeavedDetails method of service class...");
+//			return reqLeaveService.getLeaveDataByReqIdDate(leaveReqId, date);
+//		}
 		
 	//get leave details based on manager id and status
 		@GetMapping("/getLeaveDetailsBasedOnManagerId/{reportingManagerId}/{leaveStatus}/{emp_id}")

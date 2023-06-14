@@ -13,6 +13,6 @@ public class LeaveRequestBean {
 	private String reason;
 	private String fromDate;
 	private String toDate;
-	private int days;
-	private float avilableLeaves;	
+	//private int days;
+//	private float avilableLeaves;	
 }

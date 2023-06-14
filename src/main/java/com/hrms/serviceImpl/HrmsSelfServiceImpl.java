@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.header.writers.frameoptions.StaticAllowFromStrategy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,17 +23,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.hrms.beans.EmailDetails;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeLeaveRequestSummaryEntity;
-import com.hrms.entity.LeaveRequestEntity;
+
 import com.hrms.entity.MyLeaveRequestEntity;
 import com.hrms.entity.Privileges;
+import com.hrms.entity.WorkFlow;
+import com.hrms.entity.WorkFlowMngt;
 import com.hrms.repository.EmployeeLeaveDetailsRepository;
 import com.hrms.repository.EmployeeLeaveRequestSummaryRepository;
 import com.hrms.repository.EmployeeLeaveTypeRepository;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.HolidayCalenderRepository;
-import com.hrms.repository.LeaveRequestRepository;
 import com.hrms.repository.MyLeaveRequestRepository;
 import com.hrms.repository.PrivilegesRepo;
+import com.hrms.repository.WorkFlowMgntRepository;
+import com.hrms.repository.WorkFlowRepository;
 import com.hrms.request.bean.LeaveRequestBean;
 import com.hrms.response.bean.CommonResponseBean;
 import com.hrms.response.bean.LeaveResponseBean;
@@ -51,7 +55,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	private MyLeaveRequestRepository myLeaveReqRepo;
 
 	@Autowired
-	private LeaveRequestRepository leaveRequestRepo;
+	private EmployeeLeaveRequestSummaryRepository leaveRequestRepo;
 
 	@Autowired
 	private PrivilegesRepo privilegeRepo;
@@ -76,8 +80,13 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 
 	@Autowired
 	private EmailServiceImpl mailservice;
-
-
+	
+	@Autowired
+	private WorkFlowMgntRepository workFlowMgntRepo;
+	
+	@Autowired
+	private WorkFlowRepository workFlowRepo;
+	
 	@Override
 	public CommonResponseBean  saveLeaveRequest(LeaveRequestBean reqBean ,
 			String emp_id ,String leaveType) {
@@ -183,18 +192,52 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				leaveSummery.setNoOfDays(days);
 				leaveSummery.setCreateddate(timestamp);
 				//mail-sending
-				EmailDetails mailData=new EmailDetails();
-				mailData.setRecipient(employeeMail);
-				mailData.setSubject("Leave Approval Of Employee");
-				mailData.setMsgBody("Hi this is "+ empDetails.getFirstName()+"  ,Applying leave can you please approve ");
+//				EmailDetails mailData=new EmailDetails();
+//				mailData.setRecipient(employeeMail);
+//				mailData.setSubject("Leave Approval Of Employee");
+//				mailData.setMsgBody("Hi this is "+ empDetails.getFirstName()+"  ,Applying leave can you please approve ");
 
-				String sendSimpleMail = this.mailservice.sendSimpleMail(mailData);
+			//	String sendSimpleMail = this.mailservice.sendSimpleMail(mailData);
 
 
 				leaveReqSummery.save(leaveSummery);
 
 				leaveBlogic.updateEmployeeLeaves(leaveType ,emp_id, days, "save", null);
-
+				
+				//Operation for work Flow
+				WorkFlow workFlow=new WorkFlow();
+				
+				StringBuffer string=null;
+				if(workFlowMgntRepo.getType().equalsIgnoreCase("Hierarchical")) {
+					workFlow.setReq_id(leaveSummery.getId());
+					workFlow.setEmp_id(emp_id);
+					workFlow.setFeature("leave");
+					workFlow.setStatu("pending");
+					workFlow.setReportingManagerId(empDetails.getReportingManagerId());
+					workFlow.setCreatedDate(timestamp);
+					workFlow.setCreatedBy(emp_id);
+					
+					
+				}
+				else {
+					String empidtest = emp_id;
+					
+					while(employeeRepo.getReportingManagerId(empidtest)!=null) {
+						
+						//workFlow.setReq_id(leaveSummery.getId());
+						workFlow.setEmp_id(emp_id);
+						workFlow.setFeature("leave");
+						workFlow.setStatu("pending");
+						workFlow.setReportingManagerId(empDetails.getReportingManagerId());
+						workFlow.setCreatedDate(timestamp);
+						workFlow.setCreatedBy(emp_id);
+						
+					empidtest =	employeeRepo.getReportingManagerId(workFlow.getReportingManagerId());
+						
+					}
+					
+				}
+			    
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -261,7 +304,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	public CommonResponseBean getHistoryOfAppliedLeaveDetails(String emp_id, int roleId, int menuId) {
 		logger.info("entered into getHistoryOfAppliedLeaveDetails method of business class");
 		CommonResponseBean response = new CommonResponseBean();
-		List<LeaveRequestEntity> fetchAppliedLeaveRequest = leaveRequestRepo.fetchAppliedLeaveRequest(emp_id);
+		List<EmployeeLeaveRequestSummaryEntity> fetchAppliedLeaveRequest = leaveRequestRepo.fetchAppliedLeaveRequest(emp_id);
 
 		List<Privileges> listOfPrivilleges = privilegeRepo.getPrivileges(roleId, menuId);
 		if (!fetchAppliedLeaveRequest.isEmpty()) {
@@ -281,7 +324,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	public CommonResponseBean totalLeaveTaken(int id) {
 
 		CommonResponseBean commonResponse = new CommonResponseBean();
-		List<LeaveRequestEntity> totalLeaveTaken = leaveRequestRepo.totalLeaveTaken(id);
+		List<EmployeeLeaveRequestSummaryEntity> totalLeaveTaken = leaveRequestRepo.totalLeaveTaken(id);
 		if (totalLeaveTaken != null) {
 			commonResponse.setMessage("Successfully");
 			commonResponse.setStatus(true);
