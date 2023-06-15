@@ -6,4 +6,6 @@ import com.hrms.entity.AllottedLeavesLogEntity;
 
 public interface AllottedLeavesLogRepository extends JpaRepository<AllottedLeavesLogEntity, Integer> {
 
+	
+	
 }
