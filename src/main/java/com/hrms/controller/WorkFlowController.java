@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.entity.WorkFlow;
@@ -20,10 +21,27 @@ public class WorkFlowController {
 	private WorkFlowService workFlowService;
 	
 	
-	@GetMapping("/getEmployeeDetails")
+	@GetMapping("/getRequestDetails")
 	public ResponseEntity<List<WorkFlow>> getAllRequest() {
 		List<WorkFlow> getAllRequest = workFlowService.getAllRequests();
 		return new ResponseEntity<>(getAllRequest, HttpStatus.OK);
 	}
+	
+	
+
+	@GetMapping("/getRequestDetails")
+	public ResponseEntity<List<WorkFlow>> getAllRequestSort() {
+		List<WorkFlow> getAllRequest = workFlowService.getAllRequests();
+		return new ResponseEntity<>(getAllRequest, HttpStatus.OK);
+	}
+	
+//	 @GetMapping("/data")
+//	    public List<WorkFlow> getData(
+//	            @RequestParam(required = false) int Req_id,
+//	            @RequestParam(required = false) String rmId,
+//	            @RequestParam(required = false) String status
+//	    ) {
+//	        return dataService.getData(id, name, status);
+//	    }
 	
 }

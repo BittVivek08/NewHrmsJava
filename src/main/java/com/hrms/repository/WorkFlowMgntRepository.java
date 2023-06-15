@@ -9,4 +9,7 @@ public interface WorkFlowMgntRepository extends JpaRepository<WorkFlowMngt, Inte
 
 	@Query("select w.type from WorkFlowMngt w where feature= 'leave' ")
 	public String getType();
+	
+	@Query("select w.managerLevel from WorkFlowMngt w where feature= 'leave' ")
+	public int getManagerLeavel();
 }

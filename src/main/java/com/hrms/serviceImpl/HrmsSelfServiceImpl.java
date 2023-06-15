@@ -71,9 +71,6 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	private EmployeeLeaveTypeRepository leaveTypeRepo;
 
 	@Autowired
-	private HrmsGetDateAndTime dateTimeUtility;
-
-	@Autowired
 	private LeaveRequestBLogic leaveBlogic;
 
 	@Autowired
@@ -133,7 +130,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 
 				Instant timestamp = Instant.now();
 
-				//Mail-Sending
+				// Mail-Sending
 
 				List<String> emailList = new ArrayList<>();
 				String employeeMail = empDetails.getEmail();
@@ -164,11 +161,9 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				reqEntity.setModifiedBy(empDetails.getUserId());
 				reqEntity.setEmail(empDetails.getEmail());
 				reqEntity.setName(empDetails.getFirstName());
-				myLeaveReqRepo.save(reqEntity);
+				MyLeaveRequestEntity req= 	myLeaveReqRepo.save(reqEntity);
 
 				leaveSummery.setEmp_id(empDetails.getEmpId());
-
-
 
 				leaveSummery.setUser_id(empDetails.getUserId());
 				leaveSummery.setDepartmentId(empDetails.getDepartmentId());
@@ -189,65 +184,75 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				leaveSummery.setUser_id(empDetails.getUserId());
 				leaveSummery.setNoOfDays(days);
 				leaveSummery.setCreateddate(timestamp);
-				//mail-sending
-				//				EmailDetails mailData=new EmailDetails();
-				//				mailData.setRecipient(employeeMail);
-				//				mailData.setSubject("Leave Approval Of Employee");
-				//				mailData.setMsgBody("Hi this is "+ empDetails.getFirstName()+"  ,Applying leave can you please approve ");
+				// mail-sending
+				// EmailDetails mailData=new EmailDetails();
+				// mailData.setRecipient(employeeMail);
+				// mailData.setSubject("Leave Approval Of Employee");
+				// mailData.setMsgBody("Hi this is "+ empDetails.getFirstName()+" ,Applying
+				// leave can you please approve ");
 
-				//	String sendSimpleMail = this.mailservice.sendSimpleMail(mailData);
+				// String sendSimpleMail = this.mailservice.sendSimpleMail(mailData);
 
 				// mail-sending
-				for (String email : emailList) {
-					EmailDetails mailData = new EmailDetails();
-					mailData.setRecipient(email);
-					mailData.setSubject("Leave Approval Of Employee");
-					mailData.setMsgBody(
-							"Hi this is " + empDetails.getFirstName() + "  ,Applying leave can you please approve ");
-
-					String sendSimpleMail = this.mailservice.sendSimpleMail(mailData);
-
-				}
+//				for (String email : emailList) {
+//					EmailDetails mailData = new EmailDetails();
+//					mailData.setRecipient(email);
+//					mailData.setSubject("Leave Approval Of Employee");
+//					mailData.setMsgBody(
+//							"Hi this is " + empDetails.getFirstName() + "  ,Applying leave can you please approve ");
+//
+//					String sendSimpleMail = this.mailservice.sendSimpleMail(mailData);
+//
+//				}
 				leaveReqSummery.save(leaveSummery);
 
-				leaveBlogic.updateEmployeeLeaves(leaveType ,emp_id, days, "save", null);
+				leaveBlogic.updateEmployeeLeaves(leaveType, emp_id, days, "save", null);
 
-				//Operation for work Flow
-				WorkFlow workFlow=new WorkFlow();
+				// Operation for work Flow
+				WorkFlow workFlow = null;
 
-				StringBuffer string=null;
-				if(workFlowMgntRepo.getType().equalsIgnoreCase("Hierarchical")) {
-					workFlow.setReq_id(leaveSummery.getId());
+				// System.out.println(workFlowMgntRepo.getType());
+				boolean boolean1 = workFlowMgntRepo.getType().equalsIgnoreCase("Hierarchical");
+				System.out.println(boolean1);
+
+				if (workFlowMgntRepo.getType().equalsIgnoreCase("Hierarchica")) {
+					workFlow=new WorkFlow();
 					workFlow.setEmp_id(emp_id);
 					workFlow.setFeature("leave");
 					workFlow.setStatu("pending");
 					workFlow.setReportingManagerId(empDetails.getReportingManagerId());
 					workFlow.setCreatedDate(timestamp);
 					workFlow.setCreatedBy(emp_id);
+					workFlowRepo.save(workFlow);
 
-
-				}
-				else {
+				} else {
 					String empidtest = emp_id;
+					int i2 = 0; 
+					int i1=workFlowMgntRepo.getManagerLeavel();
+					
 
-					while(employeeRepo.getReportingManagerId(empidtest)!=null) {
+					while (employeeRepo.getReportingManagerId(empidtest) != null && i1!=i2) {
 
-						//workFlow.setReq_id(leaveSummery.getId());
+						workFlow=new WorkFlow();
 						workFlow.setEmp_id(emp_id);
 						workFlow.setFeature("leave");
 						workFlow.setStatu("pending");
-						workFlow.setReportingManagerId(empDetails.getReportingManagerId());
+						workFlow.setReportingManagerId(employeeRepo.getReportingManagerId(empidtest));
 						workFlow.setCreatedDate(timestamp);
 						workFlow.setCreatedBy(emp_id);
-
-						empidtest =	employeeRepo.getReportingManagerId(workFlow.getReportingManagerId());
-
+			
+						workFlow.setReq_id(req.getId());						
+						
+						workFlowRepo.save(workFlow);
+						empidtest = employeeRepo.getReportingManagerId(empidtest);
+						System.out.println(empidtest);
+						System.out.println("<<<<<<<<<<<<<<<<"+employeeRepo.getReportingManagerId(empidtest)+">>>>>>>>>>>>>>>>");
+                        i2++;
 					}
 
 				}
 
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
@@ -257,22 +262,20 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 			commonRes.setStatus(true);
 		} else {
 			commonRes.setMessage("the leave is already applied on that date");
-			commonRes.setStatus(false);	
+			commonRes.setStatus(false);
 		}
 
 		return commonRes;
 	}
 
-
-
-	//getting available leave days
+	// getting available leave days
 	public float getAvailableDays(String emp_id, String leaveType) {
 
-		float f1=leaveTypeRepo.getNoOfDays(leaveType);
-		float f2=leaveReqSummery.getNoOfDaysApproved(emp_id,leaveType);
+		float f1 = leaveTypeRepo.getNoOfDays(leaveType);
+		float f2 = leaveReqSummery.getNoOfDaysApproved(emp_id, leaveType);
 
-		float availableDays = leaveTypeRepo.getNoOfDays(leaveType)-leaveReqSummery.getNoOfDaysApproved(emp_id,leaveType);
-
+		float availableDays = leaveTypeRepo.getNoOfDays(leaveType)
+				- leaveReqSummery.getNoOfDaysApproved(emp_id, leaveType);
 
 		return availableDays;
 	}
@@ -312,7 +315,8 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	public CommonResponseBean getHistoryOfAppliedLeaveDetails(String emp_id, int roleId, int menuId) {
 		logger.info("entered into getHistoryOfAppliedLeaveDetails method of business class");
 		CommonResponseBean response = new CommonResponseBean();
-		List<EmployeeLeaveRequestSummaryEntity> fetchAppliedLeaveRequest = leaveRequestRepo.fetchAppliedLeaveRequest(emp_id);
+		List<EmployeeLeaveRequestSummaryEntity> fetchAppliedLeaveRequest = leaveRequestRepo
+				.fetchAppliedLeaveRequest(emp_id);
 
 		List<Privileges> listOfPrivilleges = privilegeRepo.getPrivileges(roleId, menuId);
 		if (!fetchAppliedLeaveRequest.isEmpty()) {
@@ -346,32 +350,32 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	}
 
 	@Override
-	public leaveReuestUpdateResponseBean updateLeavRequest(LeaveRequestUpdateDataBean bean,int id) {
+	public leaveReuestUpdateResponseBean updateLeavRequest(LeaveRequestUpdateDataBean bean, int id) {
 		try {
 			EmployeeLeaveRequestSummaryEntity LeaveReqSummaryEntity = this.leaveReqSummery.findByLeaveReqId(id);
-			if(LeaveReqSummaryEntity.getLeaveStatus().equalsIgnoreCase("pending")) {
+			if (LeaveReqSummaryEntity.getLeaveStatus().equalsIgnoreCase("pending")) {
 				LeaveReqSummaryEntity.setLeaveType(bean.getLeaveType());
-				//LocalDate startdate = LocalDate.parse(Databean.getStartdate());
+				// LocalDate startdate = LocalDate.parse(Databean.getStartdate());
 				LocalDate fromDate = LocalDate.parse(bean.getFromDate());
 				LeaveReqSummaryEntity.setFromDate(fromDate);
 				LocalDate toDate = LocalDate.parse(bean.getToDate());
 				LeaveReqSummaryEntity.setToDate(toDate);
 				LeaveReqSummaryEntity.setReason(bean.getReson());
 				EmployeeLeaveRequestSummaryEntity updatedEntity = this.leaveReqSummery.save(LeaveReqSummaryEntity);
-				if(updatedEntity!=null) {
+				if (updatedEntity != null) {
 					this.leaveReqUpdateResBean.setMessage("successfully updated ");
 					this.leaveReqUpdateResBean.setStatus(true);
-				}else {
+				} else {
 					this.leaveReqUpdateResBean.setMessage("failed to update  updated ");
 					this.leaveReqUpdateResBean.setStatus(true);
-				}	
-			}
-			else {
-				this.leaveReqUpdateResBean.setMessage("Your Leave status approved or rejected can't update leave details");
+				}
+			} else {
+				this.leaveReqUpdateResBean
+						.setMessage("Your Leave status approved or rejected can't update leave details");
 				this.leaveReqUpdateResBean.setStatus(false);
 			}
 
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			this.leaveReqUpdateResBean.setMessage("Deatils not found");
 			this.leaveReqUpdateResBean.setStatus(false);
