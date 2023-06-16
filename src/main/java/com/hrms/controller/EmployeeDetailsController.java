@@ -60,7 +60,6 @@ public class EmployeeDetailsController {
 	@PostMapping("/uploadImage") public EntityBeanResponse saveEmpDetails(@RequestParam String jsonData,@RequestParam("file") MultipartFile file) throws IOException {
 		try{
 			log.info("Class : "+this.getClass().getName());
-
 			log.info("Method :" + Thread.currentThread().getStackTrace()[1].getMethodName());
 			String fileName = fileStorageService.storeFile(file);
 			EmployeeDetails empDetails = new ObjectMapper().readValue(jsonData, EmployeeDetails.class);

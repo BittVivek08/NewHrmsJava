@@ -30,13 +30,15 @@ import com.hrms.response.bean.ProjectResponse;
 import com.hrms.response.bean.TimeSheetRequestRepDate;
 import com.hrms.response.bean.TimeSheetResponse;
 import com.hrms.service.TimeSheetDetails;
+import com.hrms.util.Constants;
+import com.hrms.util.LeaveRequestBLogic;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class TimeSheetDetailsImpl implements TimeSheetDetails {
-	final String status = "pendding";
+	private static final String CLASS_NAME = TimeSheetDetailsImpl.class.getSimpleName();
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	@Autowired
@@ -49,6 +51,9 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	private TaskDeatailsRepository taskDetailsRepository;
 
 	@Autowired
+	 private  LeaveRequestBLogic  blogic;
+	
+	@Autowired
 	private TimeSheetResponse timeSheetResponse;
 	
 	@Autowired
@@ -58,7 +63,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	private WorkFlowRepository workFlowRepository;
 	
 		public TimeSheetResponse saveTimeSheett(List<SaveTimeSheet> savetimesheetList) {
-		log.info("Entered into saveTimeSheet  method of HrmsEmpTimeSheetService class");
+		log.info("Entered into saveTimeSheet  method of "+ CLASS_NAME +" class");
 		try {
 			
 		
@@ -72,7 +77,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 			savetimesheet.setProj(proj);
 			savetimesheet.setClient(client);
 			savetimesheet.setEmp(emp1);
-			savetimesheet.setStatus(status);
+			savetimesheet.setStatus(Constants.STATUS_PENDING);
 			savetimesheet.setCreatedBy(savetimesheet.getCreatedBy());
 			savetimesheet.setWorkHours(savetimesheet.getWorkHours());
 			savetimesheet.setCreatedDate(new Date());
@@ -92,12 +97,17 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 				System.out.println(date);
 		  if(proj.getEnddate()!=LocalDate.now()){
 			bean.setApprovalManagerId(emp1.getReportingManagerId());
+			bean.setStatus("pending");			
+			blogic.workFlowInsetion(bean, "timesheet", false);
+			
 		  }
 		  else {
-			  bean.setApprovalManagerId(projectEmployeeRepository.findAll().iterator().next().getEmployee().getReportingManagerId())	;
+			  bean.setApprovalManagerId(projectEmployeeRepository.findAll().iterator().next().getEmployee().getReportingManagerId());
+			  bean.setStatus("pendingPM");
+			  blogic.workFlowInsetion(bean, "timesheet", true);			  
 			  }
-			bean.setStatus(status);
-          this.workFlowRepository.save(bean);
+			//bean.setStatus(Constants.STATUS_PENDING);
+          //this.workFlowRepository.save(bean);
 		}} catch (Exception e) {
 		e.printStackTrace();
 		}
@@ -120,7 +130,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		savetimesheet.setProj(proj);
 		savetimesheet.setClient(client);
 		savetimesheet.setEmp(emp1);
-		savetimesheet.setStatus(status);
+		savetimesheet.setStatus(Constants.STATUS_PENDING);
 		savetimesheet.setCreatedBy(savetimesheet.getCreatedBy());
 		savetimesheet.setWorkHours(savetimesheet.getWorkHours());
 		savetimesheet.setModifiedDate(new Date());
