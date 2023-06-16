@@ -29,12 +29,12 @@ public class EmployeeDocumentsEntity {
 	@Column(name = "user_id")
 	private Integer userId;
 
-	@Column(name = "name")
+	@Column(name = "documentName")
 	private String documentName;
 
 	@JsonIgnore
 	@Column(name = "attachments")
-	private String attachmentDocumentPath;
+	private String DocumentPath;
 
 	@Lob
     private byte[] data;
@@ -44,7 +44,7 @@ public class EmployeeDocumentsEntity {
 	private EmployeeDetails empdetails;
 	
 	@Column(name ="fileName")
-	private String documentFileName;
+	private String fileName;
 
 	@Transient
 	private String documentUrl;

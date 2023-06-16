@@ -48,7 +48,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 			docEntity.setCreatedBy(docsEntity.getCreatedBy());
 			docEntity.setDocumentId(docsEntity.getDocumentId());
 			docEntity.setIsExpires(docsEntity.getIsExpires());
-			docEntity.setDocumentFileName(docsEntity.getDocumentFileName());
+			docEntity.setFileName(docsEntity.getFileName());
 			docEntity.setModifiedBy(docsEntity.getModifiedBy());
 			docEntity.setCreatedBy(docsEntity.getCreatedBy());
 			docEntity.setCreatedDate(docsEntity.getCreatedDate());
@@ -67,6 +67,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 				return response;
 			}
 		} else {
+			log.error("Document file is not saved in properly" );
 			response.setMessage("something is wrong....");
 			response.setStatus(false);
 			return response;
@@ -74,20 +75,17 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 	}
 
 	@Override
-	public byte[] downloadFile(String fileName) {
-		log.info("get the document bussiness logic method");
-		Optional<EmployeeDocumentsEntity> dbData = empDocRepo.findByDocumentFileName(fileName);
+	public byte[] getDocumentFile(String fileName) {
+		log.info("get the document fileName with no extension bussiness logic");
+//		Optional<EmployeeDocumentsEntity> dbData = empDocRepo.findByDocumentName(fileName);
+		Optional<EmployeeDocumentsEntity> dbData = empDocRepo.findByFileName(fileName);
 		byte[] images = FileUtils.decompressImage(dbData.get().getData());
 		return images;
 	}
 
-	public boolean isFileNameMatch(String data, String fileName) {
-		return data.equals(fileName);
-	}
-
 	@Override
 	public MediaType getMediaTypeForFileName(String fileName) {
-		log.info("get the mediaType checking bussiness logic method");
+		log.info("get what type of mediafile checking bussiness logic");
 		String[] arr = fileName.split("\\.");
 		String fileExtension = arr[arr.length - 1];
 
@@ -110,7 +108,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 
 	@Override
 	public List<EmployeeDocumentResponse> getFileNameByEmpId(String empId) {
-		log.info("get list of document filename by empId bussiness logic method");
+		log.info("get list of documents with fileName by empId bussiness logic");
 		List<Object[]> result = empDocRepo.findByEmpId(empId);
 		List<EmployeeDocumentResponse> response = new ArrayList<>();
 		for (int i = 0; i < result.size(); i++) {
@@ -142,7 +140,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 			docEntity.setCreatedBy(docsEntity.getCreatedBy());
 			docEntity.setDocumentId(docsEntity.getDocumentId());
 			docEntity.setIsExpires(docsEntity.getIsExpires());
-			docEntity.setDocumentFileName(docsEntity.getDocumentFileName());
+			docEntity.setFileName(docsEntity.getFileName());
 			docEntity.setModifiedBy(docsEntity.getModifiedBy());
 			docEntity.setCreatedBy(docsEntity.getCreatedBy());
 			docEntity.setCreatedDate(docsEntity.getCreatedDate());
@@ -169,12 +167,12 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 
 	@Override
 	public SuccessResponseBean deleteFileNameByEmpId(String empId, String fileName) {
-
+		log.info("delete the documentFile by using empId & fileName bussiness logic");
 		List<EmployeeDocumentsEntity> documents = empDocRepo.findByEmpIds(empId);
 
 		// Find the document with the given file name
 		Optional<EmployeeDocumentsEntity> documentOptional = documents.stream()
-				.filter(doc -> doc.getDocumentFileName().equals(fileName)).findFirst();
+				.filter(doc -> doc.getFileName().equals(fileName)).findFirst();
 
 		if (documentOptional.isPresent()) {
 			EmployeeDocumentsEntity documentToDelete = documentOptional.get();
@@ -186,11 +184,38 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 			response.setStatus(true);
 			return response;
 		}
-
+		log.error("Document file not found: " + fileName);
 		response.setMessage("File not found.");
 		response.setStatus(false);
 		return response;
 	}
+
+	@Override
+	public byte[] downloadDocumentFile(String empId, String fileName) {
+		log.info("download the documentfile by using empId & fileName bussiness logic");
+		Optional<EmployeeDocumentsEntity> dbData = empDocRepo.findByFileName(fileName);
+		
+		if (dbData.isPresent()) {
+	        byte[] images = FileUtils.decompressImage(dbData.get().getData());
+	        return images;
+	    } else {
+	        log.error("Document file not found: " + fileName);
+	        return new byte[0];  // Returning an empty byte array as an example.
+	    }
+		
+//		byte[] images = FileUtils.decompressImage(dbData.get().getData());
+//		return images;
+	}
+
+	@Override
+	public byte[] getDocumentNameFile(String documentName) {
+		log.info("get the documentFile with extensionName bussiness logic");
+		Optional<EmployeeDocumentsEntity> dbData = empDocRepo.findByDocumentName(documentName);
+		byte[] images = FileUtils.decompressImage(dbData.get().getData());
+		return images;
+	}
+	
+	
 }
 
 /////////////////////BackUp////////////////////////////////////////////////
