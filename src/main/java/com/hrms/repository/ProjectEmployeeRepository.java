@@ -17,6 +17,8 @@ public interface ProjectEmployeeRepository extends JpaRepository<ProjectEmployee
 
 	@Query("from ProjectEmployeeEntity p where p.project.projectId = :pid and p.employee.empId = :sid")
 	public List<ProjectEmployeeEntity> getProjectEmployeeExistedDetails(int pid, String sid);
+//    @Query("From ProjectEmployeeEntity where id=?1 ")
+//	public String getprojectManager(int projectId);
 
 //	@Query("From ProjectEmployeeEntity where startdate=?1 and endDate=?2")
 //	public Boolean getstartdate(ProjectDetailsEntity proj);

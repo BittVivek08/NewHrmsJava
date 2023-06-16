@@ -95,14 +95,17 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 			bean.setFeature("TimeSheet");
 			LocalDate date= pojectDetailsRepository.enddate(proj.getProjectId());					
 				System.out.println(date);
-		  if(proj.getEnddate()!=LocalDate.now()){
+				LocalDate l1 =proj.getEnddate();
+				LocalDate l2 = LocalDate.now(); 
+				// (date1.isBefore(date2) || date1.isEqual(date2))
+		  if(l1.isBefore(l2) || l1.isEqual(l2)){
 			bean.setApprovalManagerId(emp1.getReportingManagerId());
 			bean.setStatus("pending");			
 			blogic.workFlowInsetion(bean, "timesheet", false);
 			
 		  }
 		  else {
-			  bean.setApprovalManagerId(projectEmployeeRepository.findAll().iterator().next().getEmployee().getReportingManagerId());
+			  bean.setApprovalManagerId(pojectDetailsRepository.getprojectManager(proj.getProjectId()));
 			  bean.setStatus("pendingPM");
 			  blogic.workFlowInsetion(bean, "timesheet", true);			  
 			  }

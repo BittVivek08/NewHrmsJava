@@ -16,13 +16,14 @@ public interface ProjectDetailsRepository extends JpaRepository<ProjectDetailsEn
 	List<ProjectDetailsEntity> findByClient(@Param("clientid") Integer clientid);
 
 	ProjectDetailsEntity findByProjectId(int projectId);
-	
-    @Query("select enddate from ProjectDetailsEntity  where projectId=?1")
-    LocalDate enddate( int projectId);
+
+	@Query("select enddate from ProjectDetailsEntity  where projectId=?1")
+	LocalDate enddate(int projectId);
+
+	@Query(" select employee.empId From  ProjectDetailsEntity where projectId=?1 ")
+	String getprojectManager(int projectId);
 
 //	@Query("From ProjectDetailsEntity where startdate=?1 and enddate=?2 and projectId=?3")
 //	boolean getstartdate(LocalDate startdate, LocalDate enddate, int projectId);
-
-	
 
 }
