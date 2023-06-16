@@ -14,12 +14,16 @@ public interface EmployeeDocumentService {
 	
 	MediaType getMediaTypeForFileName(String fileName);
 	
-	byte[] downloadFile(String fileName);
+	byte[] getDocumentFile(String fileName);
 	
 	List<EmployeeDocumentResponse> getFileNameByEmpId(String empId);
 	
 	SuccessResponseBean updateDocument( MultipartFile file, EmployeeDocumentsEntity docsEntity,int id)throws IOException;
 	
 	SuccessResponseBean deleteFileNameByEmpId(String empId,String fileName);
+	
+	byte[] downloadDocumentFile(String empId,String fileName);
+	
+	public byte[] getDocumentNameFile(String documentName);
 
 }
