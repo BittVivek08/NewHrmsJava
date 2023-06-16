@@ -5,15 +5,19 @@ import java.util.List;
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.CommonResponseBean;
 import com.hrms.beans.OrganizationStructureResponseBean;
-import com.hrms.entity.Businessunit;
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.OrganizationInfoEntity;
 import com.hrms.service.OrganizationInfoService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -48,5 +52,21 @@ public class OrganizationInfoController {
 	public List<EmployeeDetails> getAllOrganizationHierarchy(){
 		log.info("fetching EmployeeDetails data ");
 		return orgInfoService.getOrganizationHirarchy();
+	}
+	@PostMapping("/saveOrganizationInfo")
+	public CommonResponseBean saveOrganizationInfo(@RequestBody OrganizationInfoEntity infoentity)
+	
+	{
+		log.info("entered into saveOrganizationInfo method in controller");
+		return orgInfoService.saveorganization(infoentity) ;
+		
+	}
+	@GetMapping("/getOrganization")
+	public ResponseEntity<List<OrganizationInfoEntity>> getOrganizationInfo() {
+		log.info("entered into getOrganizationInfo method in controller");
+		List<OrganizationInfoEntity> details = orgInfoService.getorganizationInfo();
+		log.info("successfully fetched getOrganizationInfo in controlller");
+		return new ResponseEntity<>(details, HttpStatus.OK);
+
 	}
 }

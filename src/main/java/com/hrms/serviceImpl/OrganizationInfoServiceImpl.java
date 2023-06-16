@@ -2,8 +2,6 @@ package com.hrms.serviceImpl;
 
 import java.util.List;
 
-import javax.ws.rs.core.Response;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,6 +98,30 @@ public class OrganizationInfoServiceImpl implements OrganizationInfoService{
 		List<EmployeeDetails> emp =employeerepo.findAll();
 		return emp;	
 		
+	}
+
+	@Override
+	public CommonResponseBean saveorganization(OrganizationInfoEntity infoentity) {
+		OrganizationInfoEntity saveentity=orgInfoRepo.save(infoentity);
+		if(saveentity!=null)
+		{
+			response.setMsg("OrganizationInfo data save successfully");
+			response.setStatus(true);
+			}
+		else {
+			response.setMsg("OrganizationInfo data not saved");
+			response.setStatus(false);;
+			
+		}
+		
+		
+		return response;
+	}
+
+	@Override
+	public List<OrganizationInfoEntity> getorganizationInfo() {
+		
+		return orgInfoRepo.findAll();
 	}
 	
 }

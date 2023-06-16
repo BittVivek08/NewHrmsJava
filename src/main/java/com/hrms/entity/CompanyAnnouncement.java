@@ -1,7 +1,6 @@
 package com.hrms.entity;
 
 
-import java.time.LocalDateTime;
 import java.util.BitSet;
 
 import javax.persistence.Column;

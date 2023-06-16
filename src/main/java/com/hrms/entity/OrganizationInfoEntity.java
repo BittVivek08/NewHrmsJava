@@ -28,7 +28,7 @@ public class OrganizationInfoEntity {
 	private int id;
 
 	@Column(name = "organisationname")
-	private String OrganizationName;
+	private String organizationName;
 
 	@Column(name = "org_image")
 	private String orgImage;
@@ -61,7 +61,7 @@ public class OrganizationInfoEntity {
 	private String email;
 
 	@Column(name = "secondaryemail")
-	private String SecondaryEmail;
+	private String secondaryEmail;
 
 	@Column(name = "faxnumber")
 	private String faxNo;
@@ -91,7 +91,7 @@ public class OrganizationInfoEntity {
 	private String description;
 
 	@Column(name = "orghead")
-	private String OrganizationHead;
+	private String organizationHead;
 
 	@Column(name = "designation")
 	private String designation;
