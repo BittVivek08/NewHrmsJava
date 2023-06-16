@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.hrms.beans.CommonResponseBean;
 import com.hrms.beans.OrganizationStructureResponseBean;
-import com.hrms.entity.Businessunit;
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.OrganizationInfoEntity;
 
 public interface OrganizationInfoService {
 	
@@ -14,5 +14,9 @@ public interface OrganizationInfoService {
 	public CommonResponseBean getDepartmentBasedOnBu(int businessId);
 	public OrganizationStructureResponseBean getOrganizationStructure();
 	public List<EmployeeDetails> getOrganizationHirarchy();
+
+	public CommonResponseBean saveorganization(OrganizationInfoEntity infoentity);
+
+	public List<OrganizationInfoEntity> getorganizationInfo();
 
 }

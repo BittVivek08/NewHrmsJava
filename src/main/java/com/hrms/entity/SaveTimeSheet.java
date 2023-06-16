@@ -39,17 +39,17 @@ public class SaveTimeSheet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "emp_id" ,referencedColumnName = "emp_id" )
+	@JoinColumn(name = "emp_id", referencedColumnName = "emp_id")
 	private EmployeeDetails emp;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ClientDetailsEntity client;
-	
+
 	@Column(name = "work_duration")
 	private String workHours;
-	
+
 	@Column(name = "work_date")
 	private Date workDate;
 

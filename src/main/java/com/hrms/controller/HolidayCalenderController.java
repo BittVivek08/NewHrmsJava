@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class HolidayCalenderController {
 
 	@Autowired
-	private HolidayCalenderService service;
+	private HolidayCalenderService service;  
     
 	//save Holiday
 	@PostMapping("/Save")

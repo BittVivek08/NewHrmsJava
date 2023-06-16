@@ -94,10 +94,6 @@ public class EmployeePersonalInfoImpl  implements EmployeePersonalInfoService{
 			 expentity.get().setReferrerName(entity.getReferrerName());
 			 expentity.get().setToDate(entity.getToDate());
 			 
-		 
-		
-		
-
 		ExperinceEntity exp = experiancerepo.save(expentity.get());
 
 		if (exp != null) {

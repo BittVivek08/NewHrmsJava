@@ -1,4 +1,4 @@
-package com.hrms.controller;
+ package com.hrms.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
