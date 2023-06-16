@@ -7,9 +7,9 @@ import com.hrms.entity.WorkFlowMngt;
 
 public interface WorkFlowMgntRepository extends JpaRepository<WorkFlowMngt, Integer>{
 
-	@Query("select w.type from WorkFlowMngt w where feature= 'leave' ")
-	public String getType();
+	@Query("select w.type from WorkFlowMngt w where feature= ?1")
+	public String getType(String feature);
 	
-	@Query("select w.managerLevel from WorkFlowMngt w where feature= 'leave' ")
-	public int getManagerLeavel();
+	@Query("select w.managerLevel from WorkFlowMngt w where feature= ?1")
+	public int getManagerLeavel(String feature);
 }
