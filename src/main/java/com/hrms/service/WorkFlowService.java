@@ -7,5 +7,5 @@ public interface WorkFlowService {
 
 	public List<WorkFlow> getAllRequests();
 	
-	public List<WorkFlow> getData(String emp_id,String rmId,String status);
+	public List<WorkFlow> getData(String empid,String rmId,String status);
 }

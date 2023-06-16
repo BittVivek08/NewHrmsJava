@@ -39,11 +39,11 @@ public class WorkFlowController {
 
 	@GetMapping("/getRequestDetailsSort")
 	public List<WorkFlow> getData(
-			@RequestParam(required = false) String emp_id,
+			@RequestParam(required = false) String empid,
 			@RequestParam(required = false) String rmid,
 			@RequestParam(required = false) String status
 			) {
-		return workFlowService.getData(emp_id, rmid, status);
+		return workFlowService.getData(empid, rmid, status);
 	}
 
 }
