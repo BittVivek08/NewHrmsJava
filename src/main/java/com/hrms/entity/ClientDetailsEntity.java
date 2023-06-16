@@ -57,8 +57,6 @@ public class ClientDetailsEntity implements Serializable
 	@Column(name = "modified_by")
 	private int modifiedBy;
 	
-	
-	
 	@Column(name = "created")
 	private LocalDateTime createdDate;
 

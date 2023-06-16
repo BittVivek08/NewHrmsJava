@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import com.hrms.entity.EmployeeDocumentsEntity;
 
+
 public interface EmployeeDocumentsRepository extends JpaRepository<EmployeeDocumentsEntity,Integer> {
 
 	Optional<EmployeeDocumentsEntity> findByDocumentName(String fileName);
@@ -26,5 +27,11 @@ public interface EmployeeDocumentsRepository extends JpaRepository<EmployeeDocum
 
 //	@Query("UPDATE EmployeeDocumentsEntity doc SET doc.attachmentDocumentPath = :uploadPath WHERE doc.userId = :userId AND doc.documentId = :documentId")
 //	boolean uploadDocument(int userId, int documentId, String uploadPath);
+	
+	@Query("select e.selectedDocumentsIds from EmployeeDetails e where e.empId = :empId")
+	List<String> getSelectedVisaDocumentsId(@Param("empId") String empId);
+	
+	@Query("SELECT e FROM EmployeeDocumentsEntity e WHERE e.documentId =:id AND empId = :empId")
+	public List<EmployeeDocumentsEntity> getSelectedVisaDocuments(String empId);
 
 }
