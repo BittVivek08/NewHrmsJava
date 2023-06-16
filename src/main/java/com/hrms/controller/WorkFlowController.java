@@ -29,19 +29,19 @@ public class WorkFlowController {
 	
 	
 
-	@GetMapping("/getRequestDetails")
+	@GetMapping("/getRequestDetailsss")
 	public ResponseEntity<List<WorkFlow>> getAllRequestSort() {
 		List<WorkFlow> getAllRequest = workFlowService.getAllRequests();
 		return new ResponseEntity<>(getAllRequest, HttpStatus.OK);
 	}
 	
-//	 @GetMapping("/data")
-//	    public List<WorkFlow> getData(
-//	            @RequestParam(required = false) int Req_id,
-//	            @RequestParam(required = false) String rmId,
-//	            @RequestParam(required = false) String status
-//	    ) {
-//	        return dataService.getData(id, name, status);
-//	    }
+	 @GetMapping("/getRequestDetailsSort")
+	    public List<WorkFlow> getData(
+	            @RequestParam(required = false) String emp_id,
+	            @RequestParam(required = false) String rmid,
+	            @RequestParam(required = false) String status
+	    ) {
+        return workFlowService.getData(emp_id, rmid, status);
+	    }
 	
 }

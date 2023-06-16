@@ -15,15 +15,22 @@ public class WorkFlow {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
-	private String emp_id;
-	private int Req_id;
+	private Integer id;
+	private String empid;
+	private int reqid;
 	private String feature;
-	private String statu;
-	private String reportingManagerId;
+	private String status;
+	private String approvalManagerId;
 	private Instant createdDate;
 	private Instant modifiedDate;
 	private String createdBy;
 	private String modifiedBy;
 	
 }
+
+
+
+
+
+
+

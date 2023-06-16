@@ -208,50 +208,22 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 
 				leaveBlogic.updateEmployeeLeaves(leaveType, emp_id, days, "save", null);
 
-				// Operation for work Flow
-				WorkFlow workFlow = null;
-
-				// System.out.println(workFlowMgntRepo.getType());
-				boolean boolean1 = workFlowMgntRepo.getType().equalsIgnoreCase("Hierarchical");
-				System.out.println(boolean1);
-
-				if (workFlowMgntRepo.getType().equalsIgnoreCase("Hierarchica")) {
+		        
+                WorkFlow workFlow = new WorkFlow();
+				
 					workFlow=new WorkFlow();
-					workFlow.setEmp_id(emp_id);
+					workFlow.setEmpid(emp_id);
 					workFlow.setFeature("leave");
-					workFlow.setStatu("pending");
-					workFlow.setReportingManagerId(empDetails.getReportingManagerId());
+					workFlow.setStatus("pending");
+					workFlow.setApprovalManagerId(empDetails.getReportingManagerId());
 					workFlow.setCreatedDate(timestamp);
 					workFlow.setCreatedBy(emp_id);
-					workFlowRepo.save(workFlow);
+					workFlow.setReqid(req.getId());
+					leaveBlogic.workFlowInsetion(workFlow,"leave",false);
 
-				} else {
-					String empidtest = emp_id;
-					int i2 = 0; 
-					int i1=workFlowMgntRepo.getManagerLeavel();
 					
-
-					while (employeeRepo.getReportingManagerId(empidtest) != null && i1!=i2) {
-
-						workFlow=new WorkFlow();
-						workFlow.setEmp_id(emp_id);
-						workFlow.setFeature("leave");
-						workFlow.setStatu("pending");
-						workFlow.setReportingManagerId(employeeRepo.getReportingManagerId(empidtest));
-						workFlow.setCreatedDate(timestamp);
-						workFlow.setCreatedBy(emp_id);
-			
-						workFlow.setReq_id(req.getId());						
-						
-						workFlowRepo.save(workFlow);
-						empidtest = employeeRepo.getReportingManagerId(empidtest);
-						System.out.println(empidtest);
-						System.out.println("<<<<<<<<<<<<<<<<"+employeeRepo.getReportingManagerId(empidtest)+">>>>>>>>>>>>>>>>");
-                        i2++;
-					}
-
-				}
-
+					
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
