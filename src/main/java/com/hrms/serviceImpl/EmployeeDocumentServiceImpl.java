@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.hrms.beans.DocResponseBean;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeDocumentsEntity;
 import com.hrms.repository.EmployeeDocumentsRepository;
@@ -77,7 +79,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 	@Override
 	public byte[] getDocumentFile(String fileName) {
 		log.info("get the document fileName with no extension bussiness logic");
-//		Optional<EmployeeDocumentsEntity> dbData = empDocRepo.findByDocumentName(fileName);
+		//		Optional<EmployeeDocumentsEntity> dbData = empDocRepo.findByDocumentName(fileName);
 		Optional<EmployeeDocumentsEntity> dbData = empDocRepo.findByFileName(fileName);
 		byte[] images = FileUtils.decompressImage(dbData.get().getData());
 		return images;
@@ -100,7 +102,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 			return MediaType.IMAGE_JPEG;
 		case "doc":
 			return MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-//			return MediaType.APPLICATION_OCTET_STREAM;    
+			//			return MediaType.APPLICATION_OCTET_STREAM;    
 		default:
 			return MediaType.APPLICATION_OCTET_STREAM;
 		}
@@ -127,14 +129,14 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 	public SuccessResponseBean updateDocument(MultipartFile file, EmployeeDocumentsEntity docsEntity, int id)
 			throws IOException {
 		log.info("update the document by empId bussiness logic method");
-//		EmployeeDetails employee = this.employeeRepository.findByEmpId(empId);
+		//		EmployeeDetails employee = this.employeeRepository.findByEmpId(empId);
 		Optional<EmployeeDocumentsEntity> findById = empDocRepo.findById(id);
-//		List<EmployeeDetails> employeeDetails = this.employeeRepository.findByUserId(docsEntity.getUserId());
+		//		List<EmployeeDetails> employeeDetails = this.employeeRepository.findByUserId(docsEntity.getUserId());
 
 		if (findById != null) {
 			EmployeeDocumentsEntity docEntity = empDocRepo.save(EmployeeDocumentsEntity.builder()
 					.documentName(file.getOriginalFilename()).data(FileUtils.compressImage(file.getBytes())).build());
-//			docEntity.setEmpdetails(employee);
+			//			docEntity.setEmpdetails(employee);
 			docEntity.setUserId(docsEntity.getUserId());
 			docEntity.setIsactive(docsEntity.getIsactive());
 			docEntity.setCreatedBy(docsEntity.getCreatedBy());
@@ -194,17 +196,17 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 	public byte[] downloadDocumentFile(String empId, String fileName) {
 		log.info("download the documentfile by using empId & fileName bussiness logic");
 		Optional<EmployeeDocumentsEntity> dbData = empDocRepo.findByFileName(fileName);
-		
+
 		if (dbData.isPresent()) {
-	        byte[] images = FileUtils.decompressImage(dbData.get().getData());
-	        return images;
-	    } else {
-	        log.error("Document file not found: " + fileName);
-	        return new byte[0];  // Returning an empty byte array as an example.
-	    }
-		
-//		byte[] images = FileUtils.decompressImage(dbData.get().getData());
-//		return images;
+			byte[] images = FileUtils.decompressImage(dbData.get().getData());
+			return images;
+		} else {
+			log.error("Document file not found: " + fileName);
+			return new byte[0];  // Returning an empty byte array as an example.
+		}
+
+		//		byte[] images = FileUtils.decompressImage(dbData.get().getData());
+		//		return images;
 	}
 
 	@Override
@@ -214,8 +216,27 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 		byte[] images = FileUtils.decompressImage(dbData.get().getData());
 		return images;
 	}
-	
-	
+	public DocResponseBean getSelectedVisaDocuments(String empId) {
+		log.info("getSelectedVisaDocuments() business logic");
+		DocResponseBean response = new DocResponseBean();
+
+		List<String> selectedVisaDocumentsId = empDocRepo.getSelectedVisaDocumentsId(empId);
+
+		List<EmployeeDocumentsEntity> selectedVisaDocuments = empDocRepo.getSelectedVisaDocuments(empId);
+
+		if(!selectedVisaDocumentsId.isEmpty() && !selectedVisaDocuments.isEmpty()) {
+			response.setMessage("list of document fetched successfully");
+			response.setListOfDocuments(selectedVisaDocuments);
+			response.setStatus(true);
+		}else {
+			response.setMessage("list of document fetching failed");
+			response.setStatus(false);
+		}
+
+		return response;
+	}
+
+
 }
 
 /////////////////////BackUp////////////////////////////////////////////////

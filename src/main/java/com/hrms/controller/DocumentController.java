@@ -1,9 +1,15 @@
+
+
+
 package com.hrms.controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -19,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.hrms.beans.DocResponseBean;
 import com.hrms.entity.EmployeeDocumentsEntity;
 import com.hrms.repository.EmployeeDocumentsRepository;
 import com.hrms.response.bean.EmployeeDocumentResponse;
@@ -48,7 +56,7 @@ public class DocumentController {
 	@GetMapping("/fileName/{fileName}")
 	public ResponseEntity<?> getFileName(@PathVariable String fileName) {
 		log.info("get the documents by using fileName no extention api");
-		
+
 		Optional<EmployeeDocumentsEntity> dbData = empDocRepo.findByFileName(fileName);
 		// Determine the media type based on the file extension
 		MediaType mediaType = empDocServ.getMediaTypeForFileName(dbData.get().getDocumentName());
@@ -58,9 +66,9 @@ public class DocumentController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(mediaType);
 
-//		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//        headers.set("Content-Type", "application/msword");
-//        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=document.doc");
+		//			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		//	        headers.set("Content-Type", "application/msword");
+		//	        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=document.doc");
 
 		headers.setContentDispositionFormData(fileName, fileName);
 
@@ -107,11 +115,11 @@ public class DocumentController {
 		}
 
 	}
-	
+
 	@GetMapping("/documentName/{documentName}")
 	public ResponseEntity<?> getDocumentFile(@PathVariable String documentName) {
 		log.info("get the document api");
-		
+
 		// Determine the media type based on the file extension
 		MediaType mediaType = empDocServ.getMediaTypeForFileName(documentName);
 
@@ -120,9 +128,9 @@ public class DocumentController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(mediaType);
 
-//		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//        headers.set("Content-Type", "application/msword");
-//        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=document.doc");
+		//			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		//	        headers.set("Content-Type", "application/msword");
+		//	        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=document.doc");
 
 		headers.setContentDispositionFormData(documentName, documentName);
 
@@ -130,5 +138,11 @@ public class DocumentController {
 
 		return ResponseEntity.ok().headers(headers).body(resource);
 
+	}
+
+	@GetMapping("/getSelectedDocuments")
+	public DocResponseBean getSelectedDocuments(@QueryParam(value = "empId") String empId) {
+		log.info("entered into getEmpList service class method..");
+		return empDocServ.getSelectedVisaDocuments(empId);
 	}
 }
