@@ -1,6 +1,6 @@
 package com.hrms.controller;
 
-import java.util.List;
+import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.EntityBeanResponseCommon;
-import com.hrms.beans.ProjechtRequiredFetchDetails;
 //import com.hrms.beans.ProjectResponseBean;
 import com.hrms.entity.ProjectDetailsEntity;
 import com.hrms.request.bean.ManagerRoleReuestBean;
@@ -30,83 +28,41 @@ public class ProjectDetailsController {
 
 	@Autowired
 	private ProjectDetailsService service;
-	
-	 //oldHrms
-	//saveProject
+
 	@PostMapping("/saveProjectDetails")
 	public EntityBeanResponseCommon saveProjectDetails(@RequestBody ProjectDetailsEntity entity) {
-		this.log.info("Entered save project details in controller ");
-		
-		EntityBeanResponseCommon saveProjectDetails = this.service.saveProjectDetails(entity);
-		
-		this.log.info("successfully  saved project details in controller ");
-		
-		return saveProjectDetails;
-		
+		log.info("Entered save project details in controller ");
+		EntityBeanResponseCommon saveProjectDetails = service.saveProjectDetails(entity);
+		log.info("successfully  saved project details in controller ");
+		return saveProjectDetails;	
 	}
-	
-	 //oldHrms
-	//getProjectDeatilsByClientId
 	@GetMapping("/getProjectsByClientId/{id}")
 	public ProjecDetailsResponsebean getProjectsBYClientId(@PathVariable("id")  int id){
-		this.log.info("Entered fetch list of  project details by client id  in controller ");
-		
-		ProjecDetailsResponsebean projectListByClienyId = this.service.getAllProjectsByClientId(id);
-		
-		this.log.info("successfully  fetched list of  project details by client id  in controller ");
-		
-	
+		log.info("Entered fetch list of  project details by client id  in controller ");
+		ProjecDetailsResponsebean projectListByClienyId = service.getAllProjectsByClientId(id);
+		log.info("successfully  fetched list of  project details by client id  in controller ");
 		return projectListByClienyId;
-		
 	}
-	
-	
-	
-	//getAllProjects
 	@GetMapping("/projects")
 	public ProjecDetailsResponsebean fetchAllProjects(){
-		
-		ProjecDetailsResponsebean allProjects = this.service.getAllProjects();
+		ProjecDetailsResponsebean allProjects = service.getAllProjects();
 		return allProjects;
-		
 	}
-	
-	 
-	 //oldHrms
-	//updateProjectDetailsByProjectId
 	@PutMapping("/updateProjectById/{id}")
 	public EntityBeanResponseCommon updateProject(@PathVariable("id") int id,@RequestBody ProjectDetailsEntity entity) {
-		this.log.info("Entered update project details  in controller ");
-		
-		EntityBeanResponseCommon updateProjectDetails = this.service.updateProjectDetails(id, entity);
-		
-		this.log.info("successfully  update project details  in controller ");
-		return updateProjectDetails;
-		
+		log.info("Entered update project details  in controller ");
+		EntityBeanResponseCommon updateProjectDetails = service.updateProjectDetails(id, entity);
+		log.info("successfully  update project details  in controller ");
+		return updateProjectDetails;	
 	}
-	
-	//fetchListOfManger
-	
-	@GetMapping("/getAllManagers")
+	@GetMapping("/getAllManagersList")
 	public ManagerListResonseBean getAllMangers(@RequestBody ManagerRoleReuestBean reqBean){
-		ManagerListResonseBean listOfManagers= this.service.getAllManager(reqBean);
-		
-		return listOfManagers;
-		
+		ManagerListResonseBean listOfManagers= service.getAllManager(reqBean);
+		return listOfManagers;	
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@GetMapping("/getAllManagers")
+	public ManagerListResonseBean getAllMangersByRole(@QueryParam(value = "empRole") String managerRole){
+		ManagerListResonseBean listOfManagers= service.getAllManager(managerRole);
+		return listOfManagers;	
+	}	
 }
