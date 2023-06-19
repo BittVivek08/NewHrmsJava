@@ -16,6 +16,8 @@ public class ProjectEmployeeDataBean {
 	
 	private String enddate;
 	
+	private int billable;
+	
 	
 		
 }
