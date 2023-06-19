@@ -137,7 +137,7 @@ public class ProjectEmployeeServiceImpl implements ProjectEmployeeService {
 				ProjEmp.setStartdate(entity.getStartdate());
 				ProjEmp.setModified(LocalDateTime.now());
 				ProjEmp.setModifiedby(ProjEmp.getEmployee().getEmpId());
-				ProjEmp.setBillable(entity.getBillable());
+				ProjEmp.setBillable(entity.getBillable() );
 				ProjectEmployeeEntity save = this.projectEmpRepo.save(ProjEmp);
 
 				if (save != null) {

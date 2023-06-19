@@ -101,6 +101,8 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
 
 	@Query("from  EmployeeDetails e where e.empRole = :role")
 	List<EmployeeDetails> maangerIdByRole(String role);
+	
+	//EmployeeDetails findByManager(String mid);
 
 
 }

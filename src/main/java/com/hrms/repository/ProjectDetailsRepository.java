@@ -20,7 +20,7 @@ public interface ProjectDetailsRepository extends JpaRepository<ProjectDetailsEn
 	@Query("select enddate from ProjectDetailsEntity  where projectId=?1")
 	LocalDate enddate(int projectId);
 
-	@Query(" select employee.empId From  ProjectDetailsEntity where projectId=?1 ")
+	@Query(" select manager.empId From  ProjectDetailsEntity where projectId=?1 ")
 	String getprojectManager(int projectId);
 
 //	@Query("From ProjectDetailsEntity where startdate=?1 and enddate=?2 and projectId=?3")
