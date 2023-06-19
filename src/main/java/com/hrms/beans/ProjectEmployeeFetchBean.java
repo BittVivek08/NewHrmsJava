@@ -28,4 +28,6 @@ public class ProjectEmployeeFetchBean {
 	private LocalDateTime createdDate;
 	
 	private LocalDateTime modifiedDate;
+	
+	private int billable;
 }

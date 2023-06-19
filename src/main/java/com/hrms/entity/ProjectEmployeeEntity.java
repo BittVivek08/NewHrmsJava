@@ -51,6 +51,8 @@ public class ProjectEmployeeEntity {
 	@Column(name="modified_by")
 	private String modifiedby;
 	
+	private int billable;
+	
 	
 	
 	
