@@ -74,7 +74,9 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 		// List<EmployeeDetails> maangerIdByRole =
 		// empRepo.maangerIdByRole("Manager");
 
-		EmployeeDetails employee = empRepo.findByEmpId(projentity.getEmployee().getEmpId());
+		//EmployeeDetails employee = empRepo.findByEmpId(projentity.getEmployee().getEmpId());
+		EmployeeDetails manager = empRepo.findByEmpId(projentity.getManager().getEmpId());
+		//empRepo.find
 		// String empRole = employee.getEmpRole();
 		// String reportingManagerId = employee.getReportingManagerId();
 
@@ -84,7 +86,10 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 
 			projentity.setClient(client.get());
 			projentity.setCurrency(currency.get());
-			projentity.setEmployee(employee);
+			//projentity.setEmployee(employee);
+			projentity.setManager(manager);
+			projentity.setCreated_by(1);
+			projentity.setIsactive(true);
 
 			ProjectDetailsEntity save = projectRepo.save(projentity);
 			log.info("successfully  saved project Details in service ");
@@ -125,12 +130,16 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			entityDB.setEnddate(entity.getEnddate());
 			entityDB.setStartdate(entity.getStartdate());
 			entityDB.setEstimatedhours(entity.getEstimatedhours());
-			entityDB.setIsactive(entity.getIsactive());
+			//entityDB.setIsactive(entity.getIsactive());
+			entityDB.setIsactive(true);
 			entityDB.setLeadapprove(entity.getLeadapprove());
 			entityDB.setProjectName(entity.getProjectName());
 			entityDB.setProjectstatus(entity.getProjectstatus());
 			// entityDB.setProjecttype(entity.getProjecttype());
 			entityDB.setProject_type(entity.getProject_type());
+			entityDB.setModified_by(1);
+			
+	
 
 			projectRepo.save(entityDB);
 			log.info("successfully  updated project Details in service ");
@@ -169,7 +178,8 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			// res.setCurrencyName(proj.getCurrencyname());
 			res.setCurrencyid(proj.getCurrency().getId());
 			// res.setEmpId(proj.getEmployee().getEmpId());
-			res.setManagerId(proj.getEmployee().getEmpId());
+			//res.setManagerId(proj.getEmployee().getEmpId());
+			res.setManagerId(proj.getManager().getEmpId());
 			// res.setEndDate(proj.getEnddate());
 			res.setEndDate(proj.getEnddate());
 			res.setEstimatedhours(proj.getEstimatedhours());
@@ -211,7 +221,8 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 				bean.setProjectId(proj.getProjectId());
 				bean.setProjectName(proj.getProjectName());
 				bean.setClientid(proj.getClient().getId());
-				bean.setManagerId(proj.getEmployee().getEmpId());
+				//bean.setManagerId(proj.getEmployee().getEmpId());
+				bean.setManagerId(proj.getManager().getEmpId());
 				bean.setCurrencyid(proj.getCurrency().getId());
 				bean.setEndDate(proj.getEnddate());
 				bean.setEstimatedhours(proj.getEstimatedhours());

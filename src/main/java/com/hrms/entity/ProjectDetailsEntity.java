@@ -48,7 +48,7 @@ public class ProjectDetailsEntity {
 	//@ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
 	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
 	@JoinColumn(name="Manager_id",referencedColumnName = "emp_id")
-	private EmployeeDetails employee;
+	private EmployeeDetails manager;
 
 	@ManyToOne
 	@JoinColumn(name = "currency_id", referencedColumnName = "id")
