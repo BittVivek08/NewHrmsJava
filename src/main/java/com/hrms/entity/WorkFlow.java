@@ -25,6 +25,7 @@ public class WorkFlow {
 	private Instant modifiedDate;
 	private String createdBy;
 	private String modifiedBy;
+	private String approverComment;
 	
 }
 

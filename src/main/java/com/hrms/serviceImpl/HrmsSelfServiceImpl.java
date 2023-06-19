@@ -87,6 +87,9 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 
 	@Autowired
 	private WorkFlowRepository workFlowRepo;
+	
+	@Autowired
+	private EmployeeLeaveDetailsRepository leaveDetailsRepo;
 
 	@Autowired
 	private leaveReuestUpdateResponseBean leaveReqUpdateResBean;
@@ -149,7 +152,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				reqEntity.setReason(reqBean.getReason());
 				reqEntity.setFromDate(fromDate);
 				reqEntity.setToDate(toDate);
-				reqEntity.setLeaveStatus("Pending for approval");
+				reqEntity.setLeaveStatus("Pending");
 				reqEntity.setDays(days);
 				reqEntity.setReportingManagerId(empDetails.getReportingManagerId());
 				reqEntity.setReportingManager(empDetails.getReportingManager());
@@ -241,15 +244,23 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	}
 
 	// getting available leave days
-	public float getAvailableDays(String emp_id, String leaveType) {
+	public float getAvailableDays(String empid, String leaveType) {
 
-		float f1 = leaveTypeRepo.getNoOfDays(leaveType);
-		float f2 = leaveReqSummery.getNoOfDaysApproved(emp_id, leaveType);
+	      float availableDays=0.0f;
+	    
+		
+	if(	leaveDetailsRepo.findByEmpId(empid)==null) {
 
-		float availableDays = leaveTypeRepo.getNoOfDays(leaveType)
-				- leaveReqSummery.getNoOfDaysApproved(emp_id, leaveType);
-
-		return availableDays;
+		 availableDays=leaveTypeRepo.getNoOfDays(leaveType);
+	
+	}else {
+		
+		float f1=leaveReqSummery.getNoOfDaysPending(empid,leaveType);
+		float f2 = leaveReqSummery.getNoOfDaysApproved(empid, leaveType);
+		float f3=f1+f2;
+		availableDays = leaveTypeRepo.getNoOfDays(leaveType)-f3;
+	}
+	      return availableDays;
 	}
 
 	// selfService->Leaves->MyLeaves->Delete

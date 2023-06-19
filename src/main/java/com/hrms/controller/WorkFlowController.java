@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hrms.entity.WorkFlow;
 import com.hrms.service.WorkFlowService;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
 @RestController
 @RequestMapping("workflow")
 public class WorkFlowController {
@@ -36,6 +38,9 @@ public class WorkFlowController {
 	//		List<WorkFlow> getAllRequest = workFlowService.getAllRequests();
 	//		return new ResponseEntity<>(getAllRequest, HttpStatus.OK);
 	//	}
+	
+	//public String updateStatus(@RequestBody)
+	
 
 	@GetMapping("/getRequestDetailsSort")
 	public List<WorkFlow> getData(

@@ -99,35 +99,38 @@ public class LeaveRequestBLogic {
 					workFlowRepo.save(workFlow);
 					
 					System.out.println("<<<<<<<<<<"+type+" && Hierarchical"+">>>>>>>>>>>");
+					
+          		
 
 				} else if  (workFlowMgntRepo.getType(type).equalsIgnoreCase("parallel") && timeSheetConfig == false){
 					
-					String empidtest = bean.getEmpid();
-					String empidtest2 =bean.getEmpid();
+					
+					String empidtest =bean.getEmpid();
+					String s2=empidtest;
 					
 					int i2 = 0; 
 					int i1=workFlowMgntRepo.getManagerLeavel(type);
 					
 
-					while (employeeRepo.getReportingManagerId(empidtest) != null && i1!=i2) {
+					while (s2.isEmpty()==false && i1!=i2) {
 
 						workFlow=new WorkFlow();
 						workFlow.setEmpid(bean.getEmpid());
 						workFlow.setFeature(bean.getFeature());
 						workFlow.setStatus(bean.getStatus());
-						workFlow.setApprovalManagerId(employeeRepo.getReportingManagerId(empidtest2));
+					    workFlow.setApprovalManagerId(employeeRepo.getReportingManagerId(empidtest));
 						workFlow.setCreatedDate(timestamp);
 						workFlow.setCreatedBy(bean.getEmpid());
-			
 						workFlow.setReqid(bean.getReqid());						
-						
 						workFlowRepo.save(workFlow);
-						empidtest = employeeRepo.getReportingManagerId(employeeRepo.getReportingManagerId(empidtest));
-						empidtest2=employeeRepo.getReportingManagerId(empidtest2);
-                        i2++;
+						 i2++;
+						empidtest=workFlow.getApprovalManagerId();
+						 s2=employeeRepo.getReportingManagerId(empidtest);
+						System.out.println(employeeRepo.getReportingManagerId(empidtest));
+                       
 					}
-
-          	}
+				}
+          	
 				else {
 					workFlow=new WorkFlow();
 					workFlow.setEmpid(bean.getEmpid());
@@ -143,5 +146,6 @@ public class LeaveRequestBLogic {
 					
 				}
 				
+       }
 }
-}
+
