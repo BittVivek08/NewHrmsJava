@@ -16,7 +16,12 @@ public interface EmployeeLeaveRequestSummaryRepository extends JpaRepository<Emp
 
 	@Query("SELECT COALESCE(SUM(ls.noOfDays),0) FROM EmployeeLeaveRequestSummaryEntity ls WHERE ls.emp_id = :emp_id AND ls.leaveType = :leaveType AND ls.leaveStatus = 'approved'")
 	public float getNoOfDaysApproved(@Param("emp_id") String emp_id, @Param("leaveType") String leaveType);
+	
+	@Query("SELECT COALESCE(SUM(ls.noOfDays),0) FROM EmployeeLeaveRequestSummaryEntity ls WHERE ls.emp_id = :emp_id AND ls.leaveType = :leaveType AND ls.leaveStatus = 'pending'")
+	public float getNoOfDaysPending(@Param("emp_id") String emp_id, @Param("leaveType") String leaveType);
 
+	
+	
 	// My Leave, Employee Leave, Employee Leave Summary
 	@Query("From EmployeeLeaveRequestSummaryEntity where isActive=1 and reportingManagerId=:emp_id and leaveStatus=:leavestatus")
 	List<EmployeeLeaveRequestSummaryEntity> listOfLeavesByUid(String emp_id,String leavestatus);
