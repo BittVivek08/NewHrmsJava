@@ -21,4 +21,6 @@ public interface WorkFlowRepository extends JpaRepository<WorkFlow, Integer> {
 	
 	List<WorkFlow> findByEmpidAndStatus(String empid, String status);
 	
+	 WorkFlow	  findByEmpidAndReqidAndFeatureAndApprovalManagerId(String empid,int reqid,String feature,String approvalManagerId);
+	
 }

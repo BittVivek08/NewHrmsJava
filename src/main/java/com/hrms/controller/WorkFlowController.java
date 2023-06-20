@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.entity.WorkFlow;
+import com.hrms.request.bean.WorkFlowUpdateReqBean;
+import com.hrms.response.bean.leaveReuestUpdateResponseBean;
 import com.hrms.service.WorkFlowService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -50,5 +53,26 @@ public class WorkFlowController {
 			) {
 		return workFlowService.getData(empid, rmid, status);
 	}
+	
+	 @PutMapping("/updateReqStatus")
+		public leaveReuestUpdateResponseBean updateLeaveRequest(@RequestBody WorkFlowUpdateReqBean bean) {
+			leaveReuestUpdateResponseBean updateLeavRequest = workFlowService.updateReqStatus(bean);
+			return updateLeavRequest;
+
+		}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
