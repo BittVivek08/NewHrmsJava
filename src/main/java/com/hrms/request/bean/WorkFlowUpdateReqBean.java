@@ -7,9 +7,13 @@ public class WorkFlowUpdateReqBean {
 
 	private String empid;
 	
-	private String reportingManagerId;
+	private String ApprovalManagerId;
 	
 	private int reqId;
 	
 	private String feature;
+	
+	private String comment;
+	
+	
 }
