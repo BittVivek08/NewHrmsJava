@@ -64,10 +64,12 @@ public class ProjectEmployeeServiceImpl implements ProjectEmployeeService {
 				entity.setEmployee(empId);
 				entity.setCreated(LocalDateTime.now());
 				entity.setCreatedby(Databean.getEmpid());
-				LocalDate startdate = LocalDate.parse(Databean.getStartdate());
-				entity.setStartdate(startdate);
-				LocalDate enddate = LocalDate.parse(Databean.getEnddate());
-				entity.setEndDate(enddate);
+				//LocalDate startdate = LocalDate.parse(Databean.getStartdate());
+				//entity.setStartdate(startdate);
+				entity.setStartdate(projectId.getStartdate());
+				//LocalDate enddate = LocalDate.parse(Databean.getEnddate());
+				//entity.setEndDate(enddate);
+				entity.setEndDate(projectId.getEnddate());
 				entity.setBillable(Databean.getBillable());
 				// entity.setModified(LocalDateTime.now());
 
