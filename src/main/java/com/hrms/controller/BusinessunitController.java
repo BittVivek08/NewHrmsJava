@@ -63,21 +63,6 @@ public class BusinessunitController {
 	@DeleteMapping("/delete/{bid}")
 	public Businessbean deleteById(@PathVariable("bid") int bid) {
 		log.info("entered into delete details based on bid method in controller");
-		return BusinessunitService.deleteByBid(bid);
+		return BusinessunitService.deleteByBid(bid);	
 	}
 }
-
-//@PutMapping("/Updatebusinessdetails/{id}")
-//public ResponseEntity<Businessunit> updatebusinessdetails(@PathVariable("id") int id,
-//		@RequestBody Businessunit entity) {
-//
-//	Businessunit updatedetails = BusinessunitService.updatebusinessdetails(id, entity);
-//
-//	return new ResponseEntity<>(updatedetails, HttpStatus.OK);
-//
-//}
-//
-//@DeleteMapping("/delete/{id}")
-//public Businessbean deleteById(@PathVariable("id") int id) {
-//	return BusinessunitService.deleteById(id);
-//}
