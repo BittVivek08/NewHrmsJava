@@ -73,7 +73,7 @@ public Businessunit updatebusinessdetails(int bid, Businessunit entity) {
 			bean.setCode(entity.getCode());
 			bean.setAddress1(entity.getAddress1());
 			bean.setAddress2(entity.getAddress2());
-			bean.setAddress3(entity.getAddress3());
+			
 			bean.setCreatedby(entity.getCreatedby());
 			bean.setCreateddate(entity.getCreateddate());
 			bean.setIsactive(entity.getIsactive());
@@ -82,7 +82,7 @@ public Businessunit updatebusinessdetails(int bid, Businessunit entity) {
 			bean.setUnitcode(entity.getUnitcode());
 			bean.setUnitname(entity.getUnitname());
 			bean.setTimezone(entity.getTimezone());
-			bean.setService_desk_flag(entity.getService_desk_flag());
+			
 
 		return businessunitrepository.save(bean);
 		}
@@ -96,20 +96,13 @@ public Businessbean deleteByBid(int bid) {
 	
 	Businessunit bean = this.businessunitrepository.getByBid( bid);
 		if(bean!=null) {
-			this.businessunitrepository.delete(bean);
-			businessbean.setMessage("buinessdetails deleted successfully");
+			
+			businessbean.setMessage("Cannot delete Business Unit as it is associated to department");
 	        businessbean.setStatus(true);
-	        logging.info("Successfully Deleted busniessdetails By bid");
-
-		} else {
-			businessbean.setMessage("Failed to Delete details ");
-			businessbean.setStatus(false);
-			logging.info("failed to delte the busniessdetails");
-		}
-		return businessbean;
+	        return businessbean;
+	      }
+		return null; 
 		
-	
-
 }
 
 //

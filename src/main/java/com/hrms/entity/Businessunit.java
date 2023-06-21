@@ -22,8 +22,6 @@ public class Businessunit {
 
 	private int bid;
 
-	private int service_desk_flag;
-
 	private String name;
 
 	private String code;
@@ -41,8 +39,6 @@ public class Businessunit {
 	private String address1;
 
 	private String address2;
-
-	private String address3;
 
 	private String unitname;
 
