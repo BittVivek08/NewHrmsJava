@@ -40,10 +40,6 @@ public class Businessunit {
 
 	private String address2;
 
-	private String unitname;
-
-	private String unitcode;	
-	
 	private int createdby;
 	
 	
