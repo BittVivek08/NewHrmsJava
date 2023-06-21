@@ -15,5 +15,7 @@ public class WorkFlowUpdateReqBean {
 	
 	private String comment;
 	
+	private String status;
+	
 	
 }

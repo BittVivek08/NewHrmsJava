@@ -11,5 +11,5 @@ public interface WorkFlowService {
 	
 	public List<WorkFlow> getData(String empid,String rmId,String status);
 	
-	public leaveReuestUpdateResponseBean updateReqStatus(WorkFlowUpdateReqBean bean);
+	public leaveReuestUpdateResponseBean updateReqStatus(WorkFlowUpdateReqBean workreq);
 }

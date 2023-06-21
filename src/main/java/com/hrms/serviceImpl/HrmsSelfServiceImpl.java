@@ -164,13 +164,13 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				reqEntity.setModifiedBy(empDetails.getUserId());
 				reqEntity.setEmail(empDetails.getEmail());
 				reqEntity.setName(empDetails.getFirstName());
-				MyLeaveRequestEntity req= 	myLeaveReqRepo.save(reqEntity);
+			 	myLeaveReqRepo.save(reqEntity);
 
 				leaveSummery.setEmp_id(empDetails.getEmpId());
 
 				leaveSummery.setUser_id(empDetails.getUserId());
 				leaveSummery.setDepartmentId(empDetails.getDepartmentId());
-				leaveSummery.setLeaveStatus("pending");
+				leaveSummery.setLeaveStatus(reqEntity.getLeaveStatus());
 				leaveSummery.setDepartmentName(empDetails.getDepartmentName());
 				leaveSummery.setBusinessUnitId(empDetails.getBusinessunitId());
 				leaveSummery.setBusinessUnitName(empDetails.getBusinessunitName());
@@ -187,6 +187,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				leaveSummery.setUser_id(empDetails.getUserId());
 				leaveSummery.setNoOfDays(days);
 				leaveSummery.setCreateddate(timestamp);
+				
 				// mail-sending
 				// EmailDetails mailData=new EmailDetails();
 				// mailData.setRecipient(employeeMail);
@@ -207,8 +208,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 //					String sendSimpleMail = this.mailservice.sendSimpleMail(mailData);
 //
 //				}
-				leaveReqSummery.save(leaveSummery);
-
+				EmployeeLeaveRequestSummaryEntity summery  = leaveReqSummery.save(leaveSummery);
 				leaveBlogic.updateEmployeeLeaves(leaveType, emp_id, days, "save", null);
 
 		        
@@ -221,7 +221,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 					workFlow.setApprovalManagerId(empDetails.getReportingManagerId());
 					workFlow.setCreatedDate(timestamp);
 					workFlow.setCreatedBy(emp_id);
-					workFlow.setReqid(req.getId());
+					workFlow.setReqid(summery.getId());
 					leaveBlogic.workFlowInsetion(workFlow,"leave",false);
 
 					
