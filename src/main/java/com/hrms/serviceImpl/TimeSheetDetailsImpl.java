@@ -5,16 +5,18 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.protobuf.Timestamp;
 import com.hrms.entity.ClientDetailsEntity;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.ProjectDetailsEntity;
+import com.hrms.entity.ProjectEmployeeEntity;
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.entity.TaskDetailsEntity;
 import com.hrms.entity.WorkFlow;
@@ -24,7 +26,7 @@ import com.hrms.repository.ProjectDetailsRepository;
 import com.hrms.repository.ProjectEmployeeRepository;
 import com.hrms.repository.SaveTimeSheetRepo;
 import com.hrms.repository.TaskDeatailsRepository;
-import com.hrms.repository.WorkFlowRepository;
+
 import com.hrms.response.bean.ProjectListResponse;
 import com.hrms.response.bean.ProjectResponse;
 import com.hrms.response.bean.TimeSheetRequestRepDate;
@@ -49,70 +51,66 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	private ProjectDetailsRepository pojectDetailsRepository;
 	@Autowired
 	private TaskDeatailsRepository taskDetailsRepository;
-
-	@Autowired
-	 private  LeaveRequestBLogic  blogic;
-	
-	@Autowired
-	private TimeSheetResponse timeSheetResponse;
-	
 	@Autowired
 	private ProjectEmployeeRepository projectEmployeeRepository;
-	
 	@Autowired
-	private WorkFlowRepository workFlowRepository;
-	
-		public TimeSheetResponse saveTimeSheett(List<SaveTimeSheet> savetimesheetList) {
-		log.info("Entered into saveTimeSheet  method of "+ CLASS_NAME +" class");
-		try {
-			
-		
-		for (SaveTimeSheet savetimesheet : savetimesheetList) {
-			EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
-			ClientDetailsEntity client = this.clientDetailsRepository.findById(savetimesheet.getClient().getId()).get();
-			ProjectDetailsEntity proj = this.pojectDetailsRepository
-					.findByProjectId(savetimesheet.getProj().getProjectId());
-			TaskDetailsEntity task = this.taskDetailsRepository.findById(savetimesheet.getTask().getTaskid()).get();
-			savetimesheet.setTask(task);
-			savetimesheet.setProj(proj);
-			savetimesheet.setClient(client);
-			savetimesheet.setEmp(emp1);
-			savetimesheet.setStatus(Constants.STATUS_PENDING);
-			savetimesheet.setCreatedBy(savetimesheet.getCreatedBy());
-			savetimesheet.setWorkHours(savetimesheet.getWorkHours());
-			savetimesheet.setCreatedDate(new Date());
-			savetimesheet.setWorkDate(savetimesheet.getWorkDate());
-			SaveTimeSheet tm = this.saveTimeSheetRepo.save(savetimesheet);
-			timeSheetResponse.setMsg("timesheet detail save successfully");
-			timeSheetResponse.setStatus(true);
+	private LeaveRequestBLogic blogic;
 
-			Instant timestamp = Instant.now();
-			WorkFlow bean = new WorkFlow();
-			bean.setReqid(tm.getId());
-			bean.setCreatedBy(emp1.getEmpId());
-			bean.setCreatedDate(timestamp);
-			bean.setEmpid(emp1.getEmpId());
-			bean.setFeature("TimeSheet");
-			LocalDate date= pojectDetailsRepository.enddate(proj.getProjectId());					
+	@Autowired
+	private TimeSheetResponse timeSheetResponse;
+
+	public TimeSheetResponse saveTimeSheett(List<SaveTimeSheet> savetimesheetList) {
+		log.info("Entered into saveTimeSheet  method of " + CLASS_NAME + " class");
+		try {
+
+			for (SaveTimeSheet savetimesheet : savetimesheetList) {
+				EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
+				ClientDetailsEntity client = this.clientDetailsRepository.findById(savetimesheet.getClient().getId())
+						.get();
+				ProjectDetailsEntity proj = this.pojectDetailsRepository
+						.findByProjectId(savetimesheet.getProj().getProjectId());
+				TaskDetailsEntity task = this.taskDetailsRepository.findById(savetimesheet.getTask().getTaskid()).get();
+				savetimesheet.setTask(task);
+				savetimesheet.setProj(proj);
+				savetimesheet.setClient(client);
+				savetimesheet.setEmp(emp1);
+				savetimesheet.setStatus(Constants.STATUS_PENDING);
+				savetimesheet.setCreatedBy(savetimesheet.getCreatedBy());
+				savetimesheet.setWorkHours(savetimesheet.getWorkHours());
+				savetimesheet.setCreatedDate(new Date());
+				savetimesheet.setWorkDate(savetimesheet.getWorkDate());
+				SaveTimeSheet tm = this.saveTimeSheetRepo.save(savetimesheet);
+				timeSheetResponse.setMsg("timesheet detail save successfully");
+				timeSheetResponse.setStatus(true);
+
+				Instant timestamp = Instant.now();
+				WorkFlow bean = new WorkFlow();
+				bean.setReqid(tm.getId());
+				bean.setCreatedBy(emp1.getEmpId());
+				bean.setCreatedDate(timestamp);
+				bean.setEmpid(emp1.getEmpId());
+				bean.setFeature(Constants.STR_TIMESHEET);
+				LocalDate date = pojectDetailsRepository.enddate(proj.getProjectId());
 				System.out.println(date);
-				LocalDate l1 =proj.getEnddate();
-				LocalDate l2 = LocalDate.now(); 
-				// (date1.isBefore(date2) || date1.isEqual(date2))
-		  if(l1.isBefore(l2) || l1.isEqual(l2)){
-			bean.setApprovalManagerId(emp1.getReportingManagerId());
-			bean.setStatus("pending");			
-			blogic.workFlowInsetion(bean, "timesheet", false);
+				LocalDate l1 = proj.getEnddate();
+				LocalDate l2 = LocalDate.now();
 			
-		  }
-		  else {
-			  bean.setApprovalManagerId(pojectDetailsRepository.getprojectManager(proj.getProjectId()));
-			  bean.setStatus("pendingPM");
-			  blogic.workFlowInsetion(bean, "timesheet", true);			  
-			  }
-			//bean.setStatus(Constants.STATUS_PENDING);
-          //this.workFlowRepository.save(bean);
-		}} catch (Exception e) {
-		e.printStackTrace();
+               if(projectEmployeeRepository.findEmpId(proj.getProjectId(),emp1.getEmpId())!=null) {
+				if (l2.isBefore(l1) || l1.isEqual(l2) && !proj.getStartdate().isBefore(l2)) {
+					bean.setApprovalManagerId(pojectDetailsRepository.getprojectManager(proj.getProjectId()));
+					bean.setStatus("pendingPM");
+					blogic.workFlowInsetion(bean, Constants.STR_TIMESHEET, true);
+				}
+				} else {
+					bean.setApprovalManagerId(emp1.getReportingManagerId());
+					bean.setStatus(Constants.STATUS_PENDING);
+					blogic.workFlowInsetion(bean, Constants.STR_TIMESHEET, false);
+				}
+
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return timeSheetResponse;
 	}
@@ -151,27 +149,27 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 	public List<SaveTimeSheet> getTimeSheetByDate(TimeSheetRequestRepDate date) {
 		log.info("Entered into getTimeSheetByDate  method of HrmsEmpTimeSheetService class");
 		try {
-			Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date.getDate());
+			Date date1 = new SimpleDateFormat(Constants.DATE_FORMAT).parse(date.getDate());
 			List<SaveTimeSheet> timesheet = saveTimeSheetRepo.getByDate(date1);
 			return timesheet;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return Collections.emptyList();
 		}
 	}
 
 	public List<SaveTimeSheet> getTimeSheetByStartDateEndDate(TimeSheetRequestRepDate date) {
 		log.info("Entered into getTimeSheetByStartDateEndDate  method of HrmsEmpTimeSheetService class");
 		try {
-			Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date.getStartDate());
-			Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(date.getEndDate());
+			Date date1 = new SimpleDateFormat(Constants.DATE_FORMAT).parse(date.getStartDate());
+			Date date2 = new SimpleDateFormat(Constants.DATE_FORMAT).parse(date.getEndDate());
 			List<SaveTimeSheet> timesheet = saveTimeSheetRepo.getDetailsByStartDateEndDate(date1, date2);
 			return timesheet;
 		} catch (ParseException e) {
 
 			e.printStackTrace();
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	public List<EmployeeDetails> getTimeSheetByRpId(String repId) {
@@ -181,7 +179,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	public ProjectListResponse getProjectList() {
@@ -221,26 +219,26 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 
 	public List<SaveTimeSheet> getTimeSheetByRpIdDate(TimeSheetRequestRepDate timesheet) {
 		try {
-			Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(timesheet.getDate());
+			Date date1 = new SimpleDateFormat(Constants.DATE_FORMAT).parse(timesheet.getDate());
 			List<SaveTimeSheet> savetimesheet = saveTimeSheetRepo.getDetailsByRepIdDate(timesheet.getRepId(), date1);
 			return savetimesheet;
 		} catch (ParseException e) {
 
 			e.printStackTrace();
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	public List<SaveTimeSheet> getTimeSheetByMan(TimeSheetRequestRepDate timesheet) {
 		log.info("Entered into getTimeSheetByMan method of HrmsEmpTimeSheetService class");
 		try {
-			Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(timesheet.getStartDate());
-			Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(timesheet.getEndDate());
+			Date date1 = new SimpleDateFormat(Constants.DATE_FORMAT).parse(timesheet.getStartDate());
+			Date date2 = new SimpleDateFormat(Constants.DATE_FORMAT).parse(timesheet.getEndDate());
 			return saveTimeSheetRepo.getDetails(timesheet.getEmpId(), date1, date2, timesheet.getRepId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 }
