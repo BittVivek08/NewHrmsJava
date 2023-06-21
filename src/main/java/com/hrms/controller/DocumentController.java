@@ -140,9 +140,4 @@ public class DocumentController {
 
 	}
 
-	@GetMapping("/getSelectedDocuments")
-	public DocResponseBean getSelectedDocuments(@QueryParam(value = "empId") String empId) {
-		log.info("entered into getEmpList service class method..");
-		return empDocServ.getSelectedVisaDocuments(empId);
-	}
 }
