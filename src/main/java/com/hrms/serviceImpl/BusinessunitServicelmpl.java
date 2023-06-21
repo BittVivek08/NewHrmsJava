@@ -79,8 +79,6 @@ public Businessunit updatebusinessdetails(int bid, Businessunit entity) {
 			bean.setIsactive(entity.getIsactive());
 			bean.setModifiedBy(entity.getModifiedBy());
 			bean.setModifiedDate(entity.getModifiedDate());
-			bean.setUnitcode(entity.getUnitcode());
-			bean.setUnitname(entity.getUnitname());
 			bean.setTimezone(entity.getTimezone());
 			
 
