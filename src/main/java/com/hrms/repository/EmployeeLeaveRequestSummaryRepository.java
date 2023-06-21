@@ -39,7 +39,8 @@ public interface EmployeeLeaveRequestSummaryRepository extends JpaRepository<Emp
 
 	@Query("from EmployeeLeaveRequestSummaryEntity where isActive=1 and emp_id=:emp_id ")
 	public List<EmployeeLeaveRequestSummaryEntity> fetchAppliedLeaveRequest(String emp_id);
-
+       
+	//public EmployeeLeaveRequestSummaryEntity  findById(int id);
 
 
 	//		   @Query("from ")
@@ -59,10 +60,11 @@ public interface EmployeeLeaveRequestSummaryRepository extends JpaRepository<Emp
 	@Query("from EmployeeLeaveRequestSummaryEntity where isActive=1 and id=:id ")
 	public List<EmployeeLeaveRequestSummaryEntity> totalLeaveTaken(int id);
 
+	public EmployeeLeaveRequestSummaryEntity findById(int id);
 
 	//get leave datails based on conditons
 	@Query("from EmployeeLeaveRequestSummaryEntity where isActive=1 and id=:id")
-	public List<LeaveDetailsFiltaring> findById(int id);
+	public List<LeaveDetailsFiltaring> getById(int id);
 
 	@Query("from EmployeeLeaveRequestSummaryEntity where isActive=1 and leavestatus=:leaveStatus")
 	public List<LeaveDetailsFiltaring> findByLeaveStatusCondition(String leaveStatus);

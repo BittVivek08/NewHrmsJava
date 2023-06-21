@@ -87,12 +87,16 @@ public class LeaveRequestBLogic {
           		EmployeeDetails empDetails = employeeRepo.findByEmpId(bean.getEmpid());
           		WorkFlow workFlow =null;
           		
-          		if (workFlowMgntRepo.getType(type).equalsIgnoreCase("Hierarchical") && timeSheetConfig == false) {
-					workFlow=new WorkFlow();
+          		if (workFlowMgntRepo.getType(type).equalsIgnoreCase("Hierarchical") && timeSheetConfig == false && employeeRepo.getReportingManagerId(bean.getApprovalManagerId())!=null) {
+					
+          			
+          			
+          			
+          			workFlow=new WorkFlow();
 					workFlow.setEmpid(bean.getEmpid());
 					workFlow.setFeature(bean.getFeature());
 					workFlow.setStatus(bean.getStatus());
-					workFlow.setApprovalManagerId(empDetails.getReportingManagerId());
+					workFlow.setApprovalManagerId(bean.getApprovalManagerId());
 					workFlow.setCreatedDate(timestamp);
 					workFlow.setReqid(bean.getReqid());
 					workFlow.setCreatedBy(bean.getEmpid());
@@ -112,7 +116,7 @@ public class LeaveRequestBLogic {
 					int i1=workFlowMgntRepo.getManagerLeavel(type);
 					
 
-					while (s2.isEmpty()==false && i1!=i2) {
+					while (s2==null && i1!=i2) {
 
 						workFlow=new WorkFlow();
 						workFlow.setEmpid(bean.getEmpid());
@@ -147,5 +151,10 @@ public class LeaveRequestBLogic {
 				}
 				
        }
+          	
+          	
+        //  	public void
+          	
+          	
 }
 
