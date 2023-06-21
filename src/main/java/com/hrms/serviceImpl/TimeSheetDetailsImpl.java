@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import com.hrms.entity.ClientDetailsEntity;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.ProjectDetailsEntity;
-import com.hrms.entity.ProjectEmployeeEntity;
+
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.entity.TaskDetailsEntity;
 import com.hrms.entity.WorkFlow;
@@ -80,9 +80,14 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 				savetimesheet.setCreatedDate(new Date());
 				savetimesheet.setWorkDate(savetimesheet.getWorkDate());
 				SaveTimeSheet tm = this.saveTimeSheetRepo.save(savetimesheet);
+				if(tm!=null) {
 				timeSheetResponse.setMsg("timesheet detail save successfully");
 				timeSheetResponse.setStatus(true);
-
+				}
+				else {
+					timeSheetResponse.setMsg("timesheet detail not save successfully");
+					timeSheetResponse.setStatus(false);
+				}
 				Instant timestamp = Instant.now();
 				WorkFlow bean = new WorkFlow();
 				bean.setReqid(tm.getId());
@@ -98,7 +103,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
                if(projectEmployeeRepository.findEmpId(proj.getProjectId(),emp1.getEmpId())!=null) {
 				if (l2.isBefore(l1) || l1.isEqual(l2) && !proj.getStartdate().isBefore(l2)) {
 					bean.setApprovalManagerId(pojectDetailsRepository.getprojectManager(proj.getProjectId()));
-					bean.setStatus("pendingPM");
+					bean.setStatus("Pending");
 					blogic.workFlowInsetion(bean, Constants.STR_TIMESHEET, true);
 				}
 				} else {
