@@ -1,7 +1,6 @@
 package com.hrms.repository;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,7 +22,6 @@ public interface ProjectDetailsRepository extends JpaRepository<ProjectDetailsEn
 	@Query(" select manager.empId From  ProjectDetailsEntity where projectId=?1 ")
 	String getprojectManager(int projectId);
 
-//	@Query("From ProjectDetailsEntity where startdate=?1 and enddate=?2 and projectId=?3")
-//	boolean getstartdate(LocalDate startdate, LocalDate enddate, int projectId);
+
 
 }
