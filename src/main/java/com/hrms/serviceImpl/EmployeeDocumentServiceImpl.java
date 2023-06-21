@@ -216,27 +216,6 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 		byte[] images = FileUtils.decompressImage(dbData.get().getData());
 		return images;
 	}
-	public DocResponseBean getSelectedVisaDocuments(String empId) {
-		log.info("getSelectedVisaDocuments() business logic");
-		DocResponseBean response = new DocResponseBean();
-
-		List<String> selectedVisaDocumentsId = empDocRepo.getSelectedVisaDocumentsId(empId);
-
-		List<EmployeeDocumentsEntity> selectedVisaDocuments = empDocRepo.getSelectedVisaDocuments(empId);
-
-		if(!selectedVisaDocumentsId.isEmpty() && !selectedVisaDocuments.isEmpty()) {
-			response.setMessage("list of document fetched successfully");
-			response.setListOfDocuments(selectedVisaDocuments);
-			response.setStatus(true);
-		}else {
-			response.setMessage("list of document fetching failed");
-			response.setStatus(false);
-		}
-
-		return response;
-	}
-
-
 }
 
 /////////////////////BackUp////////////////////////////////////////////////

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hrms.beans.DocResponseBean;
 import com.hrms.entity.EmployeeDocumentsEntity;
 import com.hrms.response.bean.EmployeeDocumentResponse;
 import com.hrms.response.bean.SuccessResponseBean;
@@ -28,6 +27,5 @@ public interface EmployeeDocumentService {
 
 	public byte[] getDocumentNameFile(String documentName);
 
-	public DocResponseBean getSelectedVisaDocuments(String empId);
 
 }

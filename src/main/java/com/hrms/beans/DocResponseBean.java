@@ -1,7 +1,11 @@
 package com.hrms.beans;
 
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
+
+import com.hrms.entity.EmployeeDocumentsEntity;
 
 import lombok.Data;
 
@@ -10,7 +14,7 @@ import lombok.Data;
 public class DocResponseBean {
 	
 	private String message;
-	private Object listOfDocuments;
+	private List<String> listOfDocuments;
 	private boolean status;
 
 }
