@@ -1,10 +1,7 @@
 package com.hrms.serviceImpl;
 
-import java.sql.Date;
 import java.time.Instant;
 import java.util.List;
-
-import org.apache.poi.ss.formula.functions.Now;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hrms.entity.EmployeeDetails;
@@ -85,20 +82,24 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 		
 		leaveReuestUpdateResponseBean rs = new leaveReuestUpdateResponseBean();
 		Instant timestamp= Instant.now();
-		int count= workFlowRepo.getApprovelCount(workreq.getReqId());
+		int count= workFlowRepo.getApprovelCount(workreq.getReqId())+1;
 		int mLevel= workFlowMgntRepo.getManagerLeavel(workreq.getFeature());
+		int countp= workFlowRepo . getApprovelCountforparallel(workreq.getReqId());
+		
 		EmployeeDetails empDetails = employeeRepo.findByEmpId(workreq.getApprovalManagerId());
 		
 		WorkFlow wFlow=this.workFlowRepo.findByEmpidAndReqidAndFeatureAndApprovalManagerId(
 				workreq.getEmpid(),workreq.getReqId(), workreq.getFeature(), workreq.getApprovalManagerId());
 		
+		//01 
 		if (wFlow==null) {
 			rs.setMessage("request not found");
 			rs.setStatus(false);
-		}
+		} //01
 		
+		//02
 		else	if (wFlow.getStatus().equals("pending") && wFlow.getApprovalManagerId().equalsIgnoreCase(workreq.getApprovalManagerId()) 
-				) {  // 01
+				&& workFlowMgntRepo.getType(workreq.getFeature()).equalsIgnoreCase("hierarchical")) {  // 01
 			
 			wFlow.setStatus(workreq.getStatus());
 			wFlow.setApproverComment(workreq.getComment());
@@ -111,7 +112,7 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 			
 			//nestedIf
 			if(workreq.getStatus().equalsIgnoreCase("approved") && employeeRepo.getReportingManagerId(workreq.getApprovalManagerId())!= null
-					){
+						){
 			 WorkFlow workFlow = new WorkFlow();
 				
 				workFlow=new WorkFlow();
@@ -140,6 +141,8 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 					     timeSheetRepo.save(sheet);
 				  }
 			}
+			
+			// i have to write here
 			else if(workreq.getStatus().equalsIgnoreCase("approved") && employeeRepo.getReportingManagerId(workreq.getApprovalManagerId())!= null
 					&& workreq.getFeature().equalsIgnoreCase("timesheet")){
 			 WorkFlow workFlow = new WorkFlow();
@@ -180,15 +183,60 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 			     timeSheetRepo.save(sheet);
 			}
 			
-		}//01
+		} //02
+		//03
+		else if (wFlow.getStatus().equals("pending") && wFlow.getApprovalManagerId().equalsIgnoreCase(workreq.getApprovalManagerId()) 
+				&& workFlowMgntRepo.getType(workreq.getFeature()).equalsIgnoreCase("parallel")) {  // 01
+			
+			wFlow.setStatus(workreq.getStatus());
+			wFlow.setApproverComment(workreq.getComment());
+			wFlow.setModifiedDate(timestamp);
+			wFlow.setModifiedBy(wFlow.getApprovalManagerId());
+			
+			workFlowRepo.save(wFlow);
+			rs.setMessage("updated");
+			rs.setStatus(true);
+			
+			if(workreq.getStatus().equalsIgnoreCase("approved")) {
+			if(count==countp && workreq.getFeature().equalsIgnoreCase("leave")) {
+				 EmployeeLeaveRequestSummaryEntity summery =	leaveReqSummery.findById(workreq.getReqId());
+					summery.setLeaveStatus(workreq.getStatus());
+					leaveReqSummery.save(summery);
+			}
+			else if(count==countp && workreq.getFeature().equalsIgnoreCase("timesheet")) {
+				SaveTimeSheet sheet =	timeSheetRepo.findById(workreq.getReqId());
+				sheet.setStatus(workreq.getStatus());
+			     timeSheetRepo.save(sheet);
+			}
+			
+			else {
+				System.out.println("nothing");
+			}
+			}
+			else {
+				if(workreq.getFeature().equalsIgnoreCase("leave")){
+					
+					EmployeeLeaveRequestSummaryEntity summery =	leaveReqSummery.findById(workreq.getReqId());
+					summery.setLeaveStatus(workreq.getStatus());
+					leaveReqSummery.save(summery);
+				}
+				else {
+					SaveTimeSheet sheet =	timeSheetRepo.findById(workreq.getReqId());
+					sheet.setStatus(workreq.getStatus());
+				     timeSheetRepo.save(sheet);
+				}
+			}
+			
+		}//03
 		
-		else	if (wFlow.getStatus().equals("Pending")){
+		//04
+		else if (wFlow.getStatus().equals("Pending")){
 			wFlow.setStatus(workreq.getStatus());
 			workFlowRepo.save(wFlow);
 			SaveTimeSheet sheet =	timeSheetRepo.findById(workreq.getReqId());
 			sheet.setStatus("approved");
 		     timeSheetRepo.save(sheet);
-		}
+		}//04
 		
 		else if(wFlow.getStatus().equalsIgnoreCase("approved")) {
 			rs.setMessage("Already updated");

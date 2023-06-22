@@ -25,4 +25,9 @@ public interface WorkFlowRepository extends JpaRepository<WorkFlow, Integer> {
 	
 	 @Query("select count(*) from WorkFlow where reqid=:reqid and status='approved'")
 	 int getApprovelCount(int reqid);
+	 
+	 @Query("select count(*) from WorkFlow where reqid=:reqid ")
+	 int getApprovelCountforparallel(int reqid);
+	 
+	 
 }

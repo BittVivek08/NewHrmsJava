@@ -116,7 +116,7 @@ public class LeaveRequestBLogic {
 					int i1=workFlowMgntRepo.getManagerLeavel(type);
 					
 
-					while (s2==null && i1!=i2) {
+					while (s2!=null && i1!=i2) {
 
 						workFlow=new WorkFlow();
 						workFlow.setEmpid(bean.getEmpid());
