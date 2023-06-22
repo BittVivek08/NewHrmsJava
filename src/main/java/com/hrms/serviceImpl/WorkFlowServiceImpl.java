@@ -234,8 +234,10 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 			wFlow.setStatus(workreq.getStatus());
 			workFlowRepo.save(wFlow);
 			SaveTimeSheet sheet =	timeSheetRepo.findById(workreq.getReqId());
-			sheet.setStatus("approved");
+			sheet.setStatus(workreq.getStatus());
 		     timeSheetRepo.save(sheet);
+		     rs.setMessage("Updated successfully");
+				rs.setStatus(true);
 		}//04
 		
 		else if(wFlow.getStatus().equalsIgnoreCase("approved")) {
