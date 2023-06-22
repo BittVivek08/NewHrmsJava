@@ -64,11 +64,18 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		try {
 
 			for (SaveTimeSheet savetimesheet : savetimesheetList) {
+				ProjectDetailsEntity proj=null;
 				EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
 				ClientDetailsEntity client = this.clientDetailsRepository.findById(savetimesheet.getClient().getId())
 						.get();
-				ProjectDetailsEntity proj = this.pojectDetailsRepository
+				if(projectEmployeeRepository.findEmpId(savetimesheet.getProj().getProjectId(),emp1.getEmpId())!=null) {
+				 proj = this.pojectDetailsRepository
 						.findByProjectId(savetimesheet.getProj().getProjectId());
+				}else {
+					timeSheetResponse.setMsg("you not assign this project");
+					timeSheetResponse.setStatus(false);
+					return timeSheetResponse;
+				}
 				TaskDetailsEntity task = this.taskDetailsRepository.findById(savetimesheet.getTask().getTaskid()).get();
 				savetimesheet.setTask(task);
 				savetimesheet.setProj(proj);
@@ -95,22 +102,26 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 				bean.setCreatedDate(timestamp);
 				bean.setEmpid(emp1.getEmpId());
 				bean.setFeature(Constants.STR_TIMESHEET);
-				LocalDate date = pojectDetailsRepository.enddate(proj.getProjectId());
-				System.out.println(date);
 				LocalDate l1 = proj.getEnddate();
 				LocalDate l2 = LocalDate.now();
-			
-               if(projectEmployeeRepository.findEmpId(proj.getProjectId(),emp1.getEmpId())!=null) {
-				if (l2.isBefore(l1) || l1.isEqual(l2) && !proj.getStartdate().isBefore(l2)) {
+			    LocalDate l3=proj.getStartdate();
+//               if(projectEmployeeRepository.findEmpId(proj.getProjectId(),emp1.getEmpId())!=null) {
+				if ( !l2.isBefore(l3) && l2.isBefore(l1) || l1.isEqual(l2)) {
 					bean.setApprovalManagerId(pojectDetailsRepository.getprojectManager(proj.getProjectId()));
 					bean.setStatus("Pending");
 					blogic.workFlowInsetion(bean, Constants.STR_TIMESHEET, true);
 				}
-				} else {
+				else {
 					bean.setApprovalManagerId(emp1.getReportingManagerId());
 					bean.setStatus(Constants.STATUS_PENDING);
 					blogic.workFlowInsetion(bean, Constants.STR_TIMESHEET, false);
+					return timeSheetResponse; 
 				}
+//				} else {
+//					bean.setApprovalManagerId(emp1.getReportingManagerId());
+//					bean.setStatus(Constants.STATUS_PENDING);
+//					blogic.workFlowInsetion(bean, Constants.STR_TIMESHEET, false);
+//				}
 
 			}
 		
