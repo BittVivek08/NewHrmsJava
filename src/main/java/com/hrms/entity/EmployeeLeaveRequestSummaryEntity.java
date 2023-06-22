@@ -25,23 +25,23 @@ public class EmployeeLeaveRequestSummaryEntity {
 	
 	private int user_id;
 
-	@Column(name = "department_id")
-	private int departmentId;
+//	@Column(name = "department_id")
+//	private int departmentId;
 
 	@Column (name = "leave_status")
 	private String leaveStatus;
 	
-	@Column(name = "leave_req_id")
-	private Integer leaveReqId;
+//	@Column(name = "leave_req_id")
+//	private Integer leaveReqId;
 	
-	@Column(name = "department_name")
-	private String departmentName;
+//	@Column(name = "department_name")
+//	private String departmentName;
 
-	@Column(name = "bunit_id")
-	private int businessUnitId;
+//	@Column(name = "bunit_id")
+//	private int businessUnitId;
 
-	@Column(name = "buss_unit_name")
-	private String businessUnitName;
+//	@Column(name = "buss_unit_name")
+//	private String businessUnitName;
 
 	@Column(name = "reason")
 	private String reason;
@@ -67,11 +67,11 @@ public class EmployeeLeaveRequestSummaryEntity {
 	@Column(name = "rep_manager_name")
 	private String reportingManagerName;
 
-	@Column(name = "hr_id")
-	private String hrId;
+//	@Column(name = "hr_id")
+//	private String hrId;
 
-	@Column(name = "hr_name")
-	private String hrName;
+//	@Column(name = "hr_name")
+//	private String hrName;
 	
 	@Column(name="user_name")
 	private String userName;

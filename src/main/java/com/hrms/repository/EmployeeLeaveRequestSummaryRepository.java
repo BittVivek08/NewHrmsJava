@@ -94,6 +94,6 @@ public interface EmployeeLeaveRequestSummaryRepository extends JpaRepository<Emp
 	public List<EmployeeLeaveRequestSummaryEntity> findByLeaveStatus(String leavestatus);
 
 
-	public EmployeeLeaveRequestSummaryEntity findByLeaveReqId(int id);
+	//public EmployeeLeaveRequestSummaryEntity findByLeaveReqId(int id);
 
 }

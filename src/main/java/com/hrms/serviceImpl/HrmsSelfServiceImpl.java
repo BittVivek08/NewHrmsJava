@@ -169,11 +169,8 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				leaveSummery.setEmp_id(empDetails.getEmpId());
 
 				leaveSummery.setUser_id(empDetails.getUserId());
-				leaveSummery.setDepartmentId(empDetails.getDepartmentId());
+			
 				leaveSummery.setLeaveStatus(reqEntity.getLeaveStatus());
-				leaveSummery.setDepartmentName(empDetails.getDepartmentName());
-				leaveSummery.setBusinessUnitId(empDetails.getBusinessunitId());
-				leaveSummery.setBusinessUnitName(empDetails.getBusinessunitName());
 				leaveSummery.setReason(reqBean.getReason());
 				leaveSummery.setApproverComments("not seen");
 				leaveSummery.setLeaveType(leaveType);
@@ -181,7 +178,6 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				leaveSummery.setToDate(toDate);
 				leaveSummery.setReportingManagerId(empDetails.getReportingManagerId());
 				leaveSummery.setReportingManagerName(empDetails.getReportingManager());
-				leaveSummery.setHrId(empDetails.getHrManagerId());
 				leaveSummery.setCreatedBy(33);
 				leaveSummery.setModifiedBy(32);
 				leaveSummery.setUser_id(empDetails.getUserId());
@@ -335,7 +331,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	@Override
 	public leaveReuestUpdateResponseBean updateLeavRequest(LeaveRequestUpdateDataBean bean, int id) {
 		try {
-			EmployeeLeaveRequestSummaryEntity LeaveReqSummaryEntity = this.leaveReqSummery.findByLeaveReqId(id);
+			EmployeeLeaveRequestSummaryEntity LeaveReqSummaryEntity = this.leaveReqSummery.findById(id);
 			if (LeaveReqSummaryEntity.getLeaveStatus().equalsIgnoreCase("pending")) {
 				LeaveReqSummaryEntity.setLeaveType(bean.getLeaveType());
 				// LocalDate startdate = LocalDate.parse(Databean.getStartdate());
