@@ -1,7 +1,6 @@
 package com.hrms.repository;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -11,5 +10,11 @@ public interface DepartmentRepo extends JpaRepository<Department, Integer> {
 	
 	@Query("from Department where businessId=:businessId")
 	public List<Department> listOfDuBasedOnBu(int businessId);
+	
+	
+   @Query("From Department where businessunit.bid=?1")
+	public Department finddepartment(int bid);
+	
+
 
 }

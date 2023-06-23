@@ -1,5 +1,6 @@
 package com.hrms.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -17,7 +18,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "business_unit")
-public class Businessunit {
+public class Businessunit implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,11 +48,11 @@ public class Businessunit {
 
 	private String address2;
 
-	private int createdby;
+	private String createdby;
 	
 	
 	@Column(name = "modifiedby")
-	private int modifiedBy;
+	private String modifiedBy;
 
 
 	@Column(name = "modifieddate")

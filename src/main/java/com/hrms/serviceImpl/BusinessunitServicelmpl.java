@@ -1,7 +1,6 @@
 package com.hrms.serviceImpl;
 
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import com.hrms.beans.Businessbean;
 import com.hrms.entity.Businessunit;
+import com.hrms.entity.Department;
 import com.hrms.repository.BusinessunitRepository;
+import com.hrms.repository.DepartmentRepo;
 import com.hrms.service.BusinessunitService;
 @Service
 @Component
@@ -20,6 +21,9 @@ public class BusinessunitServicelmpl implements BusinessunitService {
 
 	@Autowired
 	private Businessbean businessbean;
+	
+	@Autowired
+	private DepartmentRepo departmentrepo;
 
 	@Override
 	public Businessbean saveBusinessDetails(Businessunit businessunit) {
@@ -41,29 +45,20 @@ public class BusinessunitServicelmpl implements BusinessunitService {
 	@Override
 	public Businessunit getByBid(int bid) {
 		logging.info("Entered Get businessdetails By bid in service ");
-
-		
 		Businessunit bean=this.businessunitrepository.getByBid(bid);
 		logging.info("Successfully get businessdetails by bid in service");
-
-		
 		return bean;
 	}
-
 	@Override
 	public List<Businessunit> getAllbusinessdetails() {
 		logging.info("Entered get all businessdetails method in servcie ");
 
 		return businessunitrepository.findAll();
 	}
-
-@Override
-public Businessunit updatebusinessdetails(int bid, Businessunit entity) {
+   @Override
+       public Businessunit updatebusinessdetails(int bid, Businessunit entity) {
 	logging.info("Entered update businessdetails by bid method in service ");
-
-
 	Businessunit bean = businessunitrepository.getByBid(bid);
-	
 		if (bean != null) {
 			bean.setName(entity.getName());
 			bean.setStartdate(entity.getStartdate());
@@ -73,7 +68,6 @@ public Businessunit updatebusinessdetails(int bid, Businessunit entity) {
 			bean.setCode(entity.getCode());
 			bean.setAddress1(entity.getAddress1());
 			bean.setAddress2(entity.getAddress2());
-			
 			bean.setCreatedby(entity.getCreatedby());
 			bean.setCreateddate(entity.getCreateddate());
 			bean.setIsactive(entity.getIsactive());
@@ -81,25 +75,20 @@ public Businessunit updatebusinessdetails(int bid, Businessunit entity) {
 			bean.setModifiedDate(entity.getModifiedDate());
 			bean.setTimezone(entity.getTimezone());
 			
-
 		return businessunitrepository.save(bean);
 		}
 		return null;
-	
-}
-
-@Override
-public Businessbean deleteByBid(int bid) {
+             }
+   
+     @Override
+      public Businessbean deleteByBid(int bid) {
 	logging.info("Entered Delete busniessdetails By bid in service");
-	
-	Businessunit bean = this.businessunitrepository.getByBid( bid);
-		if(bean!=null) {
-			
-			businessbean.setMessage("Cannot delete Business Unit as it is associated to department");
-	        businessbean.setStatus(false);
-	        return businessbean;
-	      }
-		return null; 
+	Department dep = departmentrepo.finddepartment(bid);
+	if(dep.getBusinessunit().getBid()==bid ) {
+       businessbean.setMessage("Cannot delete Business Unit as it is associated to department");
+	   businessbean.setStatus(false);
+	        }
+	return businessbean;
 		
 }
 
