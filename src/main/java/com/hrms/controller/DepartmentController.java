@@ -26,10 +26,11 @@ import lombok.extern.slf4j.Slf4j;
 public class DepartmentController {
 	@Autowired
 	private DepartmentService departmentservice;
-	@PostMapping("/saveDepartmentdetails")
-	public Departmentbean saveDepartmentDetails(@RequestBody Department department) {
+	
+	@PostMapping("/saveDepartmentdetails/{bid}")
+	public Departmentbean saveDepartmentDetails(@RequestBody Department department,@PathVariable int bid) {
 		log.info("entered saveDepartmentDetails method in controller class");
-		return departmentservice.departmentDetails(department);
+		return departmentservice.departmentDetails(department,bid);
 	}
 	
 	@GetMapping("/getDepartmentDetails")
@@ -39,7 +40,7 @@ public class DepartmentController {
 		return new ResponseEntity<> (depart, HttpStatus.OK);
 	}
 	
-	 @PutMapping("/getDetails/{id}")    
+	 @PutMapping("/updateDetails/{id}")    
 	 public ResponseEntity<Department> updateDepartment(@PathVariable(value = "id") int id, @RequestBody Department departmentDetails) {
 		 log.info("entered updateDepartment method in controller class");
 		 Department updatedDepartment =departmentservice.updateDepartment(id, departmentDetails);
@@ -49,7 +50,7 @@ public class DepartmentController {
 	 @DeleteMapping("/delete/{id}")
 		public Departmentbean  deleteByPositionId(@PathVariable("id") int id) {
 		 log.info("entered deleteByPositionId method in controller class");
-			return departmentservice.deleteById(id);	
+			return departmentservice.deleteById(id);
 		}
 }
 

@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hrms.beans.Departmentbean;
+import com.hrms.entity.Businessunit;
 import com.hrms.entity.Department;
+import com.hrms.repository.BusinessunitRepository;
 import com.hrms.repository.DepartmentRepo;
 import com.hrms.service.DepartmentService;
 
@@ -19,9 +21,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 	private DepartmentRepo departmentrepo;
 	@Autowired
 	private Departmentbean departmentbean;
+	@Autowired
+	private BusinessunitRepository businessrepo;
 	@Override
-	public Departmentbean departmentDetails(Department department) {
+	public Departmentbean departmentDetails(Department department,int bid) {
 		logging.info("entered departmentDetails method  of service implentation class");
+		Businessunit business = businessrepo.getByBid(bid);
+		department.setBusinessunit(business);
 		Department insert = departmentrepo.save(department);
 		if (insert != null) {
 			departmentbean.setMessage("data insert successfully");
@@ -52,7 +58,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	        department.setDepName(departmentDetails.getDepName());
 	        department.setDescription(departmentDetails.getDescription());
 	        department.setDepHead(departmentDetails.getDepHead());
-	        department.setBusinessId(departmentDetails.getBusinessId());
+	       // department.setBusinessId(departmentDetails.getBusinessId());
 	        department.setBusinessunitName(departmentDetails.getBusinessunitName());
 	        department.setCity(departmentDetails.getCity());
 	        department.setCountry(departmentDetails.getCountry());
@@ -70,10 +76,19 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Override
 	public Departmentbean deleteById(int id) {
 		logging.info("entered deleteById method  of service implentation class");
-		departmentrepo.deleteById(id);;
-		departmentbean.setMessage("department deatails  delete successfully");
+		Department department=this.departmentrepo.getById(id);
+		if( department!=null) {
+	    departmentrepo.deleteById(id);
+		departmentbean.setMessage("department details deleted successfully");
 		departmentbean.setStatus(true);
 		return departmentbean;
+		
+		}
+		else {
+			departmentbean.setMessage("department details not deleted");
+			departmentbean.setStatus(false);
+			return departmentbean;
+		}
 	}	
 	
 }

@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -18,8 +20,9 @@ public class Department {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
-	@Column(name="business_id")
-	private int businessId;
+	@OneToOne
+	@JoinColumn(name="bid",referencedColumnName = "bid")
+	private Businessunit businessunit;
 	
 	@Column(name="deptname")
 	private String depName;
