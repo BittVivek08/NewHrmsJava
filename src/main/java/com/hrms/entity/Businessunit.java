@@ -2,11 +2,14 @@ package com.hrms.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -21,6 +24,10 @@ public class Businessunit {
 	private int id;
 
 	private int bid;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="orgId",referencedColumnName = "orgId")
+	private OrganizationInfoEntity orgInfoEntity;
 
 	private String name;
 

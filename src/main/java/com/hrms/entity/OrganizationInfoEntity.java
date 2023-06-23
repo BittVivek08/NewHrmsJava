@@ -26,6 +26,8 @@ public class OrganizationInfoEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
+	
+	private String orgId;
 
 	@Column(name = "organisationname")
 	private String organizationName;

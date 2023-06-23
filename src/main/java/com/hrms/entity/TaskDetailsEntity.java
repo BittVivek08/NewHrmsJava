@@ -29,7 +29,10 @@ public class TaskDetailsEntity  {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int taskid;
-    
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="orgId",referencedColumnName = "orgId")
+	private OrganizationInfoEntity orgInfoEntity;
 	@Column(name = "task")
 	private String tasknmae;
 	

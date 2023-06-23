@@ -13,10 +13,12 @@ import com.hrms.beans.ProjechtRequiredFetchDetails;
 //import com.hrms.beans.ProjectResponseBean;
 import com.hrms.entity.ClientDetailsEntity;
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.JobTitlesEntity;
 import com.hrms.entity.ProjectDetailsEntity;
 import com.hrms.entity.SalaryCurrencyEntity;
 import com.hrms.repository.ClientDetailsRepository;
 import com.hrms.repository.EmployeeRepository;
+import com.hrms.repository.JobTitleRepository;
 import com.hrms.repository.ProjectDetailsRepository;
 import com.hrms.repository.SalaryCurrencyRepo;
 import com.hrms.request.bean.ManagerRoleReuestBean;
@@ -51,6 +53,10 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 
 	@Autowired
 	private ProjecDetailsResponsebean projFetchBean;
+	
+	@Autowired
+	private JobTitleRepository jobTitleRepo;
+	
 
 	@Override
 	public EntityBeanResponseCommon saveProjectDetails(ProjectDetailsEntity projentity) {
@@ -213,8 +219,18 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 
 		ProjechtRequiredFetchDetails bean;
 		List<ProjechtRequiredFetchDetails> listProj = new ArrayList<>();
+		
+		JobTitlesEntity job = new JobTitlesEntity();
+		
+		JobTitlesEntity findByjobTitleName = jobTitleRepo.findByjobTitleName(job.getJobTitleName());
+		
+		List<ProjectDetailsEntity> projects = null;
+		
+		if(findByjobTitleName != null && findByjobTitleName.getJobTitleName().equals("Project Manager")) {
+			 projects = projectRepo.findAll();
+		}
 
-		List<ProjectDetailsEntity> projects = projectRepo.findAll();
+	
 		if (projects != null) {
 			for (ProjectDetailsEntity proj : projects) {
 				bean = new ProjechtRequiredFetchDetails();
@@ -223,6 +239,7 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 				bean.setClientid(proj.getClient().getId());
 				//bean.setManagerId(proj.getEmployee().getEmpId());
 				bean.setManagerId(proj.getManager().getEmpId());
+				bean.setOrgId(proj.getOrgInfoEntity().getOrgId());
 				bean.setCurrencyid(proj.getCurrency().getId());
 				bean.setEndDate(proj.getEnddate());
 				bean.setEstimatedhours(proj.getEstimatedhours());

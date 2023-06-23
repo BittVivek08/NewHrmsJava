@@ -2,6 +2,7 @@ package com.hrms.serviceImpl;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -82,7 +83,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Autowired
 	private EmployeeEducationDetailsRepository empeducationrepo;
-	
+
 	@Autowired
 	private JobTitleRepository jobTitleRepo;
 
@@ -90,10 +91,8 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	public EntityBeanResponse saveEmpDetails(EmployeeDetails employeeDetails) {
 		String encode = this.passwordEncoder.encode(employeeDetails.getPassword());
 		employeeDetails.setPassword(encode);
-		
-		
-		List<String> reportingManagerList = empRepo
-				.getReportingManagerByEmpId(employeeDetails.getReportingManagerId());
+
+		List<String> reportingManagerList = empRepo.getReportingManagerByEmpId(employeeDetails.getReportingManagerId());
 
 		employeeDetails.setReportingManager(reportingManagerList.get(0));
 
@@ -104,30 +103,29 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		List<String> immManagerByImmManagerIdList = empRepo.getImmManagerByEmpId(employeeDetails.getImmManagerId());
 
 		employeeDetails.setImmManagerName(immManagerByImmManagerIdList.get(0));
-		
-		Integer userId = empRepo.getMaxUserId()+1;
+
+		Integer userId = empRepo.getMaxUserId() + 1;
 		employeeDetails.setUserId(userId);
-				
+
 		Optional<Businessunit> businessUnit = businessUnitRepository.findById(employeeDetails.getBusinessunitId());
 
 		employeeDetails.setBusinessunitName(businessUnit.get().getName());
-		 
+
 		Optional<Department> department = departmentRepo.findById(employeeDetails.getDepartmentId());
-		
+
 		employeeDetails.setDepartmentName(department.get().getDepName());
-		
-		 Optional<EmpRole> empRole = empRoleRepo.findById(employeeDetails.getEmpRoleId());
-		 
-		 employeeDetails.setEmpRole(empRole.get().getRoleName());
-		 
-		 Optional<JobTitlesEntity> jobTitle = jobTitleRepo.findById(employeeDetails.getJobtitle_id());
-		 
-		 employeeDetails.setJobTitleName(jobTitle.get().getJobTitleName());
+
+		Optional<EmpRole> empRole = empRoleRepo.findById(employeeDetails.getEmpRoleId());
+
+		employeeDetails.setEmpRole(empRole.get().getRoleName());
+
+		Optional<JobTitlesEntity> jobTitle = jobTitleRepo.findById(employeeDetails.getJobtitle_id());
+
+		employeeDetails.setJobTitleName(jobTitle.get().getJobTitleName());
 
 		EmployeeDetails saved = empRepo.save(employeeDetails);
 		EmployeeDetails findByEmail = empRepo.findByEmail(employeeDetails.getEmail());
 
-		
 		if (saved != null) {
 
 			EmployeeDto empDto = new EmployeeDto();
@@ -135,6 +133,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			empDto.setId(findByEmail.getId());
 			empDto.setEmpId(findByEmail.getEmpId());
 			empDto.setUserId(userId);
+			empDto.setOrgId(findByEmail.getOrgInfoEntity().getOrgId());
 			empDto.setFirstName(findByEmail.getFirstName());
 			empDto.setLastName(findByEmail.getLastName());
 			empDto.setEmployeeName(findByEmail.getEmployeeName());
@@ -218,14 +217,12 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Override
 	public EntityBeanResponse updateEmpDetails(EmployeeDetails emplDetails, String empId) {
-	
+
 		emplDetails.setPassword(emplDetails.getPassword());
-		
+
 		EmployeeDetails findByEmpId = empRepo.findByEmpId(empId);
-		
-		
-		List<String> reportingManagerList = empRepo
-				.getReportingManagerByEmpId(emplDetails.getReportingManagerId());
+
+		List<String> reportingManagerList = empRepo.getReportingManagerByEmpId(emplDetails.getReportingManagerId());
 
 		findByEmpId.setReportingManager(reportingManagerList.get(0));
 
@@ -236,16 +233,15 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		List<String> immManagerByImmManagerIdList = empRepo.getImmManagerByEmpId(emplDetails.getImmManagerId());
 
 		findByEmpId.setImmManagerName(immManagerByImmManagerIdList.get(0));
-		
 
-		
 		Optional<Businessunit> businessUnit = businessUnitRepository.findById(emplDetails.getBusinessunitId());
 
 		Optional<Department> department = departmentRepo.findById(emplDetails.getDepartmentId());
 
 		Optional<EmpRole> empRole = empRoleRepo.findById(emplDetails.getEmpRoleId());
-		
+
 		findByEmpId.setFirstName(emplDetails.getFirstName());
+	//	findByEmpId.setOrgInfoEntity(emplDetails.getOrgInfoEntity());
 		findByEmpId.setLastName(emplDetails.getLastName());
 		findByEmpId.setEmployeeName(emplDetails.getEmployeeName());
 		findByEmpId.setEmpRoleId(emplDetails.getEmpRoleId());
@@ -256,6 +252,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		findByEmpId.setBusinessunitId(emplDetails.getBusinessunitId());
 		findByEmpId.setBusinessunitName(businessUnit.get().getName());
 		findByEmpId.setCandidatereferredby(emplDetails.getCandidatereferredby());
+		// findByEmpId.setOrgInfoEntity(emplDetails.getOrgInfoEntity());
 		findByEmpId.setContactnumber(emplDetails.getContactnumber());
 		findByEmpId.setCreatedby(emplDetails.getCreatedby());
 		findByEmpId.setCreatedby_name(emplDetails.getCreatedby_name());
@@ -293,12 +290,11 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		findByEmpId.setVisaId(emplDetails.getVisaId());
 		findByEmpId.setWorkTelephoneNo(emplDetails.getWorkTelephoneNo());
 		findByEmpId.setYearOfExp(emplDetails.getYearOfExp());
-		
+
 		EmployeeDetails update = empRepo.save(findByEmpId);
-	
+
 		if (update != null) {
-			
-			
+
 			ebr.setMsg("Employee Details Updated Successfully");
 			ebr.setStatus(true);
 		} else {
@@ -356,6 +352,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 				empDto.setId(employee1.getId());
 				empDto.setEmpId(employee1.getEmpId());
 				empDto.setUserId(employee1.getUserId());
+				// empDto.setOrgId(employee1.getOrgInfoEntity().getOrgId());
 				empDto.setFirstName(employee1.getFirstName());
 				empDto.setLastName(employee1.getLastName());
 				empDto.setEmployeeName(employee1.getEmployeeName());
@@ -436,6 +433,8 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		EmployeeDto empDto = new EmployeeDto();
 		empDto.setId(employee1.getId());
 		empDto.setEmpId(employee1.getEmpId());
+		//vivek
+	//	empDto.setOrgId(employee1.getOrgInfoEntity().getOrgId());
 		empDto.setUserId(employee1.getUserId());
 		empDto.setFirstName(employee1.getFirstName());
 		empDto.setLastName(employee1.getLastName());
@@ -561,14 +560,14 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	}
 
 	@Override
-	public ContactBean updateContact(ContactDetails entity,String empId) {
+	public ContactBean updateContact(ContactDetails entity, String empId) {
 		logging.info("entered into updatecontact method of service imlementation class");
 		EmployeeDetails emp = empRepo.findByEmpId(empId);
-		//entity.setEmployeedetails(emp);
-		Optional<ContactDetails> con=contactrepo.findByEmpId(empId);
+		// entity.setEmployeedetails(emp);
+		Optional<ContactDetails> con = contactrepo.findByEmpId(empId);
 		String empId2 = con.get().getEmployeedetails().getEmpId();
-		if(emp.getEmpId().equals(empId2)) {
-			//con.setCity1(entity.getCity1())
+		if (emp.getEmpId().equals(empId2)) {
+			// con.setCity1(entity.getCity1())
 			con.get().setCity1(entity.getCity1());
 			con.get().setCity2(entity.getCity2());
 			con.get().setCountry1(entity.getCountry1());
@@ -582,19 +581,17 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			con.get().setStatus1(entity.getState1());
 			con.get().setStatus2(entity.getStatus2());
 			ContactDetails save = this.contactrepo.save(con.get());
-			if(save!=null) {
+			if (save != null) {
 				contactbean.setMessage("contact details updated successfully");
 				contactbean.setStatus(true);
-			}else {
+			} else {
 				contactbean.setMessage("contact details failed to update");
 				contactbean.setStatus(false);
 			}
-			
-			
+
 		}
 
 		return contactbean;
-		
 
 	}
 
@@ -634,13 +631,14 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	}
 
 	@Override
-	public EmployeeEducationDetailsBean updateEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails,String empId) {
+	public EmployeeEducationDetailsBean updateEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails,
+			String empId) {
 
 		EmployeeDetails employeeDetails = empRepo.findByEmpId(empId);
 		// EmployeeDetails employeeDetails=empRepo.findByEmpId(empId);
-		Optional<EmployeeEducationDetails>empdetails= empeducationrepo.findByEmpId(empId);
-		String empId2=empdetails.get().getEmployeeDetails().getEmpId();
-		if(employeeDetails.getEmpId().equals(empId2))
+		Optional<EmployeeEducationDetails> empdetails = empeducationrepo.findByEmpId(empId);
+		String empId2 = empdetails.get().getEmployeeDetails().getEmpId();
+		if (employeeDetails.getEmpId().equals(empId2))
 			empdetails.get().setBachlorsDegree(empeducationdetails.getBachlorsDegree());
 		empdetails.get().setBachlorsDegreeInstituteName(empeducationdetails.getBachlorsDegreeInstituteName());
 		empdetails.get().setCourse(empeducationdetails.getCourse());
@@ -669,11 +667,8 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		empdetails.get().setUserId(empeducationdetails.getUserId());
 		empdetails.get().setSscDegree(empeducationdetails.getSscDegree());
 		empdetails.get().setSscDegreeInstituteName(empeducationdetails.getSscDegreeInstituteName());
-		
-			
-		//empeducationdetails.setEmployeeDetails(employeeDetails);
-		
-		
+
+		// empeducationdetails.setEmployeeDetails(employeeDetails);
 
 		EmployeeEducationDetails empeducation = empeducationrepo.save(empdetails.get());
 
@@ -738,27 +733,25 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 	}
 
 	@Override
-	public CommonResponseBean updateSalaryDetails(EmployeeSalaryDetails empSalDetails,String empId) {
-		
-		    EmployeeDetails empDetails = empRepo.findByEmpId(empId);
-         	EmployeeSalaryDetails salByEmpId = empSalRepo.SalByEmpId(empId);	
-         	salByEmpId.setEmployeeDetails(empDetails);
-         	
-         	
-         	salByEmpId.setAccountClassTypeId(empSalDetails.getAccountClassTypeId());
-         	salByEmpId.setAccountHolderName(empSalDetails.getAccountHolderName());
-         	salByEmpId.setAccountHoldingSince(empSalDetails.getAccountHoldingSince());
-         	salByEmpId.setAccountNumber(empSalDetails.getAccountNumber());
-         	salByEmpId.setBankName(empSalDetails.getBankName());
-         	salByEmpId.setCurrencyId(empSalDetails.getCurrencyId());
-         	salByEmpId.setEffectiveStartDate(empSalDetails.getEffectiveStartDate());
-         	salByEmpId.setSalary(empSalDetails.getSalary());
-         	salByEmpId.setEffectiveEndDate(empSalDetails.getEffectiveEndDate());
-         	salByEmpId.setIfscCode(empSalDetails.getIfscCode());
-         	salByEmpId.setIsActive(empSalDetails.getIsActive());
-         	salByEmpId.setModifiedDate(empSalDetails.getModifiedDate());
-         	salByEmpId.setCreatedDate(empSalDetails.getCreatedDate());
-		
+	public CommonResponseBean updateSalaryDetails(EmployeeSalaryDetails empSalDetails, String empId) {
+
+		EmployeeDetails empDetails = empRepo.findByEmpId(empId);
+		EmployeeSalaryDetails salByEmpId = empSalRepo.SalByEmpId(empId);
+		salByEmpId.setEmployeeDetails(empDetails);
+
+		salByEmpId.setAccountClassTypeId(empSalDetails.getAccountClassTypeId());
+		salByEmpId.setAccountHolderName(empSalDetails.getAccountHolderName());
+		salByEmpId.setAccountHoldingSince(empSalDetails.getAccountHoldingSince());
+		salByEmpId.setAccountNumber(empSalDetails.getAccountNumber());
+		salByEmpId.setBankName(empSalDetails.getBankName());
+		salByEmpId.setCurrencyId(empSalDetails.getCurrencyId());
+		salByEmpId.setEffectiveStartDate(empSalDetails.getEffectiveStartDate());
+		salByEmpId.setSalary(empSalDetails.getSalary());
+		salByEmpId.setEffectiveEndDate(empSalDetails.getEffectiveEndDate());
+		salByEmpId.setIfscCode(empSalDetails.getIfscCode());
+		salByEmpId.setIsActive(empSalDetails.getIsActive());
+		salByEmpId.setModifiedDate(empSalDetails.getModifiedDate());
+		salByEmpId.setCreatedDate(empSalDetails.getCreatedDate());
 
 		EmployeeSalaryDetails updated = empSalRepo.save(salByEmpId);
 
@@ -788,7 +781,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Override
 	public EmployeeDetails getEmpByEmpId(String empId) {
-		
+
 		EmployeeDetails findById = empRepo.findByEmpId(empId);
 
 		if (findById != null) {
@@ -800,7 +793,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Override
 	public EmployeeInformation getEmpInfoByEmpId(String empId) {
-		
+
 		Optional<EmployeeInformation> findById = empInfRepo.findByEmpId(empId);
 		if (findById.isPresent()) {
 			return findById.get();
@@ -810,7 +803,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Override
 	public ContactDetails getcontactDetails(String empId) {
-		
+
 		Optional<ContactDetails> contact = contactrepo.findByEmpId(empId);
 		if (contact.isPresent()) {
 			return contact.get();
@@ -822,7 +815,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Override
 	public EmployeeEducationDetails getEmpeducationdetalsByEmpId(String empId) {
-		
+
 		Optional<EmployeeEducationDetails> empeducation = empeducationrepo.findByEmpId(empId);
 		if (empeducation.isPresent()) {
 			return empeducation.get();
@@ -832,13 +825,13 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 
 	@Override
 	public EmployeeSalaryDetails getEmpSalaryByEmpId(String empId) {
-		
+
 		List<EmployeeSalaryDetails> findById = empSalRepo.findByEmpId(empId);
- for(EmployeeSalaryDetails id:findById) {
-		if (id!=null) {
-			return findById.get(0);
+		for (EmployeeSalaryDetails id : findById) {
+			if (id != null) {
+				return findById.get(0);
+			}
 		}
-	}
 		return null;
 	}
 }

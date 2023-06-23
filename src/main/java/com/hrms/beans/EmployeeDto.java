@@ -14,6 +14,7 @@ public class EmployeeDto {
 	private int id;
 	private String empId;
     private Integer userId;
+    private String orgId;
     private Date dateOfJoining;
     private Date dateOfleaving;
     private String reportingManagerId;
