@@ -178,8 +178,8 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				leaveSummery.setToDate(toDate);
 				leaveSummery.setReportingManagerId(empDetails.getReportingManagerId());
 				leaveSummery.setReportingManagerName(empDetails.getReportingManager());
-				leaveSummery.setCreatedBy(33);
-				leaveSummery.setModifiedBy(32);
+				leaveSummery.setCreatedBy(reqEntity.getEmp_id());
+				leaveSummery.setCreateddate(timestamp);     
 				leaveSummery.setUser_id(empDetails.getUserId());
 				leaveSummery.setNoOfDays(days);
 				leaveSummery.setCreateddate(timestamp);
