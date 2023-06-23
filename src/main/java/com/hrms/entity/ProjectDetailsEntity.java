@@ -28,6 +28,10 @@ public class ProjectDetailsEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int projectId;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="orgId",referencedColumnName = "orgId")
+	private OrganizationInfoEntity orgInfoEntity;
 
 	@Column(name = "project_Name")
 	private String projectName;

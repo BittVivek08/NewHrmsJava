@@ -28,6 +28,10 @@ public class PositionEntity {
 
 	@Column(name = "positionname")
 	private String positionName;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="orgId",referencedColumnName = "orgId")
+	private OrganizationInfoEntity orgInfoEntity;
 
 	// @Column(name = "jobtitleid")
 	// private Integer jobTitleId;

@@ -13,5 +13,7 @@ public interface JobTitleRepository extends JpaRepository<JobTitlesEntity, Integ
 	
 	@Query("SELECT p FROM PositionEntity p JOIN JobTitlesEntity j ON p.jobTitleId.id = j.id WHERE p.jobTitleId.id = :jobTitleId AND p.isActive = 1 AND j.isActive = 1")
 	public List<PositionEntity> listOfPositions(int jobTitleId);
+	
+	JobTitlesEntity findByjobTitleName(String jobTitleName);
 
 }

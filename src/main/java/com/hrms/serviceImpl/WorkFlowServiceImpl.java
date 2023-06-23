@@ -129,7 +129,9 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 				  }
 				  else if(count == mLevel && workreq.getFeature().equalsIgnoreCase("leave")) {
 					  EmployeeLeaveRequestSummaryEntity summery =	leaveReqSummery.findById(workreq.getReqId());
-						summery.setLeaveStatus("Approved");
+						summery.setLeaveStatus(workreq.getStatus());
+						summery.setModifiedBy(workreq.getApprovalManagerId());
+						summery.setApproverComments(workreq.getComment());
 						leaveReqSummery.save(summery);
 				}
 				  else if(count != mLevel && workreq.getFeature().equalsIgnoreCase("timesheet")) {
@@ -137,8 +139,10 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 				  }
 				  else{
 					  SaveTimeSheet sheet =	timeSheetRepo.findById(workreq.getReqId());
-						sheet.setStatus("approved");
-					     timeSheetRepo.save(sheet);
+					  //sheet.setModifiedBy();
+					  sheet.setStatus("approved");
+				
+					  timeSheetRepo.save(sheet);
 				  }
 			}
 			
@@ -160,21 +164,27 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 			
 			else if(workreq.getStatus().equalsIgnoreCase("rejected") && workreq.getFeature().equalsIgnoreCase("leave")) {
 			EmployeeLeaveRequestSummaryEntity summery =	leaveReqSummery.findById(workreq.getReqId());
-			summery.setLeaveStatus("rejected");
+			summery.setLeaveStatus(workreq.getStatus());
+			summery.setApproverComments(workreq.getComment());
+			summery.setModifiedBy(workreq.getApprovalManagerId());
+			summery.setModifieddate(timestamp);		
 			leaveReqSummery.save(summery);
 			
 			}
 			
 			else if(workreq.getStatus().equalsIgnoreCase("rejected") && workreq.getFeature().equalsIgnoreCase("timesheet")) {
 				SaveTimeSheet sheet =	timeSheetRepo.findById(workreq.getReqId());
-				sheet.setStatus("rejected");
-			     timeSheetRepo.save(sheet);
+				sheet.setStatus(workreq.getStatus());
+				timeSheetRepo.save(sheet);
 			     
 			}
 			else if(employeeRepo.getReportingManagerId(workreq.getApprovalManagerId())== null && workreq.getFeature().equalsIgnoreCase("leave")
 					&&  workreq.getStatus().equalsIgnoreCase("approved")) {
 				EmployeeLeaveRequestSummaryEntity summery =	leaveReqSummery.findById(workreq.getReqId());
-				summery.setLeaveStatus("Approved");
+				summery.setLeaveStatus(workreq.getStatus());
+				summery.setApproverComments(workreq.getComment());
+				summery.setModifiedBy(workreq.getApprovalManagerId());
+				summery.setModifieddate(timestamp);	
 				leaveReqSummery.save(summery);
 			}
 			else {
@@ -200,7 +210,10 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 			if(workreq.getStatus().equalsIgnoreCase("approved")) {
 			if(count==countp && workreq.getFeature().equalsIgnoreCase("leave")) {
 				 EmployeeLeaveRequestSummaryEntity summery =	leaveReqSummery.findById(workreq.getReqId());
-					summery.setLeaveStatus(workreq.getStatus());
+				    summery.setLeaveStatus(workreq.getStatus());
+					summery.setApproverComments(workreq.getComment());
+					summery.setModifiedBy(workreq.getApprovalManagerId());
+					summery.setModifieddate(timestamp);	
 					leaveReqSummery.save(summery);
 			}
 			else if(count==countp && workreq.getFeature().equalsIgnoreCase("timesheet")) {
@@ -217,8 +230,11 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 				if(workreq.getFeature().equalsIgnoreCase("leave")){
 					
 					EmployeeLeaveRequestSummaryEntity summery =	leaveReqSummery.findById(workreq.getReqId());
-					summery.setLeaveStatus(workreq.getStatus());
-					leaveReqSummery.save(summery);
+					 summery.setLeaveStatus(workreq.getStatus());
+						summery.setApproverComments(workreq.getComment());
+						summery.setModifiedBy(workreq.getApprovalManagerId());
+						summery.setModifieddate(timestamp);	
+						leaveReqSummery.save(summery);
 				}
 				else {
 					SaveTimeSheet sheet =	timeSheetRepo.findById(workreq.getReqId());
@@ -238,6 +254,7 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 		     timeSheetRepo.save(sheet);
 		     rs.setMessage("Updated successfully");
 				rs.setStatus(true);
+				
 		}//04
 		
 		else if(wFlow.getStatus().equalsIgnoreCase("approved")) {

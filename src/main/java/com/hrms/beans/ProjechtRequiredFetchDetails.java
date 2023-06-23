@@ -21,6 +21,8 @@ public class ProjechtRequiredFetchDetails{
 	
 	private int clientid;
 	
+	private String orgId;
+	
 	private int  currencyid;
 	
 	private String ManagerId;

@@ -31,6 +31,7 @@ public class VisaDocServiceImpl implements VisaDocService {
 		return visaDocRepo.findAll();
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public DocResponseBean getDocName(String empId) {
 		log.info("Class : "+this.getClass().getName());
@@ -42,7 +43,6 @@ public class VisaDocServiceImpl implements VisaDocService {
 		String visaDocById = empRepo.getSelectedDocumentName(empId);
 		String[] split = visaDocById.split(",");
 		for(String documentId  : split) {
-		
 		String visaDocument = visaDocRepo.getVisaDocumentById(Integer.parseInt(documentId));
 		documentsIds.add(visaDocument);
 		}

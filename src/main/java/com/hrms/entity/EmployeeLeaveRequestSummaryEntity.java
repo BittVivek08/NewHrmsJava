@@ -85,8 +85,8 @@ public class EmployeeLeaveRequestSummaryEntity {
 	private Instant modifieddate;
 
 	@Column(name = "modifiedby")
-	private Integer modifiedBy;
+	private String modifiedBy;
 
 	@Column(name = "createdby")
-	private Integer createdBy;
+	private String createdBy;
 }

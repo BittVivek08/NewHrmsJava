@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.hrms.entity.EmployeeDetails;
-import com.hrms.entity.SaveTimeSheet;
 
 public interface EmployeeRepository extends JpaRepository<EmployeeDetails, String> {
 
