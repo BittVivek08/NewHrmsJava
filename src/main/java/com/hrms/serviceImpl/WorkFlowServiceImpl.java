@@ -149,13 +149,13 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 				
 				workFlow=new WorkFlow();
 				workFlow.setEmpid(workreq.getEmpid());
-				workFlow.setFeature("leave");
+				workFlow.setFeature(workreq.getFeature());
 				workFlow.setStatus("pending");
 				workFlow.setApprovalManagerId(empDetails.getReportingManagerId());
 				workFlow.setCreatedDate(timestamp);
 				workFlow.setCreatedBy(workreq.getEmpid());
 				workFlow.setReqid(wFlow.getReqid());
-				leaveBlogic.workFlowInsetion(workFlow,"leave",false);
+				leaveBlogic.workFlowInsetion(workFlow,"timesheet",false);
 			}
 			
 			else if(workreq.getStatus().equalsIgnoreCase("rejected") && workreq.getFeature().equalsIgnoreCase("leave")) {

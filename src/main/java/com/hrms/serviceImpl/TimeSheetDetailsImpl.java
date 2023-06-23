@@ -82,7 +82,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 				savetimesheet.setClient(client);
 				savetimesheet.setEmp(emp1);
 				savetimesheet.setStatus(Constants.STATUS_PENDING);
-				savetimesheet.setCreatedBy(savetimesheet.getCreatedBy());
+				savetimesheet.setCreatedBy(emp1.getEmpId());
 				savetimesheet.setWorkHours(savetimesheet.getWorkHours());
 				savetimesheet.setCreatedDate(new Date());
 				savetimesheet.setWorkDate(savetimesheet.getWorkDate());
@@ -148,7 +148,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		savetimesheet.setClient(client);
 		savetimesheet.setEmp(emp1);
 		savetimesheet.setStatus(Constants.STATUS_PENDING);
-		savetimesheet.setCreatedBy(savetimesheet.getCreatedBy());
+		savetimesheet.setCreatedBy(emp1.getEmpId());
 		savetimesheet.setWorkHours(savetimesheet.getWorkHours());
 		savetimesheet.setModifiedDate(new Date());
 		savetimesheet.setWorkDate(savetimesheet.getWorkDate());
