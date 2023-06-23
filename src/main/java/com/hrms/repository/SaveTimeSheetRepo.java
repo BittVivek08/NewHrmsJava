@@ -27,7 +27,10 @@ public interface SaveTimeSheetRepo extends JpaRepository<SaveTimeSheet, Integer>
 
 	@Query("From SaveTimeSheet where emp.empId=?1 and emp.reportingManagerId=?4 and workDate BETWEEN ?2 and ?3 ")
 	List<SaveTimeSheet> getDetails(String empId, Date date1, Date date2, String repId);
-	
+
 	SaveTimeSheet findById(int id);
-     
+
+//	@Query("select clientName from saveTimeSheet where client.id=?1 and client.clientName=?2")
+//	String findByProjectClinetName(int id, String clientName);
+
 }

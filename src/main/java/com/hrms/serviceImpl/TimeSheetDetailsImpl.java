@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.aspectj.apache.bcel.generic.InstructionConstants.Clinit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,7 +69,8 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 				EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
 				ClientDetailsEntity client = this.clientDetailsRepository.findById(savetimesheet.getClient().getId())
 						.get();
-				if(projectEmployeeRepository.findEmpId(savetimesheet.getProj().getProjectId(),emp1.getEmpId())!=null) {
+
+				if(projectEmployeeRepository.findEmpId(savetimesheet.getProj().getProjectId(),emp1.getEmpId())!=null || client.getClientName().equalsIgnoreCase("Internal")){
 				 proj = this.pojectDetailsRepository
 						.findByProjectId(savetimesheet.getProj().getProjectId());
 				}else {
@@ -105,7 +107,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 				LocalDate l1 = proj.getEnddate();
 				LocalDate l2 = LocalDate.now();
 			    LocalDate l3=proj.getStartdate();
-//               if(projectEmployeeRepository.findEmpId(proj.getProjectId(),emp1.getEmpId())!=null) {
+              if(projectEmployeeRepository.findEmpId(proj.getProjectId(),emp1.getEmpId())!=null) {
 				if ( !l2.isBefore(l3) && l2.isBefore(l1) || l1.isEqual(l2)) {
 					bean.setApprovalManagerId(pojectDetailsRepository.getprojectManager(proj.getProjectId()));
 					bean.setStatus("Pending");
@@ -117,11 +119,11 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 					blogic.workFlowInsetion(bean, Constants.STR_TIMESHEET, false);
 					return timeSheetResponse; 
 				}
-//				} else {
-//					bean.setApprovalManagerId(emp1.getReportingManagerId());
-//					bean.setStatus(Constants.STATUS_PENDING);
-//					blogic.workFlowInsetion(bean, Constants.STR_TIMESHEET, false);
-//				}
+				} else {
+					bean.setApprovalManagerId(emp1.getReportingManagerId());
+					bean.setStatus(Constants.STATUS_PENDING);
+					blogic.workFlowInsetion(bean, Constants.STR_TIMESHEET, false);
+				}
 
 			}
 		

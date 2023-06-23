@@ -22,6 +22,8 @@ public interface ProjectDetailsRepository extends JpaRepository<ProjectDetailsEn
 	@Query(" select manager.empId From  ProjectDetailsEntity where projectId=?1 ")
 	String getprojectManager(int projectId);
 
+     
+
 
 
 }
