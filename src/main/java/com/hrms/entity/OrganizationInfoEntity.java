@@ -1,5 +1,6 @@
 package com.hrms.entity;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -20,7 +21,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "main_organisationinfo")
-public class OrganizationInfoEntity {
+public class OrganizationInfoEntity implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
