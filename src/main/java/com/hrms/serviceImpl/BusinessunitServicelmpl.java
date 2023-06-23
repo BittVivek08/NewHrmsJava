@@ -96,7 +96,7 @@ public Businessbean deleteByBid(int bid) {
 		if(bean!=null) {
 			
 			businessbean.setMessage("Cannot delete Business Unit as it is associated to department");
-	        businessbean.setStatus(true);
+	        businessbean.setStatus(false);
 	        return businessbean;
 	      }
 		return null; 
