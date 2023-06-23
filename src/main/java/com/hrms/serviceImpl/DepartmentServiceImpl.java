@@ -24,12 +24,29 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Autowired
 	private BusinessunitRepository businessrepo;
 	@Override
-	public Departmentbean departmentDetails(Department department,int bid) {
+	public Departmentbean departmentDetails(Department department) {
 		logging.info("entered departmentDetails method  of service implentation class");
-		Businessunit business = businessrepo.getByBid(bid);
+		Businessunit business = businessrepo.findByBid(department.getBusinessunit().getBid());
 		department.setBusinessunit(business);
-		Department insert = departmentrepo.save(department);
-		if (insert != null) {
+		department.setAddress1(department.getAddress1());
+		department.setAddress2(department.getAddress2());
+		department.setAddress3(department.getAddress3());
+		department.setCity(department.getCity());
+		department.setCountry(department.getCountry());
+		department.setCreatedby(department.getCreatedby());
+		department.setDepHead(department.getDepHead());
+		department.setDepName(department.getDepHead());
+		department.setUnitid(department.getUnitid());
+		department.setTimezone(department.getTimezone());
+		department.setState(department.getState());
+		department.setStartDate(department.getStartDate());
+		department.setModifiedby(department.getModifiedby());
+		department.setDipCode(department.getDipCode());
+		department.setDescription(department.getDescription());
+		department.setBusinessunitName(department.getBusinessunitName());
+		
+		departmentrepo.save(department);
+		if (departmentrepo != null) {
 			departmentbean.setMessage("data insert successfully");
 			departmentbean.setStatus(true);
 		} else {
@@ -54,15 +71,23 @@ public class DepartmentServiceImpl implements DepartmentService {
 	    if (departmentOptional.isPresent()) {
 	   
 	        Department department = departmentOptional.get();
-	        
+	        Businessunit business = businessrepo.findByBid(department.getBusinessunit().getBid());
+			department.setBusinessunit(business);
 	        department.setDepName(departmentDetails.getDepName());
 	        department.setDescription(departmentDetails.getDescription());
 	        department.setDepHead(departmentDetails.getDepHead());
-	       // department.setBusinessId(departmentDetails.getBusinessId());
 	        department.setBusinessunitName(departmentDetails.getBusinessunitName());
 	        department.setCity(departmentDetails.getCity());
 	        department.setCountry(departmentDetails.getCountry());
 	        department.setDipCode(departmentDetails.getDipCode());
+	        department.setAddress1(departmentDetails.getAddress1());
+	        department.setAddress2(department.getAddress2());
+	        department.setAddress3(department.getAddress3());
+	        department.setCreatedby(department.getCreatedby());
+	        department.setModifiedby(department.getModifiedby());
+	        department.setUnitid(department.getUnitid());
+	        department.setStartDate(department.getStartDate());
+	        department.setState(department.getState());
 
 	        return departmentrepo.save(department);
 	    }
