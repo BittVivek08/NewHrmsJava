@@ -10,9 +10,9 @@ import com.hrms.entity.Department;
 
 public interface DepartmentService {
 	
-	public Departmentbean departmentDetails(Department department);
+	public Departmentbean departmentDetails(Department department, int bid);
 	public List<Department> getAllDepartmentDetails();
 	public Department updateDepartment(int id, Department departmentDetails);
-	Departmentbean deleteById(int id);
+	public Departmentbean deleteById(int id);
 
 }
