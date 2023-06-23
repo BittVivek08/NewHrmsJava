@@ -61,8 +61,9 @@ public class BusinessunitController {
 	}
 
 	@DeleteMapping("/delete/{bid}")
-	public Businessbean deleteById(@PathVariable("bid") int bid) {
+	public ResponseEntity<Businessbean> deleteById(@PathVariable("bid") int bid) {
 		log.info("entered into delete details based on bid method in controller");
-		return BusinessunitService.deleteByBid(bid);	
+		 Businessbean deleteByBid = BusinessunitService.deleteByBid(bid);	
+		 return new ResponseEntity<>(deleteByBid,HttpStatus.BAD_REQUEST);
 	}
 }
