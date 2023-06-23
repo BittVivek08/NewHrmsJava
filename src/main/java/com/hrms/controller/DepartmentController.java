@@ -2,6 +2,8 @@ package com.hrms.controller;
 
 import java.util.List;
 
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.hrms.beans.Departmentbean;
 import com.hrms.entity.Department;
@@ -27,10 +30,10 @@ public class DepartmentController {
 	@Autowired
 	private DepartmentService departmentservice;
 	
-	@PostMapping("/saveDepartmentdetails/{bid}")
-	public Departmentbean saveDepartmentDetails(@RequestBody Department department,@PathVariable int bid) {
+	@PostMapping("/saveDepartmentdetails")
+	public Departmentbean saveDepartmentDetails(@RequestBody Department department) {
 		log.info("entered saveDepartmentDetails method in controller class");
-		return departmentservice.departmentDetails(department,bid);
+		return departmentservice.departmentDetails(department);
 	}
 	
 	@GetMapping("/getDepartmentDetails")
