@@ -26,7 +26,7 @@ import com.hrms.beans.EmailDetails;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeLeaveRequestSummaryEntity;
 
-import com.hrms.entity.MyLeaveRequestEntity;
+
 import com.hrms.entity.Privileges;
 import com.hrms.entity.WorkFlow;
 import com.hrms.entity.WorkFlowMngt;
@@ -35,7 +35,6 @@ import com.hrms.repository.EmployeeLeaveRequestSummaryRepository;
 import com.hrms.repository.EmployeeLeaveTypeRepository;
 import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.HolidayCalenderRepository;
-import com.hrms.repository.MyLeaveRequestRepository;
 import com.hrms.repository.PrivilegesRepo;
 import com.hrms.repository.WorkFlowMgntRepository;
 import com.hrms.repository.WorkFlowRepository;
@@ -55,8 +54,8 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(HrmsSelfServiceImpl.class);
 
-	@Autowired
-	private MyLeaveRequestRepository myLeaveReqRepo;
+//	@Autowired
+//	private MyLeaveRequestRepository myLeaveReqRepo;
 
 	@Autowired
 	private EmployeeLeaveRequestSummaryRepository leaveRequestRepo;
@@ -98,7 +97,6 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 	public CommonResponseBean saveLeaveRequest(LeaveRequestBean reqBean, String emp_id, String leaveType) {
 
 		// EmpLeaveResponseBean empLeaveResponse= new EmpLeaveResponseBean();
-		MyLeaveRequestEntity reqEntity = new MyLeaveRequestEntity();
 		CommonResponseBean commonRes = new CommonResponseBean();
 		EmployeeLeaveRequestSummaryEntity leaveSummery = new EmployeeLeaveRequestSummaryEntity();
 
@@ -107,7 +105,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 
 		LocalDate toDate = LocalDate.parse(reqBean.getToDate(), formatter);
 
-		if (myLeaveReqRepo.checkMatchingDates(emp_id, toDate, fromDate) == false) {
+		if (reqBean!=null){
 
 			try {
 				// adding Holidays
@@ -144,33 +142,12 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				String managerMail = manager.getEmail();
 				emailList.add(managerMail);
 
-				reqEntity.setAvailabelDays(
-						leaveTypeRepo.getNoOfDays(leaveType) - leaveReqSummery.getNoOfDaysApproved(emp_id, leaveType));
-
-				reqEntity.setEmp_id(empDetails.getEmpId());
-				reqEntity.setLeaveType(leaveType);
-				reqEntity.setReason(reqBean.getReason());
-				reqEntity.setFromDate(fromDate);
-				reqEntity.setToDate(toDate);
-				reqEntity.setLeaveStatus("Pending");
-				reqEntity.setDays(days);
-				reqEntity.setReportingManagerId(empDetails.getReportingManagerId());
-				reqEntity.setReportingManager(empDetails.getReportingManager());
-				reqEntity.setHrId(empDetails.getHrManagerId());
-				reqEntity.setIsactive(1);
-				reqEntity.setModifiedDate(timestamp);
-				reqEntity.setCreatedDdate(timestamp);
-				reqEntity.setCreatedBy(empDetails.getUserId());
-				reqEntity.setModifiedBy(empDetails.getUserId());
-				reqEntity.setEmail(empDetails.getEmail());
-				reqEntity.setName(empDetails.getFirstName());
-			 	myLeaveReqRepo.save(reqEntity);
 
 				leaveSummery.setEmp_id(empDetails.getEmpId());
 
 				leaveSummery.setUser_id(empDetails.getUserId());
 			
-				leaveSummery.setLeaveStatus(reqEntity.getLeaveStatus());
+				leaveSummery.setLeaveStatus("pending");
 				leaveSummery.setReason(reqBean.getReason());
 				leaveSummery.setApproverComments("not seen");
 				leaveSummery.setLeaveType(leaveType);
@@ -178,7 +155,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 				leaveSummery.setToDate(toDate);
 				leaveSummery.setReportingManagerId(empDetails.getReportingManagerId());
 				leaveSummery.setReportingManagerName(empDetails.getReportingManager());
-				leaveSummery.setCreatedBy(reqEntity.getEmp_id());
+				leaveSummery.setCreatedBy(emp_id);
 				leaveSummery.setCreateddate(timestamp);     
 				leaveSummery.setUser_id(empDetails.getUserId());
 				leaveSummery.setNoOfDays(days);
@@ -264,7 +241,7 @@ public class HrmsSelfServiceImpl implements IHrmsSelfService {
 		logger.info("entered into deleteMyLeaveDetails method of business class");
 		LeaveResponseBean responseBean = new LeaveResponseBean();
 		try {
-			myLeaveReqRepo.deleteById(id);
+			//myLeaveReqRepo.deleteById(id);
 			responseBean.setMessage("Deleted Succesfully::");
 			responseBean.setStatus(true);
 			// return Response.status(Response.Status.OK).entity(responseBean).build();
