@@ -3,11 +3,13 @@ package com.hrms.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.google.protobuf.Option;
 import com.hrms.entity.MyLeaveRequestEntity;
 
 public interface MyLeaveRequestRepository extends JpaRepository<MyLeaveRequestEntity, Integer> {
@@ -50,6 +52,14 @@ public interface MyLeaveRequestRepository extends JpaRepository<MyLeaveRequestEn
 	 
     @Query("from MyLeaveRequestEntity where leaveStatus=:status")
     public List<MyLeaveRequestEntity> getLeavesByStatus(String status);
+    
+    @Query("select availabelDays from MyLeaveRequestEntity where isactive=1 and leaveType='casual' and emp_id=?1")
+    public int getAvailableleaveDays(String a);
+    
+      @Query("select m.emp_id from  MyLeaveRequestEntity m where  m.isactive=1 and m.leaveType='casual'")
+       List<String>  getEmpid();
+ //     public List<MyLeaveRequestEntity> getAllCasualLeaveEmp();
+   
 } 
 
 

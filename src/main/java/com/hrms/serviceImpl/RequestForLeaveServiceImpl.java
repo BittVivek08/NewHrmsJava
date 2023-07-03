@@ -6,8 +6,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,12 +24,14 @@ import org.springframework.stereotype.Service;
 import com.hrms.beans.EmailDetails;
 import com.hrms.beans.MailStatusResponse;
 import com.hrms.controller.EmailController;
+import com.hrms.entity.AssignLeaveManagement;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.EmployeeLeaveRequestSummaryEntity;
 import com.hrms.entity.EmployeeLeaveTypeEntity;
 import com.hrms.entity.LeaveManagementEntity;
 import com.hrms.entity.MyLeaveRequestEntity;
 import com.hrms.entity.RequestForLeave;
+import com.hrms.repository.AssignLeaveManagementRepo;
 import com.hrms.repository.EmployeeLeaveRequestSummaryRepository;
 import com.hrms.repository.EmployeeLeaveTypeRepository;
 import com.hrms.repository.EmployeeRepository;
@@ -99,6 +104,9 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 
 	@Autowired
 	EmailServiceImpl emailService;
+	
+	@Autowired
+	AssignLeaveManagementRepo assignLeaveManagementRepo;
 
 
 
@@ -551,7 +559,7 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		entityBean.setModifiedDate(timestamp);
 		
 		for (LeaveRequestBean value : leaveBean) {
-			BeanUtils.copyProperties(entityBean, value);
+			BeanUtils.copyProperties(entityBean, value); 
 			
 			
 		}
@@ -616,5 +624,59 @@ public class RequestForLeaveServiceImpl implements IRequestForLeaveService {
 		}		
 		//return myleaveReqRepo.findAll();
 		return null;
-	}	
+	}
+
+	@Override
+	public String assignLeave() {
+
+		AssignLeaveManagement assign = null;
+
+		// getting current month value
+		LocalDate currentDate = LocalDate.now();
+		int currentMonthValue = currentDate.getMonthValue();
+
+		// getting total leaves and assiging per month
+		int totalNumOfDays = leaveTypeRepo.getNoFoDays();
+		int perMontDays = totalNumOfDays / 12;
+
+		//gettingh list of empids acc to table
+		List<String> empid = myleaveReqRepo.getEmpid();
+		List<String> mainIds = employeeRepo.getEmpIds();	
+		List<String> assignempIds = assignLeaveManagementRepo.getEmpIds();
+		
+		for (String s : mainIds) {
+			assign = new AssignLeaveManagement();
+			AssignLeaveManagement getdetails = assignLeaveManagementRepo.getdetails(s);
+			assign.setEmp_id(s);
+			assign.setIsActive((byte) 1);
+			assign.setLeaveType("casual");
+			assign.setYear(LocalDate.now().getYear());
+			assign.setNoOfDays(totalNumOfDays);
+
+			if (currentMonthValue == 6) {
+				// setting current month
+				assign.setMonthNumber(currentMonthValue);
+
+				// adding carry forward leaves
+				if (myleaveReqRepo.getAvailableleaveDays(s) <= leaveTypeRepo.getCarryDays()) {
+
+					assign.setNoOfDaysMonth(myleaveReqRepo.getAvailableleaveDays(s) + perMontDays);
+
+				} else {
+					assign.setNoOfDaysMonth(leaveTypeRepo.getCarryDays() + perMontDays);
+				}
+				assignLeaveManagementRepo.save(assign);
+			} else {
+
+				getdetails.setNoOfDaysMonth(perMontDays + assignLeaveManagementRepo.getNoForDaysMonth(s));
+				getdetails.setMonthNumber(currentMonthValue);
+
+				AssignLeaveManagement save = assignLeaveManagementRepo.save(getdetails);
+
+			}
+			assignLeaveManagementRepo.save(assign);
+
+		}
+		return "done";
+	}
 }

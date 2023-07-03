@@ -50,6 +50,8 @@ public interface IRequestForLeaveService {
     public LeavesResponseBean getLeaveDetailsForManager(int managerid,String leavestatus,String emp_id);
     
     public List<MyLeaveRequestEntity> getLeaveHistoryByConditions(int year,int month,String status);
+    
+    public String assignLeave();
 	
     
 }

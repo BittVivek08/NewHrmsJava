@@ -103,5 +103,9 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
 	
 	@Query("SELECT selectedDocumentsIds FROM EmployeeDetails WHERE empId =?1")
 	String getSelectedDocumentName(String empId);
+	
+	@Query("select empId  from EmployeeDetails where isactive=1")
+	public List<String> getEmpIds();
+	
 
 }

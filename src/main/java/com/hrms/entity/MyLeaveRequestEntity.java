@@ -76,43 +76,6 @@ public class MyLeaveRequestEntity {
 	private String name;
 	
 	private float availabelDays;
+	
+	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

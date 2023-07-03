@@ -1,5 +1,6 @@
 package com.hrms.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.ws.rs.QueryParam;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hrms.beans.MailStatusResponse;
+import com.hrms.entity.EmployeeLeaveTypeEntity;
 import com.hrms.entity.MyLeaveRequestEntity;
 import com.hrms.request.bean.EmployeeLeaveTypeBean;
 import com.hrms.request.bean.EmployeeLeaveTypeResponseBean;
@@ -29,9 +31,7 @@ import com.hrms.request.bean.UpdateEmployeeLeaveDetails;
 import com.hrms.request.bean.UpdateLeaveRequest;
 import com.hrms.response.bean.Common;
 import com.hrms.response.bean.EmpLeaveResponseBean;
-import com.hrms.response.bean.EmployeeLeaveResponse;
 import com.hrms.response.bean.EntityResponse;
-import com.hrms.response.bean.LeaveFilterResponse;
 import com.hrms.response.bean.LeaveManagementOptionsResponseBean;
 import com.hrms.response.bean.LeavesResponseBean;
 import com.hrms.service.IRequestForLeaveService;
@@ -41,6 +41,8 @@ import com.hrms.service.IRequestForLeaveService;
 public class RequestForLeaveController {
 
 	private Logger logger = LoggerFactory.getLogger(RequestForLeaveController.class);
+	
+		
 
 	@Autowired
 	private IRequestForLeaveService reqLeaveService;
@@ -128,13 +130,20 @@ public class RequestForLeaveController {
 					
 		}
 		
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++		
-		
+	
 		@GetMapping("/leaveServiceHistory")
 		public List<MyLeaveRequestEntity> getLeaveHistoryByConditions(@QueryParam(value = "formDate") int year,@QueryParam(value = "formDate") int month,@QueryParam(value = "leaveStatus") String status) {			
 			 List<MyLeaveRequestEntity> leaveHistoryByConditions = reqLeaveService.getLeaveHistoryByConditions(year, month, status);			
 			return  (List<MyLeaveRequestEntity>) leaveHistoryByConditions;			
 			
 		}		
+		
+		
+		@PutMapping("/assignleave")
+		public String assignLeaves() {
+			
+			return	reqLeaveService.assignLeave();				
+		}
+		
 			
 }

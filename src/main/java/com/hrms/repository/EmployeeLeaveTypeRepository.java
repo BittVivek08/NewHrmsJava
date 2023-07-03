@@ -39,30 +39,15 @@ public interface EmployeeLeaveTypeRepository extends JpaRepository<EmployeeLeave
 //	public int calculateTotal(@Param("emp_id") String emp_id);
 //	
 	
-	
+
+	 //get avalible days
+	 
+	 @Query("select noOfDays from EmployeeLeaveTypeEntity where isActive=1")
+	 public int getNoFoDays();
+	 
+	 @Query("select  carryForwardDays from EmployeeLeaveTypeEntity where isActive=1")
+	 public int getCarryDays();
+	 
+	 
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
