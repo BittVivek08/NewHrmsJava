@@ -49,5 +49,6 @@ public interface EmployeeLeaveTypeRepository extends JpaRepository<EmployeeLeave
 	 public int getCarryDays();
 	 
 	 
+	 
 	
 }

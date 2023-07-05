@@ -10,9 +10,7 @@ import com.hrms.entity.AssignLeaveManagement;
 public interface AssignLeaveManagementRepo extends  JpaRepository<AssignLeaveManagement , Integer> {
 	
 	 @Query("select monthNumber  from AssignLeaveManagement where isActive=1 and emp_id=:empid")
-	 public int getMonthValue(String empid);
-	 
-	 
+	 public int getMonthValue(String empid);	 
 	 
 	 @Query("select noOfDaysMonth from AssignLeaveManagement where isActive=1 and emp_id=:empid")
 	 public int getNoForDaysMonth(String empid);

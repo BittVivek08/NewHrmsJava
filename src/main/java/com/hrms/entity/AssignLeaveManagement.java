@@ -1,6 +1,7 @@
 package com.hrms.entity;
 
 import java.sql.Timestamp;
+import java.time.Month;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +31,7 @@ public class AssignLeaveManagement {
 	private int year;
 
 	@Column(name = "isactive")
-	private byte isActive;
+	private int isActive;
 
 	@Column(name = "createddate")
 	private Timestamp createdDate;

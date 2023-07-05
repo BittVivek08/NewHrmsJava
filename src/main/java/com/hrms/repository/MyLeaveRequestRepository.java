@@ -50,6 +50,9 @@ public interface MyLeaveRequestRepository extends JpaRepository<MyLeaveRequestEn
 	 
     @Query("from MyLeaveRequestEntity where leaveStatus=:status")
     public List<MyLeaveRequestEntity> getLeavesByStatus(String status);
+    
+    @Query("select availabelDays from MyLeaveRequestEntity where isactive=1 and emp_id=:a ")
+    public int getAvlDays(String a);
 } 
 
 
