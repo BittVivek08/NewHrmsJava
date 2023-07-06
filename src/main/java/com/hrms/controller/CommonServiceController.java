@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,7 +38,6 @@ import com.hrms.request.bean.SalaryAccountClassTypeRequestBean;
 import com.hrms.request.bean.SalaryCurrencyRequestBean;
 import com.hrms.request.bean.personalLanguageBean;
 import com.hrms.response.bean.ListOfPositionsResponseBean;
-import com.hrms.service.EmployeeDetailsService;
 import com.hrms.service.HrmsCommonService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -58,12 +56,23 @@ public class CommonServiceController {
 		log.info("Saving Salary Currency Details");
 		return hrmsCommomService.saveSalaryCurrency(salaryCurrencyReqBean);
 	}
+	@PutMapping("/updateCurrency/{id}")
+	public CommonResponseBean updateCurrencyById(@PathVariable int id, @RequestBody SalaryCurrencyRequestBean bean) {
+		log.info("Entered into updateCurrencyMethod");
+		return hrmsCommomService.updateSalaryCurrById(id, bean);
+	}
 
 	@GetMapping("/getAllCurrency")
 	public ResponseEntity<List<SalaryCurrencyEntity>> getAllCurrencyDetails() {
 		log.info("Fetching all Currency Details");
 		List<SalaryCurrencyEntity> allSalaryCurrency = hrmsCommomService.getAllSalaryCurrency();
 		return new ResponseEntity<>(allSalaryCurrency, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/deleteCurrency/{id}")
+	public CommonResponseBean deleteCurrencyById(@PathVariable int id) {
+		log.info("Delete Currency Method");
+		return hrmsCommomService.deleteCurrencyById(id);
 	}
 
 	@PostMapping("/addAccountType")
@@ -72,12 +81,23 @@ public class CommonServiceController {
 		log.info("Saving salary Account Type Method");
 		return hrmsCommomService.saveSalaryAccountType(salaryAccountTypeReqBean);
 	}
-
+	
+	@PutMapping("/updateAccType/{id}")
+	public CommonResponseBean updateAccById(@PathVariable int id, @RequestBody SalaryAccountClassTypeRequestBean bean) {
+		log.info("Entered into updateAccount Type Method");
+		return hrmsCommomService.updateAccTypeById(id, bean);
+	}
 	@GetMapping("/getAllAccountType")
 	public ResponseEntity<List<SalaryAccountClassTypeEntity>> getAllAccountType() {
 		log.info("Fetching All Account Type");
 		List<SalaryAccountClassTypeEntity> allAccountType = hrmsCommomService.getAllAccountType();
 		return new ResponseEntity<>(allAccountType, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/deleteAccType/{id}")
+	public CommonResponseBean deleteAccTypeById(@PathVariable int id) {
+		log.info("Delete AccountType Method");
+		return hrmsCommomService.deleteAccType(id);
 	}
 
 	@PostMapping("/saveJobtitle")

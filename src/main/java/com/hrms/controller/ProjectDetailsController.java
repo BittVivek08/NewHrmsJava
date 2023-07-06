@@ -65,4 +65,10 @@ public class ProjectDetailsController {
 		ManagerListResonseBean listOfManagers= service.getAllManager(managerRole);
 		return listOfManagers;	
 	}	
+	
+	@GetMapping("/getProjects")
+	public ProjecDetailsResponsebean fetchProjByOrgId(@QueryParam("orgId") String orgId) {
+		ProjecDetailsResponsebean projectByOrgId = service.getProjectByOrgId(orgId);
+		return projectByOrgId;
+	}
 }

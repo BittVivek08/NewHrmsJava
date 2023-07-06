@@ -1,5 +1,6 @@
 package com.hrms.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import com.hrms.entity.Businessunit;
 import com.hrms.entity.Department;
 import com.hrms.repository.BusinessunitRepository;
 import com.hrms.repository.DepartmentRepo;
+import com.hrms.response.bean.BusinessUnitResponseBean;
 import com.hrms.service.BusinessunitService;
 
 @Service
@@ -93,82 +95,58 @@ public class BusinessunitServicelmpl implements BusinessunitService {
 		Optional<Department> dep = departmentrepo.finddepartment(bid);
 		Businessunit business = this.businessunitrepository.findByBid(bid);
 		if(dep.isEmpty()) {
-		
-//			if (dep.get().getBusinessunit().getBid() == bid && business.getBid() == bid) {
 			businessunitrepository.delete(business);
 			businessbean.setMessage("deleted successfully bid" + business.getBid());
 			businessbean.setStatus(true);	
-		
-		}else {
-			
 
+		}else {			
 			businessbean.setMessage("Cannot delete Business Unit as it is associated to department");
 			businessbean.setStatus(false);
 		}
 
-//	else {
-//		Department deprtment = departmentrepo.finddepartment(bid);
-//		if(deprtment==null) {
-//		businessunitrepository.delete(business);
-//		//businessunitrepository.delete(business);
-//		businessbean.setMessage("deleted successfully bid"+business.getBid());
-//		   businessbean.setStatus(true);
-//		}
-//	}
 		return businessbean;
 	}
+	@Override
+	public Businessbean getBuByOrgId(String orgId) {
 
-//
-//@Override
-//public Businessunit updatebusinessdetails(int id, Businessunit entity) {
-//	Optional<Businessunit> businessOptional = businessunitrepository.findById(id);
-//	try {
-//		if (businessOptional.isPresent()) {
-//
-//			Businessunit details = businessOptional.get();
-//
-//			details.setId(entity.getId());
-//			details.setBid(entity.getBid());
-//			details.setName(entity.getName());
-//			details.setStartdate(entity.getStartdate());
-//			details.setState(entity.getState());
-//			details.setDescription(entity.getDescription());
-//			details.setCountry(entity.getCountry());
-//			details.setCode(entity.getCode());
-//			details.setAddress1(entity.getAddress1());
-//			details.setAddress2(entity.getAddress2());
-//			details.setAddress3(entity.getAddress3());
-//			return businessunitrepository.save(details);
-//		}
-//	} catch (Exception e) {
-//		e.printStackTrace();
-//
-//	}
-//	return null;
-//}
-//
-//@Override
-//public Businessbean deleteById(int id) {
-//	
-//	businessunitrepository.deleteById(id);
-//	businessbean.setMessage("businessdetails delete successfully");
-//	businessbean.setStatus(true);
-//	return businessbean;
-//}
-//}
+		Businessbean response = new Businessbean();
+		BusinessUnitResponseBean bean;
+		List<BusinessUnitResponseBean> buList = new ArrayList<>();
+		List<Businessunit> findByOrgIds = businessunitrepository.findByOrgIds(orgId);
 
-//public Businessunit deletebid(int bid) {
-//
-//Businessunit bean = this.businessunitrepository.findBybid(bid);
-//if(bean!=null) {
-//	this.businessunitrepository.deleteBybId(bean);
-//	businessbean.setMessage("bussniessdetails  delete successfully");
-//	businessbean.setStatus(true);
-//} else {
-//	businessbean.setMessage("Failed to Delete details ");
-//	businessbean.setStatus(false);
-//}
-//return bean;
-//}
+		if(!findByOrgIds.isEmpty()) {
+			for(Businessunit bu : findByOrgIds) {
+				bean = new BusinessUnitResponseBean();
+				bean.setId(bu.getId());
+				bean.setBid(bu.getBid());
+				bean.setOrgId(bu.getOrgInfoEntity().getOrgId());
+				bean.setName(bu.getName());
+				bean.setAddress1(bu.getAddress1());
+				bean.setAddress2(bu.getAddress2());
+				bean.setCity(bu.getCity());
+				bean.setCode(bu.getCode());
+				bean.setCountry(bu.getCountry());
+				bean.setState(bu.getState());
+				bean.setCreatedby(bu.getCreatedby());
+				bean.setCreateddate(bu.getCreateddate());
+				bean.setDescription(bu.getDescription());
+				bean.setIsactive(bu.getIsactive());
+				bean.setModifiedBy(bu.getModifiedBy());
+				bean.setModifiedDate(bu.getModifiedDate());
+				bean.setStartdate(bu.getStartdate());
+				bean.setTimezone(bu.getTimezone());
 
+				buList.add(bean);
+			}
+			response.setMessage("Successfully Fetched BusinessUnit Based On orgId");
+			response.setStatus(true);
+			response.setListOfBU(buList);
+
+		}else {
+			response.setMessage("No Data Found");
+			response.setStatus(false);
+			response.setListOfBU(null);
+		}
+		return response;
+	}
 }

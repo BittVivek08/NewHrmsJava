@@ -53,10 +53,9 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 
 	@Autowired
 	private ProjecDetailsResponsebean projFetchBean;
-	
+
 	@Autowired
 	private JobTitleRepository jobTitleRepo;
-	
 
 	@Override
 	public EntityBeanResponseCommon saveProjectDetails(ProjectDetailsEntity projentity) {
@@ -80,9 +79,10 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 		// List<EmployeeDetails> maangerIdByRole =
 		// empRepo.maangerIdByRole("Manager");
 
-		//EmployeeDetails employee = empRepo.findByEmpId(projentity.getEmployee().getEmpId());
+		// EmployeeDetails employee =
+		// empRepo.findByEmpId(projentity.getEmployee().getEmpId());
 		EmployeeDetails manager = empRepo.findByEmpId(projentity.getManager().getEmpId());
-		//empRepo.find
+		// empRepo.find
 		// String empRole = employee.getEmpRole();
 		// String reportingManagerId = employee.getReportingManagerId();
 
@@ -92,7 +92,7 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 
 			projentity.setClient(client.get());
 			projentity.setCurrency(currency.get());
-			//projentity.setEmployee(employee);
+			// projentity.setEmployee(employee);
 			projentity.setManager(manager);
 			projentity.setCreated_by(1);
 			projentity.setIsactive(true);
@@ -136,7 +136,7 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			entityDB.setEnddate(entity.getEnddate());
 			entityDB.setStartdate(entity.getStartdate());
 			entityDB.setEstimatedhours(entity.getEstimatedhours());
-			//entityDB.setIsactive(entity.getIsactive());
+			// entityDB.setIsactive(entity.getIsactive());
 			entityDB.setIsactive(true);
 			entityDB.setLeadapprove(entity.getLeadapprove());
 			entityDB.setProjectName(entity.getProjectName());
@@ -144,8 +144,6 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			// entityDB.setProjecttype(entity.getProjecttype());
 			entityDB.setProject_type(entity.getProject_type());
 			entityDB.setModified_by(1);
-			
-	
 
 			projectRepo.save(entityDB);
 			log.info("successfully  updated project Details in service ");
@@ -184,7 +182,7 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			// res.setCurrencyName(proj.getCurrencyname());
 			res.setCurrencyid(proj.getCurrency().getId());
 			// res.setEmpId(proj.getEmployee().getEmpId());
-			//res.setManagerId(proj.getEmployee().getEmpId());
+			// res.setManagerId(proj.getEmployee().getEmpId());
 			res.setManagerId(proj.getManager().getEmpId());
 			// res.setEndDate(proj.getEnddate());
 			res.setEndDate(proj.getEnddate());
@@ -219,25 +217,37 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 
 		ProjechtRequiredFetchDetails bean;
 		List<ProjechtRequiredFetchDetails> listProj = new ArrayList<>();
-		
-		JobTitlesEntity job = new JobTitlesEntity();
-		
-		JobTitlesEntity findByjobTitleName = jobTitleRepo.findByjobTitleName(job.getJobTitleName());
-		
-		List<ProjectDetailsEntity> projects = null;
-		
-		if(findByjobTitleName != null && findByjobTitleName.getJobTitleName().equals("Project Manager")) {
-			 projects = projectRepo.findAll();
-		}
 
-	
+		/*
+		 * JobTitlesEntity job = new JobTitlesEntity();
+		 * 
+		 * // EmployeeDetails empDel = new EmployeeDetails();
+		 * 
+		 * JobTitlesEntity findByjobTitleName =
+		 * jobTitleRepo.findByjobTitleName(job.getJobTitleName());
+		 * 
+		 * // EmployeeDetails findByEmail =
+		 * empRepo.findByEmail(empDel.getOrgInfoEntity().getOrgId());
+		 * 
+		 * List<ProjectDetailsEntity> projects = null;
+		 * 
+		 * if(findByjobTitleName != null &&
+		 * findByjobTitleName.getJobTitleName().equals("Project Manager")) { projects =
+		 * projectRepo.findAll(); }
+		 * 
+		 * // if(findByEmail != null && findByEmail.getOrgInfoEntity().equals("RST")) {
+		 * // projects = projectRepo.findAll(); // }
+		 */
+
+		List<ProjectDetailsEntity> projects = projectRepo.findAll();
+
 		if (projects != null) {
 			for (ProjectDetailsEntity proj : projects) {
 				bean = new ProjechtRequiredFetchDetails();
 				bean.setProjectId(proj.getProjectId());
 				bean.setProjectName(proj.getProjectName());
 				bean.setClientid(proj.getClient().getId());
-				//bean.setManagerId(proj.getEmployee().getEmpId());
+				// bean.setManagerId(proj.getEmployee().getEmpId());
 				bean.setManagerId(proj.getManager().getEmpId());
 				bean.setOrgId(proj.getOrgInfoEntity().getOrgId());
 				bean.setCurrencyid(proj.getCurrency().getId());
@@ -295,6 +305,47 @@ public class ProjectDetailsServiceImpl implements ProjectDetailsService {
 			managerBean.setStatus(false);
 		}
 		return managerBean;
+	}
+
+	@Override
+	public ProjecDetailsResponsebean getProjectByOrgId(String orgId) {
+		ProjechtRequiredFetchDetails bean;
+		List<ProjechtRequiredFetchDetails> listProj = new ArrayList<>();
+		List<ProjectDetailsEntity> findByOrgId = projectRepo.findByOrgIds(orgId);
+		// boolean existsByOrgId = projectRepo.existsByOrgId(orgId);
+
+		if (!findByOrgId.isEmpty()) {
+			for (ProjectDetailsEntity proj : findByOrgId) {
+				bean = new ProjechtRequiredFetchDetails();
+				bean.setProjectId(proj.getProjectId());
+				bean.setProjectName(proj.getProjectName());
+				bean.setClientid(proj.getClient().getId());
+				// bean.setManagerId(proj.getEmployee().getEmpId());
+				bean.setManagerId(proj.getManager().getEmpId());
+				bean.setOrgId(proj.getOrgInfoEntity().getOrgId());
+				bean.setCurrencyid(proj.getCurrency().getId());
+				bean.setEndDate(proj.getEnddate());
+				bean.setEstimatedhours(proj.getEstimatedhours());
+				bean.setIs_active(proj.getIsactive());
+				bean.setLeadAppove(proj.getLeadapprove());
+				bean.setProjectType(proj.getProject_type());
+				bean.setProjStatus(proj.getProjectstatus());
+				bean.setStartDate(proj.getStartdate());
+				bean.setDescription(proj.getDescription());
+
+				listProj.add(bean);
+			}
+			projFetchBean.setMessage("successfully fetch");
+			projFetchBean.setStatus(true);
+			projFetchBean.setListProjectBean(listProj);
+
+		} else {
+			projFetchBean.setMessage("No Data Found");
+			projFetchBean.setStatus(false);
+			projFetchBean.setListProjectBean(null);
+		}
+
+		return projFetchBean;
 	}
 
 }

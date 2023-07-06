@@ -13,4 +13,6 @@ public interface ProjectDetailsService {
 	public  ProjecDetailsResponsebean getAllProjects();
 	public ManagerListResonseBean getAllManager(ManagerRoleReuestBean reqBean);
 	public ManagerListResonseBean getAllManager(String mangerRole);
+	
+	public ProjecDetailsResponsebean getProjectByOrgId(String orgId);
 }

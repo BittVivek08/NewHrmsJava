@@ -2,18 +2,13 @@ package com.hrms.service;
 
 import java.util.List;
 import java.util.Optional;
-
-import javax.ws.rs.core.Response;
-
 import com.hrms.beans.CommonResponseBean;
-
 import com.hrms.entity.GenderEntity;
 import com.hrms.entity.JobTitlesEntity;
 import com.hrms.entity.LanguageEntity;
 import com.hrms.entity.MaritalStatusEntity;
 import com.hrms.entity.NationalityEntity;
 import com.hrms.entity.EmpRole;
-
 import com.hrms.entity.SalaryAccountClassTypeEntity;
 import com.hrms.entity.SalaryCurrencyEntity;
 import com.hrms.request.bean.JobTitleBean;
@@ -31,11 +26,19 @@ public interface HrmsCommonService {
 	// Salary Related Api's
 	public CommonResponseBean saveSalaryCurrency(SalaryCurrencyRequestBean salaryCurrencyReqBean);
 	
+	public CommonResponseBean updateSalaryCurrById(int id, SalaryCurrencyRequestBean bean);
+	
+	public CommonResponseBean deleteCurrencyById(int id);
+	
 	public List<SalaryCurrencyEntity> getAllSalaryCurrency();
 	
 	public CommonResponseBean saveSalaryAccountType(SalaryAccountClassTypeRequestBean accountTypeReqBean);
 	
+	public CommonResponseBean updateAccTypeById(int id, SalaryAccountClassTypeRequestBean bean);
+	
 	public List<SalaryAccountClassTypeEntity> getAllAccountType();
+	
+	public CommonResponseBean deleteAccType(int id);
 	
 	public CommonResponseBean saveJobTitle(JobTitleBean bean);
 	

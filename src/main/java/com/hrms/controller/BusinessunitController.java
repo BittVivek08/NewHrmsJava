@@ -1,6 +1,9 @@
 package com.hrms.controller;
 
 import java.util.List;
+
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,5 +68,11 @@ public class BusinessunitController {
 		log.info("entered into delete details based on bid method in controller");
 		 Businessbean deleteByBid = BusinessunitService.deleteByBid(bid);	
 		 return new ResponseEntity<>(deleteByBid,HttpStatus.BAD_REQUEST);
+	}
+	
+	@GetMapping("/getBuByOrg")
+	public ResponseEntity<Businessbean> getBuByOrgId(@QueryParam("orgId") String orgId){
+		Businessbean buByOrgId = BusinessunitService.getBuByOrgId(orgId);
+		return new ResponseEntity<>(buByOrgId,HttpStatus.OK);
 	}
 }

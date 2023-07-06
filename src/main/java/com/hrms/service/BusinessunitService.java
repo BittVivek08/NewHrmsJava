@@ -16,6 +16,8 @@ public interface BusinessunitService {
 	
 	public Businessunit getByBid(int bid);
 	
+	public Businessbean getBuByOrgId(String orgId);
+	
 	
 
 }

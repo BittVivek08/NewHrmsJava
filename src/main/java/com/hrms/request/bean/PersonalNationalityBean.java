@@ -12,6 +12,7 @@ public class PersonalNationalityBean {
 	
 	private int id;
 	private String nationalityCode;
+	private String nationality;
 	private Date createdDate;
 	private int createdBy;
 	private Date modifiedDate;

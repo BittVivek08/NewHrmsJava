@@ -15,11 +15,15 @@ import com.hrms.beans.ProjectEmployeeFetchResponse;
 import com.hrms.beans.ProjectEmployeeResponseBean;
 //import com.hrms.beans.ProjectResponseBean;
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.OrganizationInfoEntity;
 import com.hrms.entity.ProjectDetailsEntity;
 import com.hrms.entity.ProjectEmployeeEntity;
 import com.hrms.repository.EmployeeRepository;
+import com.hrms.repository.OrganizationInfoRepository;
 import com.hrms.repository.ProjectDetailsRepository;
 import com.hrms.repository.ProjectEmployeeRepository;
+import com.hrms.response.bean.ProjectEmployeeFetchBeans;
+import com.hrms.response.bean.ProjectEmployeeOrgFetchBean;
 import com.hrms.service.ProjectEmployeeService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +46,12 @@ public class ProjectEmployeeServiceImpl implements ProjectEmployeeService {
 
 	@Autowired
 	private ProjectEmployeeFetchResponse response;
+	
+	@Autowired
+	private ProjectEmployeeFetchBeans beanRes;
+	
+	@Autowired
+	private OrganizationInfoRepository orgRepo;
 
 	@Override
 	public ProjectEmployeeResponseBean saveProjectEmployee(ProjectEmployeeDataBean Databean) {
@@ -49,6 +59,8 @@ public class ProjectEmployeeServiceImpl implements ProjectEmployeeService {
 		ProjectDetailsEntity projectId = this.projectRepo.findById(Databean.getProjectid()).get();
 
 		EmployeeDetails empId = this.employeeRepo.findByEmpId(Databean.getEmpid());
+		
+		OrganizationInfoEntity organization = this.orgRepo.findByOrgId(Databean.getOrgid());
 
 		// List<ProjectEmployeeEntity> listProjectAndEmployee =
 		// this.projectEmpRepo.findByProjectAndEmployee(Databean.getProjectid(),
@@ -62,6 +74,7 @@ public class ProjectEmployeeServiceImpl implements ProjectEmployeeService {
 				entity.setProject(projectId);
 				// entity.setProjectName(projectId.getProjectName());
 				entity.setEmployee(empId);
+				entity.setOrg(organization);
 				entity.setCreated(LocalDateTime.now());
 				entity.setCreatedby(Databean.getEmpid());
 				//LocalDate startdate = LocalDate.parse(Databean.getStartdate());
@@ -113,6 +126,7 @@ public class ProjectEmployeeServiceImpl implements ProjectEmployeeService {
 			bean.setCreatedDate(entity.getCreated());
 			bean.setModifiedDate(entity.getModified());
 			bean.setBillable(entity.getBillable());
+			bean.setOrganizationId(entity.getOrg().getOrgId());
 
 			boolean add = listbean.add(bean);
 		}
@@ -161,6 +175,47 @@ public class ProjectEmployeeServiceImpl implements ProjectEmployeeService {
 		}
 
 		return resBean;
+	}
+
+	@Override
+	public ProjectEmployeeFetchBeans getAllDetailsByOrgId(String oid) {
+		try {
+
+			ProjectEmployeeOrgFetchBean bean;
+			List<ProjectEmployeeOrgFetchBean> listOfBeans = new ArrayList<>();
+
+			List<ProjectEmployeeEntity> listProjectEmp = this.projectEmpRepo.findByOrg(oid);
+            if(!listProjectEmp.isEmpty()) {
+			for (ProjectEmployeeEntity entity : listProjectEmp) {
+				bean=new ProjectEmployeeOrgFetchBean();
+			    bean.setId(entity.getId());
+			    bean.setProjectId(entity.getProject().getProjectId());
+			    bean.setEmployeeId(entity.getEmployee().getEmpId());
+			    bean.setOrganizationid(entity.getOrg().getOrgId());
+			    bean.setBillable(entity.getBillable());
+			    bean.setCreatedby(entity.getCreatedby());
+                bean.setCreatedDate(entity.getCreated());
+                bean.setModifiedby(entity.getModifiedby());
+                bean.setModifiedDate(entity.getModified());
+                bean.setStartDate(entity.getEndDate());
+                bean.setEndDate(entity.getEndDate());
+                 listOfBeans.add(bean);
+			}
+                	beanRes.setMessage("Successfully fetched Details");
+                	beanRes.setStatus(true);
+                	beanRes.setListOfProjectEmpployees(listOfBeans);
+            }  else {
+                	beanRes.setMessage("details not found");
+                	beanRes.setStatus(false);
+                	beanRes.setListOfProjectEmpployees(null);
+                }              
+		} catch (Exception e) {
+			e.printStackTrace();
+			beanRes.setMessage("details not found");
+			beanRes.setStatus(false);
+		}
+		return beanRes;
+
 	}
 
 }

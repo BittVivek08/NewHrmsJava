@@ -3,6 +3,8 @@ package com.hrms.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import com.hrms.beans.CommonResponseBean;
 import com.hrms.beans.ContactBean;
 import com.hrms.beans.EmpBirthResponse;
 import com.hrms.beans.EmployeeEducationDetailsBean;
+import com.hrms.beans.EmployeeResponseBean;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
 import com.hrms.entity.ContactDetails;
@@ -57,18 +60,19 @@ public class EmployeeDetailsController {
 		return empService.saveEmpDetails(empDetails);
 	}
 
-	@PostMapping("/uploadImage") public EntityBeanResponse saveEmpDetails(@RequestParam String jsonData,@RequestParam("file") MultipartFile file) throws IOException {
-		try{
-			log.info("Class : "+this.getClass().getName());
+	@PostMapping("/uploadImage")
+	public EntityBeanResponse saveEmpDetails(@RequestParam String jsonData, @RequestParam("file") MultipartFile file)
+			throws IOException {
+		try {
+			log.info("Class : " + this.getClass().getName());
 			log.info("Method :" + Thread.currentThread().getStackTrace()[1].getMethodName());
 			String fileName = fileStorageService.storeFile(file);
 			EmployeeDetails empDetails = new ObjectMapper().readValue(jsonData, EmployeeDetails.class);
 			new ObjectMapper().writeValueAsString(jsonData);
-			empDetails.setProfileImg(fileName); 
+			empDetails.setProfileImg(fileName);
 			EntityBeanResponse response = empService.saveEmpDetails(empDetails);
 			return response;
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
@@ -84,7 +88,7 @@ public class EmployeeDetailsController {
 		EmployeeDetails empById = empService.getEmpById(id);
 		return new ResponseEntity<>(empById, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getEmployeeByempId/{empId}")
 	public ResponseEntity<EmployeeDetails> getEmployeeByEmpId(@PathVariable String empId) {
 		EmployeeDetails empById = empService.getEmpByEmpId(empId);
@@ -92,8 +96,9 @@ public class EmployeeDetailsController {
 	}
 
 	@PutMapping("/updateEmployeeDetails/{empId}")
-	public EntityBeanResponse updateEmplyee(@RequestBody EmployeeDetails empDetails,@PathVariable("empId") String empId) {
-		return empService.updateEmpDetails(empDetails,empId);
+	public EntityBeanResponse updateEmplyee(@RequestBody EmployeeDetails empDetails,
+			@PathVariable("empId") String empId) {
+		return empService.updateEmpDetails(empDetails, empId);
 	}
 
 	@GetMapping("/birthdays")
@@ -145,37 +150,38 @@ public class EmployeeDetailsController {
 		 */
 	}
 
-	@PostMapping("/saveEmpInfo/{empId}") 
-	public EntityBeanResponse saveEmployeeInformation(@PathVariable String empId,@RequestBody EmployeeInformation empInformation) {
+	@PostMapping("/saveEmpInfo/{empId}")
+	public EntityBeanResponse saveEmployeeInformation(@PathVariable String empId,
+			@RequestBody EmployeeInformation empInformation) {
 
-		return empService.saveEmployeeInformation(empId,empInformation);
-	}   
+		return empService.saveEmployeeInformation(empId, empInformation);
+	}
 
 	@PutMapping("/UpdateEmpInfo/{empId}")
-	public EntityBeanResponse updateEmpInfo(@RequestBody EmployeeInformation empInfo,@PathVariable("empId") String empId) {
+	public EntityBeanResponse updateEmpInfo(@RequestBody EmployeeInformation empInfo,
+			@PathVariable("empId") String empId) {
 		EmployeeDetails byEmp = empRepo.findByEmpId(empId);
 		empInfo.setEmployeeDetails(byEmp);
 		return empService.updateEmployeeInformation(empInfo);
 	}
 
-
 	@GetMapping("/getEmpInfo/{id}")
-	public ResponseEntity<EmployeeInformation> findEmpInfoById(@PathVariable Integer id){
+	public ResponseEntity<EmployeeInformation> findEmpInfoById(@PathVariable Integer id) {
 		EmployeeInformation empInfoById = empService.getEmpInfoById(id);
-		return new ResponseEntity<>(empInfoById,HttpStatus.OK);
-	}
-	
-	@GetMapping("/getEmpInfoempId/{empId}")
-	public ResponseEntity<EmployeeInformation> findEmpInfoByEmpId(@PathVariable String empId){
-		EmployeeInformation empInfoById = empService.getEmpInfoByEmpId(empId);
-		return new ResponseEntity<>(empInfoById,HttpStatus.OK);
+		return new ResponseEntity<>(empInfoById, HttpStatus.OK);
 	}
 
-	@PostMapping("/saveContactDetails/{empId}") 
-	public ContactBean saveContactDetails(@PathVariable String empId,  @RequestBody ContactDetails details) {
-        log.info("entered saveContactDetails method of contoller class");
-		return empService.saveContactdata(empId,details);
-	} 
+	@GetMapping("/getEmpInfoempId/{empId}")
+	public ResponseEntity<EmployeeInformation> findEmpInfoByEmpId(@PathVariable String empId) {
+		EmployeeInformation empInfoById = empService.getEmpInfoByEmpId(empId);
+		return new ResponseEntity<>(empInfoById, HttpStatus.OK);
+	}
+
+	@PostMapping("/saveContactDetails/{empId}")
+	public ContactBean saveContactDetails(@PathVariable String empId, @RequestBody ContactDetails details) {
+		log.info("entered saveContactDetails method of contoller class");
+		return empService.saveContactdata(empId, details);
+	}
 
 	@GetMapping("/getAllContactDetails")
 	public ResponseEntity<List<ContactDetails>> getAllontactDetails() {
@@ -188,45 +194,50 @@ public class EmployeeDetailsController {
 	}
 
 	@PutMapping("/updateContactDetails/{empId}")
-	public ResponseEntity<ContactBean> updateContactDetails(@RequestBody ContactDetails entity,@PathVariable("empId") String empId) {
+	public ResponseEntity<ContactBean> updateContactDetails(@RequestBody ContactDetails entity,
+			@PathVariable("empId") String empId) {
 		log.info("entered into updatecontactdetails method in controller class");
-		ContactBean updatedetails = empService.updateContact(entity,empId);
+		ContactBean updatedetails = empService.updateContact(entity, empId);
 		return ResponseEntity.ok(updatedetails);
 	}
+
 	@GetMapping("/getContactDetails/{id}")
 	public ContactDetails getContactDataById(@PathVariable int id) {
-        log.info("entered into getcontactdatabyid method in controller class");
-		ContactDetails details=empService.getcontactDetails(id);
+		log.info("entered into getcontactdatabyid method in controller class");
+		ContactDetails details = empService.getcontactDetails(id);
 		return details;
 	}
+
 	@GetMapping("/getContactempId/{empId}")
 	public ContactDetails getContactDataByEmpId(@PathVariable String empId) {
-       log.info("entered into getcontactDataByEmpId method in controller class ");
-		ContactDetails details=empService.getcontactDetails(empId);
+		log.info("entered into getcontactDataByEmpId method in controller class ");
+		ContactDetails details = empService.getcontactDetails(empId);
 		return details;
 	}
 
 	@PostMapping("/saveEmpeducationdetails/{empId}")
-	public EmployeeEducationDetailsBean saveEmployeeeducationdetails(@RequestBody EmployeeEducationDetails empeducationdetails,@PathVariable String empId) {
-		return empService.saveEmployeeeducationdetails(empeducationdetails,empId);
-	}   
+	public EmployeeEducationDetailsBean saveEmployeeeducationdetails(
+			@RequestBody EmployeeEducationDetails empeducationdetails, @PathVariable String empId) {
+		return empService.saveEmployeeeducationdetails(empeducationdetails, empId);
+	}
 
 	@PutMapping("/UpdateEmpeducationdetails/{empId}")
-	public EmployeeEducationDetailsBean updateEmployeeeducationdetails(@RequestBody EmployeeEducationDetails empeducationdetails,@PathVariable("empId") String empId) {
-		
-		return empService.updateEmployeeeducationdetails( empeducationdetails,empId);
+	public EmployeeEducationDetailsBean updateEmployeeeducationdetails(
+			@RequestBody EmployeeEducationDetails empeducationdetails, @PathVariable("empId") String empId) {
+
+		return empService.updateEmployeeeducationdetails(empeducationdetails, empId);
 	}
 
 	@GetMapping("/getEmpeducationdetails/{id}")
-	public ResponseEntity<EmployeeEducationDetails> findEmpeducationdetailsById(@PathVariable Integer id){
+	public ResponseEntity<EmployeeEducationDetails> findEmpeducationdetailsById(@PathVariable Integer id) {
 		EmployeeEducationDetails empeducationById = empService.getEmpeducationdetalsById(id);
-		return new ResponseEntity<>(empeducationById,HttpStatus.OK);
+		return new ResponseEntity<>(empeducationById, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getEmpeducationempId/{empId}")
-	public ResponseEntity<EmployeeEducationDetails> findEmpeducationdetailsByEmpId(@PathVariable String empId){
+	public ResponseEntity<EmployeeEducationDetails> findEmpeducationdetailsByEmpId(@PathVariable String empId) {
 		EmployeeEducationDetails empeducationById = empService.getEmpeducationdetalsByEmpId(empId);
-		return new ResponseEntity<>(empeducationById,HttpStatus.OK);
+		return new ResponseEntity<>(empeducationById, HttpStatus.OK);
 	}
 
 	@GetMapping("/getEmpeducationdetails")
@@ -234,27 +245,35 @@ public class EmployeeDetailsController {
 		List<EmployeeEducationDetails> allEmpeducationDetails = empService.getAllEmpeducationdetails();
 		return new ResponseEntity<>(allEmpeducationDetails, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/saveEmpSalary/{empId}")
-	public CommonResponseBean saveEmpSalDetails(@PathVariable String empId,@RequestBody EmployeeSalaryRequestBean empSalReqBean) {
+	public CommonResponseBean saveEmpSalDetails(@PathVariable String empId,
+			@RequestBody EmployeeSalaryRequestBean empSalReqBean) {
 		return empService.saveSalaryDetails(empId, empSalReqBean);
 	}
-	
+
 	@PutMapping("/updateEmpSalary/{empId}")
-	public CommonResponseBean updateEmpSalDetails(@RequestBody EmployeeSalaryDetails empsalDetails,@PathVariable("empId") String empId) {
-		return empService.updateSalaryDetails(empsalDetails,empId);
+	public CommonResponseBean updateEmpSalDetails(@RequestBody EmployeeSalaryDetails empsalDetails,
+			@PathVariable("empId") String empId) {
+		return empService.updateSalaryDetails(empsalDetails, empId);
 	}
-	
+
 	@GetMapping("/salById/{id}")
-	public ResponseEntity<EmployeeSalaryDetails> getEmpSalById(@PathVariable Integer id){
+	public ResponseEntity<EmployeeSalaryDetails> getEmpSalById(@PathVariable Integer id) {
 		EmployeeSalaryDetails empSalaryById = empService.getEmpSalaryById(id);
-		return new ResponseEntity<>(empSalaryById,HttpStatus.OK);
+		return new ResponseEntity<>(empSalaryById, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/salByEmpId/{empId}")
-	public ResponseEntity<EmployeeSalaryDetails> getEmpSalById(@PathVariable String empId){
+	public ResponseEntity<EmployeeSalaryDetails> getEmpSalById(@PathVariable String empId) {
 		EmployeeSalaryDetails empSalaryById = empService.getEmpSalaryByEmpId(empId);
-		return new ResponseEntity<>(empSalaryById,HttpStatus.OK);
+		return new ResponseEntity<>(empSalaryById, HttpStatus.OK);
+	}
+
+	@GetMapping("/employeeByOrgId")
+	public ResponseEntity<EmployeeResponseBean> getEmpByOrg(@QueryParam("orgId") String orgId) {
+		EmployeeResponseBean employeeByOrgId = empService.getEmployeeByOrgId(orgId);
+		return new ResponseEntity<>(employeeByOrgId, HttpStatus.OK);
 	}
 
 }

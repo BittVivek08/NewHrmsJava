@@ -22,6 +22,9 @@ public class NationalityEntity {
 
     @Column(name = "nationalitycode")
     private String nationalityCode;
+    
+    @Column(name = "nationalityName")
+    private String nationality;
 
     @Column(name = "isactive")
     private int isActive;

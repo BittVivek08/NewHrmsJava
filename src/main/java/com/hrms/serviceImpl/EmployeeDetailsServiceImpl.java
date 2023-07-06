@@ -2,7 +2,6 @@ package com.hrms.serviceImpl;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +18,7 @@ import com.hrms.beans.ContactBean;
 import com.hrms.beans.EmpBirthResponse;
 import com.hrms.beans.EmployeeDto;
 import com.hrms.beans.EmployeeEducationDetailsBean;
+import com.hrms.beans.EmployeeResponseBean;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
 import com.hrms.entity.Businessunit;
@@ -40,6 +40,7 @@ import com.hrms.repository.EmployeeRepository;
 import com.hrms.repository.EmployeeSalaryDetailsRepo;
 import com.hrms.repository.JobTitleRepository;
 import com.hrms.request.bean.EmployeeSalaryRequestBean;
+import com.hrms.response.bean.EmployeeFetchResponse;
 import com.hrms.service.EmployeeDetailsService;
 
 @Service
@@ -133,7 +134,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			empDto.setId(findByEmail.getId());
 			empDto.setEmpId(findByEmail.getEmpId());
 			empDto.setUserId(userId);
-			empDto.setOrgId(findByEmail.getOrgInfoEntity().getOrgId());
+			//empDto.setOrgId(findByEmail.getOrgInfoEntity().getOrgId());
 			empDto.setFirstName(findByEmail.getFirstName());
 			empDto.setLastName(findByEmail.getLastName());
 			empDto.setEmployeeName(findByEmail.getEmployeeName());
@@ -434,7 +435,7 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 		empDto.setId(employee1.getId());
 		empDto.setEmpId(employee1.getEmpId());
 		//vivek
-	//	empDto.setOrgId(employee1.getOrgInfoEntity().getOrgId());
+		empDto.setOrgId(employee1.getOrgInfoEntity().getOrgId());
 		empDto.setUserId(employee1.getUserId());
 		empDto.setFirstName(employee1.getFirstName());
 		empDto.setLastName(employee1.getLastName());
@@ -833,5 +834,85 @@ public class EmployeeDetailsServiceImpl implements EmployeeDetailsService {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public EmployeeResponseBean getEmployeeByOrgId(String orgId) {
+		
+		EmployeeResponseBean response = new EmployeeResponseBean();
+		EmployeeFetchResponse bean;
+		List<EmployeeFetchResponse> listEmp = new ArrayList<>();
+		
+		List<EmployeeDetails> findByOrgIds = empRepo.findByOrgIds(orgId);
+		
+		if(!findByOrgIds.isEmpty()) {
+			for(EmployeeDetails emp : findByOrgIds) {
+				bean = new EmployeeFetchResponse();
+				
+				bean.setId(emp.getId());
+				bean.setEmpId(emp.getEmpId());
+				bean.setUserId(emp.getUserId());
+				bean.setOrgId(emp.getOrgInfoEntity().getOrgId());
+				bean.setFirstName(emp.getFirstName());
+				bean.setLastName(emp.getLastName());
+				bean.setEmployeeName(emp.getEmployeeName());
+				bean.setEmpRole(emp.getEmpRole());
+				bean.setEmail(emp.getEmail());
+				bean.setBackgroundchk_status(emp.getBackgroundchk_status());
+				bean.setBusinessunitId(emp.getBusinessunitId());
+				bean.setBusinessunitName(emp.getBusinessunitName());
+				bean.setCandidatereferredby(emp.getCandidatereferredby());
+				bean.setContactnumber(emp.getContactnumber());
+				bean.setCreatedby(emp.getCreatedby());
+				bean.setCreatedby_name(emp.getCreatedby_name());
+				bean.setCreateddate(emp.getCreateddate());
+				bean.setDateOfJoining(emp.getDateOfJoining());
+				bean.setDateOfleaving(emp.getDateOfleaving());
+				bean.setDepartmentId(emp.getDepartmentId());
+				bean.setDepartmentName(emp.getDepartmentName());
+				bean.setDesignation(emp.getDesignation());
+				bean.setEmp_status_id(emp.getEmp_status_id());
+				bean.setEmployeeName(emp.getEmployeeName());
+				bean.setEmployeeStatus(emp.getEmployeeStatus());
+				bean.setEmploymentStatus(emp.getEmploymentStatus());
+				bean.setExtensionNo(emp.getExtensionNo());
+				bean.setFaxNo(emp.getFaxNo());
+				bean.setHoliday_group(emp.getHoliday_group());
+				bean.setHoliday_group_name(emp.getHoliday_group_name());
+				bean.setHrManagerId(emp.getHrManagerId());
+				bean.setHrManagerName(emp.getHrManagerName());
+				bean.setImmManagerId(emp.getImmManagerId());
+				bean.setImmManagerName(emp.getImmManagerName());
+				bean.setIsactive(emp.getIsactive());
+				bean.setJobtitle_id(emp.getJobtitle_id());
+				bean.setJobTitleName(emp.getJobTitleName());
+				bean.setModeOfEntry(emp.getModeOfEntry());
+				bean.setModifiedBy(emp.getModifiedBy());
+				bean.setModifieddate(emp.getModifieddate());
+				bean.setNumberType(emp.getNumberType());
+				bean.setOther_modeofentry(emp.getOther_modeofentry());
+				bean.setPosition_id(emp.getPosition_id());
+				bean.setReferer_name(emp.getReferer_name());
+				bean.setReportingManager(emp.getReportingManager());
+				bean.setReportingManagerId(emp.getReportingManagerId());
+				bean.setSelecteddate(emp.getSelecteddate());
+				bean.setSelectedDocumentsIds(emp.getSelectedDocumentsIds());
+				bean.setSignature(emp.getSignature());
+				bean.setSsnNumber(emp.getSsnNumber());
+				bean.setVisaId(emp.getVisaId());
+				bean.setWorkTelephoneNo(emp.getWorkTelephoneNo());
+				bean.setYearOfExp(emp.getYearOfExp());
+				
+				listEmp.add(bean);
+			}
+			response.setMessage("Successfully fetched Employee Based On Organization");
+			response.setStatus(true);
+			response.setListOfEmployee(listEmp);
+		}else {
+			response.setMessage("No Data Found");
+			response.setStatus(false);
+			response.setListOfEmployee(null);
+		}
+		return response;
 	}
 }

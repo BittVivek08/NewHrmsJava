@@ -18,6 +18,8 @@ public class ProjectEmployeeDataBean {
 	
 	private int billable;
 	
+	private String orgid;
+	
 	
 		
 }
