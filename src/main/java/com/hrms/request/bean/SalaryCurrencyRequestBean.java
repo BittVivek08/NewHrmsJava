@@ -7,6 +7,8 @@ import lombok.Data;
 
 @Data
 public class SalaryCurrencyRequestBean {
+	
+	private String orgId;
 	private String currencyName;
 	private String currencyCode;
 	private String discription;

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.hrms.entity.EmployeeDetails;
+import com.hrms.entity.ProjectDetailsEntity;
 
 public interface EmployeeRepository extends JpaRepository<EmployeeDetails, String> {
 
@@ -107,5 +108,7 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDetails, Strin
 	@Query("select empId  from EmployeeDetails where isactive=1")
 	public List<String> getEmpIds();
 	
+	@Query("from EmployeeDetails where orgInfoEntity.orgId = ?1")
+	List<EmployeeDetails> findByOrgIds(String orgId);
 
 }

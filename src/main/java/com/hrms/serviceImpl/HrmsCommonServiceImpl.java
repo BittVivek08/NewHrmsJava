@@ -3,8 +3,6 @@ package com.hrms.serviceImpl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.ws.rs.core.Response;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -104,6 +102,33 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 		return comResBean;
 		
 	}
+	
+	@Override
+	public CommonResponseBean updateSalaryCurrById(int id, SalaryCurrencyRequestBean bean) {
+		Optional<SalaryCurrencyEntity> list = salCurrRepo.findById(id);
+		
+		if(list.isPresent()) {
+			SalaryCurrencyEntity entity = list.get();
+			
+			entity.setCurrencyName(bean.getCurrencyName());
+			entity.setCurrencyCode(bean.getCurrencyCode());
+			entity.setDiscription(bean.getDiscription());
+			entity.setIsActive(bean.getIsActive());
+			entity.setCreatedDate(bean.getCreatedDate());
+			entity.setModifiedDate(bean.getModifiedDate());
+			
+			SalaryCurrencyEntity save = salCurrRepo.save(entity);
+			
+			if(save != null) {
+				comResBean.setMsg("Currency Details Updated successfully");
+				comResBean.setStatus(true);
+			}else {
+				comResBean.setMsg("failed to update currency");
+				comResBean.setStatus(false);
+			}
+		}
+		return comResBean;
+	}
 
 	@Override
 	public List<SalaryCurrencyEntity> getAllSalaryCurrency() {
@@ -111,6 +136,18 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 
 		return salCurrRepo.findAll();
 	}
+	
+	
+	@Override
+	public CommonResponseBean deleteCurrencyById(int id) {
+		
+		salCurrRepo.deleteById(id);
+		
+		comResBean.setMsg("Currency Deleted Successfully");
+		comResBean.setStatus(true);
+		return comResBean;
+	}
+
 
 	@Override
 	public CommonResponseBean saveSalaryAccountType(SalaryAccountClassTypeRequestBean accountTypeReqBean) {
@@ -136,6 +173,34 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 		}
 		return comResBean;
 	}
+	
+	@Override
+	public CommonResponseBean updateAccTypeById(int id, SalaryAccountClassTypeRequestBean bean) {
+		Optional<SalaryAccountClassTypeEntity> list = accTypeRepo.findById(id);
+		
+		if(list.isPresent()) {
+			
+			SalaryAccountClassTypeEntity entity = list.get();
+			
+			entity.setAccountClassType(bean.getAccountClassType());
+			entity.setDiscription(bean.getDiscription());
+			entity.setIsActive(bean.getIsActive());
+			entity.setCreatedDate(bean.getCreatedDate());
+		    entity.setModifiedDate(bean.getModifiedDate());
+		    
+		    SalaryAccountClassTypeEntity save = accTypeRepo.save(entity);
+		    
+		    if(save != null) {
+		    	comResBean.setMsg("Account Type Updated Successfully");
+		    	comResBean.setStatus(true);
+		    }else {
+		    	comResBean.setMsg("Failed to update Account Type");
+		    	comResBean.setStatus(false);
+		    }
+		}
+		return comResBean;
+	}
+
 
 	@Override
 	public List<SalaryAccountClassTypeEntity> getAllAccountType() {
@@ -151,6 +216,16 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 		return empRoleRepo.findAll();
 
 	}
+	
+	@Override
+	public CommonResponseBean deleteAccType(int id) {
+		accTypeRepo.deleteById(id);
+		
+		comResBean.setMsg("Account Type Deleted Successfully");
+		comResBean.setStatus(true);
+		return comResBean;
+	}
+
 
 	@Override
 	public EmpRole getEmpRoleById(Integer id) {
@@ -250,6 +325,7 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 			
 			comResBean.setMsg("Job Title updated Successfully..........!");
 			comResBean.setStatus(true);
+			
 		}else {
 			
 			comResBean.setMsg("Job Title Not updated ..........!");
@@ -414,6 +490,7 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 		NationalityEntity entity = new NationalityEntity();
 		
 		entity.setNationalityCode(nationalityBean.getNationalityCode());
+		entity.setNationality(nationalityBean.getNationality());
 		entity.setCreatedBy(nationalityBean.getCreatedBy());
 		entity.setCreatedDate(nationalityBean.getCreatedDate());
 		entity.setModifiedDate(nationalityBean.getModifiedDate());
@@ -461,6 +538,7 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 			NationalityEntity entity1 = entity.get();
 			
 			entity1.setNationalityCode(nationalityBean.getNationalityCode());
+			entity1.setNationality(nationalityBean.getNationality());
 			entity1.setCreatedBy(nationalityBean.getCreatedBy());
 			entity1.setCreatedDate(nationalityBean.getCreatedDate());
 			entity1.setModifiedDate(nationalityBean.getModifiedDate());
@@ -644,6 +722,5 @@ public class HrmsCommonServiceImpl implements HrmsCommonService {
 		}
 		return response;
 	}
-
 		
 }

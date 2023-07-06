@@ -7,6 +7,7 @@ import com.hrms.beans.ContactBean;
 import com.hrms.beans.EmpBirthResponse;
 import com.hrms.beans.EmployeeDto;
 import com.hrms.beans.EmployeeEducationDetailsBean;
+import com.hrms.beans.EmployeeResponseBean;
 import com.hrms.beans.EntityBeanResponse;
 import com.hrms.beans.LoginDto;
 import com.hrms.entity.ContactDetails;
@@ -15,6 +16,7 @@ import com.hrms.entity.EmployeeEducationDetails;
 import com.hrms.entity.EmployeeInformation;
 import com.hrms.entity.EmployeeSalaryDetails;
 import com.hrms.request.bean.EmployeeSalaryRequestBean;
+import com.hrms.response.bean.ProjecDetailsResponsebean;
 
 public interface EmployeeDetailsService {
 	
@@ -82,6 +84,8 @@ public interface EmployeeDetailsService {
 	EmployeeEducationDetailsBean updateEmployeeeducationdetails(EmployeeEducationDetails empeducationdetails, String empId);
 
 	EmployeeDto loginViaJWT(String email);
+	
+	public EmployeeResponseBean getEmployeeByOrgId(String orgId);
 			
 
 }

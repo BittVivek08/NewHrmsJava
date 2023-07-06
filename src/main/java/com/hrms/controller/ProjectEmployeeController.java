@@ -14,6 +14,7 @@ import com.hrms.beans.ProjectEmployeeDataBean;
 import com.hrms.beans.ProjectEmployeeFetchResponse;
 import com.hrms.beans.ProjectEmployeeResponseBean;
 import com.hrms.entity.ProjectEmployeeEntity;
+import com.hrms.response.bean.ProjectEmployeeFetchBeans;
 import com.hrms.service.ProjectDetailsService;
 import com.hrms.service.ProjectEmployeeService;
 
@@ -45,6 +46,15 @@ public class ProjectEmployeeController {
 	public ProjectEmployeeResponseBean updatedetails(@RequestBody ProjectEmployeeEntity entity,@QueryParam (value="id") int id) {
 		ProjectEmployeeResponseBean updateProjEmpDetails = this.service.updateProjEmpDetails(id, entity);
 		return updateProjEmpDetails;
+		
+	}
+	
+	
+	@GetMapping("/fetchAllDetailsByOrgId")
+	public ProjectEmployeeFetchBeans getAllProjectEmployessByOrgId(@QueryParam(value = "org") String orgId) {
+		
+		ProjectEmployeeFetchBeans ListOfProjectEmployee = this.service.getAllDetailsByOrgId(orgId);
+		return ListOfProjectEmployee;
 		
 	}
 	

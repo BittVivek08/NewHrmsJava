@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.hrms.entity.EmployeeDocumentsEntity;
 import com.hrms.entity.ProjectDetailsEntity;
 
 public interface ProjectDetailsRepository extends JpaRepository<ProjectDetailsEntity, Integer> {
@@ -21,9 +22,9 @@ public interface ProjectDetailsRepository extends JpaRepository<ProjectDetailsEn
 
 	@Query(" select manager.empId From  ProjectDetailsEntity where projectId=?1 ")
 	String getprojectManager(int projectId);
+	
 
-     
-
-
-
+	@Query("from ProjectDetailsEntity where orgInfoEntity.orgId = ?1")
+	List<ProjectDetailsEntity> findByOrgIds(String orgId);
+	
 }

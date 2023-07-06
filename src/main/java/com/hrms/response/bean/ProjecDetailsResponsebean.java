@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.hrms.beans.ProjechtRequiredFetchDetails;
+import com.hrms.entity.ProjectDetailsEntity;
 
 import lombok.Data;
 
@@ -17,5 +18,6 @@ public class ProjecDetailsResponsebean {
 	private Boolean status;
 	
 	private List<ProjechtRequiredFetchDetails> listProjectBean;
+	
 
 }

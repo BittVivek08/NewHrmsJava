@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.hrms.entity.ProjectDetailsEntity;
@@ -25,5 +26,8 @@ public interface ProjectEmployeeRepository extends JpaRepository<ProjectEmployee
 
 //	@Query("From ProjectEmployeeEntity where startdate=?1 and endDate=?2")
 //	public Boolean getstartdate(ProjectDetailsEntity proj);
+	
+	@Query("from ProjectEmployeeEntity e where e.org.orgId = :oid" )
+	public List<ProjectEmployeeEntity> findByOrg(@Param("oid") String oid);
 
 }

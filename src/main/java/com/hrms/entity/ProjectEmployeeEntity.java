@@ -35,6 +35,10 @@ public class ProjectEmployeeEntity {
 	@JoinColumn(name="Emp_Id",referencedColumnName = "emp_id")
 	private EmployeeDetails employee;
 	
+	@ManyToOne(cascade= {CascadeType.PERSIST,CascadeType.MERGE})
+	@JoinColumn(name="org_id",referencedColumnName = "orgId")
+	private OrganizationInfoEntity org;
+	
 	private LocalDateTime created;
 	
 	private LocalDateTime modified;

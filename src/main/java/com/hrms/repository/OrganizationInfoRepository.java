@@ -9,5 +9,7 @@ public interface OrganizationInfoRepository extends JpaRepository<OrganizationIn
 	
 	@Query("from OrganizationInfoEntity where isActive = 1")
 	public OrganizationInfoEntity getOrganizationInfo();
+	
+	public OrganizationInfoEntity findByOrgId(String orgid);
 
 }

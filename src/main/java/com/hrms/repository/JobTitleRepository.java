@@ -15,5 +15,7 @@ public interface JobTitleRepository extends JpaRepository<JobTitlesEntity, Integ
 	public List<PositionEntity> listOfPositions(int jobTitleId);
 	
 	JobTitlesEntity findByjobTitleName(String jobTitleName);
+	
+	
 
 }
