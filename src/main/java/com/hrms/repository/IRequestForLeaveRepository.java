@@ -33,6 +33,4 @@ public interface IRequestForLeaveRepository extends JpaRepository<RequestForLeav
 	@Query("select emp_id From RequestForLeave where emp_id=?1")
 	public String findByEmpId(String emp);
 	
-	
-	
 }

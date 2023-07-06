@@ -26,7 +26,7 @@ public interface IRequestForLeaveService {
 	
 	public LeavesResponseBean getLeavesDetails(String user_id, String leavestatus, String view);
 	
-	public LeaveManagementOptionsResponseBean leaveManagementOptions();
+  public LeaveManagementOptionsResponseBean leaveManagementOptions();
 
 	public EmployeeLeaveTypeResponseBean saveEmployeeLeaveData(EmployeeLeaveTypeBean leaveBean);
 	
@@ -35,13 +35,6 @@ public interface IRequestForLeaveService {
 
 	
 	
-	//get leaves based on year
-//	public Common getLeavesBasedOnYear(int year);//c0
-	
-	//get Leaves based on month
-	//public LeavesResponseBean getLeavesByMonth(String view, int id,int month,String leavestatus);//
-	
-//	public List<EmployeeLeaveResponse> getLeaveDataByReqIdDate(int reqId, String date);
 	
 	// 1.update for Employee leaveRequest Summary
 	public EmpLeaveResponseBean updateAllLeaveSummary(UpdateLeaveRequest updateBean);
@@ -50,6 +43,8 @@ public interface IRequestForLeaveService {
     public LeavesResponseBean getLeaveDetailsForManager(int managerid,String leavestatus,String emp_id);
     
     public List<MyLeaveRequestEntity> getLeaveHistoryByConditions(int year,int month,String status);
+    
+    public String assignLeave();
 	
     
 }

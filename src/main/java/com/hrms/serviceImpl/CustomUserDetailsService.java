@@ -23,5 +23,4 @@ public class CustomUserDetailsService implements UserDetailsService{
 		EmployeeDetails employeeDetails = employeeRepository.findByEmail(username);
 		return new User(employeeDetails.getEmail(),employeeDetails.getPassword(),new ArrayList<>());
 	}
-
 }

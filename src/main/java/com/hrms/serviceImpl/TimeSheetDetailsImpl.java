@@ -5,19 +5,14 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import org.aspectj.apache.bcel.generic.InstructionConstants.Clinit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.hrms.entity.ClientDetailsEntity;
 import com.hrms.entity.EmployeeDetails;
 import com.hrms.entity.ProjectDetailsEntity;
-
 import com.hrms.entity.SaveTimeSheet;
 import com.hrms.entity.TaskDetailsEntity;
 import com.hrms.entity.WorkFlow;
@@ -27,7 +22,6 @@ import com.hrms.repository.ProjectDetailsRepository;
 import com.hrms.repository.ProjectEmployeeRepository;
 import com.hrms.repository.SaveTimeSheetRepo;
 import com.hrms.repository.TaskDeatailsRepository;
-
 import com.hrms.response.bean.ProjectListResponse;
 import com.hrms.response.bean.ProjectResponse;
 import com.hrms.response.bean.TimeSheetRequestRepDate;
@@ -35,7 +29,6 @@ import com.hrms.response.bean.TimeSheetResponse;
 import com.hrms.service.TimeSheetDetails;
 import com.hrms.util.Constants;
 import com.hrms.util.LeaveRequestBLogic;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -65,15 +58,15 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 		try {
 
 			for (SaveTimeSheet savetimesheet : savetimesheetList) {
-				ProjectDetailsEntity proj=null;
+				ProjectDetailsEntity proj = null;
 				EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
 				ClientDetailsEntity client = this.clientDetailsRepository.findById(savetimesheet.getClient().getId())
 						.get();
 
-				if(projectEmployeeRepository.findEmpId(savetimesheet.getProj().getProjectId(),emp1.getEmpId())!=null || client.getClientName().equalsIgnoreCase("Internal")){
-				 proj = this.pojectDetailsRepository
-						.findByProjectId(savetimesheet.getProj().getProjectId());
-				}else {
+				if (projectEmployeeRepository.findEmpId(savetimesheet.getProj().getProjectId(), emp1.getEmpId()) != null
+						|| client.getClientName().equalsIgnoreCase(Constants.INTERNAL_STRING)) {
+					proj = this.pojectDetailsRepository.findByProjectId(savetimesheet.getProj().getProjectId());
+				} else {
 					timeSheetResponse.setMsg("you not assign this project");
 					timeSheetResponse.setStatus(false);
 					return timeSheetResponse;
@@ -89,11 +82,10 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 				savetimesheet.setCreatedDate(new Date());
 				savetimesheet.setWorkDate(savetimesheet.getWorkDate());
 				SaveTimeSheet tm = this.saveTimeSheetRepo.save(savetimesheet);
-				if(tm!=null) {
-				timeSheetResponse.setMsg("timesheet detail save successfully");
-				timeSheetResponse.setStatus(true);
-				}
-				else {
+				if (tm != null) {
+					timeSheetResponse.setMsg("timesheet detail save successfully");
+					timeSheetResponse.setStatus(true);
+				} else {
 					timeSheetResponse.setMsg("timesheet detail not save successfully");
 					timeSheetResponse.setStatus(false);
 				}
@@ -106,19 +98,18 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 				bean.setFeature(Constants.STR_TIMESHEET);
 				LocalDate l1 = proj.getEnddate();
 				LocalDate l2 = LocalDate.now();
-			    LocalDate l3=proj.getStartdate();
-              if(projectEmployeeRepository.findEmpId(proj.getProjectId(),emp1.getEmpId())!=null) {
-				if ( !l2.isBefore(l3) && l2.isBefore(l1) || l1.isEqual(l2)) {
-					bean.setApprovalManagerId(pojectDetailsRepository.getprojectManager(proj.getProjectId()));
-					bean.setStatus("Pending");
-					blogic.workFlowInsetion(bean, Constants.STR_TIMESHEET, true);
-				}
-				else {
-					bean.setApprovalManagerId(emp1.getReportingManagerId());
-					bean.setStatus(Constants.STATUS_PENDING);
-					blogic.workFlowInsetion(bean, Constants.STR_TIMESHEET, false);
-					return timeSheetResponse; 
-				}
+				LocalDate l3 = proj.getStartdate();
+				if (projectEmployeeRepository.findEmpId(proj.getProjectId(), emp1.getEmpId()) != null) {
+					if (!l2.isBefore(l3) && l2.isBefore(l1) || l1.isEqual(l2)) {
+						bean.setApprovalManagerId(pojectDetailsRepository.getprojectManager(proj.getProjectId()));
+						bean.setStatus(Constants.STATUS_PMPENDING);
+						blogic.workFlowInsetion(bean, Constants.STR_TIMESHEET, true);
+					} else {
+						bean.setApprovalManagerId(emp1.getReportingManagerId());
+						bean.setStatus(Constants.STATUS_PENDING);
+						blogic.workFlowInsetion(bean, Constants.STR_TIMESHEET, false);
+						return timeSheetResponse;
+					}
 				} else {
 					bean.setApprovalManagerId(emp1.getReportingManagerId());
 					bean.setStatus(Constants.STATUS_PENDING);
@@ -126,7 +117,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 				}
 
 			}
-		
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -140,10 +131,17 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 
 	public TimeSheetResponse UpdateTimeSheett(SaveTimeSheet savetimesheet, int id) {
 		log.info("Entered into  UpdateTimeSheett  method of HrmsEmpTimeSheetService class");
+		ProjectDetailsEntity proj = null;
 		EmployeeDetails emp1 = this.employeeRepository.findByEmpId(savetimesheet.getEmp().getEmpId());
 		ClientDetailsEntity client = this.clientDetailsRepository.findById(savetimesheet.getClient().getId()).get();
-		ProjectDetailsEntity proj = this.pojectDetailsRepository
-				.findByProjectId(savetimesheet.getProj().getProjectId());
+		if (projectEmployeeRepository.findEmpId(savetimesheet.getProj().getProjectId(), emp1.getEmpId()) != null
+				|| client.getClientName().equalsIgnoreCase(Constants.INTERNAL_STRING)) {
+			proj = this.pojectDetailsRepository.findByProjectId(savetimesheet.getProj().getProjectId());
+		} else {
+			timeSheetResponse.setMsg("you not assign this project");
+			timeSheetResponse.setStatus(false);
+			return timeSheetResponse;
+		}
 		TaskDetailsEntity task = this.taskDetailsRepository.findById(savetimesheet.getTask().getTaskid()).get();
 		savetimesheet.setTask(task);
 		savetimesheet.setProj(proj);
@@ -224,6 +222,7 @@ public class TimeSheetDetailsImpl implements TimeSheetDetails {
 				response.setMessage("Project Retrived UnSuccessful");
 				return response;
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

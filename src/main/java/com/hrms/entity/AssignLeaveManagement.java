@@ -1,45 +1,37 @@
 package com.hrms.entity;
 
 import java.sql.Timestamp;
+import java.time.Month;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 import lombok.Data;
 
-@Data   
 @Entity
-@Table(name = "main_employeeleavetypes")
-public class EmployeeLeaveTypeEntity {
+@Data
+public class AssignLeaveManagement {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int leaveTypeId;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="orgId",referencedColumnName = "orgId")
-	private OrganizationInfoEntity orgInfoEntity;
-
+	private String emp_id;
 	
 	@Column(name = "leavetype")
 	private String leaveType;
 
-	@Column(name = "numberofdays")
+	@Column(name = "totalNum")
 	private float noOfDays;
 
 	@Column(name = "year")
 	private int year;
 
 	@Column(name = "isactive")
-	private byte isActive;
+	private int isActive;
 
 	@Column(name = "createddate")
 	private Timestamp createdDate;
@@ -56,7 +48,5 @@ public class EmployeeLeaveTypeEntity {
 	@Column(name = "noofdaysmonth")
 	private int noOfDaysMonth;
 	
-	@Column(name = "carry")
-	private int carryForwardDays;
-
+	
 }

@@ -72,7 +72,7 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 				return workFlowRepo.findByEmpidAndStatus(empid ,status);
 				
 			} else {
-	            return workFlowRepo.findAll();
+	            return workFlowRepo.findAll();	
 	        }
 		
 	}
@@ -174,7 +174,7 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 			
 			else if(workreq.getStatus().equalsIgnoreCase("rejected") && workreq.getFeature().equalsIgnoreCase("timesheet")) {
 				SaveTimeSheet sheet =	timeSheetRepo.findById(workreq.getReqId());
-				sheet.setStatus(workreq.getStatus());
+				sheet.setStatus(workreq.getStatus()); 
 				timeSheetRepo.save(sheet);
 			     
 			}
@@ -270,5 +270,21 @@ public class WorkFlowServiceImpl implements WorkFlowService{
 		return rs;
 	}
 
+			
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

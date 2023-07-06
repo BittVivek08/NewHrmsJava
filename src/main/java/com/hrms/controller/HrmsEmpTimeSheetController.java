@@ -19,7 +19,7 @@ import com.hrms.entity.SaveTimeSheet;
 import com.hrms.response.bean.ProjectListResponse;
 import com.hrms.response.bean.TimeSheetRequestRepDate;
 import com.hrms.response.bean.TimeSheetResponse;
-import com.hrms.serviceImpl.TimeSheetDetailsImpl;
+import com.hrms.service.TimeSheetDetails;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/TimeSheet")
 public class HrmsEmpTimeSheetController {
 	@Autowired
-	private TimeSheetDetailsImpl impl;
+	private TimeSheetDetails impl;
 
 	@PostMapping("/timeSheetDetails")
 	public ResponseEntity<TimeSheetResponse> saveTimeSheett(@RequestBody List<SaveTimeSheet> timesheet) {
